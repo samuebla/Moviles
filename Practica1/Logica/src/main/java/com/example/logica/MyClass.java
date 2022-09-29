@@ -9,6 +9,12 @@ class Cell{
     cellType type;
     boolean solution = false;
 
+    int size;
+
+    public void setSize(int sizeAux) { size = sizeAux;}
+    public int getSize(){ return size; }
+
+
     public void setType(cellType aux){
         type = aux;
     }

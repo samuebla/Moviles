@@ -119,9 +119,31 @@ public class MyRenderClass implements Runnable{
         this.graphics2D.setPaintMode();
     }
 
+    //EL INT TIPO ACABARA SIENDO UN ENUM aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    protected void renderSquare(int x, int y, int w,int h,int tipo ){
+        this.graphics2D.setColor(Color.black);
+        this.graphics2D.fillRect(x-1,y-1,w+2,h+2);
+
+        this.graphics2D.setColor(Color.blue);
+        this.graphics2D.fillRect(x,y,w,h);
+
+        this.graphics2D.setColor(Color.black);
+
+        if(tipo == 2)
+            this.graphics2D.drawLine(x,y,x+w,y+h);
+
+        //this.graphics2D.drawLine(x,y,x+w,y);
+        //this.graphics2D.drawLine(x,y,x,y+h);
+        //this.graphics2D.drawLine(x+w,y,x,y+h);
+        //this.graphics2D.drawLine(x,y+h,x+w,y);
+
+
+        this.graphics2D.setPaintMode();
+    }
+
     protected void render() {
         // "Borramos" el fondo.
-        this.graphics2D.setColor(Color.BLUE);
+        this.graphics2D.setColor(Color.white);
         this.graphics2D.fillRect(0,0, this.getWidth(), this.getHeight());
         // Pintamos la escena
         this.scene.render();

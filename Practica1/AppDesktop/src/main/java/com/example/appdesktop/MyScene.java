@@ -47,6 +47,8 @@ public class MyScene {
     }
 
     public void render(){
+
         renderClass.renderCircle(this.x, this.y, this.radius);
+        renderClass.renderSquare(50,50,100,100,0);
     }
 }
