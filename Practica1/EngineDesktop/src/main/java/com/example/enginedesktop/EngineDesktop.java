@@ -59,6 +59,51 @@ public class EngineDesktop implements Runnable{
         this.graphics2D.setPaintMode();
     }
 
+    //red = rojo
+    //blue = azul
+    //gray = gris
+    //none = celda negada del tablero
+    //blank = cuadrado vacio para la interfaz
+    public void paintCell(int x1, int y1, int x2, int y2, String color){
+        Color c;
+        if(color == "blue"){
+            c = Color.blue;
+        } else if(color == "red"){
+            c = Color.red;
+        } else if(color == "gray"){
+            c = Color.gray;
+        }else{
+            c = Color.white;
+        }
+        this.graphics2D.setColor(c);
+
+        if (color == "none" || color == "blank"){
+            this.graphics2D.drawRect(x1, y1, x2 - x1, y2 - y1);
+            //Cuadrado de la interfaz
+            if (color == "none"){
+                this.graphics2D.drawLine(x1,y1,x2,y2);
+            }
+        }else{
+            //        Cambiar para que tenga en cuenta las dimensiones de la ventana, los últimos dos valores son el ancho y alto
+            this.graphics2D.fillRect(x1, y1, x2 - x1, y2 - y1);
+        }
+        this.graphics2D.setPaintMode();
+    }
+
+    public void drawText(String text, int x, int y, String color){
+        Color c;
+        if(color == "red"){
+            c = Color.red;
+        } else{
+            c = Color.black;
+        }
+        this.graphics2D.setColor(c);
+        this.graphics2D.drawString(text, x, y);
+        //No estoy muy seguro de este metodo, quitar si no funciona bien
+        this.graphics2D.setPaintMode();
+    }
+
+
     public int getWidth(){
         return this.myView.getWidth();
     }
