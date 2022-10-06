@@ -6,11 +6,32 @@ enum cellType {EMPTY,SELECTED,CROSSED,WRONG};
 //Struct
 class Cell{
 
+    private float x1;
+    private float y1;
+    private float x2;
+    private float y2;
+    private String color;
+
     cellType type;
     boolean solution = false;
 
-    int size;
 
+    public Cell(float x1aux, float y1aux,float x2aux, float y2aux){
+        this.x1=x1aux;
+        this.y1=y1aux;
+        this.x2=x2aux;
+        this.y2=y2aux;
+    }
+
+    public void update(double deltaTime){
+
+    }
+    public void render(Engine engine) {
+        engine.paintCell(this.x1, this.y1,this.x2, this.y2, this.color);
+    }
+
+    //PROVISIONAL
+    int size;
     public void setSize(int sizeAux) { size = sizeAux;}
     public int getSize(){ return size; }
 
@@ -30,9 +51,11 @@ class Cell{
     public boolean getSolution(){
         return solution;
     }
+
+    public void setColor(String color) { this.color=color; }
 }
 
-public class MyClass {
+public class MyScene {
 
     //Estuvimos pensando acerca de qué método resultaría más eficiente a la hora de comrpobar las casillas, y tuvimos 2 opciones:
     //No comprobar ni cambiar nada cuando seleccionas alguna casilla y al pulsar comprobar recorrer toda la matriz
@@ -43,8 +66,25 @@ public class MyClass {
     //Para eliminarla es mucho más eficiente.
 
     //Tenemos un Mapa Ordenado donde guardaremos las casillas seleccionadas
-    Cell [][] matriz = new Cell[2][2];
+    private Cell [][] matriz = new Cell[2][2];
     int remainingCells,wrongCells;
 
     TreeMap<Integer,Integer> wewe = new TreeMap<>();
+
+//    private Engine engine;
+//
+//    public MyScene(Engine engine){
+//        this.engine = engine;
+//        this.matriz = new Cell(50,50,10,150,engine.getWidth());
+//        this.matriz.setColor("blue");
+//
+//    }
+//
+//    public void update(double deltaTime){
+//        this.matriz.update(deltaTime);
+//    }
+//
+//    public void render(){
+//        this.matriz.render(engine);
+//    }
 }
