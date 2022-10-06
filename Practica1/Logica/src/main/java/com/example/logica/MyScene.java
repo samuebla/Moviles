@@ -1,7 +1,9 @@
 package com.example.logica;
-import java.util.TreeMap;
+import com.example.lib.*;
 
+import java.util.TreeMap;
 import javax.swing.JButton;
+
 
 enum cellType {EMPTY,SELECTED,CROSSED,WRONG};
 
@@ -87,7 +89,7 @@ public class MyScene {
         this.matriz = new Cell(50,50,10,150,engine.getWidth());
 
         for(int i = 0; i< matriz.length;i++){
-            this.matriz.setColor("blue");
+            this.matriz[i].setColor("blue");
 
         }
     }

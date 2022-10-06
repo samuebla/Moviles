@@ -8,5 +8,5 @@ public interface Engine {
     public IState getState();
 
     //Other functions(customized)
-
+//    public void paintCell(int x1,int x2, int y1,int y2, cellType typeAux);
 }
