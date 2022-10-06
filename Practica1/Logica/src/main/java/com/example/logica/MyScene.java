@@ -1,6 +1,8 @@
 package com.example.logica;
 import java.util.TreeMap;
 
+import javax.swing.JButton;
+
 enum cellType {EMPTY,SELECTED,CROSSED,WRONG};
 
 //Struct
@@ -27,7 +29,7 @@ class Cell{
 
     }
     public void render(Engine engine) {
-        engine.paintCell(this.x1, this.y1,this.x2, this.y2, this.color);
+        engine.paintCell(this.x1, this.y1,this.x2, this.y2, cellType typeAux);
     }
 
     //PROVISIONAL
@@ -69,22 +71,34 @@ public class MyScene {
     private Cell [][] matriz = new Cell[2][2];
     int remainingCells,wrongCells;
 
+    JButton playButton;
+    JButton backButton;
+    JButton checkButton;
+    JButton giveUpButton;
+
+
     TreeMap<Integer,Integer> wewe = new TreeMap<>();
 
 //    private Engine engine;
 //
-//    public MyScene(Engine engine){
+    public MyScene(Engine engine){
 //        this.engine = engine;
-//        this.matriz = new Cell(50,50,10,150,engine.getWidth());
-//        this.matriz.setColor("blue");
-//
-//    }
-//
-//    public void update(double deltaTime){
-//        this.matriz.update(deltaTime);
-//    }
-//
-//    public void render(){
-//        this.matriz.render(engine);
-//    }
+
+        this.matriz = new Cell(50,50,10,150,engine.getWidth());
+
+        for(int i = 0; i< matriz.length;i++){
+            this.matriz.setColor("blue");
+
+        }
+    }
+
+    public void update(double deltaTime){
+        for(int i = 0; i< matriz.length;i++)
+            this.matriz[i].update(deltaTime);
+    }
+
+    public void render(){
+        for(int i = 0; i< matriz.length;i++)
+            this.matriz[i].render(engine);
+    }
 }
