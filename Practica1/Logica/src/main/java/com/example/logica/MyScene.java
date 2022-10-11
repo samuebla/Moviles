@@ -8,72 +8,6 @@ import java.util.TreeMap;
 
 import javax.swing.JButton;
 
-
-
-//Struct
-public class Cell{
-
-    public enum cellType {EMPTY,SELECTED,CROSSED,WRONG};
-
-    private float x1;
-    private float y1;
-    private float x2;
-    private float y2;
-    private String color;
-
-    cellType type;
-    boolean solution = false;
-
-
-    public Cell(float x1aux, float y1aux, float x2aux, float y2aux) {
-        this.x1 = x1aux;
-        this.y1 = y1aux;
-        this.x2 = x2aux;
-        this.y2 = y2aux;
-        type = cellType.EMPTY;
-    }
-
-    public void update(double deltaTime) {
-
-    }
-
-    public void render(Engine engine) {
-        engine.paintCell(this.x1, this.y1, this.x2, this.y2, type);
-    }
-
-    //PROVISIONAL
-    int size;
-
-    public void setSize(int sizeAux) {
-        size = sizeAux;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-
-    public void setType(cellType aux) {
-        type = aux;
-    }
-
-    public void setSolution(boolean aux) {
-        solution = aux;
-    }
-
-    public cellType getType() {
-        return type;
-    }
-
-    public boolean getSolution() {
-        return solution;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-}
-
 public class MyScene {
 
     //Estuvimos pensando acerca de qué método resultaría más eficiente a la hora de comrpobar las casillas, y tuvimos 2 opciones:
@@ -123,17 +57,8 @@ public class MyScene {
         //Así es como se añade una posicion como si hicieras un emplace_back
         //xPositionsWidth[0].add(8);
 
-
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[i].length; j++) {
-                this.matriz[i][j].setColor("blue");
-            }
-
-        }
-
         checkButton.setVisible(true);
         giveUpButton.setVisible(true);
-
     }
 
     public void update(double deltaTime) {
