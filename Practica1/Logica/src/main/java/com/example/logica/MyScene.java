@@ -31,7 +31,7 @@ class Cell{
 
     }
     public void render(Engine engine) {
-        engine.paintCell(this.x1, this.y1,this.x2, this.y2, cellType typeAux);
+        engine.paintCell(this.x1, this.y1,this.x2, this.y2, type);
     }
 
     //PROVISIONAL
@@ -81,26 +81,32 @@ public class MyScene {
 
     TreeMap<Integer,Integer> wewe = new TreeMap<>();
 
-//    private Engine engine;
-//
+    private Engine engine;
+
     public MyScene(Engine engine){
-//        this.engine = engine;
+        this.engine = engine;
 
         this.matriz = new Cell(50,50,10,150,engine.getWidth());
 
         for(int i = 0; i< matriz.length;i++){
-            this.matriz[i].setColor("blue");
+            for(int j=0;j<matriz.length;j++){
+                this.matriz[i][j].setColor("blue");
+            }
 
         }
     }
 
     public void update(double deltaTime){
         for(int i = 0; i< matriz.length;i++)
-            this.matriz[i].update(deltaTime);
+            for(int j=0;j<matriz.length;j++) {
+                this.matriz[i][j].update(deltaTime);
+            }
     }
 
     public void render(){
         for(int i = 0; i< matriz.length;i++)
-            this.matriz[i].render(engine);
+            for(int j=0;j<matriz.length;j++) {
+                this.matriz[i][j].render(engine);
+            }
     }
 }
