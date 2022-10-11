@@ -1,5 +1,5 @@
 package com.example.lib;
-
+import com.example.logica.Cell.cellType;
 
 public interface Engine {
     //Main functions
@@ -8,5 +8,5 @@ public interface Engine {
     public IState getState();
 
     //Other functions(customized)
-//    public void paintCell(int x1,int x2, int y1,int y2, cellType typeAux);
+    public void paintCell(float x1,float x2, float y1,float y2, cellType typeAux);
 }

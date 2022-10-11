@@ -1,14 +1,15 @@
 package com.example.logica;
-import com.example.lib.*;
+import com.example.lib.Engine;
 
 import java.util.TreeMap;
 import javax.swing.JButton;
 
 
-enum cellType {EMPTY,SELECTED,CROSSED,WRONG};
 
 //Struct
-class Cell{
+public class Cell{
+
+    public enum cellType {EMPTY,SELECTED,CROSSED,WRONG};
 
     private float x1;
     private float y1;
