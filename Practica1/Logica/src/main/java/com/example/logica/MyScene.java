@@ -1,14 +1,17 @@
 package com.example.logica;
-import com.example.lib.*;
 
+import com.example.lib.Engine;
+
+import java.util.ArrayList;
 import java.util.TreeMap;
+
 import javax.swing.JButton;
 
 
-enum cellType {EMPTY,SELECTED,CROSSED,WRONG};
-
 //Struct
-class Cell{
+public class Cell {
+
+    public enum cellType {EMPTY, SELECTED, CROSSED, WRONG}
 
     private float x1;
     private float y1;
@@ -20,43 +23,53 @@ class Cell{
     boolean solution = false;
 
 
-    public Cell(float x1aux, float y1aux,float x2aux, float y2aux){
-        this.x1=x1aux;
-        this.y1=y1aux;
-        this.x2=x2aux;
-        this.y2=y2aux;
+    public Cell(float x1aux, float y1aux, float x2aux, float y2aux) {
+        this.x1 = x1aux;
+        this.y1 = y1aux;
+        this.x2 = x2aux;
+        this.y2 = y2aux;
+        type = cellType.EMPTY;
     }
 
-    public void update(double deltaTime){
+    public void update(double deltaTime) {
 
     }
+
     public void render(Engine engine) {
-        engine.paintCell(this.x1, this.y1,this.x2, this.y2, type);
+        engine.paintCell(this.x1, this.y1, this.x2, this.y2, type);
     }
 
     //PROVISIONAL
     int size;
-    public void setSize(int sizeAux) { size = sizeAux;}
-    public int getSize(){ return size; }
+
+    public void setSize(int sizeAux) {
+        size = sizeAux;
+    }
+
+    public int getSize() {
+        return size;
+    }
 
 
-    public void setType(cellType aux){
+    public void setType(cellType aux) {
         type = aux;
     }
 
-    public void setSolution(boolean aux){
+    public void setSolution(boolean aux) {
         solution = aux;
     }
 
-    public cellType getType(){
+    public cellType getType() {
         return type;
     }
 
-    public boolean getSolution(){
+    public boolean getSolution() {
         return solution;
     }
 
-    public void setColor(String color) { this.color=color; }
+    public void setColor(String color) {
+        this.color = color;
+    }
 }
 
 public class MyScene {
@@ -70,43 +83,70 @@ public class MyScene {
     //Para eliminarla es mucho más eficiente.
 
     //Tenemos un Mapa Ordenado donde guardaremos las casillas seleccionadas
-    private Cell [][] matriz = new Cell[2][2];
-    int remainingCells,wrongCells;
+    private Cell[][] matriz;
+
+    int remainingCells, wrongCells;
 
     JButton playButton;
     JButton backButton;
     JButton checkButton;
     JButton giveUpButton;
 
-
-    TreeMap<Integer,Integer> wewe = new TreeMap<>();
+    //Este mapa ordenado guarda las casillas erroneas pulsadas
+    TreeMap<Integer, Integer> wrongCellsPosition = new TreeMap<>();
 
     private Engine engine;
 
-    public MyScene(Engine engine){
+    public MyScene(Engine engine) {
+
+        //Asociamos el engine correspondiente
         this.engine = engine;
 
-        this.matriz = new Cell(50,50,10,150,engine.getWidth());
+        //Creamos la matriz con el tamaño
+        //AAAAAAAAAAAAAAAAAAAAA MODIFICAR TAMAÑO
+        this.matriz = new Cell[20][20];
 
-        for(int i = 0; i< matriz.length;i++){
-            for(int j=0;j<matriz.length;j++){
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
+                this.matriz[i][j] = new Cell(50, 50, 10, 150);
+            }
+        }
+
+//        this.matriz = new Cell(50, 50, 10, 150, engine.getWidth());
+
+        //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de
+        //las casillas azules. Uno el horizontal y otro el vertical
+        ArrayList<Integer>[] xPositionsWidth;
+        ArrayList<Integer>[] xPositionsHeight;
+        //Así es como se añade una posicion como si hicieras un emplace_back
+        //xPositionsWidth[0].add(8);
+
+
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
                 this.matriz[i][j].setColor("blue");
             }
 
         }
+
+        checkButton.setVisible(true);
+        giveUpButton.setVisible(true);
+
     }
 
-    public void update(double deltaTime){
-        for(int i = 0; i< matriz.length;i++)
-            for(int j=0;j<matriz.length;j++) {
+    public void update(double deltaTime) {
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
                 this.matriz[i][j].update(deltaTime);
             }
+        }
     }
 
-    public void render(){
-        for(int i = 0; i< matriz.length;i++)
-            for(int j=0;j<matriz.length;j++) {
+    public void render() {
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
                 this.matriz[i][j].render(engine);
             }
+        }
     }
 }
