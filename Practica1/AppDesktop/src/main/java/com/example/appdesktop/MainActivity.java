@@ -1,5 +1,7 @@
 package com.example.appdesktop;
 
+import com.example.enginedesktop.EngineDesktop;
+import com.example.logica.MyScene;
 import javax.swing.JFrame;
 
 public class MainActivity {
@@ -7,7 +9,7 @@ public class MainActivity {
     public static void main(String[] args) {
 
         renderView.setVisible(true);
-        Engine engine = new Engine(renderView);
+        EngineDesktop engine = new EngineDesktop(renderView);
 
         MyScene scene = new MyScene(engine);
 

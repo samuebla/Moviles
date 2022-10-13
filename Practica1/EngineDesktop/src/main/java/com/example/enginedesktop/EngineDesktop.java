@@ -1,5 +1,9 @@
 package com.example.enginedesktop;
 
+import com.example.lib.Engine;
+import com.example.lib.IAudio;
+import com.example.lib.IGraphics;
+import com.example.lib.IState;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,10 +12,11 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferStrategy;
 
+
 import javax.swing.JFrame;
 
 //Clase interna encargada de obtener el SurfaceHolder y pintar con el canvas
-public class EngineDesktop implements Runnable{
+public class EngineDesktop extends Engine{
 
     private JFrame myView;
     private BufferStrategy bufferStrategy;
@@ -22,6 +27,19 @@ public class EngineDesktop implements Runnable{
     private boolean running;
 
     private MyScene scene;
+
+    @Override
+    public IGraphics getGraphics(){
+
+    }
+    @Override
+    public IAudio getAudio(){
+
+    }
+    @Override
+    public IState getState(){
+
+    }
 
     public EngineDesktop(JFrame myView){
         // Intentamos crear el buffer strategy con 2 buffers.
@@ -59,28 +77,31 @@ public class EngineDesktop implements Runnable{
         this.graphics2D.setPaintMode();
     }
 
-    //red = rojo
-    //blue = azul
-    //gray = gris
-    //none = celda negada del tablero
-    //blank = cuadrado vacio para la interfaz
-    public void paintCell(int x1, int y1, int x2, int y2, String color){
+    //red = 2
+    //blue = 1
+    //gray = 3
+    //none = celda negada del tablero = 0
+    //blank = cuadrado vacio para la interfaz = -1
+    @Override
+    public void paintCell(int x1, int y1, int x2, int y2, int celltype){
         Color c;
-        if(color == "blue"){
+        if(celltype == 1){
             c = Color.blue;
-        } else if(color == "red"){
+        } else if(celltype == 2){
             c = Color.red;
-        } else if(color == "gray"){
+        } else if(celltype == 3){
             c = Color.gray;
-        }else{
+        }
+        //none and blank
+        else{
             c = Color.white;
         }
         this.graphics2D.setColor(c);
 
-        if (color == "none" || color == "blank"){
+        if (celltype== -1 || celltype == 0){
             this.graphics2D.drawRect(x1, y1, x2 - x1, y2 - y1);
             //Cuadrado de la interfaz
-            if (color == "none"){
+            if (celltype == 0){
                 this.graphics2D.drawLine(x1,y1,x2,y2);
             }
         }else{
@@ -119,58 +140,58 @@ public class EngineDesktop implements Runnable{
     }
 
     //blucle principal
-    @Override
-    public void run() {
-        if (renderThread != Thread.currentThread()) {
-            // Evita que cualquiera que no sea esta clase llame a este Runnable en un Thread
-            // Programación defensiva
-            throw new RuntimeException("run() should not be called directly");
-        }
-        // Si el Thread se pone en marcha
-        // muy rápido, la vista podría todavía no estar inicializada.
-        while(this.running && this.myView.getWidth() == 0);
-        // Espera activa. Sería más elegante al menos dormir un poco.
-        long lastFrameTime = System.nanoTime();
-        long informePrevio = lastFrameTime; // Informes de FPS
-        int frames = 0;
+//    @Override
+//    public void run() {
+//        if (renderThread != Thread.currentThread()) {
+//            // Evita que cualquiera que no sea esta clase llame a este Runnable en un Thread
+//            // Programación defensiva
+//            throw new RuntimeException("run() should not be called directly");
+//        }
+//        // Si el Thread se pone en marcha
+//        // muy rápido, la vista podría todavía no estar inicializada.
+//        while(this.running && this.myView.getWidth() == 0);
+//        // Espera activa. Sería más elegante al menos dormir un poco.
+//        long lastFrameTime = System.nanoTime();
+//        long informePrevio = lastFrameTime; // Informes de FPS
+//        int frames = 0;
+//
+//        // Bucle de juego principal.
+//        while(running) {
+//            long currentTime = System.nanoTime();
+//            long nanoElapsedTime = currentTime - lastFrameTime;
+//            lastFrameTime = currentTime;
+//
+//            // Actualizamos
+//            double elapsedTime = (double) nanoElapsedTime / 1.0E9;
+//            this.update(elapsedTime);
+//
+//            // Pintamos el frame
+//            do {
+//                do {
+//                    Graphics graphics = this.bufferStrategy.getDrawGraphics();
+//                    try {
+//                        this.render();
+//                    }
+//                    finally {
+//                        graphics.dispose(); //Elimina el contexto gráfico y libera recursos del sistema realacionado
+//                    }
+//                } while(this.bufferStrategy.contentsRestored());
+//                this.bufferStrategy.show();
+//            } while(this.bufferStrategy.contentsLost());
+//        }
+//    }
 
-        // Bucle de juego principal.
-        while(running) {
-            long currentTime = System.nanoTime();
-            long nanoElapsedTime = currentTime - lastFrameTime;
-            lastFrameTime = currentTime;
+//    protected void update(double deltaTime) {
+//        this.scene.update(deltaTime);
+//    }
 
-            // Actualizamos
-            double elapsedTime = (double) nanoElapsedTime / 1.0E9;
-            this.update(elapsedTime);
-
-            // Pintamos el frame
-            do {
-                do {
-                    Graphics graphics = this.bufferStrategy.getDrawGraphics();
-                    try {
-                        this.render();
-                    }
-                    finally {
-                        graphics.dispose(); //Elimina el contexto gráfico y libera recursos del sistema realacionado
-                    }
-                } while(this.bufferStrategy.contentsRestored());
-                this.bufferStrategy.show();
-            } while(this.bufferStrategy.contentsLost());
-        }
-    }
-
-    protected void update(double deltaTime) {
-        this.scene.update(deltaTime);
-    }
-
-    protected void render() {
-        // "Borramos" el fondo.
-        this.graphics2D.setColor(Color.black);
-        this.graphics2D.fillRect(0,0, this.getWidth(), this.getHeight());
-        // Pintamos la escena
-        this.scene.render();
-    }
+//    protected void render() {
+//        // "Borramos" el fondo.
+//        this.graphics2D.setColor(Color.black);
+//        this.graphics2D.fillRect(0,0, this.getWidth(), this.getHeight());
+//        // Pintamos la escena
+//        this.scene.render();
+//    }
 
     //Métodos sincronización (parar y reiniciar aplicación)
     public void resume() {
