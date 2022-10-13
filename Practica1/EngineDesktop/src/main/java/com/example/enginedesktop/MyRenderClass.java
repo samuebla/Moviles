@@ -1,4 +1,4 @@
-package com.example.appdesktop;
+package com.example.enginedesktop;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -20,7 +20,7 @@ public class MyRenderClass implements Runnable{
 
     private boolean running;
 
-    private MyScene scene;
+//    private MyScene scene;
 
     public MyRenderClass(JFrame myView){
         this.myView = myView;
@@ -75,7 +75,7 @@ public class MyRenderClass implements Runnable{
 
             // Informe de FPS
             double elapsedTime = (double) nanoElapsedTime / 1.0E9;
-            this.update(elapsedTime);
+//            this.update(elapsedTime);
             if (currentTime - informePrevio > 1000000000l) {
                 long fps = frames * 1000000000l / (currentTime - informePrevio);
                 System.out.println("" + fps + " fps");
@@ -105,13 +105,13 @@ public class MyRenderClass implements Runnable{
         }
     }
 
-    protected void update(double deltaTime) {
-        this.scene.update(deltaTime);
-    }
+//    protected void update(double deltaTime) {
+//        this.scene.update(deltaTime);
+//    }
 
-    public void setScene(MyScene scene) {
-        this.scene = scene;
-    }
+//    public void setScene(MyScene scene) {
+//        this.scene = scene;
+//    }
 
     protected void renderCircle(float x, float y, float r){
         this.graphics2D.setColor(Color.white);
@@ -146,7 +146,7 @@ public class MyRenderClass implements Runnable{
         this.graphics2D.setColor(Color.white);
         this.graphics2D.fillRect(0,0, this.getWidth(), this.getHeight());
         // Pintamos la escena
-        this.scene.render();
+//        this.scene.render();
     }
 
     public void resume() {

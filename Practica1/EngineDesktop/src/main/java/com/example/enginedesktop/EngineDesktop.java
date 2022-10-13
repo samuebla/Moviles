@@ -1,9 +1,6 @@
 package com.example.enginedesktop;
 
-import com.example.lib.Engine;
-import com.example.lib.IAudio;
-import com.example.lib.IGraphics;
-import com.example.lib.IState;
+import com.example.lib.*;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -16,29 +13,31 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 
 //Clase interna encargada de obtener el SurfaceHolder y pintar con el canvas
-public class EngineDesktop extends Engine{
+public class EngineDesktop implements Engine{
 
     private JFrame myView;
     private BufferStrategy bufferStrategy;
     private Graphics2D graphics2D;
 
+    private MyRenderClass render;
+
     private Thread renderThread;
 
     private boolean running;
 
-    private MyScene scene;
+//    private MyScene scene;
 
     @Override
     public IGraphics getGraphics(){
-
+        return null;
     }
     @Override
     public IAudio getAudio(){
-
+        return null;
     }
     @Override
     public IState getState(){
-
+        return null;
     }
 
     public EngineDesktop(JFrame myView){
@@ -60,6 +59,8 @@ public class EngineDesktop extends Engine{
 
         this.bufferStrategy = this.myView.getBufferStrategy();
         this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
+
+        this.render = new MyRenderClass(myView);
     }
 
     //<<< API >>>
@@ -135,9 +136,9 @@ public class EngineDesktop extends Engine{
 
     //<<Motor>>
 
-    public void setScene(MyScene scene) {
-        this.scene = scene;
-    }
+//    public void setScene(MyScene scene) {
+//        this.scene = scene;
+//    }
 
     //blucle principal
 //    @Override
@@ -194,30 +195,30 @@ public class EngineDesktop extends Engine{
 //    }
 
     //Métodos sincronización (parar y reiniciar aplicación)
-    public void resume() {
-        if (!this.running) {
-            // Solo hacemos algo si no nos estábamos ejecutando ya
-            // (programación defensiva)
-            this.running = true;
-            // Lanzamos la ejecución de nuestro método run() en un nuevo Thread.
-            this.renderThread = new Thread(this);
-            this.renderThread.start();
-        }
-    }
+//    public void resume() {
+//        if (!this.running) {
+//            // Solo hacemos algo si no nos estábamos ejecutando ya
+//            // (programación defensiva)
+//            this.running = true;
+//            // Lanzamos la ejecución de nuestro método run() en un nuevo Thread.
+//            this.renderThread = new Thread(this);
+//            this.renderThread.start();
+//        }
+//    }
 
-    public void pause() {
-        if (this.running) {
-            this.running = false;
-            while (true) {
-                try {
-                    this.renderThread.join();
-                    this.renderThread = null;
-                    break;
-                } catch (InterruptedException ie) {
-                    // Esto no debería ocurrir nunca...
-                }
-            }
-        }
-    }
+//    public void pause() {
+//        if (this.running) {
+//            this.running = false;
+//            while (true) {
+//                try {
+//                    this.renderThread.join();
+//                    this.renderThread = null;
+//                    break;
+//                } catch (InterruptedException ie) {
+//                    // Esto no debería ocurrir nunca...
+//                }
+//            }
+//        }
+//    }
 }
 
