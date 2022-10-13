@@ -1,5 +1,4 @@
 package com.example.lib;
-import com.example.logica.Cell.cellType;
 
 public interface Engine {
     //Main functions
