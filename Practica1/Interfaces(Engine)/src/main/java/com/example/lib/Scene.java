@@ -2,6 +2,6 @@ package com.example.lib;
 
 public interface Scene {
     //Main Functions
-    public void update();
+    public void update(double deltaTime);
     public void render();
 }

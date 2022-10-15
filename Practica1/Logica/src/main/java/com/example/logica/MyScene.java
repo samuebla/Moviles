@@ -1,14 +1,13 @@
 package com.example.logica;
-import com.example.lib.Engine;
+import com.example.lib.*;
 
-import com.example.lib.Engine;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javax.swing.JButton;
 
-public class MyScene {
+public class MyScene implements Scene {
 
     //Estuvimos pensando acerca de qué método resultaría más eficiente a la hora de comrpobar las casillas, y tuvimos 2 opciones:
     //No comprobar ni cambiar nada cuando seleccionas alguna casilla y al pulsar comprobar recorrer toda la matriz
@@ -44,7 +43,7 @@ public class MyScene {
 
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
-                this.matriz[i][j] = new Cell(50, 50, 10, 150);
+                this.matriz[i][j] = new Cell(50+20*i, 50+20*j, 18, 18);
             }
         }
 
@@ -52,15 +51,16 @@ public class MyScene {
 
         //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de
         //las casillas azules. Uno el horizontal y otro el vertical
-        ArrayList<Integer>[] xPositionsWidth;
-        ArrayList<Integer>[] xPositionsHeight;
+        //ArrayList<Integer>[] xPositionsWidth;
+        //ArrayList<Integer>[] xPositionsHeight;
         //Así es como se añade una posicion como si hicieras un emplace_back
         //xPositionsWidth[0].add(8);
 
-        checkButton.setVisible(true);
-        giveUpButton.setVisible(true);
+        //checkButton.setVisible(true);
+        //giveUpButton.setVisible(true);
     }
 
+    @Override
     public void update(double deltaTime) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
@@ -69,6 +69,7 @@ public class MyScene {
         }
     }
 
+    @Override
     public void render() {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {

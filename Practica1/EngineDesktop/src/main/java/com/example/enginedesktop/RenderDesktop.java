@@ -1,5 +1,7 @@
 package com.example.enginedesktop;
 
+import com.example.lib.*;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,7 +12,7 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 
 //Clase interna encargada de obtener el SurfaceHolder y pintar con el canvas
-public class MyRenderClass implements Runnable{
+public class RenderDesktop implements Runnable{
 
     private JFrame myView;
     private BufferStrategy bufferStrategy;
@@ -20,9 +22,9 @@ public class MyRenderClass implements Runnable{
 
     private boolean running;
 
-//    private MyScene scene;
+    private Scene scene;
 
-    public MyRenderClass(JFrame myView){
+    public RenderDesktop(JFrame myView){
         this.myView = myView;
         this.myView.addComponentListener(new ComponentAdapter()
         {
@@ -38,6 +40,7 @@ public class MyRenderClass implements Runnable{
 
         this.bufferStrategy = this.myView.getBufferStrategy();
         this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
+
     }
 
     public int getWidth(){
@@ -51,7 +54,7 @@ public class MyRenderClass implements Runnable{
 
     @Override
     public void run() {
-        if (renderThread != Thread.currentThread()) {
+        if (this.renderThread != Thread.currentThread()) {
             // Evita que cualquiera que no sea esta clase llame a este Runnable en un Thread
             // Programación defensiva
             throw new RuntimeException("run() should not be called directly");
@@ -105,48 +108,48 @@ public class MyRenderClass implements Runnable{
         }
     }
 
-//    protected void update(double deltaTime) {
-//        this.scene.update(deltaTime);
+////    protected void update(double deltaTime) {
+////        this.scene.update(deltaTime);
+////    }
+//
+////    public void setScene(MyScene scene) {
+////        this.scene = scene;
+////    }
+//
+//    protected void renderCircle(float x, float y, float r){
+//        this.graphics2D.setColor(Color.white);
+//        this.graphics2D.fillOval((int)x, (int)y, (int)r*2, (int)r*2);
+//        this.graphics2D.setPaintMode();
 //    }
-
-//    public void setScene(MyScene scene) {
-//        this.scene = scene;
+//
+//    //EL INT TIPO ACABARA SIENDO UN ENUM aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+//    protected void renderSquare(int x, int y, int w,int h,int tipo ){
+//        this.graphics2D.setColor(Color.black);
+//        this.graphics2D.fillRect(x-1,y-1,w+2,h+2);
+//
+//        this.graphics2D.setColor(Color.blue);
+//        this.graphics2D.fillRect(x,y,w,h);
+//
+//        this.graphics2D.setColor(Color.black);
+//
+//        if(tipo == 2)
+//            this.graphics2D.drawLine(x,y,x+w,y+h);
+//
+//        //this.graphics2D.drawLine(x,y,x+w,y);
+//        //this.graphics2D.drawLine(x,y,x,y+h);
+//        //this.graphics2D.drawLine(x+w,y,x,y+h);
+//        //this.graphics2D.drawLine(x,y+h,x+w,y);
+//
+//
+//        this.graphics2D.setPaintMode();
 //    }
-
-    protected void renderCircle(float x, float y, float r){
-        this.graphics2D.setColor(Color.white);
-        this.graphics2D.fillOval((int)x, (int)y, (int)r*2, (int)r*2);
-        this.graphics2D.setPaintMode();
-    }
-
-    //EL INT TIPO ACABARA SIENDO UN ENUM aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-    protected void renderSquare(int x, int y, int w,int h,int tipo ){
-        this.graphics2D.setColor(Color.black);
-        this.graphics2D.fillRect(x-1,y-1,w+2,h+2);
-
-        this.graphics2D.setColor(Color.blue);
-        this.graphics2D.fillRect(x,y,w,h);
-
-        this.graphics2D.setColor(Color.black);
-
-        if(tipo == 2)
-            this.graphics2D.drawLine(x,y,x+w,y+h);
-
-        //this.graphics2D.drawLine(x,y,x+w,y);
-        //this.graphics2D.drawLine(x,y,x,y+h);
-        //this.graphics2D.drawLine(x+w,y,x,y+h);
-        //this.graphics2D.drawLine(x,y+h,x+w,y);
-
-
-        this.graphics2D.setPaintMode();
-    }
 
     protected void render() {
         // "Borramos" el fondo.
         this.graphics2D.setColor(Color.white);
         this.graphics2D.fillRect(0,0, this.getWidth(), this.getHeight());
         // Pintamos la escena
-//        this.scene.render();
+        this.scene.render();
     }
 
     public void resume() {
@@ -173,6 +176,10 @@ public class MyRenderClass implements Runnable{
                 }
             }
         }
+    }
+
+    public void setScene(Scene newScene){
+        this.scene = newScene;
     }
 }
 
