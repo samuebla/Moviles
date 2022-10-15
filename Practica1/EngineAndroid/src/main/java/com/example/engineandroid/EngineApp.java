@@ -60,11 +60,16 @@ public class EngineApp implements Engine,Runnable{
         this.paint.setColor(c);
 
         if (celltype== -1 || celltype == 2){
+
+            this.paint.setStyle(Paint.Style.STROKE);
+            this.paint.setStrokeWidth(3);
             this.canvas.drawRect(x,y,x+w,y+h,this.paint);
             //Cuadrado de la interfaz
             if (celltype == 2){
                 this.canvas.drawLine(x,y,w+x,h+y,this.paint);
             }
+            this.paint.setStrokeWidth(1);
+
         }else{
             //Cambiar para que tenga en cuenta las dimensiones de la ventana, los últimos dos valores son el ancho y alto
             this.paint.setStyle(Paint.Style.FILL);
@@ -152,7 +157,7 @@ public class EngineApp implements Engine,Runnable{
 
     protected void render() {
         // "Borramos" el fondo.
-        this.canvas.drawColor(0xFF000000); // ARGB
+        this.canvas.drawColor(0xFFFFFFFF); // ARGB
         this.scene.render();
     }
 

@@ -39,11 +39,11 @@ public class MyScene implements Scene {
 
         //Creamos la matriz con el tamaño
         //AAAAAAAAAAAAAAAAAAAAA MODIFICAR TAMAÑO
-        this.matriz = new Cell[20][20];
+        this.matriz = new Cell[10][10];
 
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
-                this.matriz[i][j] = new Cell(50+20*i, 50+20*j, 18, 18);
+                this.matriz[i][j] = new Cell(50+80*i, 50+80*j, 72, 72);
             }
         }
 
