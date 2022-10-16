@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         this.engine = new EngineApp(this.renderView);
-        MyScene scene = new MyScene(this.engine);
+        MyScene scene = new MyScene(this.engine,10,10);
         engine.setScene(scene);
         engine.resume();
     }

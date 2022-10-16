@@ -19,7 +19,7 @@ public class MainActivity {
 
         EngineDesktop engine = new EngineDesktop(renderView);
 
-        MyScene scene = new MyScene(engine);
+        MyScene scene = new MyScene(engine,10,10);
 
 //      scene.init(render);
         engine.setScene(scene);

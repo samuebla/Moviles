@@ -3,6 +3,7 @@ package com.example.enginedesktop;
 import com.example.lib.*;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 
@@ -121,6 +122,11 @@ public class EngineDesktop implements Engine{
         //No estoy muy seguro de este metodo, quitar si no funciona bien
         this.graphics2D.setPaintMode();
     }
+
+//    @Override
+//    public void addComponent(Component aux){
+//        myView.add(aux);
+//    }
 
 
     public int getWidth(){

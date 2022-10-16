@@ -2,10 +2,16 @@ package com.example.logica;
 import com.example.lib.*;
 
 
+import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class MyScene implements Scene {
 
@@ -22,6 +28,7 @@ public class MyScene implements Scene {
 
     int remainingCells, wrongCells;
 
+    JPanel panel;
     JButton playButton;
     JButton backButton;
     JButton checkButton;
@@ -32,14 +39,14 @@ public class MyScene implements Scene {
 
     private Engine engine;
 
-    public MyScene(Engine engine) {
+    public MyScene(Engine engine, int rows, int cols) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
 
         //Creamos la matriz con el tamaño
         //AAAAAAAAAAAAAAAAAAAAA MODIFICAR TAMAÑO
-        this.matriz = new Cell[10][10];
+        this.matriz = new Cell[rows][cols];
 
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
@@ -47,17 +54,77 @@ public class MyScene implements Scene {
             }
         }
 
-//        this.matriz = new Cell(50, 50, 10, 150, engine.getWidth());
+        panel = new JPanel();
+        panel.setBackground(Color.RED);
+        panel.setBounds(0,0,300,300);
+        checkButton = new JButton("Comprobar");
+        giveUpButton = new JButton("Rendirse");
+
+        checkButton.setBounds(500,500,100,100);
+        giveUpButton.setBounds(40,120,100,100);
+
+
+        checkButton.setVisible(true);
+        giveUpButton.setVisible(true);
+
+        panel.add(checkButton);
+        panel.add(giveUpButton);
+        panel.setVisible(true);
+//        engine.addComponent(panel);
+//        engine.addComponent(checkButton);
+//        engine.addComponent(giveUpButton);
+
 
         //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de
         //las casillas azules. Uno el horizontal y otro el vertical
-        //ArrayList<Integer>[] xPositionsWidth;
-        //ArrayList<Integer>[] xPositionsHeight;
+        ArrayList<Integer>[] xPositionsWidth;
+        ArrayList<Integer>[] xPositionsHeight;
         //Así es como se añade una posicion como si hicieras un emplace_back
         //xPositionsWidth[0].add(8);
 
-        //checkButton.setVisible(true);
-        //giveUpButton.setVisible(true);
+
+
+        //Input del botón de comproabr
+        checkButton.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                //PROBABLEMENTE VACIO
+            }
+
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                //Cambiar de color o algo no se.
+                //CAMBIAR EL TAMAÑO Y HACERLO MAS PEQUEÑITO
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                //NO ES JTEXTFIELD PERO NO ME APETECE MIRAR
+                //Mostramos el mensaje en rojo si faltan casillas o tienes alguna mal seleccionada
+                if(remainingCells == 1) {
+                    JTextField wiwi = new JTextField("Te falta " + remainingCells + " casilla");
+                }
+                else{
+                    JTextField wiwi = new JTextField("Te faltan " + remainingCells + " casillas");
+                }
+                if(wrongCells == 1) {
+                    JTextField wiwi = new JTextField("Tienes mal " + wrongCells + " casilla");
+                }
+                else{
+                    JTextField wiwi = new JTextField("Tienes mal " + wrongCells + " casillas");
+                }
+            }
+
+            //Esto lo que nos salga del higo
+            @Override
+            public void mouseEntered(MouseEvent mouseEvent) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent mouseEvent) {
+            }
+        });
+
     }
 
     @Override

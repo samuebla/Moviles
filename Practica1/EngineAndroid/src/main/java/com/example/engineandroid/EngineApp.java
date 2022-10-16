@@ -102,6 +102,10 @@ public class EngineApp implements Engine,Runnable{
     //<< Fin API>>
 
     //<<Motor>>
+//    @Override
+//    public void addComponent(Component aux){
+//        //Jijiji
+//    }
 
     public void setScene(Scene scene) {
         this.scene = scene;
