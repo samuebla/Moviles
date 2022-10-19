@@ -9,6 +9,7 @@ import java.awt.image.BufferStrategy;
 
 
 import javax.swing.JFrame;
+import javax.swing.JTextPane;
 
 //Clase interna encargada de obtener el SurfaceHolder y pintar con el canvas
 public class EngineDesktop implements Engine{
@@ -24,6 +25,10 @@ public class EngineDesktop implements Engine{
     private boolean running;
 
     private Scene scene;
+
+    //TEXTO DE REMAINING CELLS Y WRONG CELLS DE PRUEBA AAAAA
+    JTextPane remainingCells = new JTextPane();
+    JTextPane wrongCells = new JTextPane();
 
     @Override
     public IGraphics getGraphics(){
@@ -146,6 +151,16 @@ public class EngineDesktop implements Engine{
 
     public void pause() {
         this.render.pause();
+    }
+
+    @Override
+    public void setWrongCells(String text){
+        wrongCells.setText(text);
+    }
+
+    @Override
+    public void setRemainingCells(String text){
+        remainingCells.setText(text);
     }
 
     @Override

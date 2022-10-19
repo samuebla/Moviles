@@ -44,9 +44,16 @@ public class MyScene implements Scene {
         //Asociamos el engine correspondiente
         this.engine = engine;
 
+
+        //Creamos un JPanel para mostrar la tabla
+        JPanel panel = new JPanel();
+
+
+
         //Creamos la matriz con el tamaño
         //AAAAAAAAAAAAAAAAAAAAA MODIFICAR TAMAÑO
         this.matriz = new Cell[rows][cols];
+
 
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
@@ -101,18 +108,18 @@ public class MyScene implements Scene {
             public void mouseReleased(MouseEvent mouseEvent) {
                 //NO ES JTEXTFIELD PERO NO ME APETECE MIRAR
                 //Mostramos el mensaje en rojo si faltan casillas o tienes alguna mal seleccionada
-                if(remainingCells == 1) {
-                    JTextField wiwi = new JTextField("Te falta " + remainingCells + " casilla");
-                }
-                else{
-                    JTextField wiwi = new JTextField("Te faltan " + remainingCells + " casillas");
-                }
-                if(wrongCells == 1) {
-                    JTextField wiwi = new JTextField("Tienes mal " + wrongCells + " casilla");
-                }
-                else{
-                    JTextField wiwi = new JTextField("Tienes mal " + wrongCells + " casillas");
-                }
+//                if(remainingCells == 1) {
+//                    engine.setRemainingCells("Te falta " + remainingCells + " casilla");
+//                }
+//                else{
+//                    engine.setRemainingCells("Te faltan " + remainingCells + " casillas");
+//                }
+//                if(wrongCells == 1) {
+//                    engine.setWrongCells("Tienes mal " + wrongCells + " casilla");
+//                }
+//                else{
+//                    engine.setWrongCells("Tienes mal " + wrongCells + " casillas");
+//                }
             }
 
             //Esto lo que nos salga del higo
