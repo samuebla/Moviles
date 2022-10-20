@@ -4,7 +4,10 @@ import com.example.lib.*;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferStrategy;
 
 
@@ -12,7 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextPane;
 
 //Clase interna encargada de obtener el SurfaceHolder y pintar con el canvas
-public class EngineDesktop implements Engine{
+public class EngineDesktop implements Engine,Runnable{
 
     private JFrame myView;
     private BufferStrategy bufferStrategy;
@@ -30,22 +33,10 @@ public class EngineDesktop implements Engine{
     JTextPane remainingCells = new JTextPane();
     JTextPane wrongCells = new JTextPane();
 
-    @Override
-    public IGraphics getGraphics(){
-        return null;
-    }
-    @Override
-    public IAudio getAudio(){
-        return null;
-    }
-    @Override
-    public IState getState(){
-        return null;
-    }
-
-    public EngineDesktop(JFrame myView){
+    public EngineDesktop(final JFrame myView){
         // Intentamos crear el buffer strategy con 2 buffers.
         this.myView = myView;
+
         int intentos = 100;
         while(intentos-- > 0) {
             try {
@@ -63,6 +54,29 @@ public class EngineDesktop implements Engine{
         this.bufferStrategy = this.myView.getBufferStrategy();
         this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
 
+//        this.myView.addComponentListener(new ComponentListener() {
+//            @Override
+//            public void componentResized(ComponentEvent componentEvent) {
+//                System.out.println(componentEvent.getComponent().getWidth());
+//                getGraphics().setResolution();
+//            }
+//
+//            @Override
+//            public void componentMoved(ComponentEvent componentEvent) {
+//
+//            }
+//
+//            @Override
+//            public void componentShown(ComponentEvent componentEvent) {
+//
+//            }
+//
+//            @Override
+//            public void componentHidden(ComponentEvent componentEvent) {
+//
+//            }
+//        });
+//
         this.render = new RenderDesktop(myView);
     }
 
@@ -143,14 +157,100 @@ public class EngineDesktop implements Engine{
     //<< Fin API>>
 
     //<<Motor>>
+    @Override
+    public IGraphics getGraphics(){
+        return null;
+    }
+    @Override
+    public IAudio getAudio(){
+        return null;
+    }
+    @Override
+    public IState getState(){
+        return null;
+    }
 
-    //Métodos sincronización (parar y reiniciar aplicación)
+    @Override
+    public void run() {
+        if (this.renderThread != Thread.currentThread()) {
+            // Evita que cualquiera que no sea esta clase llame a este Runnable en un Thread
+            // Programación defensiva
+            throw new RuntimeException("run() should not be called directly");
+        }
+
+        // Si el Thread se pone en marcha
+        // muy rápido, la vista podría todavía no estar inicializada.
+        while(this.running && this.myView.getWidth() == 0);
+        // Espera activa. Sería más elegante al menos dormir un poco.
+
+        long lastFrameTime = System.nanoTime();
+
+        long informePrevio = lastFrameTime; // Informes de FPS
+        int frames = 0;
+
+        // Bucle de juego principal.
+        while(running) {
+            long currentTime = System.nanoTime();
+            long nanoElapsedTime = currentTime - lastFrameTime;
+            lastFrameTime = currentTime;
+
+            // Informe de FPS
+            double elapsedTime = (double) nanoElapsedTime / 1.0E9;
+//            this.update(elapsedTime);
+            if (currentTime - informePrevio > 1000000000l) {
+                long fps = frames * 1000000000l / (currentTime - informePrevio);
+                System.out.println("" + fps + " fps");
+                frames = 0;
+                informePrevio = currentTime;
+            }
+            ++frames;
+
+            // Pintamos el frame
+            do {
+                do {
+                    Graphics graphics = this.bufferStrategy.getDrawGraphics();
+                    try {
+                        this.render.render();
+                    }
+                    finally {
+                        graphics.dispose(); //Elimina el contexto gráfico y libera recursos del sistema realacionado
+                    }
+                } while(this.render.bufferStrategy.contentsRestored());
+                this.bufferStrategy.show();
+            } while(this.bufferStrategy.contentsLost());
+
+            /*
+            // Posibilidad: cedemos algo de tiempo. Es una medida conflictiva...
+            try { Thread.sleep(1); } catch(Exception e) {}
+            */
+        }
+    }
+
+
     public void resume() {
-        this.render.resume();
+        if (!this.running) {
+            // Solo hacemos algo si no nos estábamos ejecutando ya
+            // (programación defensiva)
+            this.running = true;
+            // Lanzamos la ejecución de nuestro método run() en un nuevo Thread.
+            this.renderThread = new Thread(this);
+            this.renderThread.start();
+        }
     }
 
     public void pause() {
-        this.render.pause();
+        if (this.running) {
+            this.running = false;
+            while (true) {
+                try {
+                    this.renderThread.join();
+                    this.renderThread = null;
+                    break;
+                } catch (InterruptedException ie) {
+                    // Esto no debería ocurrir nunca...
+                }
+            }
+        }
     }
 
     @Override

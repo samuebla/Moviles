@@ -1,11 +1,11 @@
 package com.example.logica;
 
-import com.example.lib.IFont;
+//import com.example.lib.IFont;
 import com.example.lib.Scene;
 
 public class StartScene implements Scene {
 
-    IFont titulo;
+    //IFont titulo;
 
     @Override
     public void update(double deltaTime) {
