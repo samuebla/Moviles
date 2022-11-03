@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 public class Font_Desktop implements IFont {
 
-    Font font;
+    private Font font;
 
     public Font_Desktop(File file, int type, int size){
         try {
@@ -33,6 +33,7 @@ public class Font_Desktop implements IFont {
             }
         }
         catch(IOException | FontFormatException e) {
+            //It tells you what happened and where in the code this happened.
             e.printStackTrace();
         }
     }
