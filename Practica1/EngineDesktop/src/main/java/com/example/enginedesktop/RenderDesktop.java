@@ -17,6 +17,7 @@ public class RenderDesktop implements IGraphics {
     private BufferStrategy bufferStrategy;
     private Graphics2D graphics2D;
 
+    //AAAA ESTO NO TENDRIA QUE ESTAR CREO YO
     private Scene scene;
 
     public RenderDesktop(JFrame myView){
@@ -84,6 +85,7 @@ public class RenderDesktop implements IGraphics {
 //        this.graphics2D.setPaintMode();
 //    }
 
+    //CREO QUE ESTA MIERDA NO TIENE QUE ESTAR AQUI NONONO
     protected void render() {
         // "Borramos" el fondo.
         this.graphics2D.setColor(Color.white);
@@ -92,6 +94,7 @@ public class RenderDesktop implements IGraphics {
         this.scene.render();
     }
 
+    //CREO QUE ESTO TAMPOCO TIENE QUE ESTAR AYAYAY
     public void setScene(Scene newScene){
         this.scene = newScene;
     }
@@ -114,14 +117,25 @@ public class RenderDesktop implements IGraphics {
     }
 
     @Override
-    public void setColor() {
+    public void setColor(int color) {
+        //El color se pasa en Hexadecimal
+        int r,g,b;
+        //AAA REVISAR NO SE SI ES ASÍ
+        //creo que es 16, 8 y nada
+        r = (color & 0xFF0000)>>24;
+        g = (color & 0xFF00)>>16;
+        b = (color & 0xFF)>>8;
 
+        //AAA NO SE COMO FUNCIONA EL ALPHA
 
+        this.graphics2D.setColor(new Color(r,b,g,255));
     }
 
     @Override
-    public void setFont() {
+    public void setFont(int size, int fontType) {
 
+        //Le tienes que pasar la fuente wtf
+        //this.graphics2D.setFont();
     }
 
     @Override
@@ -130,22 +144,31 @@ public class RenderDesktop implements IGraphics {
     }
 
     @Override
-    public void drawRectangle() {
-
+    public void drawRectangle(int x,int y,int w,int h) {
+        this.graphics2D.drawRect(x,y,w,h);
+        //No recuerdo si esto iba antes o despues, creo que despues
+        this.graphics2D.setPaintMode();
     }
 
     @Override
-    public void fillRectangle() {
-
+    public void fillRectangle(int x,int y,int w,int h) {
+        //CREO QUE AQUI NO VA ANCHO Y ALGO SINO X+W E Y+H
+        this.graphics2D.fillRect(x,y,w,h);
+        //No recuerdo si esto iba antes o despues, creo que despues
+        this.graphics2D.setPaintMode();
     }
 
     @Override
-    public void drawLine() {
-
+    public void drawLine(int x,int y,int w,int h) {
+        //Creo que el w y h n es lo que hay que pasarle
+        this.graphics2D.drawLine(x,y,w,h);
+        this.graphics2D.setPaintMode();
     }
 
     @Override
-    public void drawText() {
+    public void drawText(int x,int y,String text) {
+
+        //this.graphics2D.setFont();
 
     }
 }
