@@ -57,7 +57,7 @@ public class MyScene implements Scene {
 
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
-                this.matriz[i][j] = new Cell(50+80*i, 50+80*j, 72, 72);
+                this.matriz[i][j] = new Cell(50+60*i, 50+60*j, 54, 54);
             }
         }
 

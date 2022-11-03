@@ -11,7 +11,7 @@ public class MainActivity {
 //        renderView.setVisible(true);
         JFrame renderView = new JFrame("Mondongo");
 
-        renderView.setSize(800, 600);
+        renderView.setSize(720, 720);
         renderView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         renderView.setIgnoreRepaint(true);
 

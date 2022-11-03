@@ -37,7 +37,7 @@ public class RenderDesktop implements IGraphics {
 
         this.bufferStrategy = this.myView.getBufferStrategy();
         this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
-
+        this.myView.setResizable(true);
     }
 
     public int getWidth(){
@@ -112,8 +112,6 @@ public class RenderDesktop implements IGraphics {
     @Override
     public void setResolution(double width, double height) {
         this.graphics2D.scale(width, height);
-
-
     }
 
     @Override

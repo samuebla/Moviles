@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Window;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferStrategy;
@@ -13,7 +15,10 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 import javax.swing.JTextPane;
-
+class WindowSize{
+    public float w;
+    public float h;
+};
 //Clase interna encargada de obtener el SurfaceHolder y pintar con el canvas
 public class EngineDesktop implements Engine,Runnable{
 
@@ -29,6 +34,8 @@ public class EngineDesktop implements Engine,Runnable{
 
     private Scene scene;
 
+    WindowSize windowSize;
+
     //TEXTO DE REMAINING CELLS Y WRONG CELLS DE PRUEBA AAAAA
     JTextPane remainingCells = new JTextPane();
     JTextPane wrongCells = new JTextPane();
@@ -36,6 +43,11 @@ public class EngineDesktop implements Engine,Runnable{
     public EngineDesktop(final JFrame myView){
         // Intentamos crear el buffer strategy con 2 buffers.
         this.myView = myView;
+
+        //Guardamos el tamaño de la pantalla
+        windowSize = new WindowSize();
+        this.windowSize.w = this.myView.getSize().width;
+        this.windowSize.h = this.myView.getSize().height;
 
         int intentos = 100;
         while(intentos-- > 0) {
@@ -54,29 +66,34 @@ public class EngineDesktop implements Engine,Runnable{
         this.bufferStrategy = this.myView.getBufferStrategy();
         this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
 
-//        this.myView.addComponentListener(new ComponentListener() {
-//            @Override
-//            public void componentResized(ComponentEvent componentEvent) {
-//                System.out.println(componentEvent.getComponent().getWidth());
-//                getGraphics().setResolution();
-//            }
-//
-//            @Override
-//            public void componentMoved(ComponentEvent componentEvent) {
-//
-//            }
-//
-//            @Override
-//            public void componentShown(ComponentEvent componentEvent) {
-//
-//            }
-//
-//            @Override
-//            public void componentHidden(ComponentEvent componentEvent) {
-//
-//            }
-//        });
-//
+
+        this.myView.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                int w = e.getComponent().getWidth(); int h = e.getComponent().getHeight();
+                graphics2D.scale(w/windowSize.w, h/windowSize.h);
+                windowSize.w = e.getComponent().getSize().width; windowSize.h = e.getComponent().getSize().height;
+                e.getComponent().setSize((int)windowSize.w,(int)windowSize.h);
+//                bufferStrategy = myView.getBufferStrategy();
+//                graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent componentEvent) {
+
+            }
+
+            @Override
+            public void componentShown(ComponentEvent componentEvent) {
+
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent componentEvent) {
+
+            }
+        });
+
         this.render = new RenderDesktop(myView);
     }
 
@@ -159,7 +176,7 @@ public class EngineDesktop implements Engine,Runnable{
     //<<Motor>>
     @Override
     public IGraphics getGraphics(){
-        return null;
+        return this.render;
     }
     @Override
     public IAudio getAudio(){
