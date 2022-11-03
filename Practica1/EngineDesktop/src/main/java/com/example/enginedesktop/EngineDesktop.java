@@ -215,7 +215,7 @@ public class EngineDesktop implements Engine,Runnable{
                     finally {
                         graphics.dispose(); //Elimina el contexto gráfico y libera recursos del sistema realacionado
                     }
-                } while(this.render.bufferStrategy.contentsRestored());
+                } while(this.bufferStrategy.contentsRestored());
                 this.bufferStrategy.show();
             } while(this.bufferStrategy.contentsLost());
 

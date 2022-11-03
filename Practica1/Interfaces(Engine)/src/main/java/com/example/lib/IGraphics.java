@@ -15,13 +15,3 @@ public interface IGraphics {
 
     //Other functions
 }
-
-interface IFont{
-    public int getSize();
-    public boolean isBold();
-}
-
-interface IImage{
-    public int getWidth();
-    public int getHeight();
-}
