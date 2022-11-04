@@ -29,6 +29,8 @@ public class MyScene implements Scene {
 
     int remainingCells, wrongCells;
 
+    int rows_,cols_;
+
     JPanel panel;
     JButton playButton;
     JButton backButton;
@@ -56,9 +58,58 @@ public class MyScene implements Scene {
         //AAAAAAAAAAAAAAAAAAAAA MODIFICAR TAMAÑO
         this.matriz = new Cell[rows][cols];
 
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[i].length; j++) {
+        rows_ = rows;
+        cols_ = cols;
+        for (int i = 0; i < rows_; i++) {
+            for (int j = 0; j < cols_; j++) {
                 this.matriz[i][j] = new Cell(50+60*i, 50+60*j, 54, 54);
+            }
+        }
+
+        //Variable auxiliar solo para que la creacion aleatoria tenga más sentido
+        ArrayList<Integer> colums = new ArrayList<>(rows_);
+
+        //Creación aleatoria del tablero
+        for (int i = 0; i < rows_; i++) {
+            colums.add(0);
+            int numSolutionPerCols = 0;
+            for (int j = 0; j < cols_; j++) {
+                int aux = random.nextInt(2);
+                //Si es 0 NO SE RELLENA
+                if (aux == 0){
+                    this.matriz[i][j].setSolution(false);
+                }
+                //Si es 1 se rellena
+                else{
+                    this.matriz[i][j].setSolution(true);
+                    numSolutionPerCols++;
+
+                    //Para que no haya ninguna fila o columna vacía
+                    colums.set(colums.get(j)+1,j);
+                }
+            }
+            //Si casualmente la fila se ha quedado totalmente vacia
+            if(numSolutionPerCols == 0){
+                //Minimo rellenamos una
+                this.matriz[i][random.nextInt(cols_)].setSolution(true);
+            }
+            //Si por el contrario todas se han rellenado
+            else if(numSolutionPerCols== cols_){
+                //Dejamos al menos una vacia
+                this.matriz[i][random.nextInt(cols_)].setSolution(false);
+            }
+        }
+        //Ahora hacemos lo mismo pero para las columnas
+        for(int i=0;i<rows_;i++){
+            //Si casualmente la columna se ha quedado totalmente vacia
+            if(colums.get(i) == 0){
+                //Minimo rellenamos una
+                this.matriz[random.nextInt(rows_)][i].setSolution(true);
+            }
+            //Si por el contrario todas se han rellenado
+            else if(colums.get(i) == rows_){
+                //Dejamos al menos una vacia
+                this.matriz[random.nextInt(rows_)][i].setSolution(false);
             }
         }
 
@@ -67,14 +118,14 @@ public class MyScene implements Scene {
 //        panel.setBounds(0,0,300,300);
 //        checkButton = new JButton("Comprobar");
 //        giveUpButton = new JButton("Rendirse");
-//
+
 //        checkButton.setBounds(500,500,100,100);
 //        giveUpButton.setBounds(40,120,100,100);
-//
-//
+
+
 //        checkButton.setVisible(true);
 //        giveUpButton.setVisible(true);
-//
+
 //        panel.add(checkButton);
 //        panel.add(giveUpButton);
 //        panel.setVisible(true);
