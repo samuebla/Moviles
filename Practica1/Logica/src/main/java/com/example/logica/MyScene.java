@@ -58,8 +58,20 @@ public class MyScene implements Scene {
         //AAAAAAAAAAAAAAAAAAAAA MODIFICAR TAMAÑO
         this.matriz = new Cell[rows][cols];
 
+        //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de
+        //las casillas azules. Uno el horizontal y otro el vertical
+        ArrayList<Integer>[] xPositionsWidth;
+        ArrayList<Integer>[] xPositionsHeight;
+        //Así es como se añade una posicion como si hicieras un emplace_back
+        //xPositionsWidth[0].add(8);
+
+        xPositionsWidth = new ArrayList[cols_];
+        xPositionsHeight = new ArrayList[rows_];
+
         rows_ = rows;
         cols_ = cols;
+
+        //Iniziamos la matriz
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
                 this.matriz[i][j] = new Cell(50+60*i, 50+60*j, 54, 54);
@@ -68,39 +80,74 @@ public class MyScene implements Scene {
 
         //Variable auxiliar solo para que la creacion aleatoria tenga más sentido
         ArrayList<Integer> colums = new ArrayList<>();
-
         for (int i = 0; i < rows_; i++) {
             colums.add(0);
         }
-            //Creación aleatoria del tablero
+
+
+        int numAnterior = -1;
+
+        //CREACION ALEATORIA DEL TABLERO
         for (int i = 0; i < rows_; i++) {
-            int numSolutionPerCols = 0;
+            //Contador de celdas azules por cada columna
+            int numSolutionPerRows = 0;
+            int contAux = 0;
+
             for (int j = 0; j < cols_; j++) {
+
                 int aux = random.nextInt(2);
+
                 //Si es 0 NO SE RELLENA
                 if (aux == 0){
+                    //Si estabas sumando y luego te llego a 0...
+                    if(contAux!=0){
+                        xPositionsHeight[i].add(contAux);
+                        contAux = 0;
+                    }
                     this.matriz[i][j].setSolution(false);
                 }
                 //Si es 1 se rellena
                 else{
                     this.matriz[i][j].setSolution(true);
-                    numSolutionPerCols++;
+                    numSolutionPerRows++;
+                    //Para averiguar los numeros laterales de las celdas
+                    contAux++;
 
                     //Para que no haya ninguna fila o columna vacía
                     colums.set(j,colums.get(j)+1);
+
+                    //PARA AUXILIAR
+
+
+
+
                 }
             }
+
             //Si casualmente la fila se ha quedado totalmente vacia
-            if(numSolutionPerCols == 0){
+            if(numSolutionPerRows == 0){
                 //Minimo rellenamos una
                 this.matriz[i][random.nextInt(cols_)].setSolution(true);
+                xPositionsHeight[i].add(1);
             }
             //Si por el contrario todas se han rellenado
-            else if(numSolutionPerCols== cols_){
+            else if(numSolutionPerRows== cols_){
+                //AAA MENCIONAR TODO EN EL PDF QUE ESTO COMPLICA TODO PERO SE QUEDA UN CUADRADO MAS BONITO Y CURRAO
+                int aux = random.nextInt(cols_);
                 //Dejamos al menos una vacia
-                this.matriz[i][random.nextInt(cols_)].setSolution(false);
+                this.matriz[i][aux].setSolution(false);
+
+                //Y añadimos al lateral los 2 valores seccionados
+                xPositionsHeight[i].add(aux+1);
+                xPositionsHeight[i].add(contAux-aux);
+            }
+
+            //Para meter en el lateral si el ultimo valor de la fila se ha seleccionado
+            if(contAux!=0){
+                xPositionsHeight[i].add(contAux);
             }
         }
+
         //Ahora hacemos lo mismo pero para las columnas
         for(int i=0;i<rows_;i++){
             //Si casualmente la columna se ha quedado totalmente vacia
@@ -108,11 +155,13 @@ public class MyScene implements Scene {
                 //Minimo rellenamos una
                 this.matriz[random.nextInt(rows_)][i].setSolution(true);
             }
+            //EN UN NONOGRAMA ES NORMAL UNA FILA/COLUMNA CON TO SELECCIONADO, pero hago la comprobacion en las filas
+            //Para evitar cubos grandes que no tengan forma y solo sean relleno y evitar que salga algo compacto
             //Si por el contrario todas se han rellenado
-            else if(colums.get(i) == rows_){
-                //Dejamos al menos una vacia
-                this.matriz[random.nextInt(rows_)][i].setSolution(false);
-            }
+//            else if(colums.get(i) == rows_){
+//                //Dejamos al menos una vacia
+//                this.matriz[random.nextInt(rows_)][i].setSolution(false);
+//            }
         }
 
 //        panel = new JPanel();
@@ -134,16 +183,6 @@ public class MyScene implements Scene {
 //        engine.addComponent(panel);
 //        engine.addComponent(checkButton);
 //        engine.addComponent(giveUpButton);
-
-
-        //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de
-        //las casillas azules. Uno el horizontal y otro el vertical
-        ArrayList<Integer>[] xPositionsWidth;
-        ArrayList<Integer>[] xPositionsHeight;
-        //Así es como se añade una posicion como si hicieras un emplace_back
-        //xPositionsWidth[0].add(8);
-
-
 
         //Input del botón de comproabr
 //        checkButton.addMouseListener(new MouseListener() {
@@ -185,7 +224,6 @@ public class MyScene implements Scene {
 //            public void mouseExited(MouseEvent mouseEvent) {
 //            }
 //        });
-
     }
 
     @Override
