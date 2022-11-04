@@ -15,85 +15,20 @@ import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 import javax.swing.JTextPane;
-class WindowSize{
-    public float w;
-    public float h;
-};
+
 //Clase interna encargada de obtener el SurfaceHolder y pintar con el canvas
 public class EngineDesktop implements Engine,Runnable{
-
-    private JFrame myView;
-    private BufferStrategy bufferStrategy;
-    private Graphics2D graphics2D;
-
-    private RenderDesktop render;
-
     private Thread renderThread;
-
     private boolean running;
 
+    private RenderDesktop render;
     private Scene scene;
-
-    WindowSize windowSize;
 
     //TEXTO DE REMAINING CELLS Y WRONG CELLS DE PRUEBA AAAAA
     JTextPane remainingCells = new JTextPane();
     JTextPane wrongCells = new JTextPane();
 
     public EngineDesktop(final JFrame myView){
-        // Intentamos crear el buffer strategy con 2 buffers.
-        this.myView = myView;
-
-        //Guardamos el tamaño de la pantalla
-        windowSize = new WindowSize();
-        this.windowSize.w = this.myView.getSize().width;
-        this.windowSize.h = this.myView.getSize().height;
-
-        int intentos = 100;
-        while(intentos-- > 0) {
-            try {
-                this.myView.createBufferStrategy(2);
-                break;
-            }
-            catch(Exception e) {
-            }
-        } // while pidiendo la creación de la buffeStrategy
-        if (intentos == 0) {
-            System.err.println("No pude crear la BufferStrategy");
-            return;
-        }
-
-        this.bufferStrategy = this.myView.getBufferStrategy();
-        this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
-
-
-        this.myView.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                int w = e.getComponent().getWidth(); int h = e.getComponent().getHeight();
-                graphics2D.scale(w/windowSize.w, h/windowSize.h);
-                windowSize.w = e.getComponent().getSize().width; windowSize.h = e.getComponent().getSize().height;
-                e.getComponent().setSize((int)windowSize.w,(int)windowSize.h);
-//                bufferStrategy = myView.getBufferStrategy();
-//                graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent componentEvent) {
-
-            }
-
-            @Override
-            public void componentShown(ComponentEvent componentEvent) {
-
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent componentEvent) {
-
-            }
-        });
-
         this.render = new RenderDesktop(myView);
     }
 
@@ -119,44 +54,11 @@ public class EngineDesktop implements Engine,Runnable{
     //blank = marco vacio para la interfaz = -1
     @Override
     public void paintCell(int x, int y, int w, int h, int celltype){
-        Color c;
-        if(celltype == 1){
-            c = Color.blue;
-        } else if(celltype == 3){
-            c = Color.red;
-        } else if(celltype == 0){
-            c = Color.gray;
-        }
-        //none and blank
-        else{
-            c = Color.black;
-        }
-        this.graphics2D.setColor(c);
-
-        if (celltype== -1 || celltype == 2){
-            this.graphics2D.drawRect(x, y, w, h);
-            //Cuadrado de la interfaz
-            if (celltype == 2){
-                this.graphics2D.drawLine(x,y,w+x,h+y);
-            }
-        }else{
-            //Cambiar para que tenga en cuenta las dimensiones de la ventana, los últimos dos valores son el ancho y alto
-            this.graphics2D.fillRect(x, y, w, h);
-        }
-        this.graphics2D.setPaintMode();
+        this.render.paintCell(x, y, w, h, celltype);
     }
 
     public void drawText(String text, int x, int y, String color){
-        Color c;
-        if(color == "red"){
-            c = Color.red;
-        } else{
-            c = Color.black;
-        }
-        this.graphics2D.setColor(c);
-        this.graphics2D.drawString(text, x, y);
-        //No estoy muy seguro de este metodo, quitar si no funciona bien
-        this.graphics2D.setPaintMode();
+        this.render.drawText(text, x, y, color);
     }
 
 //    @Override
@@ -166,10 +68,10 @@ public class EngineDesktop implements Engine,Runnable{
 
 
     public int getWidth(){
-        return this.myView.getWidth();
+        return this.render.getWidth();
     }
     public int getHeight(){
-        return this.myView.getHeight();
+        return this.render.getHeight();
     }
     //<< Fin API>>
 
@@ -197,13 +99,15 @@ public class EngineDesktop implements Engine,Runnable{
 
         // Si el Thread se pone en marcha
         // muy rápido, la vista podría todavía no estar inicializada.
-        while(this.running && this.myView.getWidth() == 0);
+        while(this.running && this.render.getWidth() == 0);
         // Espera activa. Sería más elegante al menos dormir un poco.
 
         long lastFrameTime = System.nanoTime();
 
         long informePrevio = lastFrameTime; // Informes de FPS
         int frames = 0;
+
+        long actualTime = System.currentTimeMillis();
 
         // Bucle de juego principal.
         while(running) {
@@ -222,24 +126,19 @@ public class EngineDesktop implements Engine,Runnable{
             }
             ++frames;
 
-            // Pintamos el frame
-            do {
-                do {
-                    Graphics graphics = this.bufferStrategy.getDrawGraphics();
-                    try {
-                        this.render.render();
-                    }
-                    finally {
-                        graphics.dispose(); //Elimina el contexto gráfico y libera recursos del sistema realacionado
-                    }
-                } while(this.bufferStrategy.contentsRestored());
-                this.bufferStrategy.show();
-            } while(this.bufferStrategy.contentsLost());
+            long deltaTime = System.currentTimeMillis() - actualTime;
+            actualTime += deltaTime;
 
-            /*
-            // Posibilidad: cedemos algo de tiempo. Es una medida conflictiva...
-            try { Thread.sleep(1); } catch(Exception e) {}
-            */
+
+            this.scene.update(deltaTime / 1000.0);
+
+            //Bucle de renderizado
+            do{
+                this.render.initFrame();
+                this.scene.render();
+                this.render.clearFrame();
+            } while(this.render.swap());
+
         }
     }
 
@@ -282,6 +181,7 @@ public class EngineDesktop implements Engine,Runnable{
 
     @Override
     public void setScene(Scene newScene){
+        this.scene = newScene;
         this.render.setScene(newScene);
     }
 }
