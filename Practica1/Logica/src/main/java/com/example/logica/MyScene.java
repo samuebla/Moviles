@@ -67,11 +67,13 @@ public class MyScene implements Scene {
         }
 
         //Variable auxiliar solo para que la creacion aleatoria tenga más sentido
-        ArrayList<Integer> colums = new ArrayList<>(rows_);
+        ArrayList<Integer> colums = new ArrayList<>();
 
-        //Creación aleatoria del tablero
         for (int i = 0; i < rows_; i++) {
             colums.add(0);
+        }
+            //Creación aleatoria del tablero
+        for (int i = 0; i < rows_; i++) {
             int numSolutionPerCols = 0;
             for (int j = 0; j < cols_; j++) {
                 int aux = random.nextInt(2);
