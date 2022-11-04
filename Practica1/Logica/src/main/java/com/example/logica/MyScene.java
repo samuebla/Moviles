@@ -85,7 +85,7 @@ public class MyScene implements Scene {
                     numSolutionPerCols++;
 
                     //Para que no haya ninguna fila o columna vacía
-                    colums.set(colums.get(j)+1,j);
+                    colums.set(j,colums.get(j)+1);
                 }
             }
             //Si casualmente la fila se ha quedado totalmente vacia
