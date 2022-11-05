@@ -11,7 +11,7 @@ public interface IGraphics {
     public void drawRectangle(int x,int y,int w,int h);
     public void fillRectangle(int x,int y,int w,int h);
     public void drawLine(int x,int y,int w,int h);
-    public void drawText(String text, int x, int y, String color);
+    public void drawText(String text, int x, int y, String color,IFont font);
 
     //Other functions
     //Sacamos de aqui el ancho y alto de la pantalla???

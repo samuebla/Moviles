@@ -3,17 +3,13 @@ package com.example.logica;
 import com.example.lib.*;
 
 
-import java.awt.Color;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.TreeMap;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 public class MyScene implements Scene {
 
@@ -28,9 +24,18 @@ public class MyScene implements Scene {
     //Tenemos un Mapa Ordenado donde guardaremos las casillas seleccionadas
     private Cell[][] matriz;
 
+    int rows_, cols_;
+
+    //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de
+    //las casillas azules. Uno el horizontal y otro el vertical
+    private ArrayList<Integer>[] xPositionsTopToBottom;
+    private ArrayList<Integer>[] xPositionsLeftToRight;
+    private String[] xNumberTopToBottom;
+    private ArrayList<String>[] xNumberLeftToRight;
+
     int remainingCells, wrongCells;
 
-    int rows_, cols_;
+    HashMap<String, IFont> fonts;
 
     JPanel panel;
     JButton playButton;
@@ -43,13 +48,21 @@ public class MyScene implements Scene {
 
     private Engine engine;
 
-    public MyScene(Engine engine, int rows, int cols) {
+    public MyScene(Engine engine, int rows, int cols, IFont[] fontsAux, String[] keys) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
 
+        fonts = new HashMap<>();
+
+        //Y las fuentes
+        for (int i = 0; i < fontsAux.length; i++) {
+            fonts.put(keys[i], fontsAux[i]);
+        }
+
         //Creamos el random
         Random random = new Random();
+
 
         //CREO QUE HAY QUE QUITAR TODO ESTO
         //Creamos un JPanel para mostrar la tabla
@@ -62,19 +75,16 @@ public class MyScene implements Scene {
         rows_ = rows;
         cols_ = cols;
 
-        //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de
-        //las casillas azules. Uno el horizontal y otro el vertical
-        ArrayList<Integer>[] xPositionsWidth = new ArrayList[cols_];
-        ArrayList<Integer>[] xPositionsHeight = new ArrayList[rows_];
-        //Así es como se añade una posicion como si hicieras un emplace_back
-        //xPositionsWidth[0].add(8);
-
+        xPositionsTopToBottom = new ArrayList[cols_];
+        xPositionsLeftToRight = new ArrayList[rows_];
+        xNumberTopToBottom = new String[cols_];
+        xNumberLeftToRight = new ArrayList[rows_];
 
 
         //Iniziamos la matriz
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
-                this.matriz[i][j] = new Cell(50 + 60 * i, 50 + 60 * j, 54, 54);
+                this.matriz[i][j] = new Cell(80 + 60 * i, 150 + 60 * j, 54, 54);
             }
         }
 
@@ -82,7 +92,7 @@ public class MyScene implements Scene {
         ArrayList<Integer> colums = new ArrayList<>();
         for (int i = 0; i < rows_; i++) {
             colums.add(0);
-            xPositionsHeight[i] = new ArrayList<>();
+            xPositionsLeftToRight[i] = new ArrayList<>();
         }
 
 
@@ -92,7 +102,8 @@ public class MyScene implements Scene {
         for (int i = 0; i < cols_; i++) {
             numAnterior[i] = -1;
             contadorCols[i] = 1;
-            xPositionsWidth[i] = new ArrayList<>();
+            xPositionsTopToBottom[i] = new ArrayList<>();
+            xNumberLeftToRight[i] = new ArrayList<>();
         }
 
         //CREACION ALEATORIA DEL TABLERO
@@ -109,7 +120,7 @@ public class MyScene implements Scene {
                 if (aux == 0) {
                     //Si estabas sumando y luego te llego a 0...
                     if (contAux != 0) {
-                        xPositionsHeight[i].add(contAux);
+                        xPositionsLeftToRight[i].add(contAux);
                         contAux = 0;
                     }
                     this.matriz[i][j].setSolution(false);
@@ -136,17 +147,17 @@ public class MyScene implements Scene {
                     //Si nunca se han añadido...
                     if (numAnterior[j] == -1) {
                         //Metemos el primero...
-                        xPositionsWidth[j].add(1);
+                        xPositionsTopToBottom[j].add(1);
                         //Y por lo tanto ya tenemos uno añadito
                         numAnterior[j] = 0;
                         //Con esto solo entra si se ha añadido algo alguna vez
-                    } else if(numAnterior[j]==0){
+                    } else if (numAnterior[j] == 0) {
                         contadorCols[j]++;
                         //Sumamos el valor +1 porque la columna continua
                         //Eliminamos el anterior
-                        xPositionsWidth[j].remove(xPositionsWidth[j].size()-1);
+                        xPositionsTopToBottom[j].remove(xPositionsTopToBottom[j].size() - 1);
                         //Y metemos el nuevo
-                        xPositionsWidth[j].add(xPositionsWidth[j].size(), contadorCols[j]);
+                        xPositionsTopToBottom[j].add(xPositionsTopToBottom[j].size(), contadorCols[j]);
                     }
                 }
             }
@@ -155,7 +166,7 @@ public class MyScene implements Scene {
             if (numSolutionPerRows == 0) {
                 //Minimo rellenamos una
                 this.matriz[i][random.nextInt(cols_)].setSolution(true);
-                xPositionsHeight[i].add(1);
+                xPositionsLeftToRight[i].add(1);
             }
             //Si por el contrario todas se han rellenado
             else if (numSolutionPerRows == cols_) {
@@ -165,13 +176,13 @@ public class MyScene implements Scene {
                 this.matriz[i][aux].setSolution(false);
 
                 //Y añadimos al lateral los 2 valores seccionados
-                xPositionsHeight[i].add(aux + 1);
-                xPositionsHeight[i].add(contAux - aux);
+                xPositionsLeftToRight[i].add(aux + 1);
+                xPositionsLeftToRight[i].add(contAux - aux);
             }
 
             //Para meter en el lateral si el ultimo valor de la fila se ha seleccionado
             if (contAux != 0) {
-                xPositionsHeight[i].add(contAux);
+                xPositionsLeftToRight[i].add(contAux);
             }
         }
 
@@ -190,6 +201,21 @@ public class MyScene implements Scene {
 //                this.matriz[random.nextInt(rows_)][i].setSolution(false);
 //            }
         }
+
+
+        for (int i = 0; i < xPositionsTopToBottom.length; i++) {
+            xNumberTopToBottom[i] = "";
+            for (int j = 0; j < xPositionsTopToBottom[i].size(); j++) {
+                xNumberTopToBottom[i] += xPositionsTopToBottom[i].get(j).toString() + " ";
+            }
+        }
+
+        for (int i = 0; i < xPositionsLeftToRight.length; i++) {
+            for (int j = 0; j < xPositionsLeftToRight[i].size(); j++) {
+                xNumberLeftToRight[i].add(xPositionsLeftToRight[i].get(j).toString());
+            }
+        }
+
 
         //QUE FUNCIONA JODER FUNCIONA OSTIA PUTA
 //        for(int i=0;i<xPositionsWidth.length;i++){
@@ -277,5 +303,16 @@ public class MyScene implements Scene {
                 this.matriz[i][j].render(engine);
             }
         }
+        for (int i = 0; i < xNumberTopToBottom.length; i++) {
+            engine.drawText(xNumberTopToBottom[i], 20, 180 + 60*i, "Black", fonts.get("Calibri"));
+
+        }
+        for (int i = 0; i < xNumberLeftToRight.length; i++) {
+            for(int j=0;j<xNumberLeftToRight[i].size();j++){
+                engine.drawText(xNumberLeftToRight[i].get(j),100 + 60*i, 50 + 30*j,"Black",fonts.get("Calibri"));
+
+            }
+        }
+
     }
 }

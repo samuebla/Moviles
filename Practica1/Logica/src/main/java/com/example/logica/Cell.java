@@ -23,7 +23,7 @@ public class Cell{
         this.y1 = y;
         this.w = width;
         this.h = height;
-        type = cellType.CROSSED;
+        type = cellType.EMPTY;
     }
 
     public void update(double deltaTime) {
@@ -52,12 +52,12 @@ public class Cell{
 
     public void setSolution(boolean aux) {
         solution = aux;
-        if(solution){
-            type =cellType.SELECTED;
-        }
-        else{
-            type = cellType.EMPTY;
-        }
+//        if(solution){
+//            type =cellType.SELECTED;
+//        }
+//        else{
+//            type = cellType.EMPTY;
+//        }
     }
 
     public cellType getType() {

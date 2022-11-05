@@ -4,6 +4,7 @@ import com.example.lib.*;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Window;
@@ -57,8 +58,9 @@ public class EngineDesktop implements Engine,Runnable{
         this.render.paintCell(x, y, w, h, celltype);
     }
 
-    public void drawText(String text, int x, int y, String color){
-        this.render.drawText(text, x, y, color);
+    @Override
+    public void drawText(String text, int x, int y, String color, IFont font){
+        this.render.drawText(text, x, y, color,font);
     }
 
 //    @Override

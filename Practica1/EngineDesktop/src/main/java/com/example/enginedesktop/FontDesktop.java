@@ -17,20 +17,7 @@ public class FontDesktop implements IFont {
         try {
             InputStream is = new FileInputStream(file);
             font = Font.createFont(Font.TRUETYPE_FONT, is);
-            switch (type){
-                //NEGRITA
-                case 1:
-                    font = font.deriveFont(Font.BOLD, 40);
-                    break;
-                //ITALICA
-                case 2:
-                    font = font.deriveFont(Font.ITALIC, 40);
-                    break;
-                //No se cual es esta la verdad
-                default:
-                    font = font.deriveFont(Font.TRUETYPE_FONT, 40);
-                    break;
-            }
+            setSize(type,size);
         }
         catch(IOException | FontFormatException e) {
             //It tells you what happened and where in the code this happened.
@@ -45,6 +32,23 @@ public class FontDesktop implements IFont {
         return font.getSize();
     }
 
+    @Override
+    public void setSize(int type,int size){
+        switch (type){
+            //NEGRITA
+            case 1:
+                font = font.deriveFont(Font.BOLD, size);
+                break;
+            //ITALICA
+            case 2:
+                font = font.deriveFont(Font.ITALIC, size);
+                break;
+            //No se cual es esta la verdad
+            default:
+                font = font.deriveFont(Font.TRUETYPE_FONT, size);
+                break;
+        }
+    }
     @Override
     public boolean isBold() {
         return font.isBold();

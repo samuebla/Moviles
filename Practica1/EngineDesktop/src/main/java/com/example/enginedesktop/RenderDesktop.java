@@ -232,7 +232,10 @@ public class RenderDesktop implements IGraphics {
     }
 
     @Override
-    public void drawText(String text, int x, int y, String color){
+    public void drawText(String text, int x, int y, String color,IFont font){
+        //Casteamos esta mierda porque sino no nos funciona
+        FontDesktop f = (FontDesktop) font;
+
         Color c;
         if(color == "red"){
             c = Color.red;
@@ -240,6 +243,7 @@ public class RenderDesktop implements IGraphics {
             c = Color.black;
         }
         this.graphics2D.setColor(c);
+        this.graphics2D.setFont(f.getFont());
         this.graphics2D.drawString(text, x, y);
         //No estoy muy seguro de este metodo, quitar si no funciona bien
         this.graphics2D.setPaintMode();
