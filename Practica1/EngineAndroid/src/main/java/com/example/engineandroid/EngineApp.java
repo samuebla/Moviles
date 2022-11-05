@@ -10,10 +10,7 @@ import android.view.SurfaceView;
 
 public class EngineApp implements Engine,Runnable{
 
-    private SurfaceView myView;
-    private SurfaceHolder holder;
-    private Canvas canvas;
-    private Paint paint;
+    private RenderAndroid render;
 
     private Thread renderThread;
 
@@ -22,17 +19,13 @@ public class EngineApp implements Engine,Runnable{
     private Scene scene;
 
     public EngineApp(SurfaceView myView){
-        // Intentamos crear el buffer strategy con 2 buffers.
-        this.myView = myView;
-        this.holder = this.myView.getHolder();
-        this.paint = new Paint();
-        this.paint.setColor(0xFF000000);
+        render = new RenderAndroid(myView);
     }
 
 
     @Override
     public IGraphics getGraphics(){
-        return null;
+        return render;
     }
     @Override
     public IAudio getAudio(){
@@ -45,37 +38,7 @@ public class EngineApp implements Engine,Runnable{
 
     @Override
     public void paintCell(int x, int y, int w, int h, int celltype){
-        int c;
-        if(celltype == 1){
-            c = 0xFF0000FF;
-        } else if(celltype == 3){
-            c = 0xFFFF0000;
-        } else if(celltype == 0){
-            c = 0xFF808080;
-        }
-        //none and blank
-        else{
-            c = 0xFF000000;
-        }
-        this.paint.setColor(c);
-
-        if (celltype== -1 || celltype == 2){
-
-            this.paint.setStyle(Paint.Style.STROKE);
-            this.paint.setStrokeWidth(3);
-            this.canvas.drawRect(x,y,x+w,y+h,this.paint);
-            //Cuadrado de la interfaz
-            if (celltype == 2){
-                this.canvas.drawLine(x,y,w+x,h+y,this.paint);
-            }
-            this.paint.setStrokeWidth(1);
-
-        }else{
-            //Cambiar para que tenga en cuenta las dimensiones de la ventana, los últimos dos valores son el ancho y alto
-            this.paint.setStyle(Paint.Style.FILL);
-            this.canvas.drawRect(x,y,x+w,y+h,this.paint);
-            this.paint.setStyle(Paint.Style.STROKE);
-        }
+        this.render.paintCell(x, y, w, h, celltype);
     }
 
 
@@ -92,20 +55,11 @@ public class EngineApp implements Engine,Runnable{
 //        this.paint.setColor(c);
 //        this.canvas.drawCircle(x, y, r, this.paint);
 //    }
-//
-//    public int getWidth(){
-//        return this.myView.getWidth();
-//    }
-//    public int getHeight(){
-//        return this.myView.getHeight();
-//    }
-    //<< Fin API>>
 
-    //<<Motor>>
-//    @Override
-//    public void addComponent(Component aux){
-//        //Jijiji
-//    }
+    @Override
+    public void drawText(String text, int x, int y, String color, IFont font){
+        this.render.drawText(text, x, y, color,font);
+    }
 
     public void setScene(Scene scene) {
         this.scene = scene;
@@ -122,7 +76,7 @@ public class EngineApp implements Engine,Runnable{
 
         // Si el Thread se pone en marcha
         // muy rápido, la vista podría todavía no estar inicializada.
-        while(this.running && this.myView.getWidth() == 0);
+        while(this.running && this.render.getWidth() == 0);
         // Espera activa. Sería más elegante al menos dormir un poco.
 
         long lastFrameTime = System.nanoTime();
@@ -147,22 +101,16 @@ public class EngineApp implements Engine,Runnable{
             }
             ++frames;
 
-            // Pintamos el frame
-            while (!this.holder.getSurface().isValid());
-            this.canvas = this.holder.lockCanvas();
-            this.render();
-            this.holder.unlockCanvasAndPost(canvas);
+            //Renderizado
+            this.render.prepareFrame();
+            this.render.render();
+            this.scene.render();
+            this.render.clear();
         }
     }
 
     protected void update(double deltaTime) {
         this.scene.update(deltaTime);
-    }
-
-    protected void render() {
-        // "Borramos" el fondo.
-        this.canvas.drawColor(0xFFFFFFFF); // ARGB
-        this.scene.render();
     }
 
     //Métodos sincronización (parar y reiniciar aplicación)

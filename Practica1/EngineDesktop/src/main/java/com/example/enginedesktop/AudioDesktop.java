@@ -7,20 +7,23 @@ import java.util.HashMap;
 
 public class AudioDesktop implements IAudio {
     //Guardamos los sonidos
-    private HashMap<String,SoundDesktop> sounds;
+    private HashMap<String, SoundDesktop> sounds;
 
-//    Clip audio;
-
-    public AudioDesktop(){
+    public AudioDesktop() {
         sounds = new HashMap<>();
     }
 
     //SetMusic(String filepath)
     //StartMusic
     //Stop music??
-    //PLAYSOUND(String nombre del sonido)
     @Override
     public ISound newSound() {
         return null;
+    }
+
+    @Override
+    public void playSound(String audioName) {
+
+
     }
 }
