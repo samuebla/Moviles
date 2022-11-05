@@ -7,7 +7,3 @@ public interface IAudio{
     //Other functions
 }
 
-interface ISound{
-    public void play();
-    public void stop();
-}

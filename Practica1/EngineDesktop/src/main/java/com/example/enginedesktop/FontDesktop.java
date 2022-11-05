@@ -9,11 +9,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class Font_Desktop implements IFont {
+public class FontDesktop implements IFont {
 
     private Font font;
 
-    public Font_Desktop(File file, int type, int size){
+    public FontDesktop(File file, int type, int size){
         try {
             InputStream is = new FileInputStream(file);
             font = Font.createFont(Font.TRUETYPE_FONT, is);

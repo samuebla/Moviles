@@ -8,11 +8,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Image_Desktop implements IImage {
+public class ImageDesktop implements IImage {
 
     private Image image;
 
-    public Image_Desktop(File file){
+    public ImageDesktop(File file){
         try{
             image = ImageIO.read(file);
         }
