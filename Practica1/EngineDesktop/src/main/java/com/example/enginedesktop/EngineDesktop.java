@@ -13,7 +13,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferStrategy;
 
-
 import javax.swing.JFrame;
 import javax.swing.JTextPane;
 
@@ -25,28 +24,15 @@ public class EngineDesktop implements Engine,Runnable{
     private RenderDesktop render;
     private Scene scene;
 
-    //TEXTO DE REMAINING CELLS Y WRONG CELLS DE PRUEBA AAAAA
-    JTextPane remainingCells = new JTextPane();
-    JTextPane wrongCells = new JTextPane();
+    private InputDesktop input;
 
     public EngineDesktop(final JFrame myView){
         this.render = new RenderDesktop(myView);
+        this.input = new InputDesktop();
+        myView.addMouseListener(this.input.getListener());
     }
 
 //    //<<< API >>>
-//    public void pintarCirculo(float x, float y, float r, String color){
-//        Color c;
-//        if(color == "blue"){
-//            c = Color.blue;
-//        } else if(color == "red"){
-//            c = Color.red;
-//        } else {
-//            c= Color.white;
-//        }
-//        this.graphics2D.setColor(c);
-//        this.graphics2D.fillOval((int)x, (int)y, (int)r*2, (int)r*2);
-//        this.graphics2D.setPaintMode();
-//    }
 
     //EMPTY(gray) = 0
     //SELECTED(blue) = 1
@@ -90,6 +76,21 @@ public class EngineDesktop implements Engine,Runnable{
     public IState getState(){
         return null;
     }
+    //<<Fin Motor>>
+
+    //<<Runnable>>
+    @Override
+    public void setScene(Scene newScene){
+        this.scene = newScene;
+    }
+    //<<Fin Runnable>>
+
+
+    //<<Input>>
+    public Input getInput(){
+        return input;
+    }
+    //<<Fin Input>>
 
     @Override
     public void run() {
@@ -170,21 +171,6 @@ public class EngineDesktop implements Engine,Runnable{
             }
         }
     }
-
-    @Override
-    public void setWrongCells(String text){
-        wrongCells.setText(text);
-    }
-
-    @Override
-    public void setRemainingCells(String text){
-        remainingCells.setText(text);
-    }
-
-    @Override
-    public void setScene(Scene newScene){
-        this.scene = newScene;
-        this.render.setScene(newScene);
-    }
 }
+
 

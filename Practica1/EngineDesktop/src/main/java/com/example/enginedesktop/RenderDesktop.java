@@ -31,9 +31,6 @@ public class RenderDesktop implements IGraphics {
     WindowSize nextScale;
     WindowSize prevScale;
 
-    //AAAA ESTO NO TENDRIA QUE ESTAR CREO YO
-    private Scene scene;
-
     public RenderDesktop(JFrame myView){
         this.myView = myView;
 
@@ -90,14 +87,6 @@ public class RenderDesktop implements IGraphics {
     }
 
 
-////    protected void update(double deltaTime) {
-////        this.scene.update(deltaTime);
-////    }
-//
-////    public void setScene(MyScene scene) {
-////        this.scene = scene;
-////    }
-//
 //    protected void renderCircle(float x, float y, float r){
 //        this.graphics2D.setColor(Color.white);
 //        this.graphics2D.fillOval((int)x, (int)y, (int)r*2, (int)r*2);
@@ -139,8 +128,6 @@ public class RenderDesktop implements IGraphics {
         // "Borramos" el fondo.
         this.graphics2D.setColor(Color.white);
         this.graphics2D.fillRect(0,0, this.getWidth(), this.getHeight());
-        // Pintamos la escena
-        this.scene.render();
     }
 
     public void clearFrame(){
@@ -162,10 +149,6 @@ public class RenderDesktop implements IGraphics {
         return this.bufferStrategy.contentsLost();
     }
 
-    //CREO QUE ESTO TAMPOCO TIENE QUE ESTAR AYAYAY
-    public void setScene(Scene newScene){
-        this.scene = newScene;
-    }
 
 //    @Override
 //    public IImage newImage() {
