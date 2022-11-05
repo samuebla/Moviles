@@ -1,60 +1,74 @@
 package com.example.engineandroid;
 
+import static android.graphics.Typeface.*;
+
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.graphics.fonts.Font;
 import android.graphics.fonts.FontStyle;
 
 import com.example.lib.IFont;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 public class Font_Android implements IFont {
 
-    Font font;
+    Typeface font;
 
-    public Font_Android(File file, int type, int size){
+    public Font_Android(String filePath, int type, int size, AssetManager assets) {
 
-        try {
-            InputStream is = new FileInputStream(file);
-//            font = Font.Builder(file);
-            //CREO QUE VOY A QUITAR ESTA PUTA BASURA
-            switch (type){
-                //NEGRITA
-                case 1:
-//                    font = font.deriveFont(Font.BOLD, 40);
-                    break;
-                //ITALICA
-                case 2:
-//                    font = font.deriveFont(Font.ITALIC, 40);
-                    break;
-                //No se cual es esta la verdad
-                default:
-//                    font = font.deriveFont(Font.TRUETYPE_FONT, 40);
-                    break;
-            }
+        Typeface baseFont = Typeface.createFromAsset(assets, filePath);
+
+        switch (type) {
+            //NEGRITA
+            case 1:
+                font = Typeface.create(baseFont, BOLD);
+                break;
+            //ITALICA
+            case 2:
+                font = Typeface.create(baseFont, ITALIC);
+                break;
+            //NORMAL
+            default:
+                font = Typeface.create(baseFont, NORMAL);
+                break;
         }
-        catch(IOException e) {
-            //It tells you what happened and where in the code this happened.
-            e.printStackTrace();
-        }
+    }
+
+    public Typeface getFont(){
+        return font;
     }
 
     @Override
     public int getSize() {
         //Esto creo que esta bien :D
-        return font.getStyle().getWeight();
+        return font.getWeight();
+    }
+
+    @Override
+    public void setSize(int type, int size) {
+//        switch (type){
+//            //NEGRITA
+//            case 1:
+//                font = font.deriveFont(Font.BOLD, size);
+//                break;
+//            //ITALICA
+//            case 2:
+//                font = font.deriveFont(Font.ITALIC, size);
+//                break;
+//            //No se cual es esta la verdad
+//            default:
+//                font = font.deriveFont(Font.TRUETYPE_FONT, size);
+//                break;
+//        }
     }
 
     @Override
     public boolean isBold() {
         //Algo mal hay por aqui me huele extraño
-        return font.getStyle().getWeight() == FontStyle.FONT_WEIGHT_BOLD;
+        return font.isBold();
     }
 
     @Override
     public boolean isItalic() {
-        return font.getStyle().getSlant() == FontStyle.FONT_SLANT_ITALIC;
+        return font.isItalic();
     }
 }
