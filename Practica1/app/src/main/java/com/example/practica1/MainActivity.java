@@ -43,8 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
         String[] keys = new String[]{"Cooper","Calibri"};
 
-        MyScene scene = new MyScene(this.engine,10,10, fonts, keys);
-        engine.setSceneManager(scene);
+        //AAAAAAAAAAA Cambiar la escena a la del menu principal
+//        MyScene scene = new MyScene(this.engine,10,10, fonts, keys);
+//        engine.setSceneManager(scene);
         engine.resume();
     }
 

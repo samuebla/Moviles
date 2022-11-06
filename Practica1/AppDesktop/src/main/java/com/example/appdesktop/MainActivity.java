@@ -3,6 +3,7 @@ package com.example.appdesktop;
 import com.example.enginedesktop.EngineDesktop;
 import com.example.enginedesktop.FontDesktop;
 import com.example.enginedesktop.SceneMngrDesktop;
+import com.example.logica.MainMenuScene;
 import com.example.logica.MyScene;
 
 import java.awt.Color;
@@ -45,12 +46,12 @@ public class MainActivity {
         //Inicializamos las fuentes y cargamos las que queramos
         FontDesktop[] fonts = new FontDesktop[2];
 
-        fonts[0] = new FontDesktop(new File("Assets\\CooperBlackRegular.ttf"),0,20);
+        fonts[0] = new FontDesktop(new File("Assets\\CooperBlackRegular.ttf"),0,40);
         fonts[1] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"),0,20);
 
         String[] keys = new String[]{"Cooper","Calibri"};
 
-        MyScene scene = new MyScene(engine,10,10,fonts,keys);
+        MainMenuScene scene = new MainMenuScene(engine, fonts, keys);
 
         SceneMngrDesktop sceneMngr = new SceneMngrDesktop();
 

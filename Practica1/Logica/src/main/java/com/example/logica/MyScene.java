@@ -49,17 +49,18 @@ public class MyScene implements Scene {
 
     private Engine engine;
 
-    public MyScene(Engine engine, int rows, int cols, IFont[] fontsAux, String[] keys) {
+    public MyScene(Engine engine, int rows, int cols, HashMap<String, IFont> fontsAux) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
 
-        fonts = new HashMap<>();
-
-        //Y las fuentes
-        for (int i = 0; i < fontsAux.length; i++) {
-            fonts.put(keys[i], fontsAux[i]);
-        }
+        this.fonts = fontsAux;
+//        fonts = new HashMap<>();
+//
+//        //Y las fuentes
+//        for (int i = 0; i < fontsAux.length; i++) {
+//            fonts.put(keys[i], fontsAux[i]);
+//        }
 
         //Creamos el random
         Random random = new Random();
@@ -70,7 +71,6 @@ public class MyScene implements Scene {
 //        JPanel panel = new JPanel();
 
         //Creamos la matriz con el tamaño
-        //AAAAAAAAAAAAAAAAAAAAA MODIFICAR TAMAÑO
         this.matriz = new Cell[rows][cols];
 
         rows_ = rows;
@@ -216,76 +216,6 @@ public class MyScene implements Scene {
                 xNumberLeftToRight[i].add(xPositionsLeftToRight[i].get(j).toString());
             }
         }
-
-
-        //QUE FUNCIONA JODER FUNCIONA OSTIA PUTA
-//        for(int i=0;i<xPositionsWidth.length;i++){
-//            for(int j=0;j<xPositionsWidth[i].size();j++){
-//                System.out.print(xPositionsWidth[i].get(j));
-//            }
-//            System.out.println("     -       ");
-//
-//        }
-//        panel = new JPanel();
-//        panel.setBackground(Color.RED);
-//        panel.setBounds(0,0,300,300);
-//        checkButton = new JButton("Comprobar");
-//        giveUpButton = new JButton("Rendirse");
-
-//        checkButton.setBounds(500,500,100,100);
-//        giveUpButton.setBounds(40,120,100,100);
-
-
-//        checkButton.setVisible(true);
-//        giveUpButton.setVisible(true);
-
-//        panel.add(checkButton);
-//        panel.add(giveUpButton);
-//        panel.setVisible(true);
-//        engine.addComponent(panel);
-//        engine.addComponent(checkButton);
-//        engine.addComponent(giveUpButton);
-
-        //Input del botón de comproabr
-//        checkButton.addMouseListener(new MouseListener() {
-//            @Override
-//            public void mouseClicked(MouseEvent mouseEvent) {
-//                //PROBABLEMENTE VACIO
-//            }
-//
-//            @Override
-//            public void mousePressed(MouseEvent mouseEvent) {
-//                //Cambiar de color o algo no se.
-//                //CAMBIAR EL TAMAÑO Y HACERLO MAS PEQUEÑITO
-//            }
-//
-//            @Override
-//            public void mouseReleased(MouseEvent mouseEvent) {
-//                //NO ES JTEXTFIELD PERO NO ME APETECE MIRAR
-//                //Mostramos el mensaje en rojo si faltan casillas o tienes alguna mal seleccionada
-////                if(remainingCells == 1) {
-////                    engine.setRemainingCells("Te falta " + remainingCells + " casilla");
-////                }
-////                else{
-////                    engine.setRemainingCells("Te faltan " + remainingCells + " casillas");
-////                }
-////                if(wrongCells == 1) {
-////                    engine.setWrongCells("Tienes mal " + wrongCells + " casilla");
-////                }
-////                else{
-////                    engine.setWrongCells("Tienes mal " + wrongCells + " casillas");
-////                }
-//            }
-//
-//            //Esto lo que nos salga del higo
-//            @Override
-//            public void mouseEntered(MouseEvent mouseEvent) {
-//            }
-//
-//            @Override
-//            public void mouseExited(MouseEvent mouseEvent) {
-//            }
-//        });
     }
     public boolean inputReceived(Point2D pos, Point2D size){
         Point2D coords = new Point2D.Double();
