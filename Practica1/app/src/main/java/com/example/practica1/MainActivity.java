@@ -6,19 +6,20 @@ import com.example.logica.MyScene;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.io.File;
-
 public class MainActivity extends AppCompatActivity {
 
     private EngineApp engine;
 
     private SurfaceView renderView;
+
+    AssetManager assetManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +35,14 @@ public class MainActivity extends AppCompatActivity {
         //Inicializamos las fuentes y cargamos las que queramos
         Font_Android[] fonts = new Font_Android[2];
 
-        fonts[0] = new Font_Android("Assets\\CooperBlackRegular.ttf",0,40, this.getAssets());
-        fonts[1] = new Font_Android("Assets\\CalibriRegular.ttf",0,40, this.getAssets());
+        this.assetManager = this.getBaseContext().getAssets();
+
+        try{
+            fonts[0] = new Font_Android("cooperblackregular.ttf",0,40, this.assetManager);
+            fonts[1] = new Font_Android("calibriregular.ttf",0,40, this.assetManager);
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
 
         String[] keys = new String[]{"Cooper","Calibri"};
 
