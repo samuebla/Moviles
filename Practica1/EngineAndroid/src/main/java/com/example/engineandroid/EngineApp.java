@@ -36,6 +36,12 @@ public class EngineApp implements Engine,Runnable{
         return null;
     }
 
+    //<<Input>>
+    public Input getInput(){
+        return null;
+    }
+    //<<Fin Input>>
+
     @Override
     public void paintCell(int x, int y, int w, int h, int celltype){
         this.render.paintCell(x, y, w, h, celltype);

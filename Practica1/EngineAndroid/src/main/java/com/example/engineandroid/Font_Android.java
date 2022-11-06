@@ -9,13 +9,17 @@ import android.graphics.fonts.FontStyle;
 
 import com.example.lib.IFont;
 
+import java.io.IOException;
+
 public class Font_Android implements IFont {
 
     Typeface font;
+    int size;
 
-    public Font_Android(String filePath, int type, int size, AssetManager assets) {
-
-        Typeface baseFont = Typeface.createFromAsset(assets, filePath);
+    public Font_Android(String filePath, int type, int sizeAux, AssetManager assets) throws IOException {
+//        assets.open(filePath);
+        Typeface baseFont = Typeface.createFromAsset(assets, "font/"+filePath);
+        size = sizeAux;
 
         switch (type) {
             //NEGRITA
@@ -40,7 +44,7 @@ public class Font_Android implements IFont {
     @Override
     public int getSize() {
         //Esto creo que esta bien :D
-        return font.getWeight();
+        return size;
     }
 
     @Override
