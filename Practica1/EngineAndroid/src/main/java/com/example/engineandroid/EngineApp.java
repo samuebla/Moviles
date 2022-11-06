@@ -7,6 +7,8 @@ import android.view.SurfaceView;
 public class EngineApp implements Engine,Runnable{
 
     private RenderAndroid render;
+    private InputAndroid input;
+    private IEventHandler eventHandler;
 
     private Thread renderThread;
 
@@ -16,6 +18,19 @@ public class EngineApp implements Engine,Runnable{
 
     public EngineApp(SurfaceView myView){
         render = new RenderAndroid(myView);
+        this.eventHandler = new IEventHandler() {
+            @Override
+            public IEvent getEvent() {
+                return event;
+            }
+
+            @Override
+            public void sendEvent(EventType type) {
+                event.eventType = type;
+            }
+        };
+        this.input = new InputAndroid(this.eventHandler);
+        myView.setOnGenericMotionListener(this.input.getListener());
     }
 
 
@@ -75,6 +90,11 @@ public class EngineApp implements Engine,Runnable{
 
     @Override
     public void setSceneMngr(ISceneMngr sceneMngrAux){this.sceneMngr = (SceneMngrAndroid) sceneMngrAux;}
+
+    @Override
+    public void popScene() {
+
+    }
 
     //blucle principal
     @Override
