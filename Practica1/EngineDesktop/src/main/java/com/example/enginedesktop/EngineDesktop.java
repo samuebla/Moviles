@@ -11,6 +11,8 @@ import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
@@ -25,10 +27,22 @@ public class EngineDesktop implements Engine,Runnable{
     private Scene scene;
 
     private InputDesktop input;
+    private IEventHandler eventHandler;
 
     public EngineDesktop(final JFrame myView){
         this.render = new RenderDesktop(myView);
-        this.input = new InputDesktop();
+        this.eventHandler = new IEventHandler() {
+            @Override
+            public IEvent getEvent() {
+                return event;
+            }
+
+            @Override
+            public void sendEvent(EventType type) {
+                event.eventType = type;
+            }
+        };
+        this.input = new InputDesktop(this.eventHandler);
         myView.addMouseListener(this.input.getListener());
     }
 
@@ -89,6 +103,11 @@ public class EngineDesktop implements Engine,Runnable{
     //<<Input>>
     public Input getInput(){
         return input;
+    }
+
+    @Override
+    public IEventHandler getEventMngr() {
+        return eventHandler;
     }
     //<<Fin Input>>
 

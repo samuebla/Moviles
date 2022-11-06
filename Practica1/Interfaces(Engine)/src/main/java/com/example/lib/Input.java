@@ -1,12 +1,9 @@
 package com.example.lib;
 
 
-public interface Input {
-    class Coords{
-        public int x;
-        public int y;
-    }
-    public void setCoords(int x, int y);
-    public Coords getRawCoords();
+import java.awt.geom.Point2D;
 
+public interface Input {
+    public Point2D getRawCoords();
+    public void setRawCoords(int x, int y);
 }

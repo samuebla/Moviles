@@ -2,15 +2,13 @@ package com.example.logica;
 
 import com.example.lib.Engine;
 
+import java.awt.geom.Point2D;
+
 //Struct
-public class Cell{
+public class Cell extends Interactive{
 
     public enum cellType {EMPTY,SELECTED,CROSSED,WRONG};
 
-    private int x1;
-    private int y1;
-    private int w;
-    private int h;
     //PROVISIONAL
     //private String color;
 
@@ -19,33 +17,47 @@ public class Cell{
 
 
     public Cell(int x, int y, int width, int height) {
-        this.x1 = x;
-        this.y1 = y;
-        this.w = width;
-        this.h = height;
+        this.setSize(width,height);
+        this.setPos(x,y);
         type = cellType.EMPTY;
     }
 
+    @Override
     public void update(double deltaTime) {
 
     }
 
+    @Override
     public void render(Engine engine) {
-        engine.paintCell(this.x1, this.y1, this.w, this.h, type.ordinal());
+        engine.paintCell((int)this.getPos().getX(), (int)this.getPos().getY(), (int)this.getSize().getX(), (int)this.getSize().getY(), type.ordinal());
     }
 
-    //PROVISIONAL
-    int size;
-
-    public void setSize(int sizeAux) {
-        size = sizeAux;
+    @Override
+    public void handleInput() {
+        switch(type){
+            case EMPTY:
+                type = cellType.SELECTED;
+                break;
+            case SELECTED:
+                type = cellType.CROSSED;
+                break;
+            case CROSSED:
+                type = cellType.EMPTY;
+                break;
+        }
     }
 
-    public int getSize() {
+    @Override
+    public Point2D getSize() {
         return size;
     }
 
+    @Override
+    public Point2D getPos() {
+        return pos;
+    }
 
+    //PROVISIONAL
     public void setType(cellType aux) {
         type = aux;
     }

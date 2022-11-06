@@ -3,6 +3,7 @@ package com.example.logica;
 import com.example.lib.*;
 
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -286,6 +287,13 @@ public class MyScene implements Scene {
 //            }
 //        });
     }
+    public boolean inputReceived(Point2D pos, Point2D size){
+        Point2D coords = new Point2D.Double();
+        coords.setLocation(engine.getInput().getRawCoords().getX(), engine.getInput().getRawCoords().getY());
+
+        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
+                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+    }
 
     @Override
     public void update(double deltaTime) {
@@ -294,7 +302,12 @@ public class MyScene implements Scene {
                 this.matriz[i][j].update(deltaTime);
             }
         }
+        if(engine.getEventMngr().getEvent().eventType != IEventHandler.EventType.NONE) {
+            handleInput();
+            engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
+        }
     }
+
 
     @Override
     public void render() {
@@ -310,9 +323,19 @@ public class MyScene implements Scene {
         for (int i = 0; i < xNumberLeftToRight.length; i++) {
             for(int j=0;j<xNumberLeftToRight[i].size();j++){
                 engine.drawText(xNumberLeftToRight[i].get(j),100 + 60*i, 50 + 30*j,"Black",fonts.get("Calibri"));
-
             }
         }
 
+    }
+
+    @Override
+    public void handleInput() {
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
+                if(inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
+                    this.matriz[i][j].handleInput();
+                }
+            }
+        }
     }
 }

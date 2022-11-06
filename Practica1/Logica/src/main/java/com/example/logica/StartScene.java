@@ -24,4 +24,9 @@ public class StartScene implements Scene {
     public void render() {
 
     }
+
+    @Override
+    public void handleInput() {
+
+    }
 }
