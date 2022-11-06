@@ -2,10 +2,6 @@ package com.example.engineandroid;
 
 import com.example.lib.*;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class EngineApp implements Engine,Runnable{
@@ -16,7 +12,7 @@ public class EngineApp implements Engine,Runnable{
 
     private boolean running;
 
-    private Scene scene;
+    private SceneMngrAndroid sceneMngr;
 
     public EngineApp(SurfaceView myView){
         render = new RenderAndroid(myView);
@@ -39,6 +35,11 @@ public class EngineApp implements Engine,Runnable{
     //<<Input>>
     public Input getInput(){
         return null;
+    }
+
+    @Override
+    public IEventHandler getEventMngr() {
+        return eventHandler;
     }
     //<<Fin Input>>
 
@@ -67,9 +68,13 @@ public class EngineApp implements Engine,Runnable{
         this.render.drawText(text, x, y, color,font);
     }
 
-    public void setSceneManager(Scene scene) {
-        this.scene = scene;
+    @Override
+    public void setScene(Scene newScene) {
+        this.sceneMngr.pushScene(newScene);
     }
+
+    @Override
+    public void setSceneMngr(ISceneMngr sceneMngrAux){this.sceneMngr = (SceneMngrAndroid) sceneMngrAux;}
 
     //blucle principal
     @Override
@@ -110,13 +115,13 @@ public class EngineApp implements Engine,Runnable{
             //Renderizado
             this.render.prepareFrame();
             this.render.render();
-            this.scene.render();
+            this.sceneMngr.render();
             this.render.clear();
         }
     }
 
     protected void update(double deltaTime) {
-        this.scene.update(deltaTime);
+        this.sceneMngr.update(deltaTime);
     }
 
     //Métodos sincronización (parar y reiniciar aplicación)
