@@ -6,9 +6,11 @@ import com.example.lib.Vector2D;
 import java.awt.geom.Point2D;
 
 //Struct
-public class Cell extends Interactive{
+public class Cell extends Interactive {
 
-    public enum cellType {EMPTY,SELECTED,CROSSED,WRONG};
+    public enum cellType {EMPTY, SELECTED, CROSSED, WRONG}
+
+    ;
 
     //PROVISIONAL
     //private String color;
@@ -18,8 +20,8 @@ public class Cell extends Interactive{
 
 
     public Cell(int x, int y, int width, int height) {
-        this.setSize(width,height);
-        this.setPos(x,y);
+        this.setSize(width, height);
+        this.setPos(x, y);
         type = cellType.EMPTY;
     }
 
@@ -30,12 +32,12 @@ public class Cell extends Interactive{
 
     @Override
     public void render(Engine engine) {
-        engine.paintCell((int)this.getPos().getX(), (int)this.getPos().getY(), (int)this.getSize().getX(), (int)this.getSize().getY(), type.ordinal());
+        engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
     }
 
     @Override
     public void handleInput() {
-        switch(type){
+        switch (type) {
             case EMPTY:
                 type = cellType.SELECTED;
                 break;
@@ -65,12 +67,6 @@ public class Cell extends Interactive{
 
     public void setSolution(boolean aux) {
         solution = aux;
-//        if(solution){
-//            type =cellType.SELECTED;
-//        }
-//        else{
-//            type = cellType.EMPTY;
-//        }
     }
 
     public cellType getType() {
@@ -83,5 +79,22 @@ public class Cell extends Interactive{
 
     public void setColor(cellType color) {
         this.type = color;
+    }
+
+    //-1 Si te equivocaste
+    //1 Si acertaste
+    //0 Si es vacio
+    public int checkSolution() {
+        if (solution && type == cellType.SELECTED) {
+            //Le decimos que tenia razon
+            return 1;
+        }
+        //Si no es la solucion y lo tienes seleccionado...
+        else if (!solution && type == cellType.SELECTED) {
+            //Cambias el render y le dices que se ha equivocado
+            type = cellType.WRONG;
+            return -1;
+        }
+        return 0;
     }
 }

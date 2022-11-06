@@ -14,6 +14,7 @@ public class LevelSelection implements Scene {
     private Button button5;
     private Button button8;
     private Button button10;
+    private Button backButton;
 
     private Engine engine;
 
@@ -27,6 +28,8 @@ public class LevelSelection implements Scene {
         this.button5 = new Button(100, 400, 70, 50);
         this.button8 = new Button(250, 400, 70, 50);
         this.button10 = new Button(400, 400, 70, 50);
+        this.backButton = new Button(20, 30, 100, 50);
+
     }
 
     public boolean inputReceived(Vector2D pos, Vector2D size){
@@ -53,6 +56,9 @@ public class LevelSelection implements Scene {
         this.engine.paintCell((int)button8.getPos().getX(), (int)button8.getPos().getY(), (int)(button8.getSize().getX()), (int)(button8.getSize().getY()), -1);
         this.engine.drawText("10x10", (int)(button10.getPos().getX() + button10.getSize().getX()/5), (int)(button10.getPos().getY() + button10.getSize().getY()/2), "Black", fonts.get("Calibri"));
         this.engine.paintCell((int)button10.getPos().getX(), (int)button10.getPos().getY(), (int)(button10.getSize().getX()), (int)(button10.getSize().getY()), -1);
+        this.engine.drawText("Volver", (int)(backButton.getPos().getX() + backButton.getSize().getX()/5), (int)(backButton.getPos().getY() + backButton.getSize().getY()/2), "Black", fonts.get("Calibri"));
+        //Texto indicativo
+        this.engine.drawText("Selecciona el tamaño del puzzle", 40, 200, "Black", fonts.get("Calibri"));
     }
 
     @Override

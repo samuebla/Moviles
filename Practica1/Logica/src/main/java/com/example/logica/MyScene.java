@@ -34,19 +34,18 @@ public class MyScene implements Scene {
     private String[] xNumberTopToBottom;
     private ArrayList<String>[] xNumberLeftToRight;
 
-    int remainingCells, wrongCells;
+    int remainingCells, wrongCells,maxCellsSolution;
 
     HashMap<String, IFont> fonts;
 
-    JPanel panel;
-    JButton playButton;
-    JButton backButton;
-    JButton checkButton;
-    JButton giveUpButton;
 
-    //Este mapa ordenado guarda las casillas erroneas pulsadas
-    TreeMap<Integer, Integer> wrongCellsPosition = new TreeMap<>();
+    private Button checkButton;
+    private Button giveUpButton;
 
+    double timerToShowAnswers;
+    boolean showAnswers;
+
+    private static final int  showAnswersTIME= 5;
     private Engine engine;
 
     public MyScene(Engine engine, int rows, int cols, HashMap<String, IFont> fontsAux) {
@@ -55,23 +54,20 @@ public class MyScene implements Scene {
         this.engine = engine;
 
         this.fonts = fontsAux;
-//        fonts = new HashMap<>();
-//
-//        //Y las fuentes
-//        for (int i = 0; i < fontsAux.length; i++) {
-//            fonts.put(keys[i], fontsAux[i]);
-//        }
+
+        this.checkButton = new Button(600, 500, 70, 50);
 
         //Creamos el random
         Random random = new Random();
 
-
-        //CREO QUE HAY QUE QUITAR TODO ESTO
-        //Creamos un JPanel para mostrar la tabla
-//        JPanel panel = new JPanel();
-
         //Creamos la matriz con el tamaño
         this.matriz = new Cell[rows][cols];
+
+        remainingCells = 0;
+        wrongCells = 0;
+        showAnswers = false;
+
+        timerToShowAnswers = showAnswersTIME;
 
         rows_ = rows;
         cols_ = cols;
@@ -136,6 +132,10 @@ public class MyScene implements Scene {
                 }
                 //Si es 1 se rellena
                 else {
+                    //Lo añadimos a la lista de celdas que tiene que acertar el jugador
+                    remainingCells++;
+
+
                     this.matriz[i][j].setSolution(true);
                     numSolutionPerRows++;
                     //Para averiguar los numeros laterales de las celdas
@@ -203,6 +203,8 @@ public class MyScene implements Scene {
 //            }
         }
 
+        //Establecemos el numero completo de casillas que resolver
+        maxCellsSolution = remainingCells;
 
         for (int i = 0; i < xPositionsTopToBottom.length; i++) {
             xNumberTopToBottom[i] = "";
@@ -217,7 +219,8 @@ public class MyScene implements Scene {
             }
         }
     }
-    public boolean inputReceived(Vector2D pos, Vector2D size){
+
+    public boolean inputReceived(Vector2D pos, Vector2D size) {
         Vector2D coords = new Vector2D();
         coords.set(engine.getInput().getRawCoords().getX(), engine.getInput().getRawCoords().getY());
 
@@ -232,9 +235,14 @@ public class MyScene implements Scene {
                 this.matriz[i][j].update(deltaTime);
             }
         }
-        if(engine.getEventMngr().getEvent().eventType != IEventHandler.EventType.NONE) {
+
+        if (engine.getEventMngr().getEvent().eventType != IEventHandler.EventType.NONE) {
             handleInput();
             engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
+        }
+
+        if(timerToShowAnswers>0){
+            timerToShowAnswers-=deltaTime;
         }
     }
 
@@ -247,13 +255,21 @@ public class MyScene implements Scene {
             }
         }
         for (int i = 0; i < xNumberTopToBottom.length; i++) {
-            engine.drawText(xNumberTopToBottom[i], 20, 180 + 60*i, "Black", fonts.get("Calibri"));
+            engine.drawText(xNumberTopToBottom[i], 20, 180 + 60 * i, "Black", fonts.get("Calibri"));
 
         }
         for (int i = 0; i < xNumberLeftToRight.length; i++) {
-            for(int j=0;j<xNumberLeftToRight[i].size();j++){
-                engine.drawText(xNumberLeftToRight[i].get(j),100 + 60*i, 50 + 30*j,"Black",fonts.get("Calibri"));
+            for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
+                engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 50 + 30 * j, "Black", fonts.get("Calibri"));
             }
+        }
+
+        //Botones
+        this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 2), "Black", fonts.get("Calibri"));
+
+        if (showAnswers) {
+            this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", 100, 600, "red", fonts.get("Calibri"));
+            this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", 100, 630, "red", fonts.get("Calibri"));
         }
 
     }
@@ -262,10 +278,40 @@ public class MyScene implements Scene {
     public void handleInput() {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
-                if(inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
+                if (inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
                     this.matriz[i][j].handleInput();
                 }
             }
+        }
+
+        //BOTONES
+        if (inputReceived(this.checkButton.getPos(), this.checkButton.getSize())) {
+            //Reseteamos cada vez que pulsas el boton por si ha cambiado cosas
+            remainingCells = maxCellsSolution;
+            wrongCells = 0;
+            //Comenzamos el timer otra vez
+            timerToShowAnswers = showAnswersTIME;
+
+            //Bool a true y apañao
+            for (int i = 0; i < matriz.length; i++) {
+                for (int j = 0; j < matriz[i].length; j++) {
+
+                    int aux = this.matriz[i][j].checkSolution();
+                    //Si el metodo devuelve 1...
+                    if (aux == 1) {
+                        //Acertaste la casilla
+                        remainingCells--;
+                    }
+                    //Si devuelve -1...
+                    else if (aux == -1) {
+                        //Es porque tienes una casilla erronea
+                        wrongCells++;
+                    }
+                    //Si devuelve 0 es casilla sin nada
+                }
+            }
+            //Y mostramos el texto en pantalla
+            showAnswers = true;
         }
     }
 }
