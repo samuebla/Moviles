@@ -7,10 +7,7 @@ import com.example.logica.MyScene;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.res.AssetManager;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         String[] keys = new String[]{"Cooper","Calibri"};
 
         MyScene scene = new MyScene(this.engine,10,10, fonts, keys);
-        engine.setScene(scene);
+        engine.setSceneManager(scene);
         engine.resume();
     }
 

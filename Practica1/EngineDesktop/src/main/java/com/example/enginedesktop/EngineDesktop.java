@@ -2,21 +2,7 @@ package com.example.enginedesktop;
 
 import com.example.lib.*;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Window;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferStrategy;
-
 import javax.swing.JFrame;
-import javax.swing.JTextPane;
 
 //Clase interna encargada de obtener el SurfaceHolder y pintar con el canvas
 public class EngineDesktop implements Engine,Runnable{
@@ -24,7 +10,7 @@ public class EngineDesktop implements Engine,Runnable{
     private boolean running;
 
     private RenderDesktop render;
-    private Scene scene;
+    private SceneMngrDesktop sceneManager;
 
     private InputDesktop input;
     private IEventHandler eventHandler;
@@ -92,12 +78,16 @@ public class EngineDesktop implements Engine,Runnable{
     }
     //<<Fin Motor>>
 
-    //<<Runnable>>
     @Override
     public void setScene(Scene newScene){
-        this.scene = newScene;
+        this.sceneManager.pushScene(newScene);
     }
-    //<<Fin Runnable>>
+
+    @Override
+    public void setSceneMngr(ISceneMngr sceneMngrAux){this.sceneManager = (SceneMngrDesktop) sceneMngrAux;}
+
+    @Override
+    public void popScene(){ this.sceneManager.popScene();}
 
 
     //<<Input>>
@@ -152,12 +142,12 @@ public class EngineDesktop implements Engine,Runnable{
             actualTime += deltaTime;
 
 
-            this.scene.update(deltaTime / 1000.0);
+            this.sceneManager.update(deltaTime / 1000.0);
 
             //Bucle de renderizado
             do{
                 this.render.initFrame();
-                this.scene.render();
+                this.sceneManager.render();
                 this.render.clearFrame();
             } while(this.render.swap());
 

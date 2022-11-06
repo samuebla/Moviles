@@ -67,7 +67,7 @@ public class EngineApp implements Engine,Runnable{
         this.render.drawText(text, x, y, color,font);
     }
 
-    public void setScene(Scene scene) {
+    public void setSceneManager(Scene scene) {
         this.scene = scene;
     }
 

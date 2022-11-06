@@ -2,11 +2,11 @@ package com.example.appdesktop;
 
 import com.example.enginedesktop.EngineDesktop;
 import com.example.enginedesktop.FontDesktop;
+import com.example.enginedesktop.SceneMngrDesktop;
 import com.example.logica.MyScene;
 
 import java.awt.Color;
 import java.io.File;
-import java.util.HashMap;
 
 import javax.swing.JFrame;
 
@@ -52,7 +52,9 @@ public class MainActivity {
 
         MyScene scene = new MyScene(engine,10,10,fonts,keys);
 
-//      scene.init(render);
+        SceneMngrDesktop sceneMngr = new SceneMngrDesktop();
+
+        engine.setSceneMngr(sceneMngr);
         engine.setScene(scene);
         engine.resume();
     }

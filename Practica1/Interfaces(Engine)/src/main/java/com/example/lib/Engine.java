@@ -13,4 +13,6 @@ public interface Engine {
     public void drawText(String text, int x, int y, String color,IFont font);
 //    public void addComponent(Component aux);
     public void setScene(Scene newScene);
+    public void setSceneMngr(ISceneMngr sceneMngr);
+    public void popScene();
 }
