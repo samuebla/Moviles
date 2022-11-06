@@ -2,6 +2,7 @@ package com.example.enginedesktop;
 
 import com.example.lib.Input;
 import com.example.lib.IEventHandler;
+import com.example.lib.Vector2D;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
 //Input
@@ -9,26 +10,25 @@ import java.awt.Event;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 
 public class InputDesktop implements Input {
     private MouseListener listener;
 
-    Point2D mouseCoords;
+    Vector2D mouseCoords;
 
     public InputDesktop(IEventHandler eHandler){
-        this.mouseCoords = new Point2D.Double();
+        this.mouseCoords = new Vector2D(0,0);
         this.listener = new MouseListener(this, eHandler);
     }
 
     @Override
-    public Point2D getRawCoords() {
+    public Vector2D getRawCoords() {
         return this.mouseCoords;
     }
 
     @Override
     public void setRawCoords(int x, int y) {
-        this.mouseCoords.setLocation(x,y);
+        this.mouseCoords.set(x,y);
     }
 
     public MouseListener getListener(){

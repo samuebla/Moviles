@@ -217,9 +217,9 @@ public class MyScene implements Scene {
             }
         }
     }
-    public boolean inputReceived(Point2D pos, Point2D size){
-        Point2D coords = new Point2D.Double();
-        coords.setLocation(engine.getInput().getRawCoords().getX(), engine.getInput().getRawCoords().getY());
+    public boolean inputReceived(Vector2D pos, Vector2D size){
+        Vector2D coords = new Vector2D();
+        coords.set(engine.getInput().getRawCoords().getX(), engine.getInput().getRawCoords().getY());
 
         return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
                 coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());

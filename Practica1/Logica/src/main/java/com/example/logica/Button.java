@@ -1,14 +1,15 @@
 package com.example.logica;
 
 import com.example.lib.Engine;
+import com.example.lib.Vector2D;
 
 import java.awt.geom.Point2D;
 
 public class Button extends Interactive {
 
     public Button(double posX, double posY, double sizeW, double sizeH){
-        this.pos = new Point2D.Double(posX, posY);
-        this.size = new Point2D.Double(sizeW, sizeH);
+        this.pos = new Vector2D(posX, posY);
+        this.size = new Vector2D(sizeW, sizeH);
     }
 
     @Override
@@ -26,18 +27,18 @@ public class Button extends Interactive {
 
     @Override
     public void setSize(int w, int h){
-        this.size.setLocation(w,h);
+        this.size.set(w,h);
     };
     @Override
     public void setPos(int x, int y){
-        this.pos.setLocation(x, y);
+        this.pos.set(x, y);
     };
 
-    public Point2D getPos(){
+    public Vector2D getPos(){
         return this.pos;
     }
 
-    public Point2D getSize(){
+    public Vector2D getSize(){
         return this.size;
     }
 }

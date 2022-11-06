@@ -1,6 +1,7 @@
 package com.example.logica;
 
 import com.example.lib.Engine;
+import com.example.lib.Vector2D;
 
 import java.awt.geom.Point2D;
 
@@ -48,12 +49,12 @@ public class Cell extends Interactive{
     }
 
     @Override
-    public Point2D getSize() {
+    public Vector2D getSize() {
         return size;
     }
 
     @Override
-    public Point2D getPos() {
+    public Vector2D getPos() {
         return pos;
     }
 

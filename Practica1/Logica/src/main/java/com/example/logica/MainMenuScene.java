@@ -4,6 +4,7 @@ import com.example.lib.Engine;
 import com.example.lib.IEventHandler;
 import com.example.lib.IFont;
 import com.example.lib.Scene;
+import com.example.lib.Vector2D;
 
 import java.awt.geom.Point2D;
 import java.util.HashMap;
@@ -29,9 +30,9 @@ public class MainMenuScene implements Scene {
         play = new Button(300, 300, 70, 40);
     }
 
-    public boolean inputReceived(Point2D pos, Point2D size){
-        Point2D coords = new Point2D.Double();
-        coords.setLocation(engine.getInput().getRawCoords().getX(), engine.getInput().getRawCoords().getY());
+    public boolean inputReceived(Vector2D pos, Vector2D size){
+        Vector2D coords = new Vector2D();
+        coords.set(engine.getInput().getRawCoords().getX(), engine.getInput().getRawCoords().getY());
 
         return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
                 coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
