@@ -27,7 +27,7 @@ public class MainMenuScene implements Scene {
             fonts.put(keys[i], fontsAux[i]);
         }
 
-        play = new Button(300, 300, 70, 40);
+        play = new Button(300, 350, 70, 40);
     }
 
     public boolean inputReceived(Vector2D pos, Vector2D size){

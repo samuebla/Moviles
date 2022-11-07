@@ -44,12 +44,14 @@ public class MainActivity {
         EngineDesktop engine = new EngineDesktop(renderView);
 
         //Inicializamos las fuentes y cargamos las que queramos
-        FontDesktop[] fonts = new FontDesktop[2];
+        FontDesktop[] fonts = new FontDesktop[4];
 
         fonts[0] = new FontDesktop(new File("Assets\\CooperBlackRegular.ttf"),0,40);
-        fonts[1] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"),0,20);
+        fonts[1] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"),0,25);
+        fonts[2] = new FontDesktop(new File("Assets\\CooperBlackRegular.ttf"),1,40);
+        fonts[3] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"),1,20);
 
-        String[] keys = new String[]{"Cooper","Calibri"};
+        String[] keys = new String[]{"Cooper","Calibri","CooperBold","CalibriBold"};
 
         MainMenuScene scene = new MainMenuScene(engine, fonts, keys);
 
