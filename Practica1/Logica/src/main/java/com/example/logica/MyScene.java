@@ -247,8 +247,11 @@ public class MyScene implements Scene {
             engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
         }
 
-        if(timerToShowAnswers>0){
+        if(showAnswers){
             timerToShowAnswers-=deltaTime;
+            if(timerToShowAnswers<=0){
+                showAnswers=false;
+            }
         }
     }
 
@@ -316,6 +319,7 @@ public class MyScene implements Scene {
                     //Si devuelve 0 es casilla sin nada
                 }
             }
+
             //Y mostramos el texto en pantalla
             showAnswers = true;
         }
