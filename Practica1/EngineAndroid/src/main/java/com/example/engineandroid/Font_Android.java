@@ -17,7 +17,7 @@ public class Font_Android implements IFont {
     int size;
 
     public Font_Android(String filePath, int type, int sizeAux, AssetManager assets) throws IOException {
-//        assets.open(filePath);
+        assets.open(filePath);
         Typeface baseFont = Typeface.createFromAsset(assets, "font/"+filePath);
         size = sizeAux;
 
