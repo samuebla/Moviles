@@ -14,6 +14,10 @@ public class LevelSelection implements Scene {
     private Button button5;
     private Button button8;
     private Button button10;
+    private Button button5x8;
+    private Button button8x10;
+    private Button button5x10;
+
     private Button backButton;
 
     private Engine engine;
@@ -25,10 +29,14 @@ public class LevelSelection implements Scene {
 
         this.fonts = fontsAux;
 
-        this.button5 = new Button(100, 400, 70, 50);
-        this.button8 = new Button(250, 400, 70, 50);
-        this.button10 = new Button(400, 400, 70, 50);
-        this.backButton = new Button(20, 30, 100, 50);
+        this.button5 = new Button(180, 300, 70, 70);
+        this.button8 = new Button(330, 300, 70, 70);
+        this.button10 = new Button(480, 300, 70, 70);
+        this.button5x8 = new Button(180, 500, 70, 70);
+        this.button8x10 = new Button(330, 500, 70, 70);
+        this.button5x10 = new Button(480, 500, 70, 70);
+
+        this.backButton = new Button(20, 30, 100, 70);
 
     }
 
@@ -50,15 +58,30 @@ public class LevelSelection implements Scene {
 
     @Override
     public void render(){
-        this.engine.drawText("5x5", (int)(button5.getPos().getX() + button5.getSize().getX()/3.5), (int)(button5.getPos().getY() + button5.getSize().getY()/2), "Black", fonts.get("Calibri"));
+        //5x5
+        this.engine.drawText("5x5", (int)(button5.getPos().getX() + button5.getSize().getX()/3.8), (int)(button5.getPos().getY() + button5.getSize().getY()/1.8), "Black", fonts.get("Calibri"));
         this.engine.paintCell((int)button5.getPos().getX(), (int)button5.getPos().getY(), (int)(button5.getSize().getX()), (int)(button5.getSize().getY()), -1);
-        this.engine.drawText("8x8", (int)(button8.getPos().getX() + button8.getSize().getX()/3.5), (int)(button8.getPos().getY() + button8.getSize().getY()/2), "Black", fonts.get("Calibri"));
+        //8x8
+        this.engine.drawText("8x8", (int)(button8.getPos().getX() + button8.getSize().getX()/3.8), (int)(button8.getPos().getY() + button8.getSize().getY()/1.8), "Black", fonts.get("Calibri"));
         this.engine.paintCell((int)button8.getPos().getX(), (int)button8.getPos().getY(), (int)(button8.getSize().getX()), (int)(button8.getSize().getY()), -1);
-        this.engine.drawText("10x10", (int)(button10.getPos().getX() + button10.getSize().getX()/5), (int)(button10.getPos().getY() + button10.getSize().getY()/2), "Black", fonts.get("Calibri"));
+        //10x10
+        this.engine.drawText("10x10", (int)(button10.getPos().getX() + button10.getSize().getX()/9), (int)(button10.getPos().getY() + button10.getSize().getY()/1.8), "Black", fonts.get("Calibri"));
         this.engine.paintCell((int)button10.getPos().getX(), (int)button10.getPos().getY(), (int)(button10.getSize().getX()), (int)(button10.getSize().getY()), -1);
+
+        this.engine.drawText("5x8", (int)(button5x8.getPos().getX() + button5x8.getSize().getX()/3.8), (int)(button5x8.getPos().getY() + button5x8.getSize().getY()/1.8), "Black", fonts.get("Calibri"));
+        this.engine.paintCell((int)button5x8.getPos().getX(), (int)button5x8.getPos().getY(), (int)(button5x8.getSize().getX()), (int)(button5x8.getSize().getY()), -1);
+
+        this.engine.drawText("8x10", (int)(button8x10.getPos().getX() + button8x10.getSize().getX()/5.5), (int)(button8x10.getPos().getY() + button8x10.getSize().getY()/1.8), "Black", fonts.get("Calibri"));
+        this.engine.paintCell((int)button8x10.getPos().getX(), (int)button8x10.getPos().getY(), (int)(button8x10.getSize().getX()), (int)(button8x10.getSize().getY()), -1);
+
+        this.engine.drawText("5x10", (int)(button5x10.getPos().getX() + button5x10.getSize().getX()/6), (int)(button5x10.getPos().getY() + button5x10.getSize().getY()/1.8), "Black", fonts.get("Calibri"));
+        this.engine.paintCell((int)button5x10.getPos().getX(), (int)button5x10.getPos().getY(), (int)(button5x10.getSize().getX()), (int)(button5x10.getSize().getY()), -1);
+
+
         this.engine.drawText("Volver", (int)(backButton.getPos().getX() + backButton.getSize().getX()/5), (int)(backButton.getPos().getY() + backButton.getSize().getY()/2), "Black", fonts.get("Calibri"));
+
         //Texto indicativo
-        this.engine.drawText("Selecciona el tamaño del puzzle", 40, 200, "Black", fonts.get("Calibri"));
+        this.engine.drawText("Selecciona el tamaño del puzzle", 200, 200, "Black", fonts.get("Calibri"));
     }
 
     @Override
@@ -75,6 +98,21 @@ public class LevelSelection implements Scene {
 
         if (inputReceived(this.button10.getPos(), this.button10.getSize())){
             MyScene playScene = new MyScene(this.engine, 10, 10, this.fonts);
+            this.engine.setScene(playScene);
+        }
+
+        if (inputReceived(this.button5x8.getPos(), this.button5x8.getSize())){
+            MyScene playScene = new MyScene(this.engine, 5, 8, this.fonts);
+            this.engine.setScene(playScene);
+        }
+
+        if (inputReceived(this.button8x10.getPos(), this.button8x10.getSize())){
+            MyScene playScene = new MyScene(this.engine, 8, 10, this.fonts);
+            this.engine.setScene(playScene);
+        }
+
+        if (inputReceived(this.button5x10.getPos(), this.button5x10.getSize())){
+            MyScene playScene = new MyScene(this.engine, 5, 10, this.fonts);
             this.engine.setScene(playScene);
         }
     }

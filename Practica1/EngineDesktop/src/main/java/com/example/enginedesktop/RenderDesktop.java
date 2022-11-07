@@ -254,6 +254,7 @@ public class RenderDesktop implements IGraphics {
 
         if (celltype== -1 || celltype == 2){
             this.graphics2D.drawRect(x, y, w, h);
+
             //Cuadrado de la interfaz
             if (celltype == 2){
                 this.graphics2D.drawLine(x,y,w+x,h+y);

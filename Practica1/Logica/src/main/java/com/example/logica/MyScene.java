@@ -72,10 +72,10 @@ public class MyScene implements Scene {
         rows_ = rows;
         cols_ = cols;
 
-        xPositionsTopToBottom = new ArrayList[cols_];
-        xPositionsLeftToRight = new ArrayList[rows_];
-        xNumberTopToBottom = new String[cols_];
-        xNumberLeftToRight = new ArrayList[rows_];
+        xPositionsTopToBottom = new ArrayList[rows_];
+        xPositionsLeftToRight = new ArrayList[cols_];
+        xNumberTopToBottom = new String[rows_];
+        xNumberLeftToRight = new ArrayList[cols_];
 
 
         //Iniziamos la matriz
@@ -88,8 +88,7 @@ public class MyScene implements Scene {
         //Variable auxiliar solo para que la creacion aleatoria tenga más sentido
         ArrayList<Integer> colums = new ArrayList<>();
         for (int i = 0; i < rows_; i++) {
-            colums.add(0);
-            xPositionsLeftToRight[i] = new ArrayList<>();
+            xPositionsTopToBottom[i] = new ArrayList<>();
         }
 
 
@@ -97,9 +96,10 @@ public class MyScene implements Scene {
         int[] contadorCols = new int[cols_];
         //Inicializamos los valores a -1
         for (int i = 0; i < cols_; i++) {
+            colums.add(0);
             numAnterior[i] = -1;
             contadorCols[i] = 1;
-            xPositionsTopToBottom[i] = new ArrayList<>();
+            xPositionsLeftToRight[i] = new ArrayList<>();
             xNumberLeftToRight[i] = new ArrayList<>();
         }
 
@@ -117,7 +117,7 @@ public class MyScene implements Scene {
                 if (aux == 0) {
                     //Si estabas sumando y luego te llego a 0...
                     if (contAux != 0) {
-                        xPositionsLeftToRight[i].add(contAux);
+                        xPositionsTopToBottom[i].add(contAux);
                         contAux = 0;
                     }
                     this.matriz[i][j].setSolution(false);
@@ -142,13 +142,14 @@ public class MyScene implements Scene {
                     contAux++;
 
                     //Para que no haya ninguna fila o columna vacía
+                    //todo wewe
                     colums.set(j, colums.get(j) + 1);
 
                     //PARA AUXILIAR
                     //Si nunca se han añadido...
                     if (numAnterior[j] == -1) {
                         //Metemos el primero...
-                        xPositionsTopToBottom[j].add(1);
+                        xPositionsLeftToRight[j].add(1);
                         //Y por lo tanto ya tenemos uno añadito
                         numAnterior[j] = 0;
                         //Con esto solo entra si se ha añadido algo alguna vez
@@ -156,9 +157,9 @@ public class MyScene implements Scene {
                         contadorCols[j]++;
                         //Sumamos el valor +1 porque la columna continua
                         //Eliminamos el anterior
-                        xPositionsTopToBottom[j].remove(xPositionsTopToBottom[j].size() - 1);
+                        xPositionsLeftToRight[j].remove(xPositionsLeftToRight[j].size() - 1);
                         //Y metemos el nuevo
-                        xPositionsTopToBottom[j].add(xPositionsTopToBottom[j].size(), contadorCols[j]);
+                        xPositionsLeftToRight[j].add(xPositionsLeftToRight[j].size(), contadorCols[j]);
                     }
                 }
             }
@@ -167,7 +168,7 @@ public class MyScene implements Scene {
             if (numSolutionPerRows == 0) {
                 //Minimo rellenamos una
                 this.matriz[i][random.nextInt(cols_)].setSolution(true);
-                xPositionsLeftToRight[i].add(1);
+                xPositionsTopToBottom[i].add(1);
             }
             //Si por el contrario todas se han rellenado
             else if (numSolutionPerRows == cols_) {
@@ -177,13 +178,13 @@ public class MyScene implements Scene {
                 this.matriz[i][aux].setSolution(false);
 
                 //Y añadimos al lateral los 2 valores seccionados
-                xPositionsLeftToRight[i].add(aux + 1);
-                xPositionsLeftToRight[i].add(contAux - aux);
+                xPositionsTopToBottom[i].add(aux + 1);
+                xPositionsTopToBottom[i].add(contAux - aux);
             }
 
             //Para meter en el lateral si el ultimo valor de la fila se ha seleccionado
             if (contAux != 0) {
-                xPositionsLeftToRight[i].add(contAux);
+                xPositionsTopToBottom[i].add(contAux);
             }
         }
 
@@ -206,6 +207,13 @@ public class MyScene implements Scene {
         //Establecemos el numero completo de casillas que resolver
         maxCellsSolution = remainingCells;
 
+        //REVISAR
+        for (int i = 0; i < xPositionsLeftToRight.length; i++) {
+            for (int j = 0; j < xPositionsLeftToRight[i].size(); j++) {
+                xNumberLeftToRight[i].add(xPositionsLeftToRight[i].get(j).toString());
+            }
+        }
+
         for (int i = 0; i < xPositionsTopToBottom.length; i++) {
             xNumberTopToBottom[i] = "";
             for (int j = 0; j < xPositionsTopToBottom[i].size(); j++) {
@@ -213,11 +221,7 @@ public class MyScene implements Scene {
             }
         }
 
-        for (int i = 0; i < xPositionsLeftToRight.length; i++) {
-            for (int j = 0; j < xPositionsLeftToRight[i].size(); j++) {
-                xNumberLeftToRight[i].add(xPositionsLeftToRight[i].get(j).toString());
-            }
-        }
+
     }
 
     public boolean inputReceived(Vector2D pos, Vector2D size) {
