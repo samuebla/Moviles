@@ -61,7 +61,7 @@ public class MyScene implements Scene {
         Random random = new Random();
 
         //Creamos la matriz con el tamaño
-        this.matriz = new Cell[rows][cols];
+        this.matriz = new Cell[cols][rows];
 
         remainingCells = 0;
         wrongCells = 0;
@@ -81,12 +81,14 @@ public class MyScene implements Scene {
         //Iniziamos la matriz
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
-                this.matriz[i][j] = new Cell(80 + 60 * i, 150 + 60 * j, 54, 54);
+                //Primero J que son las columnas en X y luego las filas en I
+                this.matriz[j][i] = new Cell(80 + 60 * j, 150 + 60 * i, 54, 54);
             }
         }
 
         //Variable auxiliar solo para que la creacion aleatoria tenga más sentido
         ArrayList<Integer> colums = new ArrayList<>();
+
         for (int i = 0; i < rows_; i++) {
             xPositionsTopToBottom[i] = new ArrayList<>();
         }
@@ -120,7 +122,7 @@ public class MyScene implements Scene {
                         xPositionsTopToBottom[i].add(contAux);
                         contAux = 0;
                     }
-                    this.matriz[i][j].setSolution(false);
+                    this.matriz[j][i].setSolution(false);
 
                     //Para el valor de las columnas...
                     if (numAnterior[j] == 0) {
@@ -136,7 +138,7 @@ public class MyScene implements Scene {
                     remainingCells++;
 
 
-                    this.matriz[i][j].setSolution(true);
+                    this.matriz[j][i].setSolution(true);
                     numSolutionPerRows++;
                     //Para averiguar los numeros laterales de las celdas
                     contAux++;
@@ -167,7 +169,7 @@ public class MyScene implements Scene {
             //Si casualmente la fila se ha quedado totalmente vacia
             if (numSolutionPerRows == 0) {
                 //Minimo rellenamos una
-                this.matriz[i][random.nextInt(cols_)].setSolution(true);
+                this.matriz[random.nextInt(cols_)][i].setSolution(true);
                 xPositionsTopToBottom[i].add(1);
             }
             //Si por el contrario todas se han rellenado
@@ -175,7 +177,7 @@ public class MyScene implements Scene {
                 //AAA MENCIONAR TODO EN EL PDF QUE ESTO COMPLICA TODO PERO SE QUEDA UN CUADRADO MAS BONITO Y CURRAO
                 int aux = random.nextInt(cols_);
                 //Dejamos al menos una vacia
-                this.matriz[i][aux].setSolution(false);
+                this.matriz[aux][i].setSolution(false);
 
                 //Y añadimos al lateral los 2 valores seccionados
                 xPositionsTopToBottom[i].add(aux + 1);
@@ -188,12 +190,13 @@ public class MyScene implements Scene {
             }
         }
 
+        //REVISAR PQ CREO QUE ESTO DA PROBLEMITAS todo
         //Ahora hacemos lo mismo pero para las columnas
-        for (int i = 0; i < rows_; i++) {
+        for (int i = 0; i < cols_; i++) {
             //Si casualmente la columna se ha quedado totalmente vacia
             if (colums.get(i) == 0) {
                 //Minimo rellenamos una
-                this.matriz[random.nextInt(rows_)][i].setSolution(true);
+                this.matriz[i][random.nextInt(rows_)].setSolution(true);
             }
             //EN UN NONOGRAMA ES NORMAL UNA FILA/COLUMNA CON TO SELECCIONADO, pero hago la comprobacion en las filas
             //Para evitar cubos grandes que no tengan forma y solo sean relleno y evitar que salga algo compacto
@@ -220,7 +223,6 @@ public class MyScene implements Scene {
                 xNumberTopToBottom[i] += xPositionsTopToBottom[i].get(j).toString() + " ";
             }
         }
-
 
     }
 
