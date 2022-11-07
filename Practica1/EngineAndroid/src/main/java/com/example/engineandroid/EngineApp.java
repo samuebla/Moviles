@@ -30,7 +30,7 @@ public class EngineApp implements Engine,Runnable{
             }
         };
         this.input = new InputAndroid(this.eventHandler);
-        myView.setOnGenericMotionListener(this.input.getListener());
+        myView.setOnTouchListener(this.input.getTouchListener());
     }
 
 
@@ -48,8 +48,9 @@ public class EngineApp implements Engine,Runnable{
     }
 
     //<<Input>>
+    @Override
     public Input getInput(){
-        return null;
+        return input;
     }
 
     @Override

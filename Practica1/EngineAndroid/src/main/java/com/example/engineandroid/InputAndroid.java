@@ -9,27 +9,55 @@ import com.example.lib.Vector2D;
 
 public class InputAndroid implements Input {
 
-    private MotionListener listener;
+    private TouchListener touchlistener;
+    private MotionListener motionlistener;
     Vector2D touchCoords;
 
     public InputAndroid(IEventHandler eHandler){
         this.touchCoords = new Vector2D();
-        this.listener = new MotionListener(this, eHandler);
+        this.touchlistener = new TouchListener(this, eHandler);
+        this.motionlistener = new MotionListener(this, eHandler);
     }
 
     @Override
     public Vector2D getRawCoords() {
-
-        return touchCoords;
+        return this.touchCoords;
     }
 
     @Override
     public void setRawCoords(int x, int y) {
-        touchCoords.set(x, y);
+        this.touchCoords.set(x, y);
     }
 
-    public MotionListener getListener(){
-        return this.listener;
+    public TouchListener getTouchListener(){
+        return this.touchlistener;
+    }
+    public MotionListener getMotionListener(){
+        return this.motionlistener;
+    }
+}
+
+class TouchListener implements View.OnTouchListener {
+    InputAndroid inputAndroid;
+    IEventHandler eventHandler;
+
+    public TouchListener(InputAndroid iAndroid, IEventHandler eHandler){
+        this.inputAndroid = iAndroid;
+        this.eventHandler = eHandler;
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        processEvent(motionEvent);
+        return false;
+    }
+
+    public void processEvent(MotionEvent e){
+        if(e.getAction() == MotionEvent.ACTION_DOWN){
+            this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
+            System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
+            this.eventHandler.sendEvent(IEventHandler.EventType.TOUCH);
+        }
     }
 }
 
@@ -44,8 +72,6 @@ class MotionListener implements View.OnGenericMotionListener {
 
     @Override
     public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-        if(motionEvent == null) return false;
-
         processMotion(motionEvent);
         return true;
     }
