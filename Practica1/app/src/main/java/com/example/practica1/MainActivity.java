@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         this.assetManager = this.getBaseContext().getAssets();
 
         try{
-            fonts[0] = new Font_Android("cooperblackregular.ttf",0,40, this.assetManager);
-            fonts[1] = new Font_Android("calibriregular.ttf",0,40, this.assetManager);
+            fonts[0] = new Font_Android("font/cooperblackregular.ttf",0,40, this.assetManager);
+            fonts[1] = new Font_Android("font/calibriregular.ttf",0,40, this.assetManager);
         }catch (Exception e){
             System.err.println(e.getMessage());
         }

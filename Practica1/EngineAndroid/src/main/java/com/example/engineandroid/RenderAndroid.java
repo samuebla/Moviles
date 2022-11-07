@@ -136,7 +136,7 @@ public class RenderAndroid implements IGraphics {
     @Override
     public void drawText(String text, int x, int y, String color, IFont font) {
         int prevColor = this.paint.getColor();
-//        this.paint.setTextSize(font.getSize());
+        this.paint.setTextSize(font.getSize());
         int currentColor;
         if (color == "red"){
             currentColor = 0xFFFF0000;

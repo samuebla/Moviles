@@ -18,7 +18,7 @@ public class Font_Android implements IFont {
 
     public Font_Android(String filePath, int type, int sizeAux, AssetManager assets) throws IOException {
         assets.open(filePath);
-        Typeface baseFont = Typeface.createFromAsset(assets, "font/"+filePath);
+        Typeface baseFont = Typeface.createFromAsset(assets, filePath);
         size = sizeAux;
 
         switch (type) {
@@ -44,7 +44,7 @@ public class Font_Android implements IFont {
     @Override
     public int getSize() {
         //Esto creo que esta bien :D
-        return size;
+        return this.size;
     }
 
     @Override
