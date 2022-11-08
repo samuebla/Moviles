@@ -6,11 +6,14 @@ import com.example.lib.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.TreeMap;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import sun.reflect.generics.tree.Tree;
 
 public class MyScene implements Scene {
 
@@ -34,7 +37,9 @@ public class MyScene implements Scene {
     private String[] xNumberTopToBottom;
     private ArrayList<String>[] xNumberLeftToRight;
 
-    int remainingCells, wrongCells,maxCellsSolution;
+
+    PriorityQueue<Vector2D> wrongCellsPosition;
+    int remainingCells, wrongCells, maxCellsSolution;
 
     HashMap<String, IFont> fonts;
     HashMap<String, IImage> images;
@@ -43,10 +48,8 @@ public class MyScene implements Scene {
     private Button checkButton;
     private Button giveUpButton;
 
-    double timerToShowAnswers;
     boolean showAnswers;
 
-    private static final int  showAnswersTIME= 5;
     private Engine engine;
 
     public MyScene(Engine engine, int rows, int cols, HashMap<String, IFont> fontsAux, HashMap<String, IImage> imagesAux) {
@@ -63,13 +66,14 @@ public class MyScene implements Scene {
         Random random = new Random();
 
         //Creamos la matriz con el tamaño
-        this.matriz = new Cell[rows][cols];
+        this.matriz = new Cell[cols][rows];
+
+        //Inizializamos el treeMap de Posiciones
+        wrongCellsPosition = new PriorityQueue<>();
 
         remainingCells = 0;
         wrongCells = 0;
         showAnswers = false;
-
-        timerToShowAnswers = showAnswersTIME;
 
         rows_ = rows;
         cols_ = cols;
@@ -83,12 +87,14 @@ public class MyScene implements Scene {
         //Iniziamos la matriz
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
-                this.matriz[i][j] = new Cell(80 + 60 * i, 150 + 60 * j, 54, 54);
+                //Primero J que son las columnas en X y luego las filas en I
+                this.matriz[j][i] = new Cell(80 + 60 * j, 150 + 60 * i, 54, 54);
             }
         }
 
         //Variable auxiliar solo para que la creacion aleatoria tenga más sentido
         ArrayList<Integer> colums = new ArrayList<>();
+
         for (int i = 0; i < rows_; i++) {
             xPositionsTopToBottom[i] = new ArrayList<>();
         }
@@ -122,7 +128,7 @@ public class MyScene implements Scene {
                         xPositionsTopToBottom[i].add(contAux);
                         contAux = 0;
                     }
-                    this.matriz[i][j].setSolution(false);
+                    this.matriz[j][i].setSolution(false);
 
                     //Para el valor de las columnas...
                     if (numAnterior[j] == 0) {
@@ -138,7 +144,7 @@ public class MyScene implements Scene {
                     remainingCells++;
 
 
-                    this.matriz[i][j].setSolution(true);
+                    this.matriz[j][i].setSolution(true);
                     numSolutionPerRows++;
                     //Para averiguar los numeros laterales de las celdas
                     contAux++;
@@ -169,7 +175,7 @@ public class MyScene implements Scene {
             //Si casualmente la fila se ha quedado totalmente vacia
             if (numSolutionPerRows == 0) {
                 //Minimo rellenamos una
-                this.matriz[i][random.nextInt(cols_)].setSolution(true);
+                this.matriz[random.nextInt(cols_)][i].setSolution(true);
                 xPositionsTopToBottom[i].add(1);
             }
             //Si por el contrario todas se han rellenado
@@ -177,7 +183,7 @@ public class MyScene implements Scene {
                 //AAA MENCIONAR TODO EN EL PDF QUE ESTO COMPLICA TODO PERO SE QUEDA UN CUADRADO MAS BONITO Y CURRAO
                 int aux = random.nextInt(cols_);
                 //Dejamos al menos una vacia
-                this.matriz[i][aux].setSolution(false);
+                this.matriz[aux][i].setSolution(false);
 
                 //Y añadimos al lateral los 2 valores seccionados
                 xPositionsTopToBottom[i].add(aux + 1);
@@ -190,12 +196,13 @@ public class MyScene implements Scene {
             }
         }
 
+        //REVISAR PQ CREO QUE ESTO DA PROBLEMITAS todo
         //Ahora hacemos lo mismo pero para las columnas
-        for (int i = 0; i < rows_; i++) {
+        for (int i = 0; i < cols_; i++) {
             //Si casualmente la columna se ha quedado totalmente vacia
             if (colums.get(i) == 0) {
                 //Minimo rellenamos una
-                this.matriz[random.nextInt(rows_)][i].setSolution(true);
+                this.matriz[i][random.nextInt(rows_)].setSolution(true);
             }
             //EN UN NONOGRAMA ES NORMAL UNA FILA/COLUMNA CON TO SELECCIONADO, pero hago la comprobacion en las filas
             //Para evitar cubos grandes que no tengan forma y solo sean relleno y evitar que salga algo compacto
@@ -223,7 +230,6 @@ public class MyScene implements Scene {
             }
         }
 
-
     }
 
     public boolean inputReceived(Vector2D pos, Vector2D size) {
@@ -245,10 +251,6 @@ public class MyScene implements Scene {
         if (engine.getEventMngr().getEvent().eventType != IEventHandler.EventType.NONE) {
             handleInput();
             engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
-        }
-
-        if(timerToShowAnswers>0){
-            timerToShowAnswers-=deltaTime;
         }
     }
 
@@ -288,39 +290,32 @@ public class MyScene implements Scene {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
                 if (inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
-                    this.matriz[i][j].handleInput(engine);
+                    //Aqui se guarda si te has equivocado...
+                    this.matriz[i][j].handleInput();
+                    //1 Si esta mal
+                    //2 Si lo seleccionas y esta bien
+                    //3 Si estaba mal seleccionado y lo deseleccionas
+                    //4 Si estaba bien seleccionado y lo deseleccionas
+                    int key = this.matriz[i][j].keyCell();
+                    if (key == 1) {
+                        //Lo metemos en el treeMap
+//                        wrongCellsPosition.add(new Vector2D(i,j));
+                        wrongCells++;
+                    } else if (key == 2) {
+                        remainingCells--;
+                    } else if (key == 3) {
+                        wrongCells--;
+                    } else if (key == 4) {
+                        remainingCells++;
+                    }
                 }
             }
         }
 
         //BOTONES
         if (inputReceived(this.checkButton.getPos(), this.checkButton.getSize())) {
-            //Reseteamos cada vez que pulsas el boton por si ha cambiado cosas
-            remainingCells = maxCellsSolution;
-            wrongCells = 0;
-            //Comenzamos el timer otra vez
-            timerToShowAnswers = showAnswersTIME;
-
-            //Bool a true y apañao
-            for (int i = 0; i < matriz.length; i++) {
-                for (int j = 0; j < matriz[i].length; j++) {
-
-                    int aux = this.matriz[i][j].checkSolution();
-                    //Si el metodo devuelve 1...
-                    if (aux == 1) {
-                        //Acertaste la casilla
-                        remainingCells--;
-                    }
-                    //Si devuelve -1...
-                    else if (aux == -1) {
-                        //Es porque tienes una casilla erronea
-                        wrongCells++;
-                    }
-                    //Si devuelve 0 es casilla sin nada
-                }
-            }
-            //Y mostramos el texto en pantalla
-            showAnswers = true;
+            //Mostramos el texto en pantalla
+            showAnswers = !showAnswers;
         }
     }
 }

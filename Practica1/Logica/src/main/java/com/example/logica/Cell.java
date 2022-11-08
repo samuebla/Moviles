@@ -12,17 +12,16 @@ public class Cell extends Interactive {
 
     ;
 
-    //PROVISIONAL
-    //private String color;
-
     private cellType type;
     private boolean solution = false;
+    int key;
 
 
     public Cell(int x, int y, int width, int height) {
         this.setSize(width, height);
         this.setPos(x, y);
         type = cellType.EMPTY;
+        key = -1;
     }
 
     @Override
@@ -40,12 +39,31 @@ public class Cell extends Interactive {
         switch (type) {
             case EMPTY:
                 type = cellType.SELECTED;
+                //Si la seleccionas y no es la solucion
+                if (!solution) {
+                    //Lo guardamos
+                    key = 1;
+                }
+                else{
+                    key = 2;
+                }
                 break;
             case SELECTED:
                 type = cellType.CROSSED;
+                //Si lo tenias seleccionado y estaba mal...
+                if(!solution){
+                    //Deja de estar mal
+                    key = 3;
+                }
+                //Si estaba bien...
+                else {
+                    //Ahora deja de estarlo
+                    key = 4;
+                }
                 break;
             case CROSSED:
                 type = cellType.EMPTY;
+                key = 0;
                 break;
         }
     }
@@ -77,24 +95,15 @@ public class Cell extends Interactive {
         return solution;
     }
 
-    public void setColor(cellType color) {
-        this.type = color;
+    //1 Si esta mal
+    //2 Si lo seleccionas y esta bien
+    //3 Si estaba mal seleccionado y lo deseleccionas
+    //4 Si estaba bien seleccionado y lo deseleccionas
+    public int keyCell() {
+        return key;
     }
 
-    //-1 Si te equivocaste
-    //1 Si acertaste
-    //0 Si es vacio
-    public int checkSolution() {
-        if (solution && type == cellType.SELECTED) {
-            //Le decimos que tenia razon
-            return 1;
-        }
-        //Si no es la solucion y lo tienes seleccionado...
-        else if (!solution && type == cellType.SELECTED) {
-            //Cambias el render y le dices que se ha equivocado
-            type = cellType.WRONG;
-            return -1;
-        }
-        return 0;
+    public void setColor(cellType color) {
+        this.type = color;
     }
 }
