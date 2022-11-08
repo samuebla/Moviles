@@ -3,17 +3,10 @@ package com.example.logica;
 import com.example.lib.*;
 
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Random;
-import java.util.TreeMap;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
-import sun.reflect.generics.tree.Tree;
 
 public class MyScene implements Scene {
 
@@ -38,7 +31,7 @@ public class MyScene implements Scene {
     private ArrayList<String>[] xNumberLeftToRight;
 
 
-    PriorityQueue<Vector2D> wrongCellsPosition;
+    PriorityQueue<Integer> wrongCellsPosition;
     int remainingCells, wrongCells, maxCellsSolution;
 
     HashMap<String, IFont> fonts;
@@ -257,11 +250,31 @@ public class MyScene implements Scene {
 
     @Override
     public void render() {
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[i].length; j++) {
-                this.matriz[i][j].render(engine);
+
+        if (showAnswers) {
+            this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", 100, 600, "red", fonts.get("Calibri"));
+            this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", 100, 630, "red", fonts.get("Calibri"));
+//            for(int i=0;i<wrongCellsPosition.size();i++) {
+//                int aux = wrongCellsPosition.peek();
+//                //Columna
+//                //(Aux-1) mod Cols
+//                //Fila
+//                //(N-1)/Cols
+//                this.matriz[((aux-1)%cols_)][(aux-1)/cols_].trueRender(engine);
+//            }
+            for (int i = 0; i < matriz.length; i++) {
+                for (int j = 0; j < matriz[i].length; j++) {
+                    this.matriz[i][j].trueRender(engine);
+                }
+            }
+        } else {
+            for (int i = 0; i < matriz.length; i++) {
+                for (int j = 0; j < matriz[i].length; j++) {
+                    this.matriz[i][j].render(engine);
+                }
             }
         }
+
         for (int i = 0; i < xNumberTopToBottom.length; i++) {
             engine.drawText(xNumberTopToBottom[i], 20, 180 + 60 * i, "Black", fonts.get("Calibri"));
 
@@ -272,13 +285,9 @@ public class MyScene implements Scene {
             }
         }
 
+
         //Botones
         this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 2), "Black", fonts.get("Calibri"));
-
-        if (showAnswers) {
-            this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", 100, 600, "red", fonts.get("Calibri"));
-            this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", 100, 630, "red", fonts.get("Calibri"));
-        }
 
         this.engine.drawImage(50, 100, 200, 200, this.images.get("Flecha"));
         this.engine.drawImage(250, 100, 200, 150, this.images.get("Lupa"));
@@ -291,7 +300,7 @@ public class MyScene implements Scene {
             for (int j = 0; j < matriz[i].length; j++) {
                 if (inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
                     //Aqui se guarda si te has equivocado...
-                    this.matriz[i][j].handleInput();
+                    this.matriz[i][j].handleInput(engine);
                     //1 Si esta mal
                     //2 Si lo seleccionas y esta bien
                     //3 Si estaba mal seleccionado y lo deseleccionas
@@ -299,11 +308,14 @@ public class MyScene implements Scene {
                     int key = this.matriz[i][j].keyCell();
                     if (key == 1) {
                         //Lo metemos en el treeMap
-//                        wrongCellsPosition.add(new Vector2D(i,j));
+                        //FilaActual*numCols + 1 + columnaActual
+                        wrongCellsPosition.add(j * cols_ + 1 + i);
                         wrongCells++;
                     } else if (key == 2) {
                         remainingCells--;
                     } else if (key == 3) {
+                        //Lo eliminamos de estas celdas
+                        wrongCellsPosition.remove(j * cols_ + 1 + i);
                         wrongCells--;
                     } else if (key == 4) {
                         remainingCells++;

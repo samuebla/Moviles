@@ -3,14 +3,10 @@ package com.example.logica;
 import com.example.lib.Engine;
 import com.example.lib.Vector2D;
 
-import java.awt.geom.Point2D;
-
 //Struct
 public class Cell extends Interactive {
 
-    public enum cellType {EMPTY, SELECTED, CROSSED, WRONG}
-
-    ;
+    public enum cellType {EMPTY, SELECTED, CROSSED, WRONG};
 
     private cellType type;
     private boolean solution = false;
@@ -81,6 +77,15 @@ public class Cell extends Interactive {
     //PROVISIONAL
     public void setType(cellType aux) {
         type = aux;
+    }
+
+    public void trueRender(Engine engine) {
+        if(key == 1){
+            engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), cellType.WRONG.ordinal());
+        }
+        else{
+            engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
+        }
     }
 
     public void setSolution(boolean aux) {
