@@ -51,7 +51,8 @@ public class MainMenuScene implements Scene {
         //Lo loopeamos para que suene siempre
         sounds.get("background").startLoop();
 
-        play = new Button(300, 350, 70, 40);
+
+        play = new Button(engine.getWidth()/2.4, engine.getHeight()/2.5, 70, 40);
     }
 
     public boolean inputReceived(Vector2D pos, Vector2D size){
@@ -72,7 +73,7 @@ public class MainMenuScene implements Scene {
 
     @Override
     public void render(){
-        engine.drawText("NONOGRAMAS", 200, 100, "Black", fonts.get("Cooper"));
+        engine.drawText("NONOGRAMAS", (int)(engine.getWidth()/3.6), (int)(engine.getHeight()/10.8), "Black", fonts.get("Cooper"));
         engine.drawText("Jugar", (int)(play.getPos().getX() + play.getSize().getX()/5), (int)(play.getPos().getY() + play.getSize().getY()/2), "Black", fonts.get("Calibri"));
     }
 
