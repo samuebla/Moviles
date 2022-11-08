@@ -13,6 +13,8 @@ public class InputAndroid implements Input {
     private MotionListener motionlistener;
     Vector2D touchCoords;
 
+    private float renderScale = 1.5f;
+
     public InputAndroid(IEventHandler eHandler){
         this.touchCoords = new Vector2D();
         this.touchlistener = new TouchListener(this, eHandler);
@@ -21,7 +23,7 @@ public class InputAndroid implements Input {
 
     @Override
     public Vector2D getRawCoords() {
-        return this.touchCoords;
+        return new Vector2D(this.touchCoords.getX()/this.renderScale, this.touchCoords.getY()/this.renderScale);
     }
 
     @Override

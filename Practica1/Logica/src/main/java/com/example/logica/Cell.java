@@ -35,7 +35,7 @@ public class Cell extends Interactive {
     }
 
     @Override
-    public void handleInput() {
+    public void handleInput(Engine engine) {
         switch (type) {
             case EMPTY:
                 type = cellType.SELECTED;

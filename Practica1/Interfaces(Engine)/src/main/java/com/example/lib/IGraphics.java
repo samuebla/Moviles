@@ -7,7 +7,7 @@ public interface IGraphics {
     public void setResolution(double width,double height);
     public void setColor(int color);
     public void setFont(int size,int fontType);
-    public void drawImage();
+    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, IImage image);
     public void drawRectangle(int x,int y,int w,int h);
     public void fillRectangle(int x,int y,int w,int h);
     public void drawLine(int x,int y,int w,int h);

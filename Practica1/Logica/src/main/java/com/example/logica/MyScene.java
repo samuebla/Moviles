@@ -42,6 +42,7 @@ public class MyScene implements Scene {
     int remainingCells, wrongCells, maxCellsSolution;
 
     HashMap<String, IFont> fonts;
+    HashMap<String, IImage> images;
 
 
     private Button checkButton;
@@ -51,12 +52,13 @@ public class MyScene implements Scene {
 
     private Engine engine;
 
-    public MyScene(Engine engine, int rows, int cols, HashMap<String, IFont> fontsAux) {
+    public MyScene(Engine engine, int rows, int cols, HashMap<String, IFont> fontsAux, HashMap<String, IImage> imagesAux) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
 
         this.fonts = fontsAux;
+        this.images = imagesAux;
 
         this.checkButton = new Button(600, 500, 70, 50);
 
@@ -277,6 +279,10 @@ public class MyScene implements Scene {
             this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", 100, 600, "red", fonts.get("Calibri"));
             this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", 100, 630, "red", fonts.get("Calibri"));
         }
+
+        this.engine.drawImage(50, 100, 200, 200, this.images.get("Flecha"));
+        this.engine.drawImage(250, 100, 200, 150, this.images.get("Lupa"));
+
     }
 
     @Override

@@ -2,11 +2,13 @@ package com.example.appdesktop;
 
 import com.example.enginedesktop.EngineDesktop;
 import com.example.enginedesktop.FontDesktop;
+import com.example.enginedesktop.ImageDesktop;
 import com.example.enginedesktop.SceneMngrDesktop;
 import com.example.logica.MainMenuScene;
 import com.example.logica.MyScene;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.io.File;
 
 import javax.swing.JFrame;
@@ -53,7 +55,15 @@ public class MainActivity {
 
         String[] keys = new String[]{"Cooper","Calibri","CooperBold","CalibriBold"};
 
-        MainMenuScene scene = new MainMenuScene(engine, fonts, keys);
+        //Inicializamos las imagenes y cargamos las que queramos
+        ImageDesktop[] images = new ImageDesktop[2];
+
+        images[0] = new ImageDesktop(new File("Assets\\arrow.png"));
+        images[1] = new ImageDesktop(new File("Assets\\lupa.png"));
+
+        String[] keysImages = new String[]{"Flecha","Lupa"};
+
+        MainMenuScene scene = new MainMenuScene(engine, fonts, keys, images, keysImages);
 
         SceneMngrDesktop sceneMngr = new SceneMngrDesktop();
 
