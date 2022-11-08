@@ -52,6 +52,11 @@ public class EngineDesktop implements Engine,Runnable{
         this.render.drawText(text, x, y, color,font);
     }
 
+    @Override
+    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, IImage image){
+        this.render.drawImage(x, y, desiredWidth, desiredHeight, image);
+    }
+
 //    @Override
 //    public void addComponent(Component aux){
 //        myView.add(aux);

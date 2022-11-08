@@ -33,4 +33,8 @@ public class ImageDesktop implements IImage {
     public int getHeight() {
         return image.getHeight(null);
     }
+
+    public Image getImage(){
+        return this.image;
+    }
 }

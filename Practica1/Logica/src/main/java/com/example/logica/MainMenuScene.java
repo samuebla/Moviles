@@ -3,6 +3,7 @@ package com.example.logica;
 import com.example.lib.Engine;
 import com.example.lib.IEventHandler;
 import com.example.lib.IFont;
+import com.example.lib.IImage;
 import com.example.lib.Scene;
 import com.example.lib.Vector2D;
 
@@ -14,17 +15,25 @@ public class MainMenuScene implements Scene {
     private Engine engine;
 
     HashMap<String, IFont> fonts;
+    HashMap<String, IImage> images;
 
     private Button play;
 
-    public MainMenuScene(Engine engineAux, IFont[] fontsAux, String[] keys){
+    public MainMenuScene(Engine engineAux, IFont[] fontsAux, String[] keys, IImage[] imagesAux, String[] imageKeys){
         this.engine = engineAux;
 
-        fonts = new HashMap<>();
+        this.fonts = new HashMap<>();
 
         //Metemos las fuentes
         for (int i = 0; i < fontsAux.length; i++) {
-            fonts.put(keys[i], fontsAux[i]);
+            this.fonts.put(keys[i], fontsAux[i]);
+        }
+
+        this.images = new HashMap<>();
+
+        //Metemos las fuentes
+        for (int i = 0; i < imagesAux.length; i++) {
+            this.images.put(imageKeys[i], imagesAux[i]);
         }
 
         play = new Button(300, 350, 70, 40);
@@ -55,7 +64,7 @@ public class MainMenuScene implements Scene {
     @Override
     public void handleInput(){
         if (inputReceived(play.getPos(), play.getSize())){
-            LevelSelection levelScene = new LevelSelection(this.engine, this.fonts);
+            LevelSelection levelScene = new LevelSelection(this.engine, this.fonts, this.images);
             this.engine.setScene(levelScene);
         }
     }

@@ -88,6 +88,11 @@ public class EngineApp implements Engine,Runnable{
     }
 
     @Override
+    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, IImage image){
+        this.render.drawImage(x, y, desiredWidth, desiredHeight, image);
+    }
+
+    @Override
     public void setScene(Scene newScene) {
         this.sceneMngr.pushScene(newScene);
     }

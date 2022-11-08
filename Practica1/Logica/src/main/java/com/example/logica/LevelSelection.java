@@ -3,6 +3,7 @@ package com.example.logica;
 import com.example.lib.Engine;
 import com.example.lib.IEventHandler;
 import com.example.lib.IFont;
+import com.example.lib.IImage;
 import com.example.lib.Scene;
 import com.example.lib.Vector2D;
 
@@ -23,11 +24,13 @@ public class LevelSelection implements Scene {
     private Engine engine;
 
     HashMap<String, IFont> fonts;
+    HashMap<String, IImage> images;
 
-    public LevelSelection(Engine engineAux, HashMap<String, IFont> fontsAux){
+    public LevelSelection(Engine engineAux, HashMap<String, IFont> fontsAux, HashMap<String, IImage> imagesAux){
         this.engine = engineAux;
 
         this.fonts = fontsAux;
+        this.images = imagesAux;
 
         this.button5 = new Button(180, 300, 70, 70);
         this.button8 = new Button(330, 300, 70, 70);
@@ -87,32 +90,32 @@ public class LevelSelection implements Scene {
     @Override
     public void handleInput(){
         if (inputReceived(this.button5.getPos(), this.button5.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 5, this.fonts);
+            MyScene playScene = new MyScene(this.engine, 5, 5, this.fonts, this.images);
             this.engine.setScene(playScene);
         }
 
         if (inputReceived(this.button8.getPos(), this.button8.getSize())){
-            MyScene playScene = new MyScene(this.engine, 8, 8, this.fonts);
+            MyScene playScene = new MyScene(this.engine, 8, 8, this.fonts, this.images);
             this.engine.setScene(playScene);
         }
 
         if (inputReceived(this.button10.getPos(), this.button10.getSize())){
-            MyScene playScene = new MyScene(this.engine, 10, 10, this.fonts);
+            MyScene playScene = new MyScene(this.engine, 10, 10, this.fonts, this.images);
             this.engine.setScene(playScene);
         }
 
         if (inputReceived(this.button5x8.getPos(), this.button5x8.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 8, this.fonts);
+            MyScene playScene = new MyScene(this.engine, 5, 8, this.fonts, this.images);
             this.engine.setScene(playScene);
         }
 
         if (inputReceived(this.button8x10.getPos(), this.button8x10.getSize())){
-            MyScene playScene = new MyScene(this.engine, 8, 10, this.fonts);
+            MyScene playScene = new MyScene(this.engine, 8, 10, this.fonts, this.images);
             this.engine.setScene(playScene);
         }
 
         if (inputReceived(this.button5x10.getPos(), this.button5x10.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 10, this.fonts);
+            MyScene playScene = new MyScene(this.engine, 5, 10, this.fonts, this.images);
             this.engine.setScene(playScene);
         }
     }

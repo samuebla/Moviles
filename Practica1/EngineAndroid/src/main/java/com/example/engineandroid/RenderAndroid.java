@@ -1,5 +1,6 @@
 package com.example.engineandroid;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.SurfaceHolder;
@@ -7,6 +8,7 @@ import android.view.SurfaceView;
 
 import com.example.lib.IFont;
 import com.example.lib.IGraphics;
+import com.example.lib.IImage;
 
 public class RenderAndroid implements IGraphics {
 
@@ -112,8 +114,11 @@ public class RenderAndroid implements IGraphics {
     }
 
     @Override
-    public void drawImage() {
-
+    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, IImage imageAux) {
+        ImageAndroid image = (ImageAndroid) imageAux;
+        Bitmap map = image.getImage();
+        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int)(desiredWidth * this.scale), (int)(desiredHeight * this.scale), false);
+        canvas.drawBitmap(scaledMap, (int)(x *this.scale), (int)(y * this.scale), this.paint);
     }
 
     @Override

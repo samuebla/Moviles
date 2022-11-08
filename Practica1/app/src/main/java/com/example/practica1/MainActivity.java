@@ -2,6 +2,7 @@ package com.example.practica1;
 
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.Font_Android;
+import com.example.engineandroid.ImageAndroid;
 import com.example.engineandroid.SceneMngrAndroid;
 import com.example.logica.MainMenuScene;
 import com.example.logica.MyScene;
@@ -51,11 +52,23 @@ public class MainActivity extends AppCompatActivity {
 
         String[] keys = new String[]{"Cooper","Calibri"};
 
+        //Carga de Imagenes
+        ImageAndroid[] images = new ImageAndroid[2];
+
+        try{
+            images[0] = new ImageAndroid(this.assetManager, "arrow.png");
+            images[1] = new ImageAndroid(this.assetManager, "lupa.png");
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+
+        String[] keysImages = new String[]{"Flecha","Lupa"};
+
         //AAAAAAAAAAA Cambiar la escena a la del menu principal
 //        MyScene scene = new MyScene(this.engine,10,10, fonts, keys);
 //        engine.setSceneManager(scene);
 
-        MainMenuScene mainMenuScene = new MainMenuScene(this.engine, fonts, keys);
+        MainMenuScene mainMenuScene = new MainMenuScene(this.engine, fonts, keys, images, keysImages);
 
         this.engine.setScene(mainMenuScene);
 
