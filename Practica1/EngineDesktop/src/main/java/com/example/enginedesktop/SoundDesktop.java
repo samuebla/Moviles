@@ -17,7 +17,7 @@ public class SoundDesktop implements ISound {
 
     Clip clip;
 
-    SoundDesktop(File file) {
+    public SoundDesktop(File file) {
         try{
             this.sound = AudioSystem.getAudioInputStream(file);
             this.clip = AudioSystem.getClip();

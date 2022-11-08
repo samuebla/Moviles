@@ -4,12 +4,14 @@ import com.example.enginedesktop.EngineDesktop;
 import com.example.enginedesktop.FontDesktop;
 import com.example.enginedesktop.ImageDesktop;
 import com.example.enginedesktop.SceneMngrDesktop;
+import com.example.enginedesktop.SoundDesktop;
 import com.example.logica.MainMenuScene;
 import com.example.logica.MyScene;
 
 import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 
@@ -63,7 +65,14 @@ public class MainActivity {
 
         String[] keysImages = new String[]{"Flecha","Lupa"};
 
-        MainMenuScene scene = new MainMenuScene(engine, fonts, keys, images, keysImages);
+        HashMap<String,SoundDesktop> sounds = new HashMap<>();
+
+        String[] keysSound = new String[]{"background","effects"};
+
+        sounds.put(keysSound[0],new SoundDesktop(new File("Assets\\WiiBackgroundMusic.wav")));
+        sounds.put(keysSound[1],new SoundDesktop(new File("Assets\\wiiClickSound.wav")));
+
+        MainMenuScene scene = new MainMenuScene(engine, fonts, keys, images, keysImages,sounds);
 
         SceneMngrDesktop sceneMngr = new SceneMngrDesktop();
 
