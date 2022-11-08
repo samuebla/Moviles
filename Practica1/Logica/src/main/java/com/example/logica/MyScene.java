@@ -98,9 +98,6 @@ public class MyScene implements Scene {
         widthAestheticCellY = (int)((this.matriz[cols_-1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + 65;
         heightAestheticCellY = (int)( this.matriz[cols_-1][rows_-1].getPos().getY() -200 + 60);
 
-        //Variable auxiliar solo para que la creacion aleatoria tenga más sentido
-        ArrayList<Integer> colums = new ArrayList<>();
-
         for (int i = 0; i < rows_; i++) {
             xPositionsTopToBottom[i] = new ArrayList<>();
         }
@@ -110,7 +107,6 @@ public class MyScene implements Scene {
         int[] contadorCols = new int[cols_];
         //Inicializamos los valores a -1
         for (int i = 0; i < cols_; i++) {
-            colums.add(0);
             numAnterior[i] = -1;
             contadorCols[i] = 1;
             xPositionsLeftToRight[i] = new ArrayList<>();
@@ -125,10 +121,11 @@ public class MyScene implements Scene {
 
             for (int j = 0; j < cols_; j++) {
 
-                int aux = random.nextInt(2);
+                int aux = random.nextInt(10);
 
+                //40% de probabilidad
                 //Si es 0 NO SE RELLENA
-                if (aux == 0) {
+                if (aux < 4) {
                     //Si estabas sumando y luego te llego a 0...
                     if (contAux != 0) {
                         xPositionsTopToBottom[i].add(contAux);
@@ -144,6 +141,7 @@ public class MyScene implements Scene {
 
                     }
                 }
+                //60% de probabilidad
                 //Si es 1 se rellena
                 else {
                     //Lo añadimos a la lista de celdas que tiene que acertar el jugador
@@ -155,9 +153,9 @@ public class MyScene implements Scene {
                     //Para averiguar los numeros laterales de las celdas
                     contAux++;
 
-                    //Para que no haya ninguna fila o columna vacía
-                    //todo wewe
-                    colums.set(j, colums.get(j) + 1);
+//                    //Para que no haya ninguna fila o columna vacía
+//                    //todo wewe
+//                    colums.set(j, colums.get(j) + 1);
 
                     //PARA AUXILIAR
                     //Si nunca se han añadido...
@@ -202,13 +200,31 @@ public class MyScene implements Scene {
             }
         }
 
-        //REVISAR PQ CREO QUE ESTO DA PROBLEMITAS todo
         //Ahora hacemos lo mismo pero para las columnas
         for (int i = 0; i < cols_; i++) {
             //Si casualmente la columna se ha quedado totalmente vacia
-            if (colums.get(i) == 0) {
+            if (xPositionsLeftToRight[i].size() == 0) {
+                int randAux = random.nextInt(rows_);
                 //Minimo rellenamos una
-                this.matriz[i][random.nextInt(rows_)].setSolution(true);
+                this.matriz[i][randAux].setSolution(true);
+                xPositionsLeftToRight[i].add(1);
+
+                //Limpiamos la lateral
+                xPositionsTopToBottom[i].clear();
+
+                int cont = 0;
+                //Recorremos la columna otra vez para rellenar correctamente la fila
+                for(int j=0;j<cols_;j++){
+                    if(this.matriz[j][i].getSolution()) {
+                        cont++;
+                    }
+                    if(cont!=0){
+                        xPositionsTopToBottom[i].add(cont);
+                    }
+                }
+                if(cont!=0){
+                    xPositionsTopToBottom[i].add(cont);
+                }
             }
             //EN UN NONOGRAMA ES NORMAL UNA FILA/COLUMNA CON TO SELECCIONADO, pero hago la comprobacion en las filas
             //Para evitar cubos grandes que no tengan forma y solo sean relleno y evitar que salga algo compacto
