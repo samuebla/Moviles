@@ -32,6 +32,8 @@ public class MyScene implements Scene {
 
     int remainingCells, wrongCells, maxCellsSolution;
 
+    int widthAestheticCellX,heightAestheticCellX,widthAestheticCellY,heightAestheticCellY;
+
     HashMap<String, IFont> fonts;
     HashMap<String, IImage> images;
     HashMap<String, ISound> sounds;
@@ -79,9 +81,15 @@ public class MyScene implements Scene {
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
                 //Primero J que son las columnas en X y luego las filas en I
-                this.matriz[j][i] = new Cell(80 + 60 * j, 150 + 60 * i, 54, 54);
+                this.matriz[j][i] = new Cell(80 + 60 * j, 220 + 60 * i, 54, 54);
             }
         }
+        //Tamaño de las cuadriculas que recubren el nonograma
+        widthAestheticCellX = (int)(this.matriz[cols_-1][rows_-1].getPos().getX()) + 45;
+        heightAestheticCellX = (int)( this.matriz[cols_-1][rows_-1].getPos().getY() - this.matriz[0][0].getPos().getY() + 65);
+
+        widthAestheticCellY = (int)((this.matriz[cols_-1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + 65;
+        heightAestheticCellY = (int)( this.matriz[cols_-1][rows_-1].getPos().getY() - 40);
 
         //Variable auxiliar solo para que la creacion aleatoria tenga más sentido
         ArrayList<Integer> colums = new ArrayList<>();
@@ -270,14 +278,22 @@ public class MyScene implements Scene {
             }
         }
 
+        //Numeros laterales
         for (int i = 0; i < xNumberTopToBottom.length; i++) {
-            engine.drawText(xNumberTopToBottom[i], 20, 180 + 60 * i, "Black", fonts.get("Calibri"));
+            engine.drawText(xNumberTopToBottom[i], 20, 250 + 60 * i, "Black", fonts.get("CalibriSmall"));
         }
         for (int i = 0; i < xNumberLeftToRight.length; i++) {
             for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 50 + 30 * j, "Black", fonts.get("Calibri"));
+                engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 120 + 30 * j, "Black", fonts.get("CalibriSmall"));
             }
         }
+
+        //Cuadriculas
+        //Ancha
+        this.engine.paintCell(15,215, widthAestheticCellX,heightAestheticCellX, -1);
+        //Larga
+        this.engine.paintCell(75,100, widthAestheticCellY,heightAestheticCellY, -1);
+
 
         //Botones
         this.engine.drawImage(570, 45, 590, 65, this.images.get("Lupa"));
@@ -285,7 +301,6 @@ public class MyScene implements Scene {
 
         this.engine.drawImage(10, 50, 50, 75, this.images.get("Flecha"));
         this.engine.drawText("Rendirse", (int)(giveUpButton.getPos().getX() +50), (int)(giveUpButton.getPos().getY() + 20), "Black", fonts.get("CalibriBold"));
-
     }
 
     @Override

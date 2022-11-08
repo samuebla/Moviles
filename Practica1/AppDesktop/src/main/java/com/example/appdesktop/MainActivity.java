@@ -20,9 +20,9 @@ public class MainActivity {
     public static void main(String[] args) {
 
 //        renderView.setVisible(true);
-        JFrame renderView = new JFrame("Mondongo");
+        JFrame renderView = new JFrame("NONOGRAMA");
 
-        renderView.setSize(720, 720);
+        renderView.setSize(720, 1080);
         renderView.setBackground(Color.GRAY);
         renderView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         renderView.setIgnoreRepaint(true);
@@ -48,14 +48,15 @@ public class MainActivity {
         EngineDesktop engine = new EngineDesktop(renderView);
 
         //Inicializamos las fuentes y cargamos las que queramos
-        FontDesktop[] fonts = new FontDesktop[4];
+        FontDesktop[] fonts = new FontDesktop[5];
 
         fonts[0] = new FontDesktop(new File("Assets\\CooperBlackRegular.ttf"),0,40);
         fonts[1] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"),0,25);
-        fonts[2] = new FontDesktop(new File("Assets\\CooperBlackRegular.ttf"),1,40);
-        fonts[3] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"),1,20);
+        fonts[2] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"),1,18);
+        fonts[3] = new FontDesktop(new File("Assets\\CooperBlackRegular.ttf"),1,40);
+        fonts[4] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"),1,20);
 
-        String[] keys = new String[]{"Cooper","Calibri","CooperBold","CalibriBold"};
+        String[] keys = new String[]{"Cooper","Calibri","CalibriSmall","CooperBold","CalibriBold"};
 
         //Inicializamos las imagenes y cargamos las que queramos
         ImageDesktop[] images = new ImageDesktop[2];
