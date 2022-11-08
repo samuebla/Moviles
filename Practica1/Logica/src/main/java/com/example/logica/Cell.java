@@ -80,8 +80,12 @@ public class Cell extends Interactive {
     }
 
     public void trueRender(Engine engine) {
+        //Si te has equivocado...
         if(key == 1){
+            //Renderizamos a rojo
             engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), cellType.WRONG.ordinal());
+            //Pero cambiamos a empty despues
+            type = cellType.EMPTY;
         }
         else{
             engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());

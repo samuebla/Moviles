@@ -45,6 +45,8 @@ public class MyScene implements Scene {
 
     boolean won;
     boolean showAnswers;
+    double timer;
+    private static final int timeCheckButton = 5;
 
     private Engine engine;
 
@@ -71,6 +73,7 @@ public class MyScene implements Scene {
         wrongCells = 0;
         showAnswers = false;
         won = false;
+        timer = 0;
 
         rows_ = rows;
         cols_ = cols;
@@ -254,8 +257,14 @@ public class MyScene implements Scene {
             handleInput();
             engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
         }
-    }
 
+        if(timer>0){
+            timer -=deltaTime;
+        }
+        else{
+            showAnswers = false;
+        }
+    }
 
     @Override
     public void render() {
@@ -271,7 +280,6 @@ public class MyScene implements Scene {
 
             //BackButton
             this.engine.drawText("Volver", (int)(backButton.getPos().getX()), (int)(backButton.getPos().getY() + 20), "Black", fonts.get("CalibriBold"));
-
         }
         else{
             //Si tienes pulsado el boton de comprobar...
@@ -355,7 +363,9 @@ public class MyScene implements Scene {
         //BOTONES
         if (inputReceived(this.checkButton.getPos(), this.checkButton.getSize())) {
             //Mostramos el texto en pantalla
-            showAnswers = !showAnswers;
+            showAnswers = true;
+            timer = timeCheckButton;
+
         }
         if (inputReceived(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
             this.engine.popScene();
