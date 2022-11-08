@@ -88,6 +88,13 @@ public class Cell extends Interactive {
         }
     }
 
+    public void solutionRender(Engine engine) {
+        //Solo renderizo si esta azul
+        if(type == cellType.SELECTED){
+            engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
+        }
+    }
+
     public void setSolution(boolean aux) {
         solution = aux;
     }

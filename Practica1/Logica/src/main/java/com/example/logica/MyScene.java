@@ -41,7 +41,9 @@ public class MyScene implements Scene {
 
     private Button checkButton;
     private Button giveUpButton;
+    private Button backButton;
 
+    boolean won;
     boolean showAnswers;
 
     private Engine engine;
@@ -57,6 +59,7 @@ public class MyScene implements Scene {
 
         this.checkButton = new Button(560, 40, 140, 30);
         this.giveUpButton = new Button(10, 50, 120, 30);
+        this.backButton = new Button(320, 960, 60, 30);
 
         //Creamos el random
         Random random = new Random();
@@ -67,6 +70,7 @@ public class MyScene implements Scene {
         remainingCells = 0;
         wrongCells = 0;
         showAnswers = false;
+        won = false;
 
         rows_ = rows;
         cols_ = cols;
@@ -81,7 +85,7 @@ public class MyScene implements Scene {
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
                 //Primero J que son las columnas en X y luego las filas en I
-                this.matriz[j][i] = new Cell(80 + 60 * j, 320 + 60 * i, 54, 54);
+                this.matriz[j][i] = new Cell(90 + 60 * j, 320 + 60 * i, 54, 54);
             }
         }
         //Tamaño de las cuadriculas que recubren el nonograma
@@ -255,51 +259,63 @@ public class MyScene implements Scene {
 
     @Override
     public void render() {
-
-        //Si tienes pulsado el boton de comprobar...
-        if (showAnswers) {
-            //Muestra el texto...
-            this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", 250, 120, "red", fonts.get("Calibri"));
-            this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", 250, 150, "red", fonts.get("Calibri"));
-
-            //Renderiza rojo si esta mal
+        if(won){
             for (int i = 0; i < matriz.length; i++) {
                 for (int j = 0; j < matriz[i].length; j++) {
-                    this.matriz[i][j].trueRender(engine);
+                    this.matriz[i][j].solutionRender(engine);
                 }
             }
-        } else {
-            //Render normal
-            for (int i = 0; i < matriz.length; i++) {
-                for (int j = 0; j < matriz[i].length; j++) {
-                    this.matriz[i][j].render(engine);
+
+            //Mensaje de enhorabuena
+            this.engine.drawText("ENHORABUENA!", 200, 120, "Black", fonts.get("Cooper"));
+
+            //BackButton
+            this.engine.drawText("Volver", (int)(backButton.getPos().getX()), (int)(backButton.getPos().getY() + 20), "Black", fonts.get("CalibriBold"));
+
+        }
+        else{
+            //Si tienes pulsado el boton de comprobar...
+            if (showAnswers) {
+                //Muestra el texto...
+                this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", 250, 120, "red", fonts.get("Calibri"));
+                this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", 250, 150, "red", fonts.get("Calibri"));
+
+                //Renderiza rojo si esta mal
+                for (int i = 0; i < matriz.length; i++) {
+                    for (int j = 0; j < matriz[i].length; j++) {
+                        this.matriz[i][j].trueRender(engine);
+                    }
+                }
+            } else {
+                //Render normal
+                for (int i = 0; i < matriz.length; i++) {
+                    for (int j = 0; j < matriz[i].length; j++) {
+                        this.matriz[i][j].render(engine);
+                    }
                 }
             }
-        }
-
-        //Numeros laterales
-        for (int i = 0; i < xNumberTopToBottom.length; i++) {
-            engine.drawText(xNumberTopToBottom[i], 20, 350 + 60 * i, "Black", fonts.get("CalibriSmall"));
-        }
-        for (int i = 0; i < xNumberLeftToRight.length; i++) {
-            for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 220 + 30 * j, "Black", fonts.get("CalibriSmall"));
+            //Numeros laterales
+            for (int i = 0; i < xNumberTopToBottom.length; i++) {
+                engine.drawText(xNumberTopToBottom[i], 20, 350 + 60 * i, "Black", fonts.get("CalibriSmall"));
             }
+            for (int i = 0; i < xNumberLeftToRight.length; i++) {
+                for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
+                    engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 220 + 30 * j, "Black", fonts.get("CalibriSmall"));
+                }
+            }
+            //Cuadriculas
+            //Ancha
+            this.engine.paintCell(15,315, widthAestheticCellX,heightAestheticCellX, -1);
+            //Larga
+            this.engine.paintCell(85,200, widthAestheticCellY,heightAestheticCellY, -1);
+
+            //Botones
+            this.engine.drawImage(570, 45, 590, 65, this.images.get("Lupa"));
+            this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 1.7), "Black", fonts.get("CalibriBold"));
+
+            this.engine.drawImage(10, 50, 50, 75, this.images.get("Flecha"));
+            this.engine.drawText("Rendirse", (int)(giveUpButton.getPos().getX() +50), (int)(giveUpButton.getPos().getY() + 20), "Black", fonts.get("CalibriBold"));
         }
-
-        //Cuadriculas
-        //Ancha
-        this.engine.paintCell(15,315, widthAestheticCellX,heightAestheticCellX, -1);
-        //Larga
-        this.engine.paintCell(75,200, widthAestheticCellY,heightAestheticCellY, -1);
-
-
-        //Botones
-        this.engine.drawImage(570, 45, 590, 65, this.images.get("Lupa"));
-        this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 1.7), "Black", fonts.get("CalibriBold"));
-
-        this.engine.drawImage(10, 50, 50, 75, this.images.get("Flecha"));
-        this.engine.drawText("Rendirse", (int)(giveUpButton.getPos().getX() +50), (int)(giveUpButton.getPos().getY() + 20), "Black", fonts.get("CalibriBold"));
     }
 
     @Override
@@ -318,9 +334,15 @@ public class MyScene implements Scene {
                         wrongCells++;
                     } else if (key == 2) {
                         remainingCells--;
+                        if(win()){
+                            won = true;
+                        }
                     } else if (key == 3) {
                         //Lo eliminamos de estas celdas
                         wrongCells--;
+                        if(win()){
+                            won = true;
+                        }
                     } else if (key == 4) {
                         remainingCells++;
                     }
@@ -338,5 +360,13 @@ public class MyScene implements Scene {
         if (inputReceived(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
             this.engine.popScene();
         }
+        //Solo funciona si has ganado
+        if (won && inputReceived(this.backButton.getPos(), this.backButton.getSize())) {
+            this.engine.popScene();
+            this.engine.popScene();
+
+        }
     }
+    private boolean win() { return remainingCells == 0 && wrongCells == 0;}
 }
+
