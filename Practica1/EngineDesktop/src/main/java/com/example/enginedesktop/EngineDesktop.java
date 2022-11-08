@@ -63,12 +63,6 @@ public class EngineDesktop implements Engine,Runnable{
 //    }
 
 
-    public int getWidth(){
-        return this.render.getWidth();
-    }
-    public int getHeight(){
-        return this.render.getHeight();
-    }
     //<< Fin API>>
 
     //<<Motor>>
@@ -85,6 +79,15 @@ public class EngineDesktop implements Engine,Runnable{
         return null;
     }
     //<<Fin Motor>>
+
+    @Override
+    public int getWidth(){
+        return this.render.getWidth();
+    }
+    @Override
+    public int getHeight(){
+        return this.render.getHeight();
+    }
 
     @Override
     public void setScene(Scene newScene){

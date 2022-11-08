@@ -60,6 +60,16 @@ public class EngineApp implements Engine,Runnable{
     public IEventHandler getEventMngr() {
         return eventHandler;
     }
+
+    @Override
+    public int getWidth() {
+        return 0;
+    }
+
+    @Override
+    public int getHeight() {
+        return 0;
+    }
     //<<Fin Input>>
 
     @Override

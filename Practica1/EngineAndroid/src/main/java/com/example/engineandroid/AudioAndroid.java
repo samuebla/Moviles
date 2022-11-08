@@ -1,15 +1,21 @@
 package com.example.engineandroid;
 
 import android.media.AudioAttributes;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 
 import com.example.lib.IAudio;
 import com.example.lib.ISound;
 
+import java.util.HashMap;
+
 public class AudioAndroid implements IAudio {
     private static final String PATH = "";
-
+    private HashMap<String,SoundApp> sounds;
     private SoundPool soundPool;
+
+    //Para sonidos de mas de 1 mega (Para el background)
+    private MediaPlayer mediaPlayer;
 
     public AudioAndroid(){
         AudioAttributes audioAttributes = new AudioAttributes.Builder()

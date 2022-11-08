@@ -5,6 +5,8 @@ public interface IGraphics {
 //    public IImage newImage();
 //    public IFont newFont();
     public void setResolution(double width,double height);
+    public int getWidth();
+    public int getHeight();
     public void setColor(int color);
     public void setFont(int size,int fontType);
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, IImage image);

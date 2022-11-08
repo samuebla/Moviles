@@ -6,10 +6,13 @@ import com.example.lib.ISound;
 import java.io.File;
 import java.util.HashMap;
 
+import javax.sound.sampled.Clip;
+
 public class AudioDesktop implements IAudio {
     private static final String PATH = "";
     //Guardamos los sonidos
-    //private HashMap<String, SoundDesktop> sounds;
+    private HashMap<String, SoundDesktop> sounds;
+    Clip backgroundMusic;
 
     public AudioDesktop() {
         //sounds = new HashMap<>();

@@ -166,6 +166,16 @@ public class RenderDesktop implements IGraphics {
     }
 
     @Override
+    public int getWidth(){
+        return this.myView.getWidth();
+    }
+
+    @Override
+    public int getHeight(){
+        return this.myView.getHeight();
+    }
+
+    @Override
     public void setColor(int color) {
         //El color se pasa en Hexadecimal
         int r,g,b;

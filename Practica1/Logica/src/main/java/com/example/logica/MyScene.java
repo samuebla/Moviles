@@ -38,7 +38,6 @@ public class MyScene implements Scene {
     HashMap<String, IImage> images;
     HashMap<String, ISound> sounds;
 
-
     private Button checkButton;
     private Button giveUpButton;
     private Button backButton;
@@ -102,7 +101,6 @@ public class MyScene implements Scene {
             xPositionsTopToBottom[i] = new ArrayList<>();
         }
 
-
         int[] numAnterior = new int[cols_];
         int[] contadorCols = new int[cols_];
         //Inicializamos los valores a -1
@@ -152,10 +150,6 @@ public class MyScene implements Scene {
                     numSolutionPerRows++;
                     //Para averiguar los numeros laterales de las celdas
                     contAux++;
-
-//                    //Para que no haya ninguna fila o columna vacía
-//                    //todo wewe
-//                    colums.set(j, colums.get(j) + 1);
 
                     //PARA AUXILIAR
                     //Si nunca se han añadido...
@@ -324,14 +318,14 @@ public class MyScene implements Scene {
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 220 + 30 * j, "Black", fonts.get("CalibriSmall"));
+                    engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 200 + 30 * j, "Black", fonts.get("CalibriSmall"));
                 }
             }
             //Cuadriculas
             //Ancha
             this.engine.paintCell(15,315, widthAestheticCellX,heightAestheticCellX, -1);
             //Larga
-            this.engine.paintCell(85,200, widthAestheticCellY,heightAestheticCellY, -1);
+            this.engine.paintCell(85,180, widthAestheticCellY,heightAestheticCellY, -1);
 
             //Botones
             this.engine.drawImage(570, 45, 590, 65, this.images.get("Lupa"));

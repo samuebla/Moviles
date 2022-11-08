@@ -8,6 +8,9 @@ public interface Engine {
     public Input getInput();
     public IEventHandler getEventMngr();
 
+    public int getWidth();
+    public int getHeight();
+
     //Other functions(customized)
     public void paintCell(int x,int y, int w,int h, int typeAux);
     public void drawText(String text, int x, int y, String color,IFont font);
