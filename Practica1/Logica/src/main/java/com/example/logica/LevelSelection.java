@@ -34,15 +34,13 @@ public class LevelSelection implements Scene {
         this.images = imagesAux;
         this.sounds = soundsAux;
 
-        this.button5 = new Button(180, 300, 70, 70);
-        this.button8 = new Button(330, 300, 70, 70);
-        this.button10 = new Button(480, 300, 70, 70);
-        this.button5x8 = new Button(180, 500, 70, 70);
-        this.button8x10 = new Button(330, 500, 70, 70);
-        this.button5x10 = new Button(480, 500, 70, 70);
-
-        //20,30
-        this.backButton = new Button(10, 50, 120, 30);
+        this.button5 = new Button(engine.getWidth()/4, engine.getHeight()/3.6, 70, 70);
+        this.button8 = new Button(engine.getWidth()/2.2, engine.getHeight()/3.6, 70, 70);
+        this.button10 = new Button(engine.getWidth()/1.5, engine.getHeight()/3.6, 70, 70);
+        this.button5x8 = new Button(engine.getWidth()/4, engine.getHeight()/2.2, 70, 70);
+        this.button8x10 = new Button(engine.getWidth()/2.2, engine.getHeight()/2.2, 70, 70);
+        this.button5x10 = new Button(engine.getWidth()/1.5, engine.getHeight()/2.2, 70, 70);
+        this.backButton = new Button(engine.getWidth()/72, engine.getHeight()/22, 120, 30);
 
     }
 
@@ -84,11 +82,11 @@ public class LevelSelection implements Scene {
         this.engine.paintCell((int)button5x10.getPos().getX(), (int)button5x10.getPos().getY(), (int)(button5x10.getSize().getX()), (int)(button5x10.getSize().getY()), -1);
 
         //Back Button
-        this.engine.drawImage(10, 50, 50, 75, this.images.get("Flecha"));
+        this.engine.drawImage(engine.getWidth()/72, engine.getHeight()/22, 50, 75, this.images.get("Flecha"));
         this.engine.drawText("Volver", (int)(backButton.getPos().getX() +50), (int)(backButton.getPos().getY() + 20), "Black", fonts.get("CalibriBold"));
 
         //Texto indicativo
-        this.engine.drawText("Selecciona el tamaño del puzzle", 200, 200, "Black", fonts.get("Calibri"));
+        this.engine.drawText("Selecciona el tamaño del puzzle", (int)(engine.getWidth()/3.6), (int)(engine.getHeight()/5.4), "Black", fonts.get("Calibri"));
     }
 
     @Override
