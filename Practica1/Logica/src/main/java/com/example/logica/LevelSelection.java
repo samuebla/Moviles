@@ -123,11 +123,8 @@ public class LevelSelection implements Scene {
             this.engine.setScene(playScene);
         }
 
-
         if (inputReceived(this.backButton.getPos(), this.backButton.getSize())){
-//            MyScene playScene = new MainMenuScene(this.engine,this.fonts, this.images);
-            System.out.println("WWEWEWE");
-//            this.engine.setScene(playScene);
+            this.engine.popScene();
         }
     }
 }

@@ -30,8 +30,6 @@ public class MyScene implements Scene {
     private String[] xNumberTopToBottom;
     private ArrayList<String>[] xNumberLeftToRight;
 
-
-    PriorityQueue<Integer> wrongCellsPosition;
     int remainingCells, wrongCells, maxCellsSolution;
 
     HashMap<String, IFont> fonts;
@@ -53,16 +51,14 @@ public class MyScene implements Scene {
         this.fonts = fontsAux;
         this.images = imagesAux;
 
-        this.checkButton = new Button(600, 500, 70, 50);
+        this.checkButton = new Button(560, 40, 140, 30);
+        this.giveUpButton = new Button(10, 50, 120, 30);
 
         //Creamos el random
         Random random = new Random();
 
         //Creamos la matriz con el tamaño
         this.matriz = new Cell[cols][rows];
-
-        //Inizializamos el treeMap de Posiciones
-        wrongCellsPosition = new PriorityQueue<>();
 
         remainingCells = 0;
         wrongCells = 0;
@@ -251,23 +247,20 @@ public class MyScene implements Scene {
     @Override
     public void render() {
 
+        //Si tienes pulsado el boton de comprobar...
         if (showAnswers) {
+            //Muestra el texto...
             this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", 100, 600, "red", fonts.get("Calibri"));
             this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", 100, 630, "red", fonts.get("Calibri"));
-//            for(int i=0;i<wrongCellsPosition.size();i++) {
-//                int aux = wrongCellsPosition.peek();
-//                //Columna
-//                //(Aux-1) mod Cols
-//                //Fila
-//                //(N-1)/Cols
-//                this.matriz[((aux-1)%cols_)][(aux-1)/cols_].trueRender(engine);
-//            }
+
+            //Renderiza rojo si esta mal
             for (int i = 0; i < matriz.length; i++) {
                 for (int j = 0; j < matriz[i].length; j++) {
                     this.matriz[i][j].trueRender(engine);
                 }
             }
         } else {
+            //Render normal
             for (int i = 0; i < matriz.length; i++) {
                 for (int j = 0; j < matriz[i].length; j++) {
                     this.matriz[i][j].render(engine);
@@ -277,7 +270,6 @@ public class MyScene implements Scene {
 
         for (int i = 0; i < xNumberTopToBottom.length; i++) {
             engine.drawText(xNumberTopToBottom[i], 20, 180 + 60 * i, "Black", fonts.get("Calibri"));
-
         }
         for (int i = 0; i < xNumberLeftToRight.length; i++) {
             for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
@@ -285,12 +277,12 @@ public class MyScene implements Scene {
             }
         }
 
-
         //Botones
-        this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 2), "Black", fonts.get("Calibri"));
+        this.engine.drawImage(570, 45, 590, 65, this.images.get("Lupa"));
+        this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 1.7), "Black", fonts.get("CalibriBold"));
 
-        this.engine.drawImage(50, 100, 200, 200, this.images.get("Flecha"));
-        this.engine.drawImage(250, 100, 200, 150, this.images.get("Lupa"));
+        this.engine.drawImage(10, 50, 50, 75, this.images.get("Flecha"));
+        this.engine.drawText("Rendirse", (int)(giveUpButton.getPos().getX() +50), (int)(giveUpButton.getPos().getY() + 20), "Black", fonts.get("CalibriBold"));
 
     }
 
@@ -307,15 +299,11 @@ public class MyScene implements Scene {
                     //4 Si estaba bien seleccionado y lo deseleccionas
                     int key = this.matriz[i][j].keyCell();
                     if (key == 1) {
-                        //Lo metemos en el treeMap
-                        //FilaActual*numCols + 1 + columnaActual
-                        wrongCellsPosition.add(j * cols_ + 1 + i);
                         wrongCells++;
                     } else if (key == 2) {
                         remainingCells--;
                     } else if (key == 3) {
                         //Lo eliminamos de estas celdas
-                        wrongCellsPosition.remove(j * cols_ + 1 + i);
                         wrongCells--;
                     } else if (key == 4) {
                         remainingCells++;
@@ -328,6 +316,9 @@ public class MyScene implements Scene {
         if (inputReceived(this.checkButton.getPos(), this.checkButton.getSize())) {
             //Mostramos el texto en pantalla
             showAnswers = !showAnswers;
+        }
+        if (inputReceived(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
+            this.engine.popScene();
         }
     }
 }
