@@ -94,32 +94,32 @@ public class LevelSelection implements Scene {
     @Override
     public void handleInput(){
         if (inputReceived(this.button5.getPos(), this.button5.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 5, this.fonts, this.images);
+            MyScene playScene = new MyScene(this.engine, 5, 5, this.fonts, this.images,this.sounds);
             this.engine.setScene(playScene);
         }
 
         if (inputReceived(this.button8.getPos(), this.button8.getSize())){
-            MyScene playScene = new MyScene(this.engine, 8, 8, this.fonts, this.images);
+            MyScene playScene = new MyScene(this.engine, 8, 8, this.fonts, this.images,this.sounds);
             this.engine.setScene(playScene);
         }
 
         if (inputReceived(this.button10.getPos(), this.button10.getSize())){
-            MyScene playScene = new MyScene(this.engine, 10, 10, this.fonts, this.images);
+            MyScene playScene = new MyScene(this.engine, 10, 10, this.fonts, this.images,this.sounds);
             this.engine.setScene(playScene);
         }
 
         if (inputReceived(this.button5x8.getPos(), this.button5x8.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 8, this.fonts, this.images);
+            MyScene playScene = new MyScene(this.engine, 5, 8, this.fonts, this.images,this.sounds);
             this.engine.setScene(playScene);
         }
 
         if (inputReceived(this.button8x10.getPos(), this.button8x10.getSize())){
-            MyScene playScene = new MyScene(this.engine, 8, 10, this.fonts, this.images);
+            MyScene playScene = new MyScene(this.engine, 8, 10, this.fonts, this.images,this.sounds);
             this.engine.setScene(playScene);
         }
 
         if (inputReceived(this.button5x10.getPos(), this.button5x10.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 10, this.fonts, this.images);
+            MyScene playScene = new MyScene(this.engine, 5, 10, this.fonts, this.images,this.sounds);
             this.engine.setScene(playScene);
         }
 

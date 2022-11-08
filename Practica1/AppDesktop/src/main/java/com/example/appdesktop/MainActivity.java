@@ -67,7 +67,7 @@ public class MainActivity {
 
         SoundDesktop[] sounds = new SoundDesktop[2];
 
-        String[] keysSound = new String[]{"background","effects"};
+        String[] keysSound = new String[]{"background","effect"};
 
         sounds[0] = new SoundDesktop(new File("Assets\\WiiBackgroundMusic.wav"));
         sounds[1] = new SoundDesktop(new File("Assets\\wiiClickSound.wav"));

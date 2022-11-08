@@ -34,6 +34,7 @@ public class MyScene implements Scene {
 
     HashMap<String, IFont> fonts;
     HashMap<String, IImage> images;
+    HashMap<String, ISound> sounds;
 
 
     private Button checkButton;
@@ -43,13 +44,14 @@ public class MyScene implements Scene {
 
     private Engine engine;
 
-    public MyScene(Engine engine, int rows, int cols, HashMap<String, IFont> fontsAux, HashMap<String, IImage> imagesAux) {
+    public MyScene(Engine engine, int rows, int cols, HashMap<String, IFont> fontsAux, HashMap<String, IImage> imagesAux,HashMap<String, ISound> soundsAux) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
 
         this.fonts = fontsAux;
         this.images = imagesAux;
+        this.sounds = soundsAux;
 
         this.checkButton = new Button(560, 40, 140, 30);
         this.giveUpButton = new Button(10, 50, 120, 30);
@@ -308,6 +310,8 @@ public class MyScene implements Scene {
                     } else if (key == 4) {
                         remainingCells++;
                     }
+                    //Y playeamos el sonido
+                    sounds.get("effect").play();
                 }
             }
         }
