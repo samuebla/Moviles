@@ -4,6 +4,7 @@ import com.example.lib.Engine;
 import com.example.lib.IEventHandler;
 import com.example.lib.IFont;
 import com.example.lib.IImage;
+import com.example.lib.ISound;
 import com.example.lib.Scene;
 import com.example.lib.Vector2D;
 
@@ -16,13 +17,22 @@ public class MainMenuScene implements Scene {
 
     HashMap<String, IFont> fonts;
     HashMap<String, IImage> images;
+    HashMap<String, ISound> sounds;
+
 
     private Button play;
 
-    public MainMenuScene(Engine engineAux, IFont[] fontsAux, String[] keys, IImage[] imagesAux, String[] imageKeys){
+    public MainMenuScene(Engine engineAux, IFont[] fontsAux, String[] keys, IImage[] imagesAux, String[] imageKeys,String[] soundKeys,ISound[] soundsAux){
         this.engine = engineAux;
 
         this.fonts = new HashMap<>();
+
+        this.sounds = new HashMap<>();
+
+        //Metemos laos sonidos
+        for (int i = 0; i < soundsAux.length; i++) {
+            this.sounds.put(soundKeys[i], soundsAux[i]);
+        }
 
         //Metemos las fuentes
         for (int i = 0; i < fontsAux.length; i++) {
@@ -35,6 +45,11 @@ public class MainMenuScene implements Scene {
         for (int i = 0; i < imagesAux.length; i++) {
             this.images.put(imageKeys[i], imagesAux[i]);
         }
+
+        //Playeamos la musica
+        sounds.get("background").play();
+        //Lo loopeamos para que suene siempre
+        sounds.get("background").startLoop();
 
         play = new Button(300, 350, 70, 40);
     }
@@ -64,7 +79,7 @@ public class MainMenuScene implements Scene {
     @Override
     public void handleInput(){
         if (inputReceived(play.getPos(), play.getSize())){
-            LevelSelection levelScene = new LevelSelection(this.engine, this.fonts, this.images);
+            LevelSelection levelScene = new LevelSelection(this.engine, this.fonts, this.images,this.sounds);
             this.engine.setScene(levelScene);
         }
     }

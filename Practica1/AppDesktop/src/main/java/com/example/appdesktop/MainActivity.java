@@ -65,14 +65,14 @@ public class MainActivity {
 
         String[] keysImages = new String[]{"Flecha","Lupa"};
 
-        HashMap<String,SoundDesktop> sounds = new HashMap<>();
+        SoundDesktop[] sounds = new SoundDesktop[2];
 
         String[] keysSound = new String[]{"background","effects"};
 
-        sounds.put(keysSound[0],new SoundDesktop(new File("Assets\\WiiBackgroundMusic.wav")));
-        sounds.put(keysSound[1],new SoundDesktop(new File("Assets\\wiiClickSound.wav")));
+        sounds[0] = new SoundDesktop(new File("Assets\\WiiBackgroundMusic.wav"));
+        sounds[1] = new SoundDesktop(new File("Assets\\wiiClickSound.wav"));
 
-        MainMenuScene scene = new MainMenuScene(engine, fonts, keys, images, keysImages,sounds);
+        MainMenuScene scene = new MainMenuScene(engine, fonts, keys, images, keysImages,keysSound,sounds);
 
         SceneMngrDesktop sceneMngr = new SceneMngrDesktop();
 

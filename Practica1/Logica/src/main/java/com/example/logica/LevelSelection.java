@@ -4,6 +4,7 @@ import com.example.lib.Engine;
 import com.example.lib.IEventHandler;
 import com.example.lib.IFont;
 import com.example.lib.IImage;
+import com.example.lib.ISound;
 import com.example.lib.Scene;
 import com.example.lib.Vector2D;
 
@@ -25,12 +26,13 @@ public class LevelSelection implements Scene {
 
     HashMap<String, IFont> fonts;
     HashMap<String, IImage> images;
+    HashMap<String, ISound> sounds;
 
-    public LevelSelection(Engine engineAux, HashMap<String, IFont> fontsAux, HashMap<String, IImage> imagesAux){
+    public LevelSelection(Engine engineAux, HashMap<String, IFont> fontsAux, HashMap<String, IImage> imagesAux, HashMap<String, ISound> soundsAux){
         this.engine = engineAux;
-
         this.fonts = fontsAux;
         this.images = imagesAux;
+        this.sounds = soundsAux;
 
         this.button5 = new Button(180, 300, 70, 70);
         this.button8 = new Button(330, 300, 70, 70);
@@ -39,7 +41,8 @@ public class LevelSelection implements Scene {
         this.button8x10 = new Button(330, 500, 70, 70);
         this.button5x10 = new Button(480, 500, 70, 70);
 
-        this.backButton = new Button(20, 30, 100, 70);
+        //20,30
+        this.backButton = new Button(10, 50, 120, 30);
 
     }
 
@@ -80,8 +83,9 @@ public class LevelSelection implements Scene {
         this.engine.drawText("5x10", (int)(button5x10.getPos().getX() + button5x10.getSize().getX()/6), (int)(button5x10.getPos().getY() + button5x10.getSize().getY()/1.8), "Black", fonts.get("Calibri"));
         this.engine.paintCell((int)button5x10.getPos().getX(), (int)button5x10.getPos().getY(), (int)(button5x10.getSize().getX()), (int)(button5x10.getSize().getY()), -1);
 
-
-        this.engine.drawText("Volver", (int)(backButton.getPos().getX() + backButton.getSize().getX()/5), (int)(backButton.getPos().getY() + backButton.getSize().getY()/2), "Black", fonts.get("Calibri"));
+        //Back Button
+        this.engine.drawImage(10, 50, 50, 75, this.images.get("Flecha"));
+        this.engine.drawText("Volver", (int)(backButton.getPos().getX() +50), (int)(backButton.getPos().getY() + 20), "Black", fonts.get("CalibriBold"));
 
         //Texto indicativo
         this.engine.drawText("Selecciona el tamaño del puzzle", 200, 200, "Black", fonts.get("Calibri"));
@@ -117,6 +121,13 @@ public class LevelSelection implements Scene {
         if (inputReceived(this.button5x10.getPos(), this.button5x10.getSize())){
             MyScene playScene = new MyScene(this.engine, 5, 10, this.fonts, this.images);
             this.engine.setScene(playScene);
+        }
+
+
+        if (inputReceived(this.backButton.getPos(), this.backButton.getSize())){
+//            MyScene playScene = new MainMenuScene(this.engine,this.fonts, this.images);
+            System.out.println("WWEWEWE");
+//            this.engine.setScene(playScene);
         }
     }
 }
