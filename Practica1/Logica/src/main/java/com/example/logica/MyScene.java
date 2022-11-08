@@ -283,7 +283,7 @@ public class MyScene implements Scene {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
                 if (inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
-                    this.matriz[i][j].handleInput();
+                    this.matriz[i][j].handleInput(engine);
                 }
             }
         }

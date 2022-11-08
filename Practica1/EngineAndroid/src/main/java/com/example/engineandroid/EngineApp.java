@@ -9,6 +9,7 @@ public class EngineApp implements Engine,Runnable{
     private RenderAndroid render;
     private InputAndroid input;
     private IEventHandler eventHandler;
+    private AudioAndroid audioMngr;
 
     private Thread renderThread;
 
@@ -31,6 +32,8 @@ public class EngineApp implements Engine,Runnable{
         };
         this.input = new InputAndroid(this.eventHandler);
         myView.setOnTouchListener(this.input.getTouchListener());
+
+        this.audioMngr = new AudioAndroid();
     }
 
 
@@ -40,7 +43,7 @@ public class EngineApp implements Engine,Runnable{
     }
     @Override
     public IAudio getAudio(){
-        return null;
+        return audioMngr;
     }
     @Override
     public IState getState(){

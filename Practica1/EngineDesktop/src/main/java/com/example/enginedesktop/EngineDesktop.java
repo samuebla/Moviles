@@ -14,6 +14,7 @@ public class EngineDesktop implements Engine,Runnable{
 
     private InputDesktop input;
     private IEventHandler eventHandler;
+    private AudioDesktop audioMngr;
 
     public EngineDesktop(final JFrame myView){
         this.render = new RenderDesktop(myView);
@@ -30,6 +31,8 @@ public class EngineDesktop implements Engine,Runnable{
         };
         this.input = new InputDesktop(this.eventHandler);
         myView.addMouseListener(this.input.getListener());
+
+        this.audioMngr = new AudioDesktop();
     }
 
 //    //<<< API >>>
@@ -70,7 +73,7 @@ public class EngineDesktop implements Engine,Runnable{
     }
     @Override
     public IAudio getAudio(){
-        return null;
+        return audioMngr;
     }
     @Override
     public IState getState(){

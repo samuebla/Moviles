@@ -11,7 +11,7 @@ public class Interactive {
 
     public void render(Engine engine){};
     public void update(double deltaTime){};
-    public void handleInput(){};
+    public void handleInput(Engine engine){};
 
     public Vector2D getSize(){return size;};
     public Vector2D getPos(){return pos;};

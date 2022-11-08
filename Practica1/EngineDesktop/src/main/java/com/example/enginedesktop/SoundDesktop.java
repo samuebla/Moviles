@@ -15,40 +15,35 @@ public class SoundDesktop implements ISound {
 
     AudioInputStream sound;
 
-    Clip song;
+    Clip clip;
 
     SoundDesktop(File file) {
         try{
             this.sound = AudioSystem.getAudioInputStream(file);
-            this.song = AudioSystem.getClip();
-            this.song.open(sound);
+            this.clip = AudioSystem.getClip();
+            this.clip.open(sound);
         }
         catch (IOException | UnsupportedAudioFileException | LineUnavailableException e){
-            //AAA TODO QUITAR
-            System.out.println("NO PUEDO CARGAR SONIDO");
+            System.out.println("Can't load audio file");
             e.printStackTrace();
         }
     }
 
-    //TODO CREO QUE FALTA UN GETTER DE AUDIOINPUTSTREAM
-
-
-
     @Override
     public void play() {
-
-        this.song.setFramePosition(0);
-        this.song.start();
+        this.clip.setFramePosition(0);
+        this.clip.start();
     }
 
     @Override
     public void stop() {
-
+        if(this.clip.isRunning())
+            this.clip.stop();
     }
 
     @Override
     public void startLoop() {
-        this.song.loop(Clip.LOOP_CONTINUOUSLY);
+        this.clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
 }
