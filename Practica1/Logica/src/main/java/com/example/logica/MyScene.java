@@ -81,7 +81,7 @@ public class MyScene implements Scene {
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
                 //Primero J que son las columnas en X y luego las filas en I
-                this.matriz[j][i] = new Cell(80 + 60 * j, 220 + 60 * i, 54, 54);
+                this.matriz[j][i] = new Cell(80 + 60 * j, 320 + 60 * i, 54, 54);
             }
         }
         //Tamaño de las cuadriculas que recubren el nonograma
@@ -89,7 +89,7 @@ public class MyScene implements Scene {
         heightAestheticCellX = (int)( this.matriz[cols_-1][rows_-1].getPos().getY() - this.matriz[0][0].getPos().getY() + 65);
 
         widthAestheticCellY = (int)((this.matriz[cols_-1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + 65;
-        heightAestheticCellY = (int)( this.matriz[cols_-1][rows_-1].getPos().getY() - 40);
+        heightAestheticCellY = (int)( this.matriz[cols_-1][rows_-1].getPos().getY() -200 + 60);
 
         //Variable auxiliar solo para que la creacion aleatoria tenga más sentido
         ArrayList<Integer> colums = new ArrayList<>();
@@ -215,7 +215,6 @@ public class MyScene implements Scene {
         //Establecemos el numero completo de casillas que resolver
         maxCellsSolution = remainingCells;
 
-        //REVISAR
         for (int i = 0; i < xPositionsLeftToRight.length; i++) {
             for (int j = 0; j < xPositionsLeftToRight[i].size(); j++) {
                 xNumberLeftToRight[i].add(xPositionsLeftToRight[i].get(j).toString());
@@ -260,8 +259,8 @@ public class MyScene implements Scene {
         //Si tienes pulsado el boton de comprobar...
         if (showAnswers) {
             //Muestra el texto...
-            this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", 100, 600, "red", fonts.get("Calibri"));
-            this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", 100, 630, "red", fonts.get("Calibri"));
+            this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", 250, 120, "red", fonts.get("Calibri"));
+            this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", 250, 150, "red", fonts.get("Calibri"));
 
             //Renderiza rojo si esta mal
             for (int i = 0; i < matriz.length; i++) {
@@ -280,19 +279,19 @@ public class MyScene implements Scene {
 
         //Numeros laterales
         for (int i = 0; i < xNumberTopToBottom.length; i++) {
-            engine.drawText(xNumberTopToBottom[i], 20, 250 + 60 * i, "Black", fonts.get("CalibriSmall"));
+            engine.drawText(xNumberTopToBottom[i], 20, 350 + 60 * i, "Black", fonts.get("CalibriSmall"));
         }
         for (int i = 0; i < xNumberLeftToRight.length; i++) {
             for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 120 + 30 * j, "Black", fonts.get("CalibriSmall"));
+                engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 220 + 30 * j, "Black", fonts.get("CalibriSmall"));
             }
         }
 
         //Cuadriculas
         //Ancha
-        this.engine.paintCell(15,215, widthAestheticCellX,heightAestheticCellX, -1);
+        this.engine.paintCell(15,315, widthAestheticCellX,heightAestheticCellX, -1);
         //Larga
-        this.engine.paintCell(75,100, widthAestheticCellY,heightAestheticCellY, -1);
+        this.engine.paintCell(75,200, widthAestheticCellY,heightAestheticCellY, -1);
 
 
         //Botones
