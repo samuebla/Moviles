@@ -12,4 +12,5 @@ public interface IGraphics {
     public void drawRectangle(int x,int y,int w,int h, boolean fill);
     public void drawLine(int x,int y,int w,int h);
     public void drawText(String text, int x, int y, String color,String fontKey);
+    public void drawCircle(float x, float y, float r ,String color);
 }

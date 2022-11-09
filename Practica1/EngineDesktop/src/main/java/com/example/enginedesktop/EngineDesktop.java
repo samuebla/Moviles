@@ -53,6 +53,11 @@ public class EngineDesktop implements Engine,Runnable{
     }
 
     @Override
+    public void drawCircle(float x, float y, float r, String color) {
+        this.render.drawCircle(x,y,r,color);
+    }
+
+    @Override
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String image){
         this.render.drawImage(x, y, desiredWidth, desiredHeight, image);
     }
