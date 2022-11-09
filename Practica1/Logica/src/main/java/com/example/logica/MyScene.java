@@ -10,26 +10,6 @@ import java.util.Random;
 
 public class MyScene implements Scene {
 
-    //Estuvimos pensando acerca de qué método resultaría más eficiente a la hora de comrpobar las casillas, y tuvimos 2 opciones:
-    //No comprobar ni cambiar nada cuando seleccionas alguna casilla y al pulsar comprobar recorrer toda la matriz
-    //O cambiar el valor de la celda en cuanto la selecciones, guardar los valores de casillas restantes y erroneas en variables
-    //y al pulsar comprobar solo muestra las variables en pantalla. Guardaríamos las casillas erroneas en un array, el problema es
-    //que tendriamos que volver a recorrer la matriz entera para pintarlas, así que pensamos en guardarlas en un Mapa Ordenado
-    //De esta manera el coste máximo siempre seria logarítmico y en caso de que deselecciones una casilla la busqueda del mapa
-    //Para eliminarla es mucho más eficiente.
-
-    //LINEA 195:
-    //AAA MENCIONAR TODO EN EL PDF QUE ESTO COMPLICA TODO PERO SE QUEDA UN CUADRADO MAS BONITO Y CURRAO
-
-    //LINEA 240:
-    //EN UN NONOGRAMA ES NORMAL UNA FILA/COLUMNA CON TO SELECCIONADO, pero hago la comprobacion en las filas
-    //Para evitar cubos grandes que no tengan forma y solo sean relleno y evitar que salga algo compacto
-    //Si por el contrario todas se han rellenado
-//            else if(colums.get(i) == rows_){
-//                //Dejamos al menos una vacia
-//                this.matriz[random.nextInt(rows_)][i].setSolution(false);
-//            }
-
     private Engine engine;
 
     //Tenemos una matriz donde guardaremos las casillas seleccionadas
