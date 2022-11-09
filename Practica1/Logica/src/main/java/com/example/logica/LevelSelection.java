@@ -90,7 +90,7 @@ public class LevelSelection implements Scene {
         this.engine.drawText("Volver", (int)(backButton.getPos().getX() +50), (int)(backButton.getPos().getY() + 20), "Black", "CalibriBold");
 
         //Texto indicativo
-        this.engine.drawText("Selecciona el tamaño del puzzle", (int)(engine.getWidth()/3.6), (int)(engine.getHeight()/5.4), "Black", "Calibri");
+        this.engine.drawText("Selecciona el tamaño del puzzle", (int)(engine.getWidth()/2), (int)(engine.getHeight()/5.4), "Black", "Calibri");
     }
 
     @Override

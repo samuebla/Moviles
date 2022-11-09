@@ -165,7 +165,8 @@ public class RenderDesktop implements IGraphics {
         }
         this.graphics2D.setColor(c);
         this.graphics2D.setFont(fonts.get(fontKey).getFont());
-        this.graphics2D.drawString(text, x, y);
+        //Con esto centramos el texto en Desktop
+        this.graphics2D.drawString(text, x - (this.graphics2D.getFontMetrics().stringWidth(text)/2), y);
         this.graphics2D.setPaintMode();
     }
 

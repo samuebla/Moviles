@@ -207,6 +207,7 @@ public class RenderAndroid implements IGraphics {
         int f = (int)(font.getSize() /factorScale);
         this.paint.setTextSize(f);
         this.paint.setTypeface(font.getFont());
+        this.paint.setTextAlign(Paint.Align.CENTER);
         this.paint.setStyle(Paint.Style.FILL_AND_STROKE);
         int currentColor;
         if (color == "red"){
