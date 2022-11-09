@@ -53,7 +53,7 @@ public class RenderAndroid implements IGraphics {
         while (!this.holder.getSurface().isValid()) ;
         this.canvas = this.holder.lockCanvas();
         // "Borramos" el fondo.
-        this.canvas.drawColor(0xFFAAAAAA); // ARGB
+        this.canvas.drawColor(0xFFFFFFFF); // ARGB
         this.canvas.translate(0, this.posCanvas.getY());
         setColor(0XFFFFFFFF);
         drawRectangle(0,0, this.getViewWidth(), (int)(this.frameSize.getY()/factorScale), true);
