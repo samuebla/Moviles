@@ -18,38 +18,54 @@ public class MyScene implements Scene {
     //De esta manera el coste máximo siempre seria logarítmico y en caso de que deselecciones una casilla la busqueda del mapa
     //Para eliminarla es mucho más eficiente.
 
-    //Tenemos un Mapa Ordenado donde guardaremos las casillas seleccionadas
+    //LINEA 195:
+    //AAA MENCIONAR TODO EN EL PDF QUE ESTO COMPLICA TODO PERO SE QUEDA UN CUADRADO MAS BONITO Y CURRAO
+
+    //LINEA 240:
+    //EN UN NONOGRAMA ES NORMAL UNA FILA/COLUMNA CON TO SELECCIONADO, pero hago la comprobacion en las filas
+    //Para evitar cubos grandes que no tengan forma y solo sean relleno y evitar que salga algo compacto
+    //Si por el contrario todas se han rellenado
+//            else if(colums.get(i) == rows_){
+//                //Dejamos al menos una vacia
+//                this.matriz[random.nextInt(rows_)][i].setSolution(false);
+//            }
+
+    private Engine engine;
+
+    //Tenemos una matriz donde guardaremos las casillas seleccionadas
     private Cell[][] matriz;
 
     int rows_, cols_;
 
-    //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de
-    //las casillas azules. Uno el horizontal y otro el vertical
-    private ArrayList<Integer>[] xPositionsTopToBottom;
-    private ArrayList<Integer>[] xPositionsLeftToRight;
-    private String[] xNumberTopToBottom;
-    private ArrayList<String>[] xNumberLeftToRight;
-
+    //Para mostrar en pantallas la info de las celdas
     int remainingCells, wrongCells, maxCellsSolution;
-
-    int widthAestheticCellX, heightAestheticCellX, widthAestheticCellY, heightAestheticCellY;
 
     private Button checkButton;
     private Button giveUpButton;
     private Button backButton;
 
+    //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de las casillas azules. Uno el horizontal y otro el vertical
+    private ArrayList<Integer>[] xPositionsTopToBottom;
+    private ArrayList<Integer>[] xPositionsLeftToRight;
+
+    //Esto es para coger los numeros de antes y mostrarlos en pantalla como un string
+    private String[] xNumberTopToBottom;
+    private ArrayList<String>[] xNumberLeftToRight;
+
+    //Para los rectangulos que recubren las celdas y son meramente esteticos
+    int widthAestheticCellX, heightAestheticCellX, widthAestheticCellY, heightAestheticCellY;
+
+    private static final int timeCheckButton = 5;
+    double timer;
     boolean won;
     boolean showAnswers;
-    double timer;
-    private static final int timeCheckButton = 5;
-
-    private Engine engine;
 
     public MyScene(Engine engine, int rows, int cols) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
 
+        //Seteamos los botones
         this.checkButton = new Button(560, 40, 140, 30);
         this.giveUpButton = new Button(10, 50, 120, 30);
         this.backButton = new Button(320, 960, 60, 30);
@@ -60,6 +76,7 @@ public class MyScene implements Scene {
         //Creamos la matriz con el tamaño
         this.matriz = new Cell[cols][rows];
 
+        //Seteamos valores iniciales
         remainingCells = 0;
         wrongCells = 0;
         showAnswers = false;
@@ -73,21 +90,6 @@ public class MyScene implements Scene {
         xPositionsLeftToRight = new ArrayList[cols_];
         xNumberTopToBottom = new String[rows_];
         xNumberLeftToRight = new ArrayList[cols_];
-
-
-        //Iniziamos la matriz
-        for (int i = 0; i < rows_; i++) {
-            for (int j = 0; j < cols_; j++) {
-                //Primero J que son las columnas en X y luego las filas en I
-                this.matriz[j][i] = new Cell(90 + 60 * j, 320 + 60 * i, 54, 54);
-            }
-        }
-        //Tamaño de las cuadriculas que recubren el nonograma
-        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + 45;
-        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + 65);
-
-        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + 65;
-        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - 120);
 
         for (int i = 0; i < rows_; i++) {
             xPositionsTopToBottom[i] = new ArrayList<>();
@@ -103,11 +105,29 @@ public class MyScene implements Scene {
             xNumberLeftToRight[i] = new ArrayList<>();
         }
 
+        //Iniciamos la matriz
+        for (int i = 0; i < rows_; i++) {
+            for (int j = 0; j < cols_; j++) {
+                //Primero J que son las columnas en X y luego las filas en Y
+                this.matriz[j][i] = new Cell(90 + 60 * j, 320 + 60 * i, 54, 54);
+            }
+        }
+
+        //Tamaño de las cuadriculas que recubren el nonograma
+        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + 45;
+        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + 65);
+
+        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + 65;
+        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - 120);
+
         //CREACION ALEATORIA DEL TABLERO
         for (int i = 0; i < rows_; i++) {
-            //Contador de celdas azules por cada columna
-            int numSolutionPerRows = 0;
+
+            //Contador de celdas azules por cada fila
             int contAux = 0;
+
+            //Para evitar Filas vacias o llenas
+            int numSolutionPerRows = 0;
 
             for (int j = 0; j < cols_; j++) {
 
@@ -137,25 +157,30 @@ public class MyScene implements Scene {
                     //Lo añadimos a la lista de celdas que tiene que acertar el jugador
                     remainingCells++;
 
-
                     this.matriz[j][i].setSolution(true);
                     numSolutionPerRows++;
+
                     //Para averiguar los numeros laterales de las celdas
                     contAux++;
 
-                    //PARA AUXILIAR
-                    //Si nunca se han añadido...
+                    //Si nunca se han añadido en la celda de arriba suya...
                     if (numAnterior[j] == -1) {
+
                         //Metemos el primero...
                         xPositionsLeftToRight[j].add(1);
-                        //Y por lo tanto ya tenemos uno añadito
+
+                        //Y por lo tanto ya tenemos uno añadido
                         numAnterior[j] = 0;
-                        //Con esto solo entra si se ha añadido algo alguna vez
+
+                      //Con esto solo entra si se ha añadido algo alguna vez
                     } else if (numAnterior[j] == 0) {
-                        contadorCols[j]++;
+
                         //Sumamos el valor +1 porque la columna continua
+                        contadorCols[j]++;
+
                         //Eliminamos el anterior
                         xPositionsLeftToRight[j].remove(xPositionsLeftToRight[j].size() - 1);
+
                         //Y metemos el nuevo
                         xPositionsLeftToRight[j].add(xPositionsLeftToRight[j].size(), contadorCols[j]);
                     }
@@ -170,7 +195,6 @@ public class MyScene implements Scene {
             }
             //Si por el contrario todas se han rellenado
             else if (numSolutionPerRows == cols_) {
-                //AAA MENCIONAR TODO EN EL PDF QUE ESTO COMPLICA TODO PERO SE QUEDA UN CUADRADO MAS BONITO Y CURRAO
                 int aux = random.nextInt(cols_);
                 //Dejamos al menos una vacia
                 this.matriz[aux][i].setSolution(false);
@@ -191,11 +215,12 @@ public class MyScene implements Scene {
             //Si casualmente la columna se ha quedado totalmente vacia
             if (xPositionsLeftToRight[i].size() == 0) {
                 int randAux = random.nextInt(rows_);
+
                 //Minimo rellenamos una
                 this.matriz[i][randAux].setSolution(true);
                 xPositionsLeftToRight[i].add(1);
 
-                //Limpiamos la lateral
+                //Limpiamos el lateral
                 xPositionsTopToBottom[i].clear();
 
                 int cont = 0;
@@ -212,13 +237,6 @@ public class MyScene implements Scene {
                     xPositionsTopToBottom[i].add(cont);
                 }
             }
-            //EN UN NONOGRAMA ES NORMAL UNA FILA/COLUMNA CON TO SELECCIONADO, pero hago la comprobacion en las filas
-            //Para evitar cubos grandes que no tengan forma y solo sean relleno y evitar que salga algo compacto
-            //Si por el contrario todas se han rellenado
-//            else if(colums.get(i) == rows_){
-//                //Dejamos al menos una vacia
-//                this.matriz[random.nextInt(rows_)][i].setSolution(false);
-//            }
         }
 
         //Establecemos el numero completo de casillas que resolver
@@ -236,7 +254,6 @@ public class MyScene implements Scene {
                 xNumberTopToBottom[i] += xPositionsTopToBottom[i].get(j).toString() + " ";
             }
         }
-
     }
 
     @Override
@@ -261,6 +278,7 @@ public class MyScene implements Scene {
             engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
         }
 
+        //Timer del boton de comprobar
         if (timer > 0) {
             timer -= deltaTime;
         } else {
@@ -270,7 +288,9 @@ public class MyScene implements Scene {
 
     @Override
     public void render() {
+        //Si ya he ganado...
         if (won) {
+            //Solo renderizo las azules
             for (int i = 0; i < matriz.length; i++) {
                 for (int j = 0; j < matriz[i].length; j++) {
                     this.matriz[i][j].solutionRender(engine);
@@ -282,6 +302,8 @@ public class MyScene implements Scene {
 
             //BackButton
             this.engine.drawText("Volver", (int) (backButton.getPos().getX()), (int) (backButton.getPos().getY() + 20), "Black", "CalibriBold");
+
+        //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
@@ -303,7 +325,7 @@ public class MyScene implements Scene {
                     }
                 }
             }
-            //Numeros laterales
+            //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
                 engine.drawText(xNumberTopToBottom[i], 20, 350 + 60 * i, "Black", "CalibriSmall");
             }
@@ -312,13 +334,14 @@ public class MyScene implements Scene {
                     engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 200 + 30 * j, "Black", "CalibriSmall");
                 }
             }
-            //Cuadriculas
+
+            //CUADRICULAS
             //Ancha
             this.engine.paintCell(15, 315, widthAestheticCellX, heightAestheticCellX, -1);
             //Larga
             this.engine.paintCell(85, 180, widthAestheticCellY, heightAestheticCellY, -1);
 
-            //Botones
+            //BOTONES
             this.engine.drawImage(570, 45, 590, 65, "Lupa");
             this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 1.7), "Black", "CalibriBold");
 
@@ -362,12 +385,13 @@ public class MyScene implements Scene {
         }
 
         //BOTONES
+        //Boton de comprobar
         if (inputReceived(this.checkButton.getPos(), this.checkButton.getSize())) {
             //Mostramos el texto en pantalla
             showAnswers = true;
             timer = timeCheckButton;
-
         }
+        //Si te rindes vuelves a la seleccion de nivel
         if (inputReceived(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
             this.engine.popScene();
         }
@@ -375,12 +399,11 @@ public class MyScene implements Scene {
         if (won && inputReceived(this.backButton.getPos(), this.backButton.getSize())) {
             this.engine.popScene();
             this.engine.popScene();
-
         }
     }
 
+    //Comprueba si has ganado o no
     private boolean win() {
         return remainingCells == 0 && wrongCells == 0;
     }
 }
-

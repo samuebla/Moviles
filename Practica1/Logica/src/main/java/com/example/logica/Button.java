@@ -5,6 +5,7 @@ import com.example.lib.Vector2D;
 
 import java.awt.geom.Point2D;
 
+//Clase para todos los botones
 public class Button extends Interactive {
 
     public Button(double posX, double posY, double sizeW, double sizeH){

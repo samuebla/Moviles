@@ -14,7 +14,6 @@ public class Cell extends Interactive {
     //Para el contador de celdas restantes y erroneas
     int key;
 
-
     public Cell(int x, int y, int width, int height) {
         this.setSize(width, height);
         this.setPos(x, y);

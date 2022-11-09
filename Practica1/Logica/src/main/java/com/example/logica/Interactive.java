@@ -5,6 +5,7 @@ import com.example.lib.Vector2D;
 
 import java.awt.geom.Point2D;
 
+//Clase Abstracta para todos los elementos que tengan Input
 public class Interactive {
     Vector2D size = new Vector2D();
     Vector2D pos = new Vector2D();
