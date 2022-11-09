@@ -67,9 +67,12 @@ public class MyScene implements Scene {
         this.engine = engine;
 
         //Seteamos los botones
-        this.checkButton = new Button(560, 40, 140, 30);
-        this.giveUpButton = new Button(10, 50, 120, 30);
-        this.backButton = new Button(320, 960, 60, 30);
+        this.checkButton = new Button((double)this.engine.getWidth()*0.7777777, (double)this.engine.getHeight()*0.037037037,
+                (double)this.engine.getWidth()*0.1944444, (double)this.engine.getHeight()*0.02777777);
+        this.giveUpButton = new Button((double)this.engine.getWidth()*0.01388888, (double)this.engine.getHeight()*0.04629629,
+                (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.02777777);
+        this.backButton = new Button((double)this.engine.getWidth()*0.44444444, (double)this.engine.getHeight()*0.888888888,
+                (double)this.engine.getWidth()*0.0833333, (double)this.engine.getHeight()*0.02777777);
 
         //Creamos el random
         Random random = new Random();
@@ -111,16 +114,17 @@ public class MyScene implements Scene {
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
                 //Primero J que son las columnas en X y luego las filas en Y
-                this.matriz[j][i] = new Cell(90 + 60 * j, 320 + 60 * i, 54, 54);
+                this.matriz[j][i] = new Cell((int)((double)this.engine.getWidth()*0.125) + (int)((double)this.engine.getWidth()*0.083333) * j,
+                        (int)((double)this.engine.getHeight()*0.296296296) + (int)((double)this.engine.getHeight()*0.055555555) * i, (int)((double)this.engine.getWidth()*0.075), (int)((double)this.engine.getHeight()*0.05));
             }
         }
 
         //Tamaño de las cuadriculas que recubren el nonograma
-        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + 45;
-        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + 65);
+        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int)((double)this.engine.getWidth()*0.0625);
+        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + (int)((double)this.engine.getHeight()*0.0601851));
 
-        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + 65;
-        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - 120);
+        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + (int)((double)this.engine.getWidth()*0.0902777);
+        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - (int)((double)this.engine.getHeight()*0.111111111));
 
         //CREACION ALEATORIA DEL TABLERO
         for (int i = 0; i < rows_; i++) {
@@ -325,18 +329,18 @@ public class MyScene implements Scene {
             }
 
             //Mensaje de enhorabuena
-            this.engine.drawText("ENHORABUENA!", 200, 120, "Black", "Cooper");
+            this.engine.drawText("ENHORABUENA!", (int)((double)this.engine.getWidth()*0.27777), (int)((double)this.engine.getHeight()*0.1111111), "Black", "Cooper");
 
             //BackButton
-            this.engine.drawText("Volver", (int) (backButton.getPos().getX()), (int) (backButton.getPos().getY() + 20), "Black", "CalibriBold");
+            this.engine.drawText("Volver", (int) (backButton.getPos().getX()), (int) (backButton.getPos().getY() + (int)((double)this.engine.getHeight()*0.0185185)), "Black", "CalibriBold");
 
             //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
                 //Muestra el texto...
-                this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", 250, 120, "red", "Calibri");
-                this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", 250, 150, "red", "Calibri");
+                this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)this.engine.getWidth()*0.34722222), (int)((double)this.engine.getHeight()*0.1111111), "red", "Calibri");
+                this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)this.engine.getWidth()*0.3472222222), (int)((double)this.engine.getHeight()*0.1388888), "red", "Calibri");
 
                 //Renderiza rojo si esta mal
                 for (int i = 0; i < matriz.length; i++) {
@@ -354,26 +358,26 @@ public class MyScene implements Scene {
             }
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                engine.drawText(xNumberTopToBottom[i], 20, 350 + 60 * i, "Black", "CalibriSmall");
+                engine.drawText(xNumberTopToBottom[i], (int)((double)this.engine.getWidth()*0.0277777), (int)((double)this.engine.getHeight()*0.3240740) + (int)((double)this.engine.getHeight()*0.0555555) * i, "Black", "CalibriSmall");
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 200 + 30 * j, "Black", "CalibriSmall");
+                    engine.drawText(xNumberLeftToRight[i].get(j), (int)((double)this.engine.getWidth()*0.1388888) + (int)((double)this.engine.getWidth()*0.083333) * i, (int)((double)this.engine.getHeight()*0.185185) + (int)((double)this.engine.getHeight()*0.027777) * j, "Black", "CalibriSmall");
                 }
             }
 
             //CUADRICULAS
             //Ancha
-            this.engine.paintCell(15, 315, widthAestheticCellX, heightAestheticCellX, -1);
+            this.engine.paintCell((int)((double)this.engine.getWidth()*0.0208333), (int)((double)this.engine.getHeight()*0.291666), widthAestheticCellX, heightAestheticCellX, -1);
             //Larga
-            this.engine.paintCell(85, 180, widthAestheticCellY, heightAestheticCellY, -1);
+            this.engine.paintCell((int)((double)this.engine.getWidth()*0.1180555), (int)((double)this.engine.getHeight()*0.166666), widthAestheticCellY, heightAestheticCellY, -1);
 
             //BOTONES
-            this.engine.drawImage(570, 45, 590, 65, "Lupa");
+            this.engine.drawImage((int)((double)this.engine.getWidth()*0.7916666), (int)((double)this.engine.getHeight()*0.041666), (int)((double)this.engine.getWidth()*0.819444), (int)((double)this.engine.getHeight()*0.060185), "Lupa");
             this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 1.7), "Black", "CalibriBold");
 
-            this.engine.drawImage(10, 50, 50, 75, "Flecha");
-            this.engine.drawText("Rendirse", (int) (giveUpButton.getPos().getX() + 50), (int) (giveUpButton.getPos().getY() + 20), "Black", "CalibriBold");
+            this.engine.drawImage((int)((double)this.engine.getWidth()*0.0138888), (int)((double)this.engine.getHeight()*0.046296), (int)((double)this.engine.getWidth()*0.069444), (int)((double)this.engine.getHeight()*0.0694444), "Flecha");
+            this.engine.drawText("Rendirse", (int) (giveUpButton.getPos().getX() + (int)((double)this.engine.getWidth()*0.069444)), (int) (giveUpButton.getPos().getY() + (int)((double)this.engine.getHeight()*0.0185185)), "Black", "CalibriBold");
         }
     }
 
