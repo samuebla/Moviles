@@ -20,11 +20,20 @@ public class MainMenuScene implements Scene {
     public MainMenuScene(Engine engineAux){
         this.engine = engineAux;
 
+        try{
+<<<<<<< Updated upstream
         //La constructora del menu solo se llama una vez
         //Cargamos el fondo y lo playeamos
         engine.getAudio().loadMusic("background", "Assets\\WiiBackgroundMusic.wav");
         engine.getAudio().playSound("background", 0);
         engine.getAudio().newSound("effect","Assets\\wiiClickSound.wav");
+=======
+            //La constructora del menu solo se llama una vez
+            //Cargamos el fondo y lo playeamos
+            engine.getAudio().newSound("background","Assets\\WiiBackgroundMusic.wav").play();
+            engine.getAudio().setLoop("background");
+            engine.getAudio().newSound("effect","Assets\\wiiClickSound.wav");
+>>>>>>> Stashed changes
 
         engine.getGraphics().newFont("Calibri","Assets\\CalibriRegular.ttf", 0, 25);
         engine.getGraphics().newFont("Cooper","Assets\\CooperBlackRegular.ttf", 0, 40);
