@@ -168,6 +168,7 @@ public class RenderAndroid implements IGraphics {
         int prevColor = this.paint.getColor();
         Font_Android font = this.fonts.get(fontAux);
         this.paint.setTextSize(font.getSize());
+        this.paint.setTypeface(font.getFont());
         int currentColor;
         if (color == "red"){
             currentColor = 0xFFFF0000;
@@ -175,7 +176,6 @@ public class RenderAndroid implements IGraphics {
             currentColor = 0xFF000000;
         }
         this.paint.setColor(currentColor);
-        //AAAAAAAAAAAAA Aplicar la fuente
 
         this.canvas.drawText(text, (float)x, (float)y, this.paint);
         this.paint.setColor(prevColor);
