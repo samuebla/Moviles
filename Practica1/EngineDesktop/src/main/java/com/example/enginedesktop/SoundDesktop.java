@@ -19,6 +19,7 @@ public class SoundDesktop implements ISound {
 
     public SoundDesktop(File file) {
         try{
+            //Abre y reproduce un sonido
             this.sound = AudioSystem.getAudioInputStream(file);
             this.clip = AudioSystem.getClip();
             this.clip.open(sound);

@@ -22,7 +22,7 @@ public class MainActivity {
         JFrame renderView = new JFrame("NONOGRAMA");
 
         renderView.setSize(720, 1080);
-        renderView.setBackground(Color.GRAY);
+        renderView.setBackground(Color.WHITE);
         renderView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         renderView.setIgnoreRepaint(true);
 

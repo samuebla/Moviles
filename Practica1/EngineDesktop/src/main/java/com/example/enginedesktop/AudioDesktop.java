@@ -18,9 +18,7 @@ public class AudioDesktop implements IAudio {
         sounds = new HashMap<>();
     }
 
-    //SetMusic(String filepath)
-    //StartMusic
-    //Stop music??
+    //Inicializa un sonido
     @Override
     public ISound newSound(String audioName,String path) {
         File audioFile = new File(PATH + path);
@@ -30,14 +28,17 @@ public class AudioDesktop implements IAudio {
         return sAux;
     }
 
+    //Inicializa la musica de fondo
     @Override
     public void loadMusic(String audioName, String path) {
         File audioFile = new File(PATH + path);
         SoundDesktop sAux = new SoundDesktop(audioFile);
 
+        //Guardamos la musica de fondo, la cual sera solo una
         this.backgroundMusic = sAux;
     }
 
+    //Reproduce un sonido, si type es 0 se reproduce la musica de fondo, sino reproduce el sonido especificado
     @Override
     public void playSound(String audioName, int type) {
         if (type == 0){
@@ -47,6 +48,7 @@ public class AudioDesktop implements IAudio {
         }
     }
 
+    //Reproduce en bucle el sonido especificado
     @Override
     public void setLoop(String audioName){
         sounds.get(audioName).startLoop();

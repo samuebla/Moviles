@@ -22,17 +22,21 @@ public class AudioAndroid implements IAudio {
     private AssetManager assets;
 
     public AudioAndroid(){
+        //Inicializamos atributos
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .build();
+        //SoundPool que reproduce los sonidos de efecto
         this.soundPool = new SoundPool.Builder().
                 setMaxStreams(10).
                 setAudioAttributes(audioAttributes)
                 .build();
 
+        //Media player para la musica de fondo
         this.mediaPlayer = new MediaPlayer();
 
+        //Aqui guardamos los sonidos de efecto
         this.sounds = new HashMap<>();
     }
 
@@ -42,19 +46,21 @@ public class AudioAndroid implements IAudio {
 
     @Override
     public ISound newSound(String audioName, String path) {
+        //Guarda en los sounds y crea el nuevo sonido
         return this.sounds.put(audioName, new SoundApp(this.soundPool, PATH + audioName, this.assets));
     }
 
     @Override
     public void loadMusic(String audioName, String path){
+        //Inicializamos la musica
         this.mediaPlayer.reset();
-        this.mediaPlayer.setVolume(1.0f, 1.0f);
         String newFilePath = path.replaceAll("assets/", "");
         AssetFileDescriptor fileDescriptor = null;
         try{
             fileDescriptor = this.assets.openFd(newFilePath);
             this.mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(),
                     fileDescriptor.getStartOffset(), fileDescriptor.getLength());
+            this.mediaPlayer.setVolume(1.0f, 1.0f);
             this.mediaPlayer.prepare();
         }catch (Exception e){
             e.printStackTrace();
