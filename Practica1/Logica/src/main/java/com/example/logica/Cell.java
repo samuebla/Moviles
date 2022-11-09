@@ -10,6 +10,8 @@ public class Cell extends Interactive {
 
     private cellType type;
     private boolean solution = false;
+
+    //Para el contador de celdas restantes y erroneas
     int key;
 
 
@@ -22,7 +24,6 @@ public class Cell extends Interactive {
 
     @Override
     public void update(double deltaTime) {
-
     }
 
     @Override
@@ -35,25 +36,25 @@ public class Cell extends Interactive {
         switch (type) {
             case EMPTY:
                 type = cellType.SELECTED;
-                //Si la seleccionas y no es la solucion
+
+                //1 si la seleccionas y no es la solucion
                 if (!solution) {
-                    //Lo guardamos
                     key = 1;
                 }
+                //2 si lo seleccionas y es la solucion
                 else{
                     key = 2;
                 }
                 break;
             case SELECTED:
                 type = cellType.CROSSED;
-                //Si lo tenias seleccionado y estaba mal...
+
+                //3 si lo tenias seleccionado y estaba mal pero ahora no
                 if(!solution){
-                    //Deja de estar mal
                     key = 3;
                 }
-                //Si estaba bien...
+                //4 si estaba bien seleccionado y lo deseleccionas
                 else {
-                    //Ahora deja de estarlo
                     key = 4;
                 }
                 break;
@@ -79,6 +80,7 @@ public class Cell extends Interactive {
         type = aux;
     }
 
+    //Para el boton de comprobar
     public void trueRender(Engine engine) {
         //Si te has equivocado...
         if(key == 1){
@@ -92,6 +94,7 @@ public class Cell extends Interactive {
         }
     }
 
+    //Para la pantalla de Enhorabuena
     public void solutionRender(Engine engine) {
         //Solo renderizo si esta azul
         if(type == cellType.SELECTED){
