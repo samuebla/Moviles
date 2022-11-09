@@ -14,13 +14,14 @@ public class FontDesktop implements IFont {
     private Font font;
 
     public FontDesktop(File file, int type, int size){
+        //Intenta inicializar la fuente del fichero especificado
         try {
             InputStream is = new FileInputStream(file);
             font = Font.createFont(Font.TRUETYPE_FONT, is);
             setSize(type,size);
         }
         catch(IOException | FontFormatException e) {
-            //It tells you what happened and where in the code this happened.
+            //Te devuelve el recorrido de llamadas en caso de que de error
             e.printStackTrace();
         }
     }
@@ -32,6 +33,7 @@ public class FontDesktop implements IFont {
         return font.getSize();
     }
 
+    //Cambia el tamano y el tipo de la fuente
     @Override
     public void setSize(int type,int size){
         switch (type){

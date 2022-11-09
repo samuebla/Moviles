@@ -39,12 +39,6 @@ public class RenderDesktop implements IGraphics {
     HashMap<String,FontDesktop> fonts;
     HashMap<String,ImageDesktop> images;
 
-//    WindowSize baseSize;
-//    WindowSize windowSize;
-//    WindowSize nextWindowSize;
-//    WindowSize nextScale;
-//    WindowSize prevScale;
-
     public RenderDesktop(JFrame myView) {
         //Canvas y ventana
         this.myView = myView;
@@ -66,72 +60,8 @@ public class RenderDesktop implements IGraphics {
         //Guardado del escalado y las proporciones a mantener
         this.scaleProportion = this.graphics2D.getTransform().getScaleX();
 
-//        this.nextWindowSize = new Vector2D();
-//        this.nextWindowSize.w = this.myView.getSize().width;
-//        this.nextWindowSize.h = this.myView.getSize().height;
-//
-//        this.nextScale = new WindowSize();
-//        this.nextScale.w = 1.0;
-//        this.nextScale.h = 1.0;
-//
-//        this.prevScale = new WindowSize();
-//        this.prevScale.w = 1.0;
-//        this.prevScale.h = 1.0;
-
-//        this.myView.addComponentListener(new ComponentAdapter() {
-//            public void componentResized(ComponentEvent e) {
-//                    graphics2D.dispose();
-//                    bufferStrategy.show();
-//                try {
-//                    graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
-//                }
-//                catch (Exception exception){
-//                    System.err.println("Bad thread buffering management");
-//                }
-//                    double w = e.getComponent().getWidth();
-//                    double h = e.getComponent().getHeight();
-//                    nextScale.w = w / windowSize.w;
-//                    nextScale.h = h / windowSize.h;
-//                    nextWindowSize.w = w;
-//                    nextWindowSize.h = h;
-//            }
-//        });
-//
-//        baseSize = new WindowSize();
-//        baseSize.h = this.myView.getHeight();
-//        baseSize.w = this.myView.getWidth();
-
         this.myView.setResizable(true);
     }
-
-
-//    protected void renderCircle(float x, float y, float r){
-//        this.graphics2D.setColor(Color.white);
-//        this.graphics2D.fillOval((int)x, (int)y, (int)r*2, (int)r*2);
-//        this.graphics2D.setPaintMode();
-//    }
-//
-//    //EL INT TIPO ACABARA SIENDO UN ENUM aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-//    protected void renderSquare(int x, int y, int w,int h,int tipo ){
-//        this.graphics2D.setColor(Color.black);
-//        this.graphics2D.fillRect(x-1,y-1,w+2,h+2);
-//
-//        this.graphics2D.setColor(Color.blue);
-//        this.graphics2D.fillRect(x,y,w,h);
-//
-//        this.graphics2D.setColor(Color.black);
-//
-//        if(tipo == 2)
-//            this.graphics2D.drawLine(x,y,x+w,y+h);
-//
-//        //this.graphics2D.drawLine(x,y,x+w,y);
-//        //this.graphics2D.drawLine(x,y,x,y+h);
-//        //this.graphics2D.drawLine(x+w,y,x,y+h);
-//        //this.graphics2D.drawLine(x,y+h,x+w,y);
-//
-//
-//        this.graphics2D.setPaintMode();
-//    }
 
     public void initFrame() {
         //Siguiente buffer a procesar
@@ -143,12 +73,6 @@ public class RenderDesktop implements IGraphics {
         this.graphics2D.fillRect(0, 0, getWidth(), getHeight());
     }
 
-    protected void render() {
-        // "Borramos" el fondo.
-        this.graphics2D.setColor(Color.white);
-        this.graphics2D.fillRect(0, 0, this.getWidth(), this.getHeight());
-    }
-
     public void clearFrame() {
         //dibujar los margenes por encima
         drawMargins();
@@ -156,6 +80,7 @@ public class RenderDesktop implements IGraphics {
         this.bufferStrategy.getDrawGraphics().dispose();
     }
 
+    //Cambia el buffer para empezar a pintar en el otro buffer y renderizar el anterior
     public boolean swap() {
         if (this.bufferStrategy.contentsRestored())
             return false;
@@ -194,13 +119,10 @@ public class RenderDesktop implements IGraphics {
     public void setColor(int color) {
         //El color se pasa en Hexadecimal
         int r, g, b;
-        //AAA REVISAR NO SE SI ES ASÍ
-        //creo que es 16, 8 y nada
+        //Conversion del color a rgb
         r = (color & 0xFF0000) >> 24;
         g = (color & 0xFF00) >> 16;
         b = (color & 0xFF) >> 8;
-
-        //AAA NO SE COMO FUNCIONA EL ALPHA
 
         this.graphics2D.setColor(new Color(r, b, g, 255));
     }
@@ -214,6 +136,7 @@ public class RenderDesktop implements IGraphics {
         this.graphics2D.setPaintMode();
     }
 
+    //Dubuja un rectangulo relleno o hueco
     @Override
     public void drawRectangle(int x, int y, int w, int h, boolean fill) {
         if (!fill)
@@ -225,20 +148,12 @@ public class RenderDesktop implements IGraphics {
     }
 
     @Override
-    public void fillRectangle(int x, int y, int w, int h) {
-        //CREO QUE AQUI NO VA ANCHO Y ALGO SINO X+W E Y+H
-        this.graphics2D.fillRect(x, y, w, h);
-        //No recuerdo si esto iba antes o despues, creo que despues
-        this.graphics2D.setPaintMode();
-    }
-
-    @Override
     public void drawLine(int x, int y, int w, int h) {
-        //Creo que el w y h n es lo que hay que pasarle
         this.graphics2D.drawLine(x, y, w, h);
         this.graphics2D.setPaintMode();
     }
 
+    //Dibuja un texto rojo o negro
     @Override
     public void drawText(String text, int x, int y, String color, String fontKey) {
 
@@ -255,6 +170,7 @@ public class RenderDesktop implements IGraphics {
     }
 
 
+    //Escala el canvas a la posicion de la ventana
     private void scaleCanvas() {
         //Averiguamos la escala más pequeña para mantener la proporción
         double scaleX = (myView.getWidth() - insets.left - insets.right) / canvasSize.getX();
@@ -276,7 +192,7 @@ public class RenderDesktop implements IGraphics {
     }
 
     private void drawMargins() {
-        this.graphics2D.setColor(Color.gray);
+        this.graphics2D.setColor(Color.WHITE);
 
         drawRectangle((int) (-margins.getX() / factorScale), 0, (int) (margins.getX() / factorScale), (int) canvasSize.getY(), true);
         drawRectangle((int) canvasSize.getX(), 0, (int) (margins.getX() / factorScale), (int) canvasSize.getY(), true);
@@ -285,6 +201,7 @@ public class RenderDesktop implements IGraphics {
         drawRectangle(0, (int) canvasSize.getY(), (int) canvasSize.getX(), (int) (margins.getY() / factorScale), true);
     }
 
+    //Pinta una celda del juego
     //EMPTY(gray) = 0
     //SELECTED(blue) = 1
     //CROSSED(crossed) = 2

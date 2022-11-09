@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class SceneMngrDesktop implements ISceneMngr {
+    //Stack de escenas
     Stack<Scene> stack;
 
     public SceneMngrDesktop(){

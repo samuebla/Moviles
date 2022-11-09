@@ -18,6 +18,7 @@ public class EngineDesktop implements Engine,Runnable{
 
     public EngineDesktop(final JFrame myView){
         this.render = new RenderDesktop(myView);
+        //Event handler que detecta los eventos de raton
         this.eventHandler = new IEventHandler() {
             @Override
             public IEvent getEvent() {
@@ -35,8 +36,7 @@ public class EngineDesktop implements Engine,Runnable{
         this.audioMngr = new AudioDesktop();
     }
 
-//    //<<< API >>>
-
+    //Pinta una celda del tablero
     //EMPTY(gray) = 0
     //SELECTED(blue) = 1
     //CROSSED(crossed) = 2
@@ -57,15 +57,7 @@ public class EngineDesktop implements Engine,Runnable{
         this.render.drawImage(x, y, desiredWidth, desiredHeight, image);
     }
 
-//    @Override
-//    public void addComponent(Component aux){
-//        myView.add(aux);
-//    }
-
-
-    //<< Fin API>>
-
-    //<<Motor>>
+    //<<Partes Motor>>
     @Override
     public IGraphics getGraphics(){
         return this.render;
@@ -75,7 +67,7 @@ public class EngineDesktop implements Engine,Runnable{
         return audioMngr;
     }
 
-    //<<Fin Motor>>
+    //<<Fin Partes Motor>>
 
     @Override
     public int getWidth(){
@@ -86,14 +78,17 @@ public class EngineDesktop implements Engine,Runnable{
         return this.render.getHeight();
     }
 
+    //Cambia la escena activa
     @Override
     public void setScene(Scene newScene){
         this.sceneManager.pushScene(newScene);
     }
 
+    //Guarda el sceneManager
     @Override
     public void setSceneMngr(ISceneMngr sceneMngrAux){this.sceneManager = (SceneMngrDesktop) sceneMngrAux;}
 
+    //Vuelve a la escena anterior del stack
     @Override
     public void popScene(){ this.sceneManager.popScene();}
 
@@ -109,6 +104,7 @@ public class EngineDesktop implements Engine,Runnable{
     }
     //<<Fin Input>>
 
+    //Hebra principal
     @Override
     public void run() {
         if (this.renderThread != Thread.currentThread()) {
@@ -122,30 +118,27 @@ public class EngineDesktop implements Engine,Runnable{
         while(this.running && this.render.getWidth() == 0);
         // Espera activa. Sería más elegante al menos dormir un poco.
 
-        long lastFrameTime = System.nanoTime();
+//        long lastFrameTime = System.nanoTime();
 
-        long informePrevio = lastFrameTime; // Informes de FPS
-        int frames = 0;
+//        long informePrevio = lastFrameTime; // Informes de FPS
+//        int frames = 0;
 
         long actualTime = System.currentTimeMillis();
 
         // Bucle de juego principal.
         while(running) {
             long currentTime = System.nanoTime();
-            long nanoElapsedTime = currentTime - lastFrameTime;
-            lastFrameTime = currentTime;
 
-            // Informe de FPS
-            double elapsedTime = (double) nanoElapsedTime / 1.0E9;
-//            this.update(elapsedTime);
-            if (currentTime - informePrevio > 1000000000l) {
-                long fps = frames * 1000000000l / (currentTime - informePrevio);
-                System.out.println("" + fps + " fps");
-                frames = 0;
-                informePrevio = currentTime;
-            }
-            ++frames;
+//            // Informe de FPS
+//            if (currentTime - informePrevio > 1000000000l) {
+//                long fps = frames * 1000000000l / (currentTime - informePrevio);
+//                System.out.println("" + fps + " fps");
+//                frames = 0;
+//                informePrevio = currentTime;
+//            }
+//            ++frames;
 
+            //Calculo del delta time para el update
             long deltaTime = System.currentTimeMillis() - actualTime;
             actualTime += deltaTime;
 

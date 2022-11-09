@@ -13,19 +13,19 @@ public class ImageDesktop implements IImage {
     private Image image;
 
     public ImageDesktop(File file){
+        //Intenta leer la imagen del archivo
         try{
             image = ImageIO.read(file);
         }
         catch (IOException e){
-            //It tells you what happened and where in the code this happened
-            //Eso dice google tia yo que se
+            //Te devuelve la cola de llamadas
             e.printStackTrace();
         }
     }
 
     @Override
     public int getWidth() {
-        //Ni puta idea de qe cojones tengo que pasarle
+        //Al parecer el parametro adicional es un observer que no necesitamos de momento
         return image.getWidth(null);
     }
 
