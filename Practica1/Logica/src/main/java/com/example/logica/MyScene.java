@@ -169,9 +169,27 @@ public class MyScene implements Scene {
 
             //Si casualmente la fila se ha quedado totalmente vacia
             if (numSolutionPerRows == 0) {
+                int aux = random.nextInt(cols_);
                 //Minimo rellenamos una
-                this.matriz[random.nextInt(cols_)][i].setSolution(true);
+                this.matriz[aux][i].setSolution(true);
                 xPositionsTopToBottom[i].add(1);
+
+                //Ahora limpiamos la columna correspondiente y volvemos a contar
+                xPositionsLeftToRight[aux].clear();
+
+                int cont = 0;
+                //Recorremos la columna otra vez para rellenar correctamente la fila
+                for (int j = 0; j < rows_; j++) {
+                    if (this.matriz[aux][j].getSolution()) {
+                        cont++;
+                    } else if (cont != 0) {
+                        xPositionsLeftToRight[aux].add(cont);
+                        cont = 0;
+                    }
+                }
+                if (cont != 0) {
+                    xPositionsLeftToRight[aux].add(cont);
+                }
 
                 //Y la contabilizamos
                 remainingCells++;
@@ -287,8 +305,8 @@ public class MyScene implements Scene {
                 (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.10);
         this.giveUpButton = new Button((double)this.engine.getWidth()*0.01388888, (double)this.engine.getHeight()*0.04629629,
                 (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.10);
-        this.backButton = new Button((double)this.engine.getWidth()*0.44444444, (double)this.engine.getHeight()*0.888888888,
-                (double)this.engine.getWidth()*0.0833333, (double)this.engine.getHeight()*0.02777777);
+        this.backButton = new Button((double)this.engine.getWidth()*0.44444444, (double)this.engine.getHeight()/1.1,
+                (double)this.engine.getWidth()/10, (double)this.engine.getHeight()/15);
     }
 
     @Override
@@ -328,9 +346,9 @@ public class MyScene implements Scene {
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 
         //El cuadrado se mantiene aunque ganes porque es muy bonito
-        this.engine.drawImage((int)(auxCuadradoInicio.getX()-((double)(this.engine.getWidth())/72.0)), (int)(auxCuadradoInicio.getY()-((double)(this.engine.getHeight())/108)),
-                (int)(auxCuadradoFinal.getX()-auxCuadradoInicio.getX() + engine.getWidth()/36 + this.engine.getWidth()*0.075)
-               , (int)(auxCuadradoFinal.getY()-auxCuadradoInicio.getY() + engine.getHeight()/54 + this.engine.getHeight()*0.05), "Board");
+        this.engine.drawImage((int)(auxCuadradoInicio.getX()-((double)(this.engine.getWidth())/100.0)), (int)(auxCuadradoInicio.getY()-((double)(this.engine.getHeight())/150)),
+                (int)(auxCuadradoFinal.getX()-auxCuadradoInicio.getX() + engine.getWidth()/50 + this.engine.getWidth()*0.075)
+               , (int)(auxCuadradoFinal.getY()-auxCuadradoInicio.getY() + engine.getHeight()/65 + this.engine.getHeight()*0.05), "Board");
 
         //Si ya he ganado...
         if (won) {
@@ -345,7 +363,7 @@ public class MyScene implements Scene {
             this.engine.drawText("ENHORABUENA!", (int)((double)this.engine.getWidth()*0.5), (int)((double)this.engine.getHeight()*0.1111111), "Black", "Cooper", 0);
 
             //BackButton
-            this.engine.drawText("Volver", (int) (backButton.getPos().getX()), (int) (backButton.getPos().getY() + (int)((double)this.engine.getHeight()*0.0185185)), "Black", "CalibriBold", 0);
+            this.engine.drawImage((int)(backButton.getPos().getX()), (int)(backButton.getPos().getY()), (int)(backButton.getSize().getX()), (int)(backButton.getSize().getY()), "Back");
 
             //Si sigo jugando...
         } else {
@@ -376,7 +394,7 @@ public class MyScene implements Scene {
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    engine.drawText(xNumberLeftToRight[i].get(j), (int)((double)this.engine.getWidth()*0.1388888) + (int)((double)this.engine.getWidth()*0.083333) * i, (int)((double)this.engine.getHeight()*0.185185) + (int)((double)this.engine.getHeight()*0.027777) * j, "Black", "CalibriSmall", 0);
+                    engine.drawText(xNumberLeftToRight[i].get(j), (int)((double)this.engine.getWidth()*0.155) + (int)((double)this.engine.getWidth()*0.083333) * i, (int)((double)this.engine.getHeight()*0.185185) + (int)((double)this.engine.getHeight()*0.027777) * j, "Black", "CalibriSmall", 0);
                 }
             }
 

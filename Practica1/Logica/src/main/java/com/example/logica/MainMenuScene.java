@@ -42,7 +42,7 @@ public class MainMenuScene implements Scene {
             this.engine.getGraphics().newFont("Amor", "assets/AmorRegular.ttf", 0, 50);
             this.engine.getGraphics().newFont("Calibri", "assets/CalibriRegular.ttf", 0, 25);
             this.engine.getGraphics().newFont("Cooper", "assets/CooperBlackRegular.ttf", 0, 50);
-            this.engine.getGraphics().newFont("CalibriSmall", "assets/CalibriRegular.ttf", 1, 18);
+            this.engine.getGraphics().newFont("CalibriSmall", "assets/CalibriRegular.ttf", 0, 22);
             this.engine.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1, 40);
             this.engine.getGraphics().newFont("CalibriBold", "assets/CalibriRegular.ttf", 1, 20);
 

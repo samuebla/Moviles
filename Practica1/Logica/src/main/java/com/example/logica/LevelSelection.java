@@ -35,7 +35,6 @@ public class LevelSelection implements Scene {
     public boolean inputReceived(Vector2D pos, Vector2D size){
         Vector2D coords = new Vector2D();
         coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
-        System.out.println("Mi abuela mide : [x]" + coords.getX() + " [y] " + coords.getY());
 
         return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
                 coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
