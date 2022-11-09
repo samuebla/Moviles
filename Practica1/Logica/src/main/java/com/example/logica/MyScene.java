@@ -264,10 +264,10 @@ public class MyScene implements Scene {
     @Override
     public void init() {
         //Seteamos los botones
-        this.checkButton = new Button((double)this.engine.getWidth()*0.7777777, (double)this.engine.getHeight()*0.037037037,
-                (double)this.engine.getWidth()*0.1944444, (double)this.engine.getHeight()*0.02777777);
+        this.checkButton = new Button((double)this.engine.getWidth()*0.8, (double)this.engine.getHeight()*0.06,
+                (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.10);
         this.giveUpButton = new Button((double)this.engine.getWidth()*0.01388888, (double)this.engine.getHeight()*0.04629629,
-                (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.02777777);
+                (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.10);
         this.backButton = new Button((double)this.engine.getWidth()*0.44444444, (double)this.engine.getHeight()*0.888888888,
                 (double)this.engine.getWidth()*0.0833333, (double)this.engine.getHeight()*0.02777777);
     }
@@ -358,11 +358,9 @@ public class MyScene implements Scene {
             this.engine.paintCell((int)((double)this.engine.getWidth()*0.1180555), (int)((double)this.engine.getHeight()*0.166666), widthAestheticCellY, heightAestheticCellY, -1);
 
             //BOTONES
-            this.engine.drawImage((int)((double)this.engine.getWidth()*0.8416666), (int)((double)this.engine.getHeight()*0.041666), (int)((double)this.engine.getWidth()*0.15), (int)((double)this.engine.getHeight()*0.08), "GiveUp");
-            this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 1.7), "Black", "CalibriBold");
+            this.engine.drawImage((int)((double)checkButton.getPos().getX()), (int)((double)checkButton.getPos().getY()), (int)((double)checkButton.getSize().getX()), (int)((double)checkButton.getSize().getY()), "Check");
 
-            this.engine.drawImage((int)((double)this.engine.getWidth()*0.0138888), (int)((double)this.engine.getHeight()*0.046296), (int)((double)this.engine.getWidth()*0.1), (int)((double)this.engine.getHeight()*0.05), "GiveUp");
-            this.engine.drawText("Rendirse", (int) (giveUpButton.getPos().getX() + (int)((double)this.engine.getWidth()*0.069444)), (int) (giveUpButton.getPos().getY() + (int)((double)this.engine.getHeight()*0.0185185)), "Black", "CalibriBold");
+            this.engine.drawImage((int)((double)giveUpButton.getPos().getX()), (int)((double)giveUpButton.getPos().getY()), (int)((double)giveUpButton.getSize().getX()), (int)((double)giveUpButton.getSize().getY()), "GiveUp");
         }
     }
 
