@@ -14,8 +14,9 @@ public class ImageAndroid implements IImage {
     Bitmap image;
 
     public ImageAndroid(AssetManager assets, String path) {
+        String newFilePath = path.replaceAll("assets/", "");
         try {
-            InputStream input = assets.open(path);
+            InputStream input = assets.open(newFilePath);
             //Ni idea de que hace esto, pero gracias google
             image = BitmapFactory.decodeStream(input);
         } catch (IOException e) {

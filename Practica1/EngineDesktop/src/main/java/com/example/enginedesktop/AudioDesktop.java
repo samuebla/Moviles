@@ -34,7 +34,6 @@ public class AudioDesktop implements IAudio {
     public void loadMusic(String audioName, String path) {
         File audioFile = new File(PATH + path);
         SoundDesktop sAux = new SoundDesktop(audioFile);
-        sAux.startLoop();
 
         this.backgroundMusic = sAux;
     }
@@ -42,7 +41,7 @@ public class AudioDesktop implements IAudio {
     @Override
     public void playSound(String audioName, int type) {
         if (type == 0){
-            this.backgroundMusic.play();
+            this.backgroundMusic.startLoop();
         }else{
             sounds.get(audioName).play();
         }
