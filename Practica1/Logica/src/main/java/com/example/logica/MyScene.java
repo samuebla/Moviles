@@ -32,7 +32,7 @@ public class MyScene implements Scene {
 
     int remainingCells, wrongCells, maxCellsSolution;
 
-    int widthAestheticCellX,heightAestheticCellX,widthAestheticCellY,heightAestheticCellY;
+    int widthAestheticCellX, heightAestheticCellX, widthAestheticCellY, heightAestheticCellY;
 
     private Button checkButton;
     private Button giveUpButton;
@@ -83,11 +83,11 @@ public class MyScene implements Scene {
             }
         }
         //Tamaño de las cuadriculas que recubren el nonograma
-        widthAestheticCellX = (int)(this.matriz[cols_-1][rows_-1].getPos().getX()) + 45;
-        heightAestheticCellX = (int)( this.matriz[cols_-1][rows_-1].getPos().getY() - this.matriz[0][0].getPos().getY() + 65);
+        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + 45;
+        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + 65);
 
-        widthAestheticCellY = (int)((this.matriz[cols_-1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + 65;
-        heightAestheticCellY = (int)( this.matriz[cols_-1][rows_-1].getPos().getY() -200 + 60);
+        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + 65;
+        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - 120);
 
         for (int i = 0; i < rows_; i++) {
             xPositionsTopToBottom[i] = new ArrayList<>();
@@ -200,15 +200,15 @@ public class MyScene implements Scene {
 
                 int cont = 0;
                 //Recorremos la columna otra vez para rellenar correctamente la fila
-                for(int j=0;j<cols_;j++){
-                    if(this.matriz[j][i].getSolution()) {
+                for (int j = 0; j < cols_; j++) {
+                    if (this.matriz[j][i].getSolution()) {
                         cont++;
-                    }
-                    if(cont!=0){
+                    } else if (cont != 0) {
                         xPositionsTopToBottom[i].add(cont);
+                        cont = 0;
                     }
                 }
-                if(cont!=0){
+                if (cont != 0) {
                     xPositionsTopToBottom[i].add(cont);
                 }
             }
@@ -261,17 +261,16 @@ public class MyScene implements Scene {
             engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
         }
 
-        if(timer>0){
-            timer -=deltaTime;
-        }
-        else{
+        if (timer > 0) {
+            timer -= deltaTime;
+        } else {
             showAnswers = false;
         }
     }
 
     @Override
     public void render() {
-        if(won){
+        if (won) {
             for (int i = 0; i < matriz.length; i++) {
                 for (int j = 0; j < matriz[i].length; j++) {
                     this.matriz[i][j].solutionRender(engine);
@@ -282,9 +281,8 @@ public class MyScene implements Scene {
             this.engine.drawText("ENHORABUENA!", 200, 120, "Black", "Cooper");
 
             //BackButton
-            this.engine.drawText("Volver", (int)(backButton.getPos().getX()), (int)(backButton.getPos().getY() + 20), "Black", "CalibriBold");
-        }
-        else{
+            this.engine.drawText("Volver", (int) (backButton.getPos().getX()), (int) (backButton.getPos().getY() + 20), "Black", "CalibriBold");
+        } else {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
                 //Muestra el texto...
@@ -316,16 +314,16 @@ public class MyScene implements Scene {
             }
             //Cuadriculas
             //Ancha
-            this.engine.paintCell(15,315, widthAestheticCellX,heightAestheticCellX, -1);
+            this.engine.paintCell(15, 315, widthAestheticCellX, heightAestheticCellX, -1);
             //Larga
-            this.engine.paintCell(85,180, widthAestheticCellY,heightAestheticCellY, -1);
+            this.engine.paintCell(85, 180, widthAestheticCellY, heightAestheticCellY, -1);
 
             //Botones
             this.engine.drawImage(570, 45, 590, 65, "Lupa");
             this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 1.7), "Black", "CalibriBold");
 
             this.engine.drawImage(10, 50, 50, 75, "Flecha");
-            this.engine.drawText("Rendirse", (int)(giveUpButton.getPos().getX() +50), (int)(giveUpButton.getPos().getY() + 20), "Black", "CalibriBold");
+            this.engine.drawText("Rendirse", (int) (giveUpButton.getPos().getX() + 50), (int) (giveUpButton.getPos().getY() + 20), "Black", "CalibriBold");
         }
     }
 
@@ -345,13 +343,13 @@ public class MyScene implements Scene {
                         wrongCells++;
                     } else if (key == 2) {
                         remainingCells--;
-                        if(win()){
+                        if (win()) {
                             won = true;
                         }
                     } else if (key == 3) {
                         //Lo eliminamos de estas celdas
                         wrongCells--;
-                        if(win()){
+                        if (win()) {
                             won = true;
                         }
                     } else if (key == 4) {
@@ -380,6 +378,9 @@ public class MyScene implements Scene {
 
         }
     }
-    private boolean win() { return remainingCells == 0 && wrongCells == 0;}
+
+    private boolean win() {
+        return remainingCells == 0 && wrongCells == 0;
+    }
 }
 
