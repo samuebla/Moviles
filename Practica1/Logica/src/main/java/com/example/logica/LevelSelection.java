@@ -67,23 +67,23 @@ public class LevelSelection implements Scene {
     @Override
     public void render(){
         //5x5
-        this.engine.drawText("5x5", (int)(button5.getPos().getX() + button5.getSize().getX()/3.8), (int)(button5.getPos().getY() + button5.getSize().getY()/1.8), "Black","Calibri");
-        this.engine.paintCell((int)button5.getPos().getX(), (int)button5.getPos().getY(), (int)(button5.getSize().getX()), (int)(button5.getSize().getY()), -1);
+        this.engine.drawCircle(button5.getPos().getX(), button5.getPos().getY(), button5.getSize().getX()/2, "purple");
+        this.engine.drawText("5x5", (int)(button5.getPos().getX() + button5.getSize().getX()/2), (int)(button5.getPos().getY() + button5.getSize().getY()/2), "Black","Calibri");
         //8x8
-        this.engine.drawText("8x8", (int)(button8.getPos().getX() + button8.getSize().getX()/3.8), (int)(button8.getPos().getY() + button8.getSize().getY()/1.8), "Black","Calibri");
-        this.engine.paintCell((int)button8.getPos().getX(), (int)button8.getPos().getY(), (int)(button8.getSize().getX()), (int)(button8.getSize().getY()), -1);
+        this.engine.drawCircle(button8.getPos().getX(), button8.getPos().getY(), button8.getSize().getX()/2, "purple");
+        this.engine.drawText("8x8", (int)(button8.getPos().getX() + button8.getSize().getX()/2), (int)(button8.getPos().getY() + button8.getSize().getY()/2), "Black","Calibri");
         //10x10
-        this.engine.drawText("10x10", (int)(button10.getPos().getX() + button10.getSize().getX()/9), (int)(button10.getPos().getY() + button10.getSize().getY()/1.8), "Black", "Calibri");
-        this.engine.paintCell((int)button10.getPos().getX(), (int)button10.getPos().getY(), (int)(button10.getSize().getX()), (int)(button10.getSize().getY()), -1);
+        this.engine.drawCircle(button10.getPos().getX(), button10.getPos().getY(), button10.getSize().getX()/2, "purple");
+        this.engine.drawText("10x10", (int)(button10.getPos().getX() + button10.getSize().getX()/2), (int)(button10.getPos().getY() + button10.getSize().getY()/2), "Black", "Calibri");
         //5x8
-        this.engine.drawText("5x8", (int)(button5x8.getPos().getX() + button5x8.getSize().getX()/3.8), (int)(button5x8.getPos().getY() + button5x8.getSize().getY()/1.8), "Black", "Calibri");
-        this.engine.paintCell((int)button5x8.getPos().getX(), (int)button5x8.getPos().getY(), (int)(button5x8.getSize().getX()), (int)(button5x8.getSize().getY()), -1);
+        this.engine.drawCircle(button5x8.getPos().getX(), button5x8.getPos().getY(), button5x8.getSize().getX()/2, "purple");
+        this.engine.drawText("5x8", (int)(button5x8.getPos().getX() + button5x8.getSize().getX()/2), (int)(button5x8.getPos().getY() + button5x8.getSize().getY()/2), "Black", "Calibri");
         //8x10
-        this.engine.drawText("8x10", (int)(button8x10.getPos().getX() + button8x10.getSize().getX()/5.5), (int)(button8x10.getPos().getY() + button8x10.getSize().getY()/1.8), "Black", "Calibri");
-        this.engine.paintCell((int)button8x10.getPos().getX(), (int)button8x10.getPos().getY(), (int)(button8x10.getSize().getX()), (int)(button8x10.getSize().getY()), -1);
+        this.engine.drawCircle(button8x10.getPos().getX(), button8x10.getPos().getY(), button8x10.getSize().getX()/2, "purple");
+        this.engine.drawText("8x10", (int)(button8x10.getPos().getX() + button8x10.getSize().getX()/2), (int)(button8x10.getPos().getY() + button8x10.getSize().getY()/2), "Black", "Calibri");
         //5x10
-        this.engine.drawText("5x10", (int)(button5x10.getPos().getX() + button5x10.getSize().getX()/6), (int)(button5x10.getPos().getY() + button5x10.getSize().getY()/1.8), "Black", "Calibri");
-        this.engine.paintCell((int)button5x10.getPos().getX(), (int)button5x10.getPos().getY(), (int)(button5x10.getSize().getX()), (int)(button5x10.getSize().getY()), -1);
+        this.engine.drawCircle(button5x10.getPos().getX(), button5x10.getPos().getY(), button5x10.getSize().getX()/2, "purple");
+        this.engine.drawText("5x10", (int)(button5x10.getPos().getX() + button5x10.getSize().getX()/2), (int)(button5x10.getPos().getY() + button5x10.getSize().getY()/2), "Black", "Calibri");
 
         //Back Button
         this.engine.drawImage(engine.getWidth()/72, engine.getHeight()/22, (int)((double)this.engine.getWidth()*0.04), (int)((double)this.engine.getHeight()*0.025), "Flecha");

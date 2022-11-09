@@ -97,17 +97,26 @@ public class RenderAndroid implements IGraphics {
         }
     }
 
-    public void pintarCirculo(float x, float y, float r, String color) {
+    public void drawCircle(float x, float y, float r, String color) {
         int c;
         if (color == "blue") {
             c = 0xFF0000FF;
         } else if (color == "red") {
             c = 0xFFFF0000;
-        } else {
+        }else if(color == "purple"){
+            c = 0xFF6960EC;
+        }
+        else {
             c = 0xFFFFFFFF;
         }
+
         this.paint.setColor(c);
-        this.canvas.drawCircle(x, y, r, this.paint);
+        this.paint.setStyle(Paint.Style.FILL);
+        this.canvas.drawCircle(x+r, y+r, r, this.paint);
+        this.paint.setStyle(Paint.Style.STROKE);
+        this.paint.setColor(Color.BLACK);
+        this.canvas.drawCircle(x+r, y+r, r, this.paint);
+
     }
 
     @Override

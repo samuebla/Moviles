@@ -83,24 +83,16 @@ public class EngineApp implements Engine,Runnable{
         this.audioMngr.setAssetsManager(assetsAux);
     }
 
-
     //<<< API >>>
-//    public void pintarCirculo(float x, float y, float r, String color){
-//        int c;
-//        if(color == "blue"){
-//            c = 0xFF0000FF;
-//        } else if(color == "red"){
-//            c = 0xFFFF0000;
-//        } else {
-//            c = 0xFFFFFFFF;
-//        }
-//        this.paint.setColor(c);
-//        this.canvas.drawCircle(x, y, r, this.paint);
-//    }
 
     @Override
     public void drawText(String text, int x, int y, String color, String font){
         this.render.drawText(text, x, y, color,font);
+    }
+
+    @Override
+    public void drawCircle(float x, float y, float r, String color) {
+        this.render.drawCircle(x,y,r,color);
     }
 
     @Override

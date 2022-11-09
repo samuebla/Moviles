@@ -170,6 +170,27 @@ public class RenderDesktop implements IGraphics {
         this.graphics2D.setPaintMode();
     }
 
+    @Override
+    public void drawCircle(float x, float y, float r, String color){
+        Color c;
+
+        if (color == "red") {
+            c = Color.red;
+        } else if(color=="purple") {
+            c = new Color(0xFF6960EC);
+        }
+        else {
+            c = Color.black;
+        }
+
+        this.graphics2D.setColor(c);
+        this.graphics2D.fillOval((int)x, (int)y, (int)r*2, (int)r*2);
+
+        this.graphics2D.setColor(Color.BLACK);
+        this.graphics2D.drawOval((int)x,(int)y,(int)r*2,(int)r*2);
+
+        this.graphics2D.setPaintMode();
+    }
 
     //Escala el canvas a la posicion de la ventana
     private void scaleCanvas() {
