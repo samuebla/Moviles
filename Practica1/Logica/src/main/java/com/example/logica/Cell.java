@@ -85,8 +85,6 @@ public class Cell extends Interactive {
         if(key == 1){
             //Renderizamos a rojo
             engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), cellType.WRONG.ordinal());
-            //Pero cambiamos a empty despues
-            type = cellType.EMPTY;
         }
         else{
             engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
@@ -101,6 +99,12 @@ public class Cell extends Interactive {
         }
     }
 
+    public void changeEmptyCells(){
+        if(key == 1){
+            key = -1;
+            type = cellType.EMPTY;
+        }
+    }
     public void setSolution(boolean aux) {
         solution = aux;
     }

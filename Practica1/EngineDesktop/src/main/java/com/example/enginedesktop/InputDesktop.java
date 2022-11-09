@@ -32,7 +32,7 @@ public class InputDesktop implements Input {
 
     @Override
     public Vector2D getScaledCoords() {
-        System.out.println("Mi abuela mide : [x]" + offset.getX() + " [y] " + offset.getY());
+//        System.out.println("Mi abuela mide : [x]" + offset.getX() + " [y] " + offset.getY());
         return new Vector2D((getRawCoords().getX() - offset.getX())/scaleFactor, (getRawCoords().getY()  - offset.getY())/scaleFactor);
     }
 

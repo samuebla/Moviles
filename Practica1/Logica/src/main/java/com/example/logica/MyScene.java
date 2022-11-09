@@ -59,6 +59,7 @@ public class MyScene implements Scene {
     double timer;
     boolean won;
     boolean showAnswers;
+    boolean auxShowAnswer;
 
     public MyScene(Engine engine, int rows, int cols) {
 
@@ -80,6 +81,7 @@ public class MyScene implements Scene {
         remainingCells = 0;
         wrongCells = 0;
         showAnswers = false;
+        auxShowAnswer = false;
         won = false;
         timer = 0;
 
@@ -192,20 +194,29 @@ public class MyScene implements Scene {
                 //Minimo rellenamos una
                 this.matriz[random.nextInt(cols_)][i].setSolution(true);
                 xPositionsTopToBottom[i].add(1);
+
+                //Y la contabilizamos
+                remainingCells++;
+
             }
             //Si por el contrario todas se han rellenado
             else if (numSolutionPerRows == cols_) {
                 int aux = random.nextInt(cols_);
                 //Dejamos al menos una vacia
                 this.matriz[aux][i].setSolution(false);
+                System.out.println("KAPASAOOOOOOOOOOO  " + aux);
 
+                //Vaciamos la lista
+                xPositionsTopToBottom[i].clear();
                 //Y añadimos al lateral los 2 valores seccionados
-                xPositionsTopToBottom[i].add(aux + 1);
-                xPositionsTopToBottom[i].add(contAux - aux);
-            }
+                xPositionsTopToBottom[i].add(aux);
+                xPositionsTopToBottom[i].add(cols - aux - 1);
 
+                //Y contabilizamos esa resta
+                remainingCells--;
+            }
             //Para meter en el lateral si el ultimo valor de la fila se ha seleccionado
-            if (contAux != 0) {
+            else if (contAux != 0) {
                 xPositionsTopToBottom[i].add(contAux);
             }
         }
@@ -220,8 +231,11 @@ public class MyScene implements Scene {
                 this.matriz[i][randAux].setSolution(true);
                 xPositionsLeftToRight[i].add(1);
 
+                //Contabilizamos esa suma
+                remainingCells++;
+
                 //Limpiamos el lateral
-                xPositionsTopToBottom[i].clear();
+                xPositionsTopToBottom[randAux].clear();
 
                 int cont = 0;
                 //Recorremos la columna otra vez para rellenar correctamente la fila
@@ -279,10 +293,19 @@ public class MyScene implements Scene {
         }
 
         //Timer del boton de comprobar
-        if (timer > 0) {
+        if ( timer > 0) {
             timer -= deltaTime;
-        } else {
+        } else if(auxShowAnswer){
             showAnswers = false;
+            wrongCells = 0;
+            for (int i = 0; i < matriz.length; i++) {
+                for (int j = 0; j < matriz[i].length; j++) {
+                    this.matriz[i][j].changeEmptyCells();
+                }
+            }
+            auxShowAnswer = false;
+            if (win())
+                won=true;
         }
     }
 
@@ -389,6 +412,7 @@ public class MyScene implements Scene {
         if (inputReceived(this.checkButton.getPos(), this.checkButton.getSize())) {
             //Mostramos el texto en pantalla
             showAnswers = true;
+            auxShowAnswer= true;
             timer = timeCheckButton;
         }
         //Si te rindes vuelves a la seleccion de nivel
