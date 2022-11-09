@@ -50,7 +50,7 @@ public class LevelSelection implements Scene {
         this.button5x8 = new Button(engine.getWidth()/4  - engine.getWidth()/12, engine.getHeight()/2.2, engine.getWidth()/6, engine.getHeight()/9);
         this.button8x10 = new Button(engine.getWidth()/2 - engine.getWidth()/12, engine.getHeight()/2.2, engine.getWidth()/6, engine.getHeight()/9);
         this.button5x10 = new Button(engine.getWidth()*3/4  - engine.getWidth()/12, engine.getHeight()/2.2, engine.getWidth()/6, engine.getHeight()/9);
-        this.backButton = new Button(engine.getWidth()/72, engine.getHeight()/22, engine.getWidth()/6, engine.getHeight()/9);
+        this.backButton = new Button(engine.getWidth()/72 + engine.getWidth()/44, engine.getHeight()/22, engine.getWidth()/18, engine.getHeight()/27);
 
         System.out.println("boton rendirse: [x] " + backButton.getPos().getX() +" [y] " + backButton.getPos().getY());
     }
