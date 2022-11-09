@@ -47,9 +47,13 @@ public class EngineDesktop implements Engine,Runnable{
         this.render.paintCell(x, y, w, h, celltype);
     }
 
+    //AlignType:
+    //-1 Alineamiento a la izquierda
+    //0 Alineamiento en el centro
+    //1 Alineamiento a la derecho
     @Override
-    public void drawText(String text, int x, int y, String color, String font){
-        this.render.drawText(text, x, y, color,font);
+    public void drawText(String text, int x, int y, String color, String font, int alignType){
+        this.render.drawText(text, x, y, color,font, alignType);
     }
 
     @Override

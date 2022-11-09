@@ -154,8 +154,12 @@ public class RenderDesktop implements IGraphics {
     }
 
     //Dibuja un texto rojo o negro
+    //AlignType:
+    //-1 Alineamiento a la izquierda
+    //0 Alineamiento en el centro
+    //1 Alineamiento a la derecho
     @Override
-    public void drawText(String text, int x, int y, String color, String fontKey) {
+    public void drawText(String text, int x, int y, String color, String fontKey, int alignType) {
 
         Color c;
         if (color == "red") {
@@ -166,7 +170,20 @@ public class RenderDesktop implements IGraphics {
         this.graphics2D.setColor(c);
         this.graphics2D.setFont(fonts.get(fontKey).getFont());
         //Con esto centramos el texto en Desktop
-        this.graphics2D.drawString(text, x - (this.graphics2D.getFontMetrics().stringWidth(text)/2), y);
+        switch (alignType){
+            case 0:
+                this.graphics2D.drawString(text, x - (this.graphics2D.getFontMetrics().stringWidth(text)/2), y);
+                break;
+            case 1:
+                this.graphics2D.drawString(text, x - (this.graphics2D.getFontMetrics().stringWidth(text)), y);
+                break;
+            case -1:
+                this.graphics2D.drawString(text, x, y);
+                break;
+            default:
+                break;
+        }
+
         this.graphics2D.setPaintMode();
     }
 
