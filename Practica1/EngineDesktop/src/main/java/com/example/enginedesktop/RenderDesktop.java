@@ -34,7 +34,7 @@ public class RenderDesktop implements IGraphics {
     Vector2D margins;
 
     public double factorScale = 1.0;
-    public double scaleProportion = 1.0;
+    public double scaleProportion = 1.0;    //Proporción original de la pantalla
 
     HashMap<String,FontDesktop> fonts;
     HashMap<String,ImageDesktop> images;
@@ -259,7 +259,7 @@ public class RenderDesktop implements IGraphics {
         //Averiguamos la escala más pequeña para mantener la proporción
         double scaleX = (myView.getWidth() - insets.left - insets.right) / canvasSize.getX();
         double scaleY = (myView.getHeight() - insets.top - insets.bottom) / canvasSize.getY();
-        factorScale = Math.min(scaleX, scaleY) * scaleProportion;
+        this.factorScale = Math.min(scaleX, scaleY) * scaleProportion;
 
         Vector2D tr = new Vector2D((int) ((this.myView.getWidth() / 2 - canvasSize.getX() * (factorScale / scaleProportion) / 2) * scaleProportion),
                 (int) (((this.myView.getHeight() + this.insets.top - this.insets.bottom) / 2 - canvasSize.getY() * (factorScale / scaleProportion) / 2) * scaleProportion));
@@ -319,9 +319,13 @@ public class RenderDesktop implements IGraphics {
         this.graphics2D.setPaintMode();
     }
 
-
     public double getScale() {
-        return this.factorScale / this.scaleProportion;
+        return this.factorScale/scaleProportion;
+    }
+
+    public Vector2D getMargins(){
+        Vector2D offset = new Vector2D((margins.getX()+ insets.left)/scaleProportion, (margins.getY()+ insets.top)/scaleProportion);
+        return offset;
     }
 }
 
