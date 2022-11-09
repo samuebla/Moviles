@@ -7,6 +7,8 @@ import android.view.SurfaceView;
 
 public class EngineApp implements Engine,Runnable{
 
+    private SurfaceView view;
+
     private RenderAndroid render;
     private InputAndroid input;
     private IEventHandler eventHandler;
@@ -19,7 +21,8 @@ public class EngineApp implements Engine,Runnable{
     private SceneMngrAndroid sceneMngr;
 
     public EngineApp(SurfaceView myView){
-        render = new RenderAndroid(myView);
+        this.view = myView;
+        this.render = new RenderAndroid(this.view, 4/6);
         this.eventHandler = new IEventHandler() {
             @Override
             public IEvent getEvent() {
@@ -32,7 +35,7 @@ public class EngineApp implements Engine,Runnable{
             }
         };
         this.input = new InputAndroid(this.eventHandler);
-        myView.setOnTouchListener(this.input.getTouchListener());
+        this.view.setOnTouchListener(this.input.getTouchListener());
 
         this.audioMngr = new AudioAndroid();
     }
@@ -60,7 +63,8 @@ public class EngineApp implements Engine,Runnable{
 
     @Override
     public int getWidth() {
-        return this.render.getWidth();
+        int w = this.render.getWidth();
+        return w;
     }
 
     @Override
@@ -129,6 +133,10 @@ public class EngineApp implements Engine,Runnable{
         // Si el Thread se pone en marcha
         // muy rápido, la vista podría todavía no estar inicializada.
         while(this.running && this.render.getWidth() == 0);
+
+        //Escalado de la app
+        this.render.scaleAppView();
+        this.sceneMngr.getScene().init();
         // Espera activa. Sería más elegante al menos dormir un poco.
 
         long lastFrameTime = System.nanoTime();
@@ -162,7 +170,6 @@ public class EngineApp implements Engine,Runnable{
 
             //Renderizado
             this.render.prepareFrame();
-            this.render.render();
             this.sceneMngr.render();
             this.render.clear();
         }

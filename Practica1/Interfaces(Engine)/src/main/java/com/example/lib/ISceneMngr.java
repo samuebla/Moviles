@@ -7,4 +7,5 @@ public interface ISceneMngr {
     public void update(double deltaTime);
     public void render();
     public void handleInput();
+    public Scene getScene();
 }

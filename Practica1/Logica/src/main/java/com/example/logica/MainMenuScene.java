@@ -19,7 +19,19 @@ public class MainMenuScene implements Scene {
 
     public MainMenuScene(Engine engineAux) {
         this.engine = engineAux;
+    }
 
+    @Override
+    public boolean inputReceived(Vector2D pos, Vector2D size) {
+        Vector2D coords = new Vector2D();
+        coords.set(engine.getInput().getScaledCoords().getX(), this.engine.getInput().getScaledCoords().getY());
+
+        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
+                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+    }
+
+    @Override
+    public void init() {
         try {
             //La constructora del menu solo se llama una vez
             //Cargamos el fondo y lo playeamos
@@ -38,17 +50,7 @@ public class MainMenuScene implements Scene {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-
-        this.play = new Button(this.engine.getWidth() / 2.4, this.engine.getHeight() / 2.5, 70, 40);
-    }
-
-    @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size) {
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), this.engine.getInput().getScaledCoords().getY());
-
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+        this.play = new Button(this.engine.getWidth() / 2.4 + 100, this.engine.getHeight() / 2.5+70, 70, 40);
     }
 
     @Override
@@ -58,13 +60,14 @@ public class MainMenuScene implements Scene {
             handleInput();
             this.engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
         }
+
     }
 
     @Override
     public void render() {
         //Titulo
         this.engine.drawText("NONOGRAMAS", (int) (this.engine.getWidth() / 3.6), (int) (this.engine.getHeight() / 10.8), "Black", "Cooper");
-
+        int w = this.engine.getWidth();
         //Boton
         this.engine.drawText("Jugar", (int) (this.play.getPos().getX() + this.play.getSize().getX() / 5), (int) (this.play.getPos().getY() + this.play.getSize().getY() / 2), "Black", "Calibri");
     }

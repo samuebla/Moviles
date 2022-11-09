@@ -185,7 +185,7 @@ public class RenderDesktop implements IGraphics {
 
         //Proceso de escalado
         AffineTransform aTr = this.graphics2D.getTransform();
-        aTr.setToTranslation(tr.getX(), tr.getY());
+            aTr.setToTranslation(tr.getX(), tr.getY());
         this.graphics2D.setTransform(aTr);
         aTr.setToScale((factorScale / aTr.getScaleX()), (factorScale / aTr.getScaleY()));
         this.graphics2D.transform(aTr);

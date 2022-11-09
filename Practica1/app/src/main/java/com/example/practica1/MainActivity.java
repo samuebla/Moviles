@@ -3,6 +3,7 @@ package com.example.practica1;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.SceneMngrAndroid;
 import com.example.logica.MainMenuScene;
+import com.example.logica.MyScene;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         this.renderView = new SurfaceView(this);
         setContentView(this.renderView);
 
-
+        getSupportActionBar().hide();
         this.engine = new EngineApp(this.renderView);
 
         this.assetManager = this.getBaseContext().getAssets();
@@ -79,11 +80,11 @@ public class MainActivity extends AppCompatActivity {
 //
 //        String[] keysSound = new String[]{"background", "effect"};
 
-        MainMenuScene mainMenuScene = new MainMenuScene(this.engine);
 
-        this.engine.setScene(mainMenuScene);
 
         engine.resume();
+        MainMenuScene mainMenuScene = new MainMenuScene(this.engine);
+        this.engine.setScene(mainMenuScene);
     }
 
     @Override

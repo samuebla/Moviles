@@ -38,4 +38,9 @@ public class SceneMngrDesktop implements ISceneMngr {
     public void handleInput(){
         stack.peek().handleInput();
     }
+
+    @Override
+    public Scene getScene() {
+        return stack.peek();
+    }
 }

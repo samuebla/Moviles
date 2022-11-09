@@ -13,10 +13,10 @@ public class InputAndroid implements Input {
     private MotionListener motionlistener;
     Vector2D touchCoords;
 
-    private float scaleFactor = 0.75f;
+    private float scaleFactor = 1.0f;
 
     public InputAndroid(IEventHandler eHandler){
-        this.touchCoords = new Vector2D();
+        this.touchCoords = new Vector2D(-1,-1);
         this.touchlistener = new TouchListener(this, eHandler);
         this.motionlistener = new MotionListener(this, eHandler);
     }
@@ -28,6 +28,7 @@ public class InputAndroid implements Input {
 
     @Override
     public Vector2D getScaledCoords() {
+        //System.out.println("Mi abuela mide : [x]" + getRawCoords().getX() + " [y] " + getRawCoords().getY());
         return getRawCoords().multiply(scaleFactor);
     }
 

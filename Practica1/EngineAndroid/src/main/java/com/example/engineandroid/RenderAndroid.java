@@ -3,6 +3,7 @@ package com.example.engineandroid;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -10,6 +11,7 @@ import android.view.SurfaceView;
 import com.example.lib.IFont;
 import com.example.lib.IGraphics;
 import com.example.lib.IImage;
+import com.example.lib.Vector2D;
 
 import java.io.File;
 import java.util.HashMap;
@@ -26,28 +28,33 @@ public class RenderAndroid implements IGraphics {
 
     private AssetManager assets;
 
-//    private float scale = 1.5f;
+    private Vector2D posCanvas;
+    private Vector2D frameSize;
+    private float factorScale;
 
-    public RenderAndroid(SurfaceView myView) {
+    public RenderAndroid(SurfaceView myView, float scale) {
         // Intentamos crear el buffer strategy con 2 buffers.
         this.myView = myView;
         this.holder = this.myView.getHolder();
         this.paint = new Paint();
         this.paint.setColor(0xFF000000);
 
+        this.frameSize = new Vector2D(720, 1080);
+        this.posCanvas = new Vector2D();
+
         this.fonts = new HashMap<>();
         this.images = new HashMap<>();
+
+        this.factorScale = scale;
     }
 
     public void prepareFrame() {
-        // Pintamos el frame
+        // Pintamos el framefsefsefdfs
         while (!this.holder.getSurface().isValid()) ;
         this.canvas = this.holder.lockCanvas();
-    }
-
-    public void render() {
         // "Borramos" el fondo.
         this.canvas.drawColor(0xFFFFFFFF); // ARGB
+        this.canvas.translate(this.posCanvas.getX(), this.posCanvas.getY());
     }
 
     public void clear() {
@@ -109,6 +116,25 @@ public class RenderAndroid implements IGraphics {
         return this.myView.getHeight();
     }
 
+    public void scaleAppView(){
+        while(this.holder.getSurfaceFrame().width() == 0);
+        //obtenemos el tamaño del frame y lo guardamos como copia para la escala
+        Vector2D surfaceFrame = new Vector2D(this.holder.getSurfaceFrame().width(), this.holder.getSurfaceFrame().height());
+        Vector2D scale = new Vector2D(surfaceFrame.getX()/frameSize.getX(), surfaceFrame.getY()/frameSize.getY());
+
+        if(scale.getX() * this.factorScale < scale.getY()) scale.setY(scale.getX()/factorScale);
+        else
+            scale.setX(scale.getY()/factorScale);
+
+        posCanvas.set((int)(surfaceFrame.getX()-scale.getX())/2, (int)(surfaceFrame.getY()-scale.getY())/2);
+        this.frameSize = scale;
+    }
+
+
+    public float getScale() {
+        return this.factorScale;
+    }
+
     @Override
     public void setResolution(double width, double height) {
         this.canvas.scale((float) width, (float) height);
@@ -148,14 +174,13 @@ public class RenderAndroid implements IGraphics {
 
     @Override
     public void drawRectangle(int x, int y, int w, int h, boolean fill) {
-        this.canvas.drawRect(x, y, x + w, y + h, this.paint);
-    }
-
-    @Override
-    public void fillRectangle(int x, int y, int w, int h) {
-        this.paint.setStyle(Paint.Style.FILL);
-        this.canvas.drawRect(x, y, x + w, y + h, this.paint);
-        this.paint.setStyle(Paint.Style.STROKE);
+        if(!fill)
+            this.canvas.drawRect(x, y, x + w, y + h, this.paint);
+        else{
+            this.paint.setStyle(Paint.Style.FILL);
+            this.canvas.drawRect(x, y, x + w, y + h, this.paint);
+            this.paint.setStyle(Paint.Style.STROKE);
+        }
     }
 
     @Override
@@ -167,7 +192,8 @@ public class RenderAndroid implements IGraphics {
     public void drawText(String text, int x, int y, String color, String fontAux) {
         int prevColor = this.paint.getColor();
         Font_Android font = this.fonts.get(fontAux);
-        this.paint.setTextSize(font.getSize());
+        int f = font.getSize();
+        this.paint.setTextSize(f);
         this.paint.setTypeface(font.getFont());
         int currentColor;
         if (color == "red"){

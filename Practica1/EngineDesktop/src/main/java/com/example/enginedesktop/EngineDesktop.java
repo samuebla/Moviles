@@ -122,6 +122,7 @@ public class EngineDesktop implements Engine,Runnable{
 
 //        long informePrevio = lastFrameTime; // Informes de FPS
 //        int frames = 0;
+        this.sceneManager.getScene().init();
 
         long actualTime = System.currentTimeMillis();
 

@@ -46,13 +46,7 @@ public class MyScene implements Scene {
         //Asociamos el engine correspondiente
         this.engine = engine;
 
-        //Seteamos los botones
-        this.checkButton = new Button((double)this.engine.getWidth()*0.7777777, (double)this.engine.getHeight()*0.037037037,
-                (double)this.engine.getWidth()*0.1944444, (double)this.engine.getHeight()*0.02777777);
-        this.giveUpButton = new Button((double)this.engine.getWidth()*0.01388888, (double)this.engine.getHeight()*0.04629629,
-                (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.02777777);
-        this.backButton = new Button((double)this.engine.getWidth()*0.44444444, (double)this.engine.getHeight()*0.888888888,
-                (double)this.engine.getWidth()*0.0833333, (double)this.engine.getHeight()*0.02777777);
+        init();
 
         //Creamos el random
         Random random = new Random();
@@ -265,6 +259,17 @@ public class MyScene implements Scene {
 
         return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
                 coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+    }
+
+    @Override
+    public void init() {
+        //Seteamos los botones
+        this.checkButton = new Button((double)this.engine.getWidth()*0.7777777, (double)this.engine.getHeight()*0.037037037,
+                (double)this.engine.getWidth()*0.1944444, (double)this.engine.getHeight()*0.02777777);
+        this.giveUpButton = new Button((double)this.engine.getWidth()*0.01388888, (double)this.engine.getHeight()*0.04629629,
+                (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.02777777);
+        this.backButton = new Button((double)this.engine.getWidth()*0.44444444, (double)this.engine.getHeight()*0.888888888,
+                (double)this.engine.getWidth()*0.0833333, (double)this.engine.getHeight()*0.02777777);
     }
 
     @Override
