@@ -208,14 +208,32 @@ public class RenderAndroid implements IGraphics {
         this.canvas.drawLine(x, y, x + w, y + h, this.paint);
     }
 
+    //AlignType:
+    //-1 Alineamiento a la izquierda
+    //0 Alineamiento en el centro
+    //1 Alineamiento a la derecho
     @Override
-    public void drawText(String text, int x, int y, String color, String fontAux) {
+    public void drawText(String text, int x, int y, String color, String fontAux, int alignType) {
         int prevColor = this.paint.getColor();
         Font_Android font = this.fonts.get(fontAux);
         int f = (int)(font.getSize() /factorScale);
         this.paint.setTextSize(f);
         this.paint.setTypeface(font.getFont());
-        this.paint.setTextAlign(Paint.Align.CENTER);
+
+        switch (alignType){
+            case 0:
+                this.paint.setTextAlign(Paint.Align.CENTER);
+                break;
+            case 1:
+                this.paint.setTextAlign(Paint.Align.RIGHT);
+                break;
+            case -1:
+                this.paint.setTextAlign(Paint.Align.LEFT);
+                break;
+            default:
+                break;
+        }
+
         this.paint.setStyle(Paint.Style.FILL_AND_STROKE);
         int currentColor;
         if (color == "red"){
