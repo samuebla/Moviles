@@ -18,10 +18,11 @@ public class SoundApp implements ISound {
     private float rate = 1.0f;
 
     public SoundApp(SoundPool sPool, String path, AssetManager assets) {
+        String newFilePath = path.replaceAll("assets/", "");
         this.soundPool = sPool;
         AssetFileDescriptor fileDescriptor = null;
         try {
-            fileDescriptor = assets.openFd(path);
+            fileDescriptor = assets.openFd(newFilePath);
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -1,13 +1,8 @@
 package com.example.practica1;
 
-import com.example.engineandroid.AudioAndroid;
 import com.example.engineandroid.EngineApp;
-import com.example.engineandroid.Font_Android;
-import com.example.engineandroid.ImageAndroid;
 import com.example.engineandroid.SceneMngrAndroid;
-import com.example.engineandroid.SoundApp;
 import com.example.logica.MainMenuScene;
-import com.example.logica.MyScene;
 
 import androidx.appcompat.app.AppCompatActivity;
 

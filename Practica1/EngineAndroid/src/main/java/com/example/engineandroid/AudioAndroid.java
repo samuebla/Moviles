@@ -49,9 +49,10 @@ public class AudioAndroid implements IAudio {
     public void loadMusic(String audioName, String path){
         this.mediaPlayer.reset();
         this.mediaPlayer.setVolume(1.0f, 1.0f);
+        String newFilePath = path.replaceAll("assets/", "");
         AssetFileDescriptor fileDescriptor = null;
         try{
-            fileDescriptor = this.assets.openFd(path);
+            fileDescriptor = this.assets.openFd(newFilePath);
             this.mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(),
                     fileDescriptor.getStartOffset(), fileDescriptor.getLength());
             this.mediaPlayer.prepare();

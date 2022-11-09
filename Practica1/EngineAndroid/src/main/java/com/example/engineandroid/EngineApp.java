@@ -60,12 +60,12 @@ public class EngineApp implements Engine,Runnable{
 
     @Override
     public int getWidth() {
-        return 0;
+        return this.render.getWidth();
     }
 
     @Override
     public int getHeight() {
-        return 0;
+        return this.render.getHeight();
     }
     //<<Fin Input>>
 
@@ -136,6 +136,8 @@ public class EngineApp implements Engine,Runnable{
         long informePrevio = lastFrameTime; // Informes de FPS
         int frames = 0;
 
+        long actualTime = System.currentTimeMillis();
+
         // Bucle de juego principal.
         while(running) {
             long currentTime = System.nanoTime();
@@ -152,6 +154,11 @@ public class EngineApp implements Engine,Runnable{
                 informePrevio = currentTime;
             }
             ++frames;
+
+            long deltaTime = System.currentTimeMillis() - actualTime;
+            actualTime += deltaTime;
+
+            this.sceneMngr.update(deltaTime / 1000.0);
 
             //Renderizado
             this.render.prepareFrame();

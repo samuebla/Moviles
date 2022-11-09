@@ -23,18 +23,18 @@ public class MainMenuScene implements Scene {
         try {
             //La constructora del menu solo se llama una vez
             //Cargamos el fondo y lo playeamos
-            this.engine.getAudio().loadMusic("background", "Assets\\WiiBackgroundMusic.wav");
+            this.engine.getAudio().loadMusic("background", "assets/WiiBackgroundMusic.wav");
             this.engine.getAudio().playSound("background", 0);
-            this.engine.getAudio().newSound("effect", "Assets\\wiiClickSound.wav");
+            this.engine.getAudio().newSound("effect", "assets/wiiClickSound.wav");
 
-            this.engine.getGraphics().newFont("Calibri", "Assets\\CalibriRegular.ttf", 0, 25);
-            this.engine.getGraphics().newFont("Cooper", "Assets\\CooperBlackRegular.ttf", 0, 40);
-            this.engine.getGraphics().newFont("CalibriSmall", "Assets\\CalibriRegular.ttf", 1, 18);
-            this.engine.getGraphics().newFont("CooperBold", "Assets\\CalibriRegular.ttf", 1, 40);
-            this.engine.getGraphics().newFont("CalibriBold", "Assets\\CalibriRegular.ttf", 1, 20);
+            this.engine.getGraphics().newFont("Calibri", "assets/CalibriRegular.ttf", 0, 25);
+            this.engine.getGraphics().newFont("Cooper", "assets/CooperBlackRegular.ttf", 0, 40);
+            this.engine.getGraphics().newFont("CalibriSmall", "assets/CalibriRegular.ttf", 1, 18);
+            this.engine.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1, 40);
+            this.engine.getGraphics().newFont("CalibriBold", "assets/CalibriRegular.ttf", 1, 20);
 
-            this.engine.getGraphics().newImage("Flecha", "Assets\\arrow.png");
-            this.engine.getGraphics().newImage("Lupa", "Assets\\lupa.png");
+            this.engine.getGraphics().newImage("Flecha", "assets/arrow.png");
+            this.engine.getGraphics().newImage("Lupa", "assets/lupa.png");
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

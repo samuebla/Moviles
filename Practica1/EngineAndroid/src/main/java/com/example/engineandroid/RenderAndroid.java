@@ -26,7 +26,7 @@ public class RenderAndroid implements IGraphics {
 
     private AssetManager assets;
 
-    private float scale = 1.5f;
+//    private float scale = 1.5f;
 
     public RenderAndroid(SurfaceView myView) {
         // Intentamos crear el buffer strategy con 2 buffers.
@@ -73,17 +73,17 @@ public class RenderAndroid implements IGraphics {
 
             this.paint.setStyle(Paint.Style.STROKE);
             this.paint.setStrokeWidth(3);
-            this.canvas.drawRect(x * this.scale, y * this.scale, x * this.scale + w * this.scale, y * this.scale + h * this.scale, this.paint);
+            this.canvas.drawRect(x, y, x + w, y + h, this.paint);
             //Cuadrado de la interfaz
             if (celltype == 2) {
-                this.canvas.drawLine(x * this.scale, y * this.scale, w * this.scale + x * this.scale, h * this.scale + y * this.scale, this.paint);
+                this.canvas.drawLine(x, y, w + x, h + y, this.paint);
             }
             this.paint.setStrokeWidth(1);
 
         } else {
             //Cambiar para que tenga en cuenta las dimensiones de la ventana, los últimos dos valores son el ancho y alto
             this.paint.setStyle(Paint.Style.FILL);
-            this.canvas.drawRect(x * this.scale, y * this.scale, x * this.scale + w * this.scale, y * this.scale + h * this.scale, this.paint);
+            this.canvas.drawRect(x, y, x + w, y + h, this.paint);
             this.paint.setStyle(Paint.Style.STROKE);
         }
     }
@@ -98,7 +98,7 @@ public class RenderAndroid implements IGraphics {
             c = 0xFFFFFFFF;
         }
         this.paint.setColor(c);
-        this.canvas.drawCircle(x * this.scale, y * this.scale, r * this.scale, this.paint);
+        this.canvas.drawCircle(x, y, r, this.paint);
     }
 
     public int getWidth() {
@@ -142,25 +142,25 @@ public class RenderAndroid implements IGraphics {
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String imageAux) {
         ImageAndroid image = images.get(imageAux);
         Bitmap map = image.getImage();
-        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int)(desiredWidth * this.scale), (int)(desiredHeight * this.scale), false);
-        canvas.drawBitmap(scaledMap, (int)(x *this.scale), (int)(y * this.scale), this.paint);
+        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int)(desiredWidth), (int)(desiredHeight), false);
+        canvas.drawBitmap(scaledMap, (int)(x), (int)(y), this.paint);
     }
 
     @Override
     public void drawRectangle(int x, int y, int w, int h, boolean fill) {
-        this.canvas.drawRect(x * this.scale, y * this.scale, x * this.scale + w * this.scale, y * this.scale + h * this.scale, this.paint);
+        this.canvas.drawRect(x, y, x + w, y + h, this.paint);
     }
 
     @Override
     public void fillRectangle(int x, int y, int w, int h) {
         this.paint.setStyle(Paint.Style.FILL);
-        this.canvas.drawRect(x * this.scale, y * this.scale, x * this.scale + w * this.scale, y * this.scale + h * this.scale, this.paint);
+        this.canvas.drawRect(x, y, x + w, y + h, this.paint);
         this.paint.setStyle(Paint.Style.STROKE);
     }
 
     @Override
     public void drawLine(int x, int y, int w, int h) {
-        this.canvas.drawLine(x * this.scale, y * this.scale, x * this.scale + w * this.scale, y * this.scale + h * this.scale, this.paint);
+        this.canvas.drawLine(x, y, x + w, y + h, this.paint);
     }
 
     @Override
@@ -177,7 +177,7 @@ public class RenderAndroid implements IGraphics {
         this.paint.setColor(currentColor);
         //AAAAAAAAAAAAA Aplicar la fuente
 
-        this.canvas.drawText(text, (float)x * this.scale, (float)y * this.scale, this.paint);
+        this.canvas.drawText(text, (float)x, (float)y, this.paint);
         this.paint.setColor(prevColor);
     }
 
