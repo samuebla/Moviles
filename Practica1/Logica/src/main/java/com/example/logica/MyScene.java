@@ -34,10 +34,6 @@ public class MyScene implements Scene {
 
     int widthAestheticCellX,heightAestheticCellX,widthAestheticCellY,heightAestheticCellY;
 
-    HashMap<String, IFont> fonts;
-    HashMap<String, IImage> images;
-    HashMap<String, ISound> sounds;
-
     private Button checkButton;
     private Button giveUpButton;
     private Button backButton;
@@ -49,14 +45,10 @@ public class MyScene implements Scene {
 
     private Engine engine;
 
-    public MyScene(Engine engine, int rows, int cols, HashMap<String, IFont> fontsAux, HashMap<String, IImage> imagesAux,HashMap<String, ISound> soundsAux) {
+    public MyScene(Engine engine, int rows, int cols) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
-
-        this.fonts = fontsAux;
-        this.images = imagesAux;
-        this.sounds = soundsAux;
 
         this.checkButton = new Button(560, 40, 140, 30);
         this.giveUpButton = new Button(10, 50, 120, 30);
@@ -247,6 +239,7 @@ public class MyScene implements Scene {
 
     }
 
+    @Override
     public boolean inputReceived(Vector2D pos, Vector2D size) {
         Vector2D coords = new Vector2D();
         coords.set(engine.getInput().getRawCoords().getX(), engine.getInput().getRawCoords().getY());
@@ -286,17 +279,17 @@ public class MyScene implements Scene {
             }
 
             //Mensaje de enhorabuena
-            this.engine.drawText("ENHORABUENA!", 200, 120, "Black", fonts.get("Cooper"));
+            this.engine.drawText("ENHORABUENA!", 200, 120, "Black", "Cooper");
 
             //BackButton
-            this.engine.drawText("Volver", (int)(backButton.getPos().getX()), (int)(backButton.getPos().getY() + 20), "Black", fonts.get("CalibriBold"));
+            this.engine.drawText("Volver", (int)(backButton.getPos().getX()), (int)(backButton.getPos().getY() + 20), "Black", "CalibriBold");
         }
         else{
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
                 //Muestra el texto...
-                this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", 250, 120, "red", fonts.get("Calibri"));
-                this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", 250, 150, "red", fonts.get("Calibri"));
+                this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", 250, 120, "red", "Calibri");
+                this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", 250, 150, "red", "Calibri");
 
                 //Renderiza rojo si esta mal
                 for (int i = 0; i < matriz.length; i++) {
@@ -314,11 +307,11 @@ public class MyScene implements Scene {
             }
             //Numeros laterales
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                engine.drawText(xNumberTopToBottom[i], 20, 350 + 60 * i, "Black", fonts.get("CalibriSmall"));
+                engine.drawText(xNumberTopToBottom[i], 20, 350 + 60 * i, "Black", "CalibriSmall");
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 200 + 30 * j, "Black", fonts.get("CalibriSmall"));
+                    engine.drawText(xNumberLeftToRight[i].get(j), 100 + 60 * i, 200 + 30 * j, "Black", "CalibriSmall");
                 }
             }
             //Cuadriculas
@@ -328,11 +321,11 @@ public class MyScene implements Scene {
             this.engine.paintCell(85,180, widthAestheticCellY,heightAestheticCellY, -1);
 
             //Botones
-            this.engine.drawImage(570, 45, 590, 65, this.images.get("Lupa"));
-            this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 1.7), "Black", fonts.get("CalibriBold"));
+            this.engine.drawImage(570, 45, 590, 65, "Lupa");
+            this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 1.7), "Black", "CalibriBold");
 
-            this.engine.drawImage(10, 50, 50, 75, this.images.get("Flecha"));
-            this.engine.drawText("Rendirse", (int)(giveUpButton.getPos().getX() +50), (int)(giveUpButton.getPos().getY() + 20), "Black", fonts.get("CalibriBold"));
+            this.engine.drawImage(10, 50, 50, 75, "Flecha");
+            this.engine.drawText("Rendirse", (int)(giveUpButton.getPos().getX() +50), (int)(giveUpButton.getPos().getY() + 20), "Black", "CalibriBold");
         }
     }
 
@@ -365,7 +358,7 @@ public class MyScene implements Scene {
                         remainingCells++;
                     }
                     //Y playeamos el sonido
-                    sounds.get("effect").play();
+                    engine.getAudio().playSound("effect");
                 }
             }
         }

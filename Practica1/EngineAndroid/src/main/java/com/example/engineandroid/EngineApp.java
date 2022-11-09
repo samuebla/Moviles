@@ -45,10 +45,6 @@ public class EngineApp implements Engine,Runnable{
     public IAudio getAudio(){
         return audioMngr;
     }
-    @Override
-    public IState getState(){
-        return null;
-    }
 
     //<<Input>>
     @Override

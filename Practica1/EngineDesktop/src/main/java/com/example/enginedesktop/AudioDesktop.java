@@ -15,21 +15,28 @@ public class AudioDesktop implements IAudio {
     Clip backgroundMusic;
 
     public AudioDesktop() {
-        //sounds = new HashMap<>();
+        sounds = new HashMap<>();
     }
 
     //SetMusic(String filepath)
     //StartMusic
     //Stop music??
     @Override
-    public ISound newSound(String audioName) {
-        File audioFile = new File(PATH + audioName);
-        return new SoundDesktop(audioFile);
+    public ISound newSound(String audioName,String path) {
+        File audioFile = new File(PATH + path);
+        SoundDesktop sAux = new SoundDesktop(audioFile);
+        //Lo metemos en el mapa
+        sounds.put(audioName,sAux);
+        return sAux;
     }
 
     @Override
     public void playSound(String audioName) {
-        ISound s = newSound(audioName);
-        s.play();
+        sounds.get(audioName).play();
+    }
+
+    @Override
+    public void setLoop(String audioName){
+        sounds.get(audioName).startLoop();
     }
 }

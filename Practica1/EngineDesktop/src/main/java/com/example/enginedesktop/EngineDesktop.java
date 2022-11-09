@@ -48,12 +48,12 @@ public class EngineDesktop implements Engine,Runnable{
     }
 
     @Override
-    public void drawText(String text, int x, int y, String color, IFont font){
+    public void drawText(String text, int x, int y, String color, String font){
         this.render.drawText(text, x, y, color,font);
     }
 
     @Override
-    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, IImage image){
+    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String image){
         this.render.drawImage(x, y, desiredWidth, desiredHeight, image);
     }
 
@@ -74,10 +74,7 @@ public class EngineDesktop implements Engine,Runnable{
     public IAudio getAudio(){
         return audioMngr;
     }
-    @Override
-    public IState getState(){
-        return null;
-    }
+
     //<<Fin Motor>>
 
     @Override

@@ -10,7 +10,9 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 
@@ -34,6 +36,9 @@ public class RenderDesktop implements IGraphics {
     public double factorScale = 1.0;
     public double scaleProportion = 1.0;
 
+    HashMap<String,FontDesktop> fonts;
+    HashMap<String,ImageDesktop> images;
+
 //    WindowSize baseSize;
 //    WindowSize windowSize;
 //    WindowSize nextWindowSize;
@@ -46,6 +51,9 @@ public class RenderDesktop implements IGraphics {
         this.bufferStrategy = this.myView.getBufferStrategy();
         this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
         this.insets = this.myView.getInsets();
+
+        fonts = new HashMap<>();
+        images = new HashMap<>();
 
         //Ajuste tamaño de la ventana y desplazamiento del canvas con margenes
         this.myView.setSize(this.myView.getWidth() + this.insets.right + this.insets.left,
@@ -157,15 +165,15 @@ public class RenderDesktop implements IGraphics {
     }
 
 
-//    @Override
-//    public IImage newImage() {
-//        return null;
-//    }
-//
-//    @Override
-//    public IFont newFont() {
-//        return null;
-//    }
+    @Override
+    public IImage newImage(String imageName,String path) {
+        return images.put(imageName,new ImageDesktop(new File(path)));
+    }
+
+    @Override
+    public IFont newFont(String fontName,String path,int type, int size) {
+        return fonts.put(fontName,new FontDesktop(new File(path),type,size));
+    }
 
     @Override
     public void setResolution(double width, double height) {
@@ -197,16 +205,10 @@ public class RenderDesktop implements IGraphics {
         this.graphics2D.setColor(new Color(r, b, g, 255));
     }
 
-    @Override
-    public void setFont(int size, int fontType) {
-
-        //Le tienes que pasar la fuente wtf
-        //this.graphics2D.setFont();
-    }
 
     @Override
-    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, IImage imageAux) {
-        ImageDesktop image = (ImageDesktop) imageAux;
+    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String imageName) {
+        ImageDesktop image = images.get(imageName);
         this.graphics2D.drawImage(image.getImage(), x, y, desiredWidth, desiredHeight,
                 0, 0, image.getWidth(), image.getHeight(), null);
         this.graphics2D.setPaintMode();
@@ -238,9 +240,7 @@ public class RenderDesktop implements IGraphics {
     }
 
     @Override
-    public void drawText(String text, int x, int y, String color, IFont font) {
-        //Casteamos esta mierda porque sino no nos funciona
-        FontDesktop f = (FontDesktop) font;
+    public void drawText(String text, int x, int y, String color, String fontKey) {
 
         Color c;
         if (color == "red") {
@@ -249,9 +249,8 @@ public class RenderDesktop implements IGraphics {
             c = Color.black;
         }
         this.graphics2D.setColor(c);
-        this.graphics2D.setFont(f.getFont());
+        this.graphics2D.setFont(fonts.get(fontKey).getFont());
         this.graphics2D.drawString(text, x, y);
-        //No estoy muy seguro de este metodo, quitar si no funciona bien
         this.graphics2D.setPaintMode();
     }
 

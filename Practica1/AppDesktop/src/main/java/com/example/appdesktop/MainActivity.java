@@ -48,19 +48,19 @@ public class MainActivity {
         //Inicializamos las fuentes y cargamos las que queramos
         FontDesktop[] fonts = new FontDesktop[5];
 
-        fonts[0] = new FontDesktop(new File("Assets\\CooperBlackRegular.ttf"), 0, 40);
-        fonts[1] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"), 0, 25);
-        fonts[2] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"), 1, 18);
-        fonts[3] = new FontDesktop(new File("Assets\\CooperBlackRegular.ttf"), 1, 40);
-        fonts[4] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"), 1, 20);
+//        fonts[0] = new FontDesktop();
+//        fonts[1] = new FontDesktop();
+//        fonts[2] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"), 1, 18);
+//        fonts[3] = new FontDesktop(new File("Assets\\CooperBlackRegular.ttf"), 1, 40);
+//        fonts[4] = new FontDesktop(new File("Assets\\CalibriRegular.ttf"), 1, 20);
 
-        String[] keys = new String[]{"Cooper", "Calibri", "CalibriSmall", "CooperBold", "CalibriBold"};
+//        String[] keys = new String[]{"Cooper", "Calibri", "CalibriSmall", "CooperBold", "CalibriBold"};
 
         //Inicializamos las imagenes y cargamos las que queramos
         ImageDesktop[] images = new ImageDesktop[2];
 
         try {
-            images[0] = new ImageDesktop(new File("Assets\\arrow.png"));
+//            images[0] = new ImageDesktop(new File("Assets\\arrow.png"));
             images[1] = new ImageDesktop(new File("Assets\\lupa.png"));
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -68,18 +68,18 @@ public class MainActivity {
 
         String[] keysImages = new String[]{"Flecha", "Lupa"};
 
-        SoundDesktop[] sounds = new SoundDesktop[2];
+//        SoundDesktop[] sounds = new SoundDesktop[2];
+//
+//        try {
+//            sounds[0] = new SoundDesktop(new File());
+//            sounds[1] = new SoundDesktop(new File());
+//        } catch (Exception e) {
+//            System.err.println(e.getMessage());
+//        }
+//
+//        String[] keysSound = new String[]{"background", "effect"};
 
-        try {
-            sounds[0] = new SoundDesktop(new File("Assets\\WiiBackgroundMusic.wav"));
-            sounds[1] = new SoundDesktop(new File("Assets\\wiiClickSound.wav"));
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-
-        String[] keysSound = new String[]{"background", "effect"};
-
-        MainMenuScene scene = new MainMenuScene(engine, fonts, keys, images, keysImages, keysSound, sounds);
+        MainMenuScene scene = new MainMenuScene(engine);
 
         SceneMngrDesktop sceneMngr = new SceneMngrDesktop();
 
