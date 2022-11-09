@@ -53,7 +53,7 @@ public class MainMenuScene implements Scene {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        this.play = new Button(this.engine.getWidth() / 2 -(engine.getWidth()/6), this.engine.getHeight() / 2.5, engine.getWidth()/3, engine.getHeight()/4.8);
+        this.play = new Button(this.engine.getWidth() / 2 - (engine.getWidth()/6), this.engine.getHeight() / 2.5, engine.getWidth()/3, engine.getHeight()/4.8);
         System.out.println("Boton[X] " + this.play.pos.getX() +" [Y] " + this.play.pos.getY());
     }
 

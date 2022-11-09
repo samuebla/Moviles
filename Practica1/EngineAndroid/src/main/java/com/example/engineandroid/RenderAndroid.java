@@ -57,7 +57,6 @@ public class RenderAndroid implements IGraphics {
         this.canvas.translate(0, this.posCanvas.getY());
         setColor(0XFFFFFFFF);
         drawRectangle(0,0, this.getViewWidth(), (int)(this.frameSize.getY()/factorScale), true);
-        //this.canvas.scale(1/factorScale,1/factorScale);
     }
 
     public void clear() {
@@ -112,12 +111,12 @@ public class RenderAndroid implements IGraphics {
     }
 
     @Override
-    public int getHeight() {
-        return (int)(this.frameSize.getY() + posCanvas.getY());
+    public int getWidth() {
+        return (int)(this.frameSize.getX() + posCanvas.getX());
     }
     @Override
-    public int getWidth() {
-        return this.getViewWidth();
+    public int getHeight() {
+        return (int)(this.frameSize.getY() + posCanvas.getY());
     }
 
     public int getViewWidth() {
@@ -138,7 +137,7 @@ public class RenderAndroid implements IGraphics {
         else
             scale.setX(scale.getY()/factorScale);
 
-        posCanvas.set((int)(surfaceFrame.getX()-frameSize.getX())/2*factorScale, (int)(surfaceFrame.getY()-frameSize.getY())/2*factorScale);
+        posCanvas.set((int)(surfaceFrame.getX()-frameSize.getX()), (int)(surfaceFrame.getY()-frameSize.getY())/2*factorScale);
 
     }
 
@@ -180,7 +179,7 @@ public class RenderAndroid implements IGraphics {
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String imageAux) {
         ImageAndroid image = images.get(imageAux);
         Bitmap map = image.getImage();
-        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int)(desiredWidth*factorScale), (int)(desiredHeight*factorScale), false);
+        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int)(desiredWidth), (int)(desiredHeight), false);
         canvas.drawBitmap(scaledMap, (int)(x), (int)(y), this.paint);
     }
 
