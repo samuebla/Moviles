@@ -122,7 +122,7 @@ public class RenderAndroid implements IGraphics {
     }
 
     @Override
-    public void drawRectangle(int x, int y, int w, int h) {
+    public void drawRectangle(int x, int y, int w, int h, boolean fill) {
         this.canvas.drawRect(x * this.scale, y * this.scale, x * this.scale + w * this.scale, y * this.scale + h * this.scale, this.paint);
     }
 
