@@ -356,7 +356,7 @@ public class MyScene implements Scene {
                         remainingCells++;
                     }
                     //Y playeamos el sonido
-                    engine.getAudio().playSound("effect");
+                    engine.getAudio().playSound("effect", 1);
                 }
             }
         }

@@ -12,7 +12,7 @@ public class AudioDesktop implements IAudio {
     private static final String PATH = "";
     //Guardamos los sonidos
     private HashMap<String, SoundDesktop> sounds;
-    Clip backgroundMusic;
+    SoundDesktop backgroundMusic;
 
     public AudioDesktop() {
         sounds = new HashMap<>();
@@ -31,8 +31,21 @@ public class AudioDesktop implements IAudio {
     }
 
     @Override
-    public void playSound(String audioName) {
-        sounds.get(audioName).play();
+    public void loadMusic(String audioName, String path) {
+        File audioFile = new File(PATH + path);
+        SoundDesktop sAux = new SoundDesktop(audioFile);
+        sAux.startLoop();
+
+        this.backgroundMusic = sAux;
+    }
+
+    @Override
+    public void playSound(String audioName, int type) {
+        if (type == 0){
+            this.backgroundMusic.play();
+        }else{
+            sounds.get(audioName).play();
+        }
     }
 
     @Override

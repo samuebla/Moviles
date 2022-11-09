@@ -45,7 +45,7 @@ task copyData( type: Copy) {
     from(fromDir) {
         include "**"
     }
-    into 'src/main/assets'
+    into 'src/main/Assets'
 }
 
 tasks.whenTaskAdded{ task ->

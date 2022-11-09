@@ -22,8 +22,8 @@ public class MainMenuScene implements Scene {
 
         //La constructora del menu solo se llama una vez
         //Cargamos el fondo y lo playeamos
-        engine.getAudio().newSound("background","Assets\\WiiBackgroundMusic.wav").play();
-        engine.getAudio().setLoop("background");
+        engine.getAudio().loadMusic("background", "Assets\\WiiBackgroundMusic.wav");
+        engine.getAudio().playSound("background", 0);
         engine.getAudio().newSound("effect","Assets\\wiiClickSound.wav");
 
         engine.getGraphics().newFont("Calibri","Assets\\CalibriRegular.ttf", 0, 25);

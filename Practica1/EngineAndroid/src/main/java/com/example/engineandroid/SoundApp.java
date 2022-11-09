@@ -1,5 +1,7 @@
 package com.example.engineandroid;
 
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 
@@ -8,17 +10,44 @@ import com.example.lib.ISound;
 public class SoundApp implements ISound {
 
     private SoundPool soundPool;
-    private int soundID;
 
-    public SoundApp(SoundPool sPool, String path) {
+    private int soundID;
+    private float volume = 1.0f;
+    private int priority = 0;
+    private int loop = 0;
+    private float rate = 1.0f;
+
+    public SoundApp(SoundPool sPool, String path, AssetManager assets) {
         this.soundPool = sPool;
-        soundID = this.soundPool.load(path, 0);
+        AssetFileDescriptor fileDescriptor = null;
+        try {
+            fileDescriptor = assets.openFd(path);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        soundID = this.soundPool.load(fileDescriptor, this.priority);
+    }
+
+    public void setLoop(int loopAux){
+        this.loop = loopAux;
+    }
+
+    public void setPriority(int priorityAux){
+        this.priority = priorityAux;
+    }
+
+    public void setRate(float rateAux){
+        this.rate = rateAux;
+    }
+
+    public void setVolume(float volumeAux){
+        this.volume = volumeAux;
     }
 
     @Override
     public void play() {
         this.soundPool.stop(soundID);
-        this.soundPool.play(this.soundID, 1, 1, 0, 0, 1);
+        this.soundPool.play(this.soundID, this.volume, this.volume, this.priority, this.loop, this.rate);
     }
 
     @Override
@@ -28,7 +57,7 @@ public class SoundApp implements ISound {
 
     @Override
     public void startLoop() {
-        this.soundPool.setLoop(soundID, -1);
+        this.loop = 1;
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.engineandroid;
 
 import com.example.lib.*;
 
+import android.content.res.AssetManager;
 import android.view.SurfaceView;
 
 public class EngineApp implements Engine,Runnable{
@@ -73,6 +74,11 @@ public class EngineApp implements Engine,Runnable{
         this.render.paintCell(x, y, w, h, celltype);
     }
 
+    public void setAssetsContext(AssetManager assetsAux){
+        this.render.setAssetContext(assetsAux);
+        this.audioMngr.setAssetsManager(assetsAux);
+    }
+
 
     //<<< API >>>
 //    public void pintarCirculo(float x, float y, float r, String color){
@@ -89,12 +95,12 @@ public class EngineApp implements Engine,Runnable{
 //    }
 
     @Override
-    public void drawText(String text, int x, int y, String color, IFont font){
+    public void drawText(String text, int x, int y, String color, String font){
         this.render.drawText(text, x, y, color,font);
     }
 
     @Override
-    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, IImage image){
+    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String image){
         this.render.drawImage(x, y, desiredWidth, desiredHeight, image);
     }
 
