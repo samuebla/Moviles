@@ -47,7 +47,7 @@ public class AudioAndroid implements IAudio {
     @Override
     public ISound newSound(String audioName, String path) {
         //Guarda en los sounds y crea el nuevo sonido
-        return this.sounds.put(audioName, new SoundApp(this.soundPool, PATH + audioName, this.assets));
+        return this.sounds.put(audioName, new SoundApp(this.soundPool, PATH + path, this.assets));
     }
 
     @Override

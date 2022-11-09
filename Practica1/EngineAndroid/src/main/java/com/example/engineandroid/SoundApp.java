@@ -26,7 +26,7 @@ public class SoundApp implements ISound {
         }catch (Exception e){
             e.printStackTrace();
         }
-        soundID = this.soundPool.load(fileDescriptor, this.priority);
+        this.soundID = this.soundPool.load(fileDescriptor, this.priority);
     }
 
     public void setLoop(int loopAux){
@@ -47,7 +47,7 @@ public class SoundApp implements ISound {
 
     @Override
     public void play() {
-        this.soundPool.stop(soundID);
+//        this.soundPool.stop(this.soundID);
         this.soundPool.play(this.soundID, this.volume, this.volume, this.priority, this.loop, this.rate);
     }
 
