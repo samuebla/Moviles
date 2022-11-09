@@ -131,7 +131,7 @@ public class RenderDesktop implements IGraphics {
     @Override
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String imageName) {
         ImageDesktop image = images.get(imageName);
-        this.graphics2D.drawImage(image.getImage(), x, y, desiredWidth, desiredHeight,
+        this.graphics2D.drawImage(image.getImage(), x, y, x +desiredWidth, y + desiredHeight,
                 0, 0, image.getWidth(), image.getHeight(), null);
         this.graphics2D.setPaintMode();
     }

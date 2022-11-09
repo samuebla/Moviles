@@ -53,8 +53,11 @@ public class RenderAndroid implements IGraphics {
         while (!this.holder.getSurface().isValid()) ;
         this.canvas = this.holder.lockCanvas();
         // "Borramos" el fondo.
-        this.canvas.drawColor(0xFFFFFFFF); // ARGB
-        this.canvas.translate(this.posCanvas.getX(), this.posCanvas.getY());
+        this.canvas.drawColor(0xFFAAAAAA); // ARGB
+        this.canvas.translate(0, this.posCanvas.getY());
+        setColor(0XFFFFFFFF);
+        drawRectangle(0,0, this.getViewWidth(), (int)(this.frameSize.getY()/factorScale), true);
+        //this.canvas.scale(1/factorScale,1/factorScale);
     }
 
     public void clear() {
@@ -108,11 +111,20 @@ public class RenderAndroid implements IGraphics {
         this.canvas.drawCircle(x, y, r, this.paint);
     }
 
+    @Override
+    public int getHeight() {
+        return (int)(this.frameSize.getY() + posCanvas.getY());
+    }
+    @Override
     public int getWidth() {
+        return this.getViewWidth();
+    }
+
+    public int getViewWidth() {
         return this.myView.getWidth();
     }
 
-    public int getHeight() {
+    public int getViewHeight() {
         return this.myView.getHeight();
     }
 
@@ -126,13 +138,13 @@ public class RenderAndroid implements IGraphics {
         else
             scale.setX(scale.getY()/factorScale);
 
-        posCanvas.set((int)(surfaceFrame.getX()-scale.getX())/2, (int)(surfaceFrame.getY()-scale.getY())/2);
-        this.frameSize = scale;
+        posCanvas.set((int)(surfaceFrame.getX()-frameSize.getX())/2*factorScale, (int)(surfaceFrame.getY()-frameSize.getY())/2*factorScale);
+
     }
 
 
-    public float getScale() {
-        return this.factorScale;
+    public Vector2D getOffset() {
+        return this.posCanvas;
     }
 
     @Override
@@ -168,7 +180,7 @@ public class RenderAndroid implements IGraphics {
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String imageAux) {
         ImageAndroid image = images.get(imageAux);
         Bitmap map = image.getImage();
-        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int)(desiredWidth), (int)(desiredHeight), false);
+        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int)(desiredWidth*factorScale), (int)(desiredHeight*factorScale), false);
         canvas.drawBitmap(scaledMap, (int)(x), (int)(y), this.paint);
     }
 
@@ -192,9 +204,10 @@ public class RenderAndroid implements IGraphics {
     public void drawText(String text, int x, int y, String color, String fontAux) {
         int prevColor = this.paint.getColor();
         Font_Android font = this.fonts.get(fontAux);
-        int f = font.getSize();
+        int f = (int)(font.getSize() /factorScale);
         this.paint.setTextSize(f);
         this.paint.setTypeface(font.getFont());
+        this.paint.setStyle(Paint.Style.FILL_AND_STROKE);
         int currentColor;
         if (color == "red"){
             currentColor = 0xFFFF0000;
@@ -205,6 +218,7 @@ public class RenderAndroid implements IGraphics {
 
         this.canvas.drawText(text, (float)x, (float)y, this.paint);
         this.paint.setColor(prevColor);
+        this.paint.setStyle(Paint.Style.STROKE);
     }
 
 }

@@ -22,7 +22,7 @@ public class EngineApp implements Engine,Runnable{
 
     public EngineApp(SurfaceView myView){
         this.view = myView;
-        this.render = new RenderAndroid(this.view, 4/6);
+        this.render = new RenderAndroid(this.view, 4.0f/6.0f);
         this.eventHandler = new IEventHandler() {
             @Override
             public IEvent getEvent() {
@@ -118,7 +118,7 @@ public class EngineApp implements Engine,Runnable{
 
     @Override
     public void popScene() {
-
+        this.sceneMngr.popScene();
     }
 
     //blucle principal
@@ -136,6 +136,7 @@ public class EngineApp implements Engine,Runnable{
 
         //Escalado de la app
         this.render.scaleAppView();
+        this.input.setOffset(0,this.render.getOffset().getY());
         this.sceneMngr.getScene().init();
         // Espera activa. Sería más elegante al menos dormir un poco.
 

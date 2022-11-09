@@ -50,7 +50,8 @@ public class MainMenuScene implements Scene {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        this.play = new Button(this.engine.getWidth() / 2.4 + 100, this.engine.getHeight() / 2.5+70, 70, 40);
+        this.play = new Button(this.engine.getWidth() / 2.4, this.engine.getHeight() / 2.5, 70, 40);
+        System.out.println("Boton[X] " + this.play.pos.getX() +" [Y] " + this.play.pos.getY());
     }
 
     @Override
@@ -60,14 +61,12 @@ public class MainMenuScene implements Scene {
             handleInput();
             this.engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
         }
-
     }
 
     @Override
     public void render() {
         //Titulo
         this.engine.drawText("NONOGRAMAS", (int) (this.engine.getWidth() / 3.6), (int) (this.engine.getHeight() / 10.8), "Black", "Cooper");
-        int w = this.engine.getWidth();
         //Boton
         this.engine.drawText("Jugar", (int) (this.play.getPos().getX() + this.play.getSize().getX() / 5), (int) (this.play.getPos().getY() + this.play.getSize().getY() / 2), "Black", "Calibri");
     }

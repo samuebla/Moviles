@@ -12,6 +12,7 @@ public class InputAndroid implements Input {
     private TouchListener touchlistener;
     private MotionListener motionlistener;
     Vector2D touchCoords;
+    private Vector2D offset;
 
     private float scaleFactor = 1.0f;
 
@@ -19,6 +20,7 @@ public class InputAndroid implements Input {
         this.touchCoords = new Vector2D(-1,-1);
         this.touchlistener = new TouchListener(this, eHandler);
         this.motionlistener = new MotionListener(this, eHandler);
+        offset = new Vector2D();
     }
 
     @Override
@@ -28,8 +30,7 @@ public class InputAndroid implements Input {
 
     @Override
     public Vector2D getScaledCoords() {
-        //System.out.println("Mi abuela mide : [x]" + getRawCoords().getX() + " [y] " + getRawCoords().getY());
-        return getRawCoords().multiply(scaleFactor);
+        return new Vector2D((getRawCoords().getX() - offset.getX())/scaleFactor, (getRawCoords().getY()  - offset.getY())/scaleFactor);
     }
 
     @Override
@@ -40,6 +41,10 @@ public class InputAndroid implements Input {
     @Override
     public void setScaleFactor(float scale) {
         this.scaleFactor = scale;
+    }
+
+    public void setOffset(float x, float y) {
+        this.offset.set(x,y);
     }
 
     public TouchListener getTouchListener(){

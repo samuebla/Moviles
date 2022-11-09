@@ -35,6 +35,7 @@ public class LevelSelection implements Scene {
     public boolean inputReceived(Vector2D pos, Vector2D size){
         Vector2D coords = new Vector2D();
         coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
+        System.out.println("Mi abuela mide : [x]" + coords.getX() + " [y] " + coords.getY());
 
         return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
                 coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
@@ -49,9 +50,9 @@ public class LevelSelection implements Scene {
         this.button5x8 = new Button(engine.getWidth()/4, engine.getHeight()/2.2, 70, 70);
         this.button8x10 = new Button(engine.getWidth()/2.2, engine.getHeight()/2.2, 70, 70);
         this.button5x10 = new Button(engine.getWidth()/1.5, engine.getHeight()/2.2, 70, 70);
-        this.backButton = new Button(engine.getWidth()/72, engine.getHeight()/22, 120, 30);
+        this.backButton = new Button(engine.getWidth()/72, engine.getHeight()/22, 120, 50);
 
-        System.out.println("boton 10x10: [x] " + button10.getPos().getX() +" [y] " + button10.getPos().getY());
+        System.out.println("boton rendirse: [x] " + backButton.getPos().getX() +" [y] " + backButton.getPos().getY());
     }
 
     @Override
@@ -85,7 +86,7 @@ public class LevelSelection implements Scene {
         this.engine.paintCell((int)button5x10.getPos().getX(), (int)button5x10.getPos().getY(), (int)(button5x10.getSize().getX()), (int)(button5x10.getSize().getY()), -1);
 
         //Back Button
-        this.engine.drawImage(engine.getWidth()/72, engine.getHeight()/22, 50, 75, "Flecha");
+        this.engine.drawImage(engine.getWidth()/72, engine.getHeight()/22, (int)((double)this.engine.getWidth()*0.04), (int)((double)this.engine.getHeight()*0.025), "Flecha");
         this.engine.drawText("Volver", (int)(backButton.getPos().getX() +50), (int)(backButton.getPos().getY() + 20), "Black", "CalibriBold");
 
         //Texto indicativo
