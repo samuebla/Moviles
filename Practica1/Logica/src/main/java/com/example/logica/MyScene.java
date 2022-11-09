@@ -174,7 +174,7 @@ public class MyScene implements Scene {
                         //Y por lo tanto ya tenemos uno añadido
                         numAnterior[j] = 0;
 
-                      //Con esto solo entra si se ha añadido algo alguna vez
+                        //Con esto solo entra si se ha añadido algo alguna vez
                     } else if (numAnterior[j] == 0) {
 
                         //Sumamos el valor +1 porque la columna continua
@@ -209,8 +209,12 @@ public class MyScene implements Scene {
                 //Vaciamos la lista
                 xPositionsTopToBottom[i].clear();
                 //Y añadimos al lateral los 2 valores seccionados
-                xPositionsTopToBottom[i].add(aux);
-                xPositionsTopToBottom[i].add(cols - aux - 1);
+                //Si has quitado la primera celda no añades un 0
+                if (aux != 0)
+                    xPositionsTopToBottom[i].add(aux);
+                //Si has quitado la ultima celda no se añade un 0
+                if (cols - aux - 1 != 0)
+                    xPositionsTopToBottom[i].add(cols - aux - 1);
 
                 //Y contabilizamos esa resta
                 remainingCells--;
@@ -293,9 +297,9 @@ public class MyScene implements Scene {
         }
 
         //Timer del boton de comprobar
-        if ( timer > 0) {
+        if (timer > 0) {
             timer -= deltaTime;
-        } else if(auxShowAnswer){
+        } else if (auxShowAnswer) {
             showAnswers = false;
             wrongCells = 0;
             for (int i = 0; i < matriz.length; i++) {
@@ -305,7 +309,7 @@ public class MyScene implements Scene {
             }
             auxShowAnswer = false;
             if (win())
-                won=true;
+                won = true;
         }
     }
 
@@ -326,7 +330,7 @@ public class MyScene implements Scene {
             //BackButton
             this.engine.drawText("Volver", (int) (backButton.getPos().getX()), (int) (backButton.getPos().getY() + 20), "Black", "CalibriBold");
 
-        //Si sigo jugando...
+            //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
@@ -412,7 +416,7 @@ public class MyScene implements Scene {
         if (inputReceived(this.checkButton.getPos(), this.checkButton.getSize())) {
             //Mostramos el texto en pantalla
             showAnswers = true;
-            auxShowAnswer= true;
+            auxShowAnswer = true;
             timer = timeCheckButton;
         }
         //Si te rindes vuelves a la seleccion de nivel
