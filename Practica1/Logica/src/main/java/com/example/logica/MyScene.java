@@ -196,9 +196,28 @@ public class MyScene implements Scene {
 
                 //Y contabilizamos esa resta
                 remainingCells--;
+
+                //Ahora limpiamos la columna correspondiente y volvemos a contar
+                xPositionsLeftToRight[aux].clear();
+
+                int cont = 0;
+                //Recorremos la columna otra vez para rellenar correctamente la fila
+                for (int j = 0; j < rows_; j++) {
+                    if (this.matriz[aux][j].getSolution()) {
+                        cont++;
+                    } else if (cont != 0) {
+                        xPositionsLeftToRight[aux].add(cont);
+                        cont = 0;
+                    }
+                }
+                if (cont != 0) {
+                    xPositionsLeftToRight[aux].add(cont);
+                }
             }
             //Para meter en el lateral si el ultimo valor de la fila se ha seleccionado
             else if (contAux != 0) {
+                System.out.println("KAPASAOOOOOOOOOOO123123  " );
+
                 xPositionsTopToBottom[i].add(contAux);
             }
         }
@@ -222,15 +241,15 @@ public class MyScene implements Scene {
                 int cont = 0;
                 //Recorremos la columna otra vez para rellenar correctamente la fila
                 for (int j = 0; j < cols_; j++) {
-                    if (this.matriz[j][i].getSolution()) {
+                    if (this.matriz[j][randAux].getSolution()) {
                         cont++;
                     } else if (cont != 0) {
-                        xPositionsTopToBottom[i].add(cont);
+                        xPositionsTopToBottom[randAux].add(cont);
                         cont = 0;
                     }
                 }
                 if (cont != 0) {
-                    xPositionsTopToBottom[i].add(cont);
+                    xPositionsTopToBottom[randAux].add(cont);
                 }
             }
         }
@@ -350,9 +369,10 @@ public class MyScene implements Scene {
                     }
                 }
             }
+
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                engine.drawText(xNumberTopToBottom[i], (int)((double)this.engine.getWidth()*0.0277777), (int)((double)this.engine.getHeight()*0.3240740) + (int)((double)this.engine.getHeight()*0.0555555) * i, "Black", "CalibriSmall");
+                engine.drawText(xNumberTopToBottom[i], (int)(this.matriz[0][0].getPos().getX()/2), (int)((double)this.engine.getHeight()*0.3240740) + (int)((double)this.engine.getHeight()*0.0555555) * i, "Black", "CalibriSmall");
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
