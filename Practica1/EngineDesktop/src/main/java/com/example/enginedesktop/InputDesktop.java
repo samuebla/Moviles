@@ -16,9 +16,13 @@ public class InputDesktop implements Input {
 
     Vector2D mouseCoords;
 
+    private float scaleFactor;
+    private Vector2D offset;
+
     public InputDesktop(IEventHandler eHandler){
         this.mouseCoords = new Vector2D(0,0);
         this.listener = new MouseListener(this, eHandler);
+        offset = new Vector2D();
     }
 
     @Override
@@ -27,8 +31,23 @@ public class InputDesktop implements Input {
     }
 
     @Override
+    public Vector2D getScaledCoords() {
+        System.out.println("Mi abuela mide : [x]" + offset.getX() + " [y] " + offset.getY());
+        return new Vector2D((getRawCoords().getX() - offset.getX())/scaleFactor, (getRawCoords().getY()  - offset.getY())/scaleFactor);
+    }
+
+    @Override
     public void setRawCoords(int x, int y) {
         this.mouseCoords.set(x,y);
+    }
+
+    @Override
+    public void setScaleFactor(float scale) {
+        this.scaleFactor = scale;
+    }
+
+    public void setOffset(Vector2D v) {
+        this.offset = v;
     }
 
     public MouseListener getListener(){

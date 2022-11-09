@@ -158,6 +158,10 @@ public class EngineDesktop implements Engine,Runnable{
             //Bucle de renderizado
             do{
                 this.render.initFrame();
+                //Actualizo el posicionamiento para el input
+                this.input.setScaleFactor((float)this.render.getScale());
+                this.input.setOffset(this.render.getMargins());
+
                 this.sceneManager.render();
                 this.render.clearFrame();
             } while(this.render.swap());
