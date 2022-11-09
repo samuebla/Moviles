@@ -24,10 +24,11 @@ public class LevelSelection implements Scene {
 
     private Engine engine;
 
-
     public LevelSelection(Engine engineAux){
+
         this.engine = engineAux;
 
+        //Botones selectores del nivel
         this.button5 = new Button(engine.getWidth()/4, engine.getHeight()/3.6, 70, 70);
         this.button8 = new Button(engine.getWidth()/2.2, engine.getHeight()/3.6, 70, 70);
         this.button10 = new Button(engine.getWidth()/1.5, engine.getHeight()/3.6, 70, 70);
@@ -48,6 +49,7 @@ public class LevelSelection implements Scene {
 
     @Override
     public void update(double deltaTime){
+        //Para los eventos...
         if(engine.getEventMngr().getEvent().eventType != IEventHandler.EventType.NONE) {
             handleInput();
             engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
@@ -65,13 +67,13 @@ public class LevelSelection implements Scene {
         //10x10
         this.engine.drawText("10x10", (int)(button10.getPos().getX() + button10.getSize().getX()/9), (int)(button10.getPos().getY() + button10.getSize().getY()/1.8), "Black", "Calibri");
         this.engine.paintCell((int)button10.getPos().getX(), (int)button10.getPos().getY(), (int)(button10.getSize().getX()), (int)(button10.getSize().getY()), -1);
-
+        //5x8
         this.engine.drawText("5x8", (int)(button5x8.getPos().getX() + button5x8.getSize().getX()/3.8), (int)(button5x8.getPos().getY() + button5x8.getSize().getY()/1.8), "Black", "Calibri");
         this.engine.paintCell((int)button5x8.getPos().getX(), (int)button5x8.getPos().getY(), (int)(button5x8.getSize().getX()), (int)(button5x8.getSize().getY()), -1);
-
+        //8x10
         this.engine.drawText("8x10", (int)(button8x10.getPos().getX() + button8x10.getSize().getX()/5.5), (int)(button8x10.getPos().getY() + button8x10.getSize().getY()/1.8), "Black", "Calibri");
         this.engine.paintCell((int)button8x10.getPos().getX(), (int)button8x10.getPos().getY(), (int)(button8x10.getSize().getX()), (int)(button8x10.getSize().getY()), -1);
-
+        //5x10
         this.engine.drawText("5x10", (int)(button5x10.getPos().getX() + button5x10.getSize().getX()/6), (int)(button5x10.getPos().getY() + button5x10.getSize().getY()/1.8), "Black", "Calibri");
         this.engine.paintCell((int)button5x10.getPos().getX(), (int)button5x10.getPos().getY(), (int)(button5x10.getSize().getX()), (int)(button5x10.getSize().getY()), -1);
 
@@ -85,36 +87,43 @@ public class LevelSelection implements Scene {
 
     @Override
     public void handleInput(){
+        //5x5
         if (inputReceived(this.button5.getPos(), this.button5.getSize())){
             MyScene playScene = new MyScene(this.engine, 5, 5);
             this.engine.setScene(playScene);
         }
 
+        //8x8
         if (inputReceived(this.button8.getPos(), this.button8.getSize())){
             MyScene playScene = new MyScene(this.engine, 8, 8);
             this.engine.setScene(playScene);
         }
 
+        //10x10
         if (inputReceived(this.button10.getPos(), this.button10.getSize())){
             MyScene playScene = new MyScene(this.engine, 10, 10);
             this.engine.setScene(playScene);
         }
 
+        //5x8
         if (inputReceived(this.button5x8.getPos(), this.button5x8.getSize())){
             MyScene playScene = new MyScene(this.engine, 5, 8);
             this.engine.setScene(playScene);
         }
 
+        //8x10
         if (inputReceived(this.button8x10.getPos(), this.button8x10.getSize())){
             MyScene playScene = new MyScene(this.engine, 8, 10);
             this.engine.setScene(playScene);
         }
 
+        //5x10
         if (inputReceived(this.button5x10.getPos(), this.button5x10.getSize())){
             MyScene playScene = new MyScene(this.engine, 5, 10);
             this.engine.setScene(playScene);
         }
 
+        //Back button
         if (inputReceived(this.backButton.getPos(), this.backButton.getSize())){
             this.engine.popScene();
         }
