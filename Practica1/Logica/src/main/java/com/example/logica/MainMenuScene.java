@@ -47,10 +47,13 @@ public class MainMenuScene implements Scene {
 
             this.engine.getGraphics().newImage("Flecha", "assets/arrow.png");
             this.engine.getGraphics().newImage("Lupa", "assets/lupa.png");
+            this.engine.getGraphics().newImage("PlayButton", "assets/playButton.png");
+
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        this.play = new Button(this.engine.getWidth() / 2.4, this.engine.getHeight() / 2.5, engine.getWidth()/10.28, engine.getHeight()/27);
+        this.play = new Button(this.engine.getWidth() / 2 -(engine.getWidth()/6), this.engine.getHeight() / 2.5, engine.getWidth()/3, engine.getHeight()/4.8);
         System.out.println("Boton[X] " + this.play.pos.getX() +" [Y] " + this.play.pos.getY());
     }
 
@@ -68,7 +71,8 @@ public class MainMenuScene implements Scene {
         //Titulo
         this.engine.drawText("NONOGRAMAS", (int) (this.engine.getWidth() / 3.6), (int) (this.engine.getHeight() / 10.8), "Black", "Cooper");
         //Boton
-        this.engine.drawText("Jugar", (int) (this.play.getPos().getX() + this.play.getSize().getX() / 5), (int) (this.play.getPos().getY() + this.play.getSize().getY() / 2), "Black", "Calibri");
+        this.engine.drawImage((int)this.play.getPos().getX(),(int)(play.getPos().getY()) ,(int)(this.play.getSize ().getX()), (int)(this.play.getSize ().getY()), "PlayButton");
+
     }
 
     @Override
