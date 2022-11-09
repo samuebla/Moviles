@@ -72,7 +72,7 @@ public class MainMenuScene implements Scene {
     @Override
     public void render() {
         //Titulo
-        this.engine.drawText("NONOGRAMAS", (int) (this.engine.getWidth() / 2), (int) (this.engine.getHeight() / 10.8), "Black", "Cooper");
+        this.engine.drawText("NONOGRAMAS", (int) (this.engine.getWidth() / 2), (int) (this.engine.getHeight() / 10.8), "Black", "Cooper", 0);
         //Boton
         this.engine.drawImage((int)this.play.getPos().getX(),(int)(play.getPos().getY()) ,(int)(this.play.getSize ().getX()), (int)(this.play.getSize ().getY()), "PlayButton");
 

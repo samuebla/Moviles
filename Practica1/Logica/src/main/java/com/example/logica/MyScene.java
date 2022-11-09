@@ -323,18 +323,18 @@ public class MyScene implements Scene {
             }
 
             //Mensaje de enhorabuena
-            this.engine.drawText("ENHORABUENA!", (int)((double)this.engine.getWidth()*0.27777), (int)((double)this.engine.getHeight()*0.1111111), "Black", "Cooper");
+            this.engine.drawText("ENHORABUENA!", (int)((double)this.engine.getWidth()*0.5), (int)((double)this.engine.getHeight()*0.1111111), "Black", "Cooper", 0);
 
             //BackButton
-            this.engine.drawText("Volver", (int) (backButton.getPos().getX()), (int) (backButton.getPos().getY() + (int)((double)this.engine.getHeight()*0.0185185)), "Black", "CalibriBold");
+            this.engine.drawText("Volver", (int) (backButton.getPos().getX()), (int) (backButton.getPos().getY() + (int)((double)this.engine.getHeight()*0.0185185)), "Black", "CalibriBold", 0);
 
             //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
                 //Muestra el texto...
-                this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)this.engine.getWidth()*0.34722222), (int)((double)this.engine.getHeight()*0.1111111), "red", "Calibri");
-                this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)this.engine.getWidth()*0.3472222222), (int)((double)this.engine.getHeight()*0.1388888), "red", "Calibri");
+                this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)this.engine.getWidth()*0.34722222), (int)((double)this.engine.getHeight()*0.1111111), "red", "Calibri", 0);
+                this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)this.engine.getWidth()*0.3472222222), (int)((double)this.engine.getHeight()*0.1388888), "red", "Calibri", 0);
 
                 //Renderiza rojo si esta mal
                 for (int i = 0; i < matriz.length; i++) {
@@ -352,11 +352,11 @@ public class MyScene implements Scene {
             }
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                engine.drawText(xNumberTopToBottom[i], (int)((double)this.engine.getWidth()*0.0277777), (int)((double)this.engine.getHeight()*0.3240740) + (int)((double)this.engine.getHeight()*0.0555555) * i, "Black", "CalibriSmall");
+                engine.drawText(xNumberTopToBottom[i], (int)(auxCuadradoInicio.getX()-((double)(this.engine.getWidth())/90.0)), (int)((double)this.engine.getHeight()*0.3240740) + (int)((double)this.engine.getHeight()*0.0555555) * i, "Black", "CalibriSmall", 1);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    engine.drawText(xNumberLeftToRight[i].get(j), (int)((double)this.engine.getWidth()*0.1388888) + (int)((double)this.engine.getWidth()*0.083333) * i, (int)((double)this.engine.getHeight()*0.185185) + (int)((double)this.engine.getHeight()*0.027777) * j, "Black", "CalibriSmall");
+                    engine.drawText(xNumberLeftToRight[i].get(j), (int)((double)this.engine.getWidth()*0.1388888) + (int)((double)this.engine.getWidth()*0.083333) * i, (int)((double)this.engine.getHeight()*0.185185) + (int)((double)this.engine.getHeight()*0.027777) * j, "Black", "CalibriSmall", 0);
                 }
             }
 

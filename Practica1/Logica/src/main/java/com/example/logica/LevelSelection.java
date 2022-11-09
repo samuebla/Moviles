@@ -66,28 +66,28 @@ public class LevelSelection implements Scene {
     public void render(){
         //5x5
         this.engine.drawCircle(button5.getPos().getX(), button5.getPos().getY(), button5.getSize().getX()/2, "purple");
-        this.engine.drawText("5x5", (int)(button5.getPos().getX() + button5.getSize().getX()/2), (int)(button5.getPos().getY() + button5.getSize().getY()/1.8), "Black","Amor");
+        this.engine.drawText("5x5", (int)(button5.getPos().getX() + button5.getSize().getX()/2), (int)(button5.getPos().getY() + button5.getSize().getY()/1.8), "Black","Amor", 0);
         //8x8
         this.engine.drawCircle(button8.getPos().getX(), button8.getPos().getY(), button8.getSize().getX()/2, "purple");
-        this.engine.drawText("8x8", (int)(button8.getPos().getX() + button8.getSize().getX()/2), (int)(button8.getPos().getY() + button8.getSize().getY()/1.8), "Black","Amor");
+        this.engine.drawText("8x8", (int)(button8.getPos().getX() + button8.getSize().getX()/2), (int)(button8.getPos().getY() + button8.getSize().getY()/1.8), "Black","Amor", 0);
         //10x10
         this.engine.drawCircle(button10.getPos().getX(), button10.getPos().getY(), button10.getSize().getX()/2, "purple");
-        this.engine.drawText("10x10", (int)(button10.getPos().getX() + button10.getSize().getX()/2), (int)(button10.getPos().getY() + button10.getSize().getY()/1.8), "Black", "Amor");
+        this.engine.drawText("10x10", (int)(button10.getPos().getX() + button10.getSize().getX()/2), (int)(button10.getPos().getY() + button10.getSize().getY()/1.8), "Black", "Amor", 0);
         //5x8
         this.engine.drawCircle(button5x8.getPos().getX(), button5x8.getPos().getY(), button5x8.getSize().getX()/2, "purple");
-        this.engine.drawText("5x8", (int)(button5x8.getPos().getX() + button5x8.getSize().getX()/2), (int)(button5x8.getPos().getY() + button5x8.getSize().getY()/1.8), "Black", "Amor");
+        this.engine.drawText("5x8", (int)(button5x8.getPos().getX() + button5x8.getSize().getX()/2), (int)(button5x8.getPos().getY() + button5x8.getSize().getY()/1.8), "Black", "Amor", 0);
         //8x10
         this.engine.drawCircle(button8x10.getPos().getX(), button8x10.getPos().getY(), button8x10.getSize().getX()/2, "purple");
-        this.engine.drawText("8x10", (int)(button8x10.getPos().getX() + button8x10.getSize().getX()/2), (int)(button8x10.getPos().getY() + button8x10.getSize().getY()/1.8), "Black", "Amor");
+        this.engine.drawText("8x10", (int)(button8x10.getPos().getX() + button8x10.getSize().getX()/2), (int)(button8x10.getPos().getY() + button8x10.getSize().getY()/1.8), "Black", "Amor", 0);
         //5x10
         this.engine.drawCircle(button5x10.getPos().getX(), button5x10.getPos().getY(), button5x10.getSize().getX()/2, "purple");
-        this.engine.drawText("5x10", (int)(button5x10.getPos().getX() + button5x10.getSize().getX()/2), (int)(button5x10.getPos().getY() + button5x10.getSize().getY()/1.8), "Black", "Amor");
+        this.engine.drawText("5x10", (int)(button5x10.getPos().getX() + button5x10.getSize().getX()/2), (int)(button5x10.getPos().getY() + button5x10.getSize().getY()/1.8), "Black", "Amor", 0);
 
         //Back Button
         this.engine.drawImage(engine.getWidth()/72, engine.getHeight()/22,(int)(backButton.getSize().getX()),(int)(backButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        this.engine.drawText("Selecciona el tamaño del puzzle", (int)(engine.getWidth()/2), (int)(engine.getHeight()/5.4), "Black", "Amor");
+        this.engine.drawText("Selecciona el tamaño del puzzle", (int)(engine.getWidth()/2), (int)(engine.getHeight()/5.4), "Black", "Amor", 0);
     }
 
     @Override
