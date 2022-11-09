@@ -44,13 +44,13 @@ public class LevelSelection implements Scene {
     @Override
     public void init() {
         //Botones selectores del nivel
-        this.button5 = new Button(engine.getWidth()/4, engine.getHeight()/3.6, 70, 70);
-        this.button8 = new Button(engine.getWidth()/2.2, engine.getHeight()/3.6, 70, 70);
-        this.button10 = new Button(engine.getWidth()/1.5, engine.getHeight()/3.6, 70, 70);
-        this.button5x8 = new Button(engine.getWidth()/4, engine.getHeight()/2.2, 70, 70);
-        this.button8x10 = new Button(engine.getWidth()/2.2, engine.getHeight()/2.2, 70, 70);
-        this.button5x10 = new Button(engine.getWidth()/1.5, engine.getHeight()/2.2, 70, 70);
-        this.backButton = new Button(engine.getWidth()/72, engine.getHeight()/22, 120, 50);
+        this.button5 = new Button(engine.getWidth()/4, engine.getHeight()/3.6, engine.getWidth()/10.28, engine.getHeight()/15.42);
+        this.button8 = new Button(engine.getWidth()/2.2, engine.getHeight()/3.6, engine.getWidth()/10.28, engine.getHeight()/15.42);
+        this.button10 = new Button(engine.getWidth()/1.5, engine.getHeight()/3.6, engine.getWidth()/10.28, engine.getHeight()/15.42);
+        this.button5x8 = new Button(engine.getWidth()/4, engine.getHeight()/2.2, engine.getWidth()/10.28, engine.getHeight()/15.42);
+        this.button8x10 = new Button(engine.getWidth()/2.2, engine.getHeight()/2.2, engine.getWidth()/10.28, engine.getHeight()/15.42);
+        this.button5x10 = new Button(engine.getWidth()/1.5, engine.getHeight()/2.2, engine.getWidth()/10.28, engine.getHeight()/15.42);
+        this.backButton = new Button(engine.getWidth()/72, engine.getHeight()/22, engine.getWidth()/6, engine.getHeight()/21.6);
 
         System.out.println("boton rendirse: [x] " + backButton.getPos().getX() +" [y] " + backButton.getPos().getY());
     }
