@@ -45,8 +45,8 @@ public class MainMenuScene implements Scene {
             this.engine.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1, 40);
             this.engine.getGraphics().newFont("CalibriBold", "assets/CalibriRegular.ttf", 1, 20);
 
-            this.engine.getGraphics().newImage("Flecha", "assets/arrow.png");
-            this.engine.getGraphics().newImage("Lupa", "assets/lupa.png");
+            this.engine.getGraphics().newImage("GiveUp", "assets/giveUpButton.png");
+            this.engine.getGraphics().newImage("Back", "assets/backButton.png");
             this.engine.getGraphics().newImage("PlayButton", "assets/playButton.png");
 
 
