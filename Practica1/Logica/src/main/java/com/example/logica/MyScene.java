@@ -358,7 +358,7 @@ public class MyScene implements Scene {
             this.engine.paintCell((int)((double)this.engine.getWidth()*0.1180555), (int)((double)this.engine.getHeight()*0.166666), widthAestheticCellY, heightAestheticCellY, -1);
 
             //BOTONES
-            this.engine.drawImage((int)((double)this.engine.getWidth()*0.7916666), (int)((double)this.engine.getHeight()*0.041666), (int)((double)this.engine.getWidth()*0.15), (int)((double)this.engine.getHeight()*0.08), "GiveUp");
+            this.engine.drawImage((int)((double)this.engine.getWidth()*0.8416666), (int)((double)this.engine.getHeight()*0.041666), (int)((double)this.engine.getWidth()*0.15), (int)((double)this.engine.getHeight()*0.08), "GiveUp");
             this.engine.drawText("Comprobar", (int) (checkButton.getPos().getX() + checkButton.getSize().getX() / 3.5), (int) (checkButton.getPos().getY() + checkButton.getSize().getY() / 1.7), "Black", "CalibriBold");
 
             this.engine.drawImage((int)((double)this.engine.getWidth()*0.0138888), (int)((double)this.engine.getHeight()*0.046296), (int)((double)this.engine.getWidth()*0.1), (int)((double)this.engine.getHeight()*0.05), "GiveUp");
