@@ -17,7 +17,6 @@ public class ImageAndroid implements IImage {
         String newFilePath = path.replaceAll("assets/", "");
         try {
             InputStream input = assets.open(newFilePath);
-            //Ni idea de que hace esto, pero gracias google
             image = BitmapFactory.decodeStream(input);
         } catch (IOException e) {
             e.printStackTrace();

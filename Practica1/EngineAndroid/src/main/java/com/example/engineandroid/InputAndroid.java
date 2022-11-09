@@ -102,12 +102,3 @@ class MotionListener implements View.OnGenericMotionListener {
         }
     }
 }
-
-
-//class TouchListener implements View.OnTouchListener {
-//
-//    @Override
-//    public boolean onTouch(View view, MotionEvent motionEvent) {
-//        return false;
-//    }
-//}

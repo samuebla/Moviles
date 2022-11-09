@@ -47,7 +47,6 @@ public class SoundApp implements ISound {
 
     @Override
     public void play() {
-//        this.soundPool.stop(this.soundID);
         this.soundPool.play(this.soundID, this.volume, this.volume, this.priority, this.loop, this.rate);
     }
 

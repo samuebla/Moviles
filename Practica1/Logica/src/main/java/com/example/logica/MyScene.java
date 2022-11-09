@@ -200,7 +200,6 @@ public class MyScene implements Scene {
                 int aux = random.nextInt(cols_);
                 //Dejamos al menos una vacia
                 this.matriz[aux][i].setSolution(false);
-                System.out.println("KAPASAOOOOOOOOOOO  " + aux);
 
                 //Vaciamos la lista
                 xPositionsTopToBottom[i].clear();
@@ -234,8 +233,6 @@ public class MyScene implements Scene {
             }
             //Para meter en el lateral si el ultimo valor de la fila se ha seleccionado
             else if (contAux != 0) {
-                System.out.println("KAPASAOOOOOOOOOOO123123  " );
-
                 xPositionsTopToBottom[i].add(contAux);
             }
         }
@@ -370,8 +367,8 @@ public class MyScene implements Scene {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
                 //Muestra el texto...
-                this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)this.engine.getWidth()*0.34722222), (int)((double)this.engine.getHeight()*0.1111111), "red", "Calibri", 0);
-                this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)this.engine.getWidth()*0.3472222222), (int)((double)this.engine.getHeight()*0.1388888), "red", "Calibri", 0);
+                this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)this.engine.getWidth()/2), (int)((double)this.engine.getHeight()*0.1111111), "red", "Calibri", 0);
+                this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)this.engine.getWidth()/2), (int)((double)this.engine.getHeight()*0.1388888), "red", "Calibri", 0);
 
                 //Renderiza rojo si esta mal
                 for (int i = 0; i < matriz.length; i++) {

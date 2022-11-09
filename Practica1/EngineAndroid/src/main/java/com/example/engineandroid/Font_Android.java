@@ -44,31 +44,16 @@ public class Font_Android implements IFont {
 
     @Override
     public int getSize() {
-        //Esto creo que esta bien :D
         return this.size;
     }
 
     @Override
     public void setSize(int type, int size) {
-//        switch (type){
-//            //NEGRITA
-//            case 1:
-//                font = font.deriveFont(Font.BOLD, size);
-//                break;
-//            //ITALICA
-//            case 2:
-//                font = font.deriveFont(Font.ITALIC, size);
-//                break;
-//            //No se cual es esta la verdad
-//            default:
-//                font = font.deriveFont(Font.TRUETYPE_FONT, size);
-//                break;
-//        }
+        this.size = size;
     }
 
     @Override
     public boolean isBold() {
-        //Algo mal hay por aqui me huele extraño
         return font.isBold();
     }
 
