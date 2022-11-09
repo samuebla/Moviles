@@ -304,6 +304,15 @@ public class MyScene implements Scene {
 
     @Override
     public void render() {
+
+        Vector2D auxCuadradoFinal = this.matriz[cols_-1][rows_-1].getPos();
+        Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
+
+        //El cuadrado se mantiene aunque ganes porque es muy bonito
+        this.engine.drawImage((int)(auxCuadradoInicio.getX()-((double)(this.engine.getWidth())/72.0)), (int)(auxCuadradoInicio.getY()-((double)(this.engine.getHeight())/108)),
+                (int)(auxCuadradoFinal.getX()-auxCuadradoInicio.getX() + engine.getWidth()/36 + this.engine.getWidth()*0.075)
+               , (int)(auxCuadradoFinal.getY()-auxCuadradoInicio.getY() + engine.getHeight()/54 + this.engine.getHeight()*0.05), "Board");
+
         //Si ya he ganado...
         if (won) {
             //Solo renderizo las azules
@@ -350,12 +359,6 @@ public class MyScene implements Scene {
                     engine.drawText(xNumberLeftToRight[i].get(j), (int)((double)this.engine.getWidth()*0.1388888) + (int)((double)this.engine.getWidth()*0.083333) * i, (int)((double)this.engine.getHeight()*0.185185) + (int)((double)this.engine.getHeight()*0.027777) * j, "Black", "CalibriSmall");
                 }
             }
-
-            //CUADRICULAS
-            //Ancha
-            this.engine.paintCell((int)((double)this.engine.getWidth()*0.0208333), (int)((double)this.engine.getHeight()*0.291666), widthAestheticCellX, heightAestheticCellX, -1);
-            //Larga
-            this.engine.paintCell((int)((double)this.engine.getWidth()*0.1180555), (int)((double)this.engine.getHeight()*0.166666), widthAestheticCellY, heightAestheticCellY, -1);
 
             //BOTONES
             this.engine.drawImage((int)((double)checkButton.getPos().getX()), (int)((double)checkButton.getPos().getY()), (int)((double)checkButton.getSize().getX()), (int)((double)checkButton.getSize().getY()), "Check");

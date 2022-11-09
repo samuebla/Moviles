@@ -39,18 +39,19 @@ public class MainMenuScene implements Scene {
             this.engine.getAudio().playSound("background", 0);
             this.engine.getAudio().newSound("effect", "assets/wiiClickSound.wav");
 
+            this.engine.getGraphics().newFont("Amor", "assets/AmorRegular.ttf", 0, 50);
             this.engine.getGraphics().newFont("Calibri", "assets/CalibriRegular.ttf", 0, 25);
-            this.engine.getGraphics().newFont("Cooper", "assets/CooperBlackRegular.ttf", 0, 40);
+            this.engine.getGraphics().newFont("Cooper", "assets/CooperBlackRegular.ttf", 0, 50);
             this.engine.getGraphics().newFont("CalibriSmall", "assets/CalibriRegular.ttf", 1, 18);
             this.engine.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1, 40);
             this.engine.getGraphics().newFont("CalibriBold", "assets/CalibriRegular.ttf", 1, 20);
 
+            this.engine.getGraphics().newImage("Board", "assets/board.png");
             this.engine.getGraphics().newImage("GiveUp", "assets/giveUpButton.png");
             this.engine.getGraphics().newImage("Back", "assets/backButton.png");
             this.engine.getGraphics().newImage("Check", "assets/checkButton.png");
 
             this.engine.getGraphics().newImage("PlayButton", "assets/playButton.png");
-
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
