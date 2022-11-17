@@ -12,7 +12,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Practica1"
+rootProject.name = "Practica2"
 include ':app'
 include ':Interfaces(Engine)'
 include ':Logica'

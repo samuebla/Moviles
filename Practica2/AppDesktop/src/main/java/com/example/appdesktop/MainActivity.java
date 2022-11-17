@@ -20,12 +20,12 @@ public class MainActivity {
     public static void main(String[] args) {
 
         JFrame renderView = new JFrame("NONOGRAMA");
-
         renderView.setSize(720, 1080);
         renderView.setBackground(Color.WHITE);
         renderView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         renderView.setIgnoreRepaint(true);
 
+        
         renderView.setVisible(true);
         renderView.setResizable(true);
 
