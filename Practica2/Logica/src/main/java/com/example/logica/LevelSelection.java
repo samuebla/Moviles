@@ -1,4 +1,5 @@
 package com.example.logica;
+import com.example.engineandroid.*;
 
 public class LevelSelection implements Scene {
 
@@ -11,9 +12,9 @@ public class LevelSelection implements Scene {
 
     private Button backButton;
 
-    private Engine engine;
+    private EngineApp engine;
 
-    public LevelSelection(Engine engineAux){
+    public LevelSelection(EngineApp engineAux){
 
         this.engine = engineAux;
 
@@ -44,9 +45,9 @@ public class LevelSelection implements Scene {
     @Override
     public void update(double deltaTime){
         //Para los eventos...
-        if(engine.getEventMngr().getEvent().eventType != IEventHandler.EventType.NONE) {
+        if(engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
             handleInput();
-            engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
+            engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
     }
 

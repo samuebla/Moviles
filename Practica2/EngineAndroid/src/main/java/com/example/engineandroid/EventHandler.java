@@ -16,6 +16,8 @@ public class EventHandler {
     public IEvent getEvent(){
         return event;
     };
+
+    public EventType getEventType(){ return event.eventType;}
     public void sendEvent(EventType type){
         event.eventType = type;
     };

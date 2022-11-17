@@ -1,5 +1,7 @@
 package com.example.logica;
 
+import com.example.engineandroid.*;
+
 public class HistoryModeMenu implements Scene {
 
     private Button themeButtonMode;
@@ -7,9 +9,9 @@ public class HistoryModeMenu implements Scene {
 
     private Button backButton;
 
-    private Engine engine;
+    private EngineApp engine;
 
-    public HistoryModeMenu(Engine engineAux){
+    public HistoryModeMenu(EngineApp engineAux){
 
         this.engine = engineAux;
 
@@ -33,9 +35,9 @@ public class HistoryModeMenu implements Scene {
 
     public void update(double deltaTime){
         //Para los eventos...
-        if(engine.getEventMngr().getEvent().eventType != IEventHandler.EventType.NONE) {
+        if(engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
             handleInput();
-            engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
+            engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
     }
 

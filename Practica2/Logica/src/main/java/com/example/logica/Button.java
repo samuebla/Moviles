@@ -1,6 +1,5 @@
 package com.example.logica;
-
-import java.awt.geom.Point2D;
+import com.example.engineandroid.*;
 
 //Clase para todos los botones
 public class Button extends Interactive {
@@ -11,7 +10,7 @@ public class Button extends Interactive {
     }
 
     @Override
-    public void render(Engine engine){
+    public void render(EngineApp engine){
 
     }
     @Override
@@ -19,7 +18,7 @@ public class Button extends Interactive {
 
     }
     @Override
-    public void handleInput(Engine engine){
+    public void handleInput(EngineApp engine){
 
     }
 

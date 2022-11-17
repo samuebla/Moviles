@@ -1,12 +1,16 @@
 package com.example.logica;
 
+import com.example.engineandroid.EngineApp;
+
+import com.example.engineandroid.*;
+
 public class MainMenuScene implements Scene {
 
-    private Engine engine;
+    private EngineApp engine;
     private Button fastPlay;
     private Button historyMode;
 
-    public MainMenuScene(Engine engineAux) {
+    public MainMenuScene(EngineApp engineAux) {
         this.engine = engineAux;
     }
 
@@ -45,17 +49,17 @@ public class MainMenuScene implements Scene {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        this.fastPlay = new Button(this.engine.getWidth() / 2 - (engine.getWidth()/6), this.engine.getHeight() / 5, engine.getWidth()/3, engine.getHeight()/4.8);
+        this.fastPlay = new Button(this.engine.getWidth() / 2 - (engine.getWidth() / 6), this.engine.getHeight() / 5, engine.getWidth() / 3, engine.getHeight() / 4.8);
 
-        this.historyMode = new Button(this.engine.getWidth() / 2 - (engine.getWidth()/6), this.engine.getHeight() / 2, engine.getWidth()/3, engine.getHeight()/4.8);
+        this.historyMode = new Button(this.engine.getWidth() / 2 - (engine.getWidth() / 6), this.engine.getHeight() / 2, engine.getWidth() / 3, engine.getHeight() / 4.8);
     }
 
     @Override
     public void update(double deltaTime) {
         //Para los eventos
-        if (this.engine.getEventMngr().getEvent().eventType != IEventHandler.EventType.NONE) {
+        if (this.engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
             handleInput();
-            this.engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
+            this.engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
     }
 
@@ -65,8 +69,8 @@ public class MainMenuScene implements Scene {
         this.engine.drawText("NONOGRAMAS", (int) (this.engine.getWidth() / 2), (int) (this.engine.getHeight() / 10.8), "Black", "Cooper", 0);
 
         //Botones
-        this.engine.drawImage((int)this.fastPlay.getPos().getX(),(int)(fastPlay.getPos().getY()) ,(int)(this.fastPlay.getSize ().getX()), (int)(this.fastPlay.getSize ().getY()), "PlayButton");
-        this.engine.drawImage((int)this.historyMode.getPos().getX(),(int)(historyMode.getPos().getY()) ,(int)(this.historyMode.getSize ().getX()), (int)(this.historyMode.getSize ().getY()), "PlayButton");
+        this.engine.drawImage((int) this.fastPlay.getPos().getX(), (int) (fastPlay.getPos().getY()), (int) (this.fastPlay.getSize().getX()), (int) (this.fastPlay.getSize().getY()), "PlayButton");
+        this.engine.drawImage((int) this.historyMode.getPos().getX(), (int) (historyMode.getPos().getY()), (int) (this.historyMode.getSize().getX()), (int) (this.historyMode.getSize().getY()), "PlayButton");
 
     }
 

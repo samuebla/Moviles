@@ -1,7 +1,5 @@
 package com.example.engineandroid;
 
-import com.example.lib.*;
-
 import android.content.res.AssetManager;
 import android.view.SurfaceView;
 
@@ -90,7 +88,7 @@ public class EngineApp implements Runnable{
         this.sceneMngr.pushScene(newScene);
     }
 
-    public void setSceneMngr(ISceneMngr sceneMngrAux){this.sceneMngr = (SceneMngrAndroid) sceneMngrAux;}
+    public void setSceneMngr(SceneMngrAndroid sceneMngrAux){this.sceneMngr = sceneMngrAux;}
 
     public void popScene() {
         this.sceneMngr.popScene();

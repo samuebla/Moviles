@@ -1,4 +1,5 @@
 package com.example.logica;
+import com.example.engineandroid.*;
 
 //Struct
 public class Cell extends Interactive {
@@ -23,12 +24,12 @@ public class Cell extends Interactive {
     }
 
     @Override
-    public void render(Engine engine) {
+    public void render(EngineApp engine) {
         engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
     }
 
     @Override
-    public void handleInput(Engine engine) {
+    public void handleInput(EngineApp engine) {
         switch (type) {
             case EMPTY:
                 type = cellType.SELECTED;
@@ -77,7 +78,7 @@ public class Cell extends Interactive {
     }
 
     //Para el boton de comprobar
-    public void trueRender(Engine engine) {
+    public void trueRender(EngineApp engine) {
         //Si te has equivocado...
         if(key == 1){
             //Renderizamos a rojo
@@ -89,7 +90,7 @@ public class Cell extends Interactive {
     }
 
     //Para la pantalla de Enhorabuena
-    public void solutionRender(Engine engine) {
+    public void solutionRender(EngineApp engine) {
         //Solo renderizo si esta azul
         if(type == cellType.SELECTED){
             engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());

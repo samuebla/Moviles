@@ -3,9 +3,11 @@ package com.example.logica;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.example.engineandroid.*;
+
 public class MyScene implements Scene {
 
-    private Engine engine;
+    private EngineApp engine;
 
     //Tenemos una matriz donde guardaremos las casillas seleccionadas
     private Cell[][] matriz;
@@ -36,7 +38,7 @@ public class MyScene implements Scene {
     boolean showAnswers;
     boolean auxShowAnswer;
 
-    public MyScene(Engine engine, int rows, int cols) {
+    public MyScene(EngineApp engine, int rows, int cols) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
@@ -309,9 +311,9 @@ public class MyScene implements Scene {
             }
         }
 
-        if (engine.getEventMngr().getEvent().eventType != IEventHandler.EventType.NONE) {
+        if (engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
             handleInput();
-            engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
+            engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
 
         //Timer del boton de comprobar

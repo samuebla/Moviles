@@ -1,7 +1,5 @@
 package com.example.engineandroid;
 
-import com.example.lib.IImage;
-
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,7 +7,7 @@ import android.graphics.BitmapFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ImageAndroid implements IImage {
+public class ImageAndroid {
 
     Bitmap image;
 
@@ -27,12 +25,10 @@ public class ImageAndroid implements IImage {
         return image;
     }
 
-    @Override
     public int getWidth() {
         return image.getWidth();
     }
 
-    @Override
     public int getHeight() {
         return image.getHeight();
     }
