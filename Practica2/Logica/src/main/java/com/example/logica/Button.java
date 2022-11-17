@@ -1,8 +1,5 @@
 package com.example.logica;
 
-import com.example.lib.Engine;
-import com.example.lib.Vector2D;
-
 import java.awt.geom.Point2D;
 
 //Clase para todos los botones

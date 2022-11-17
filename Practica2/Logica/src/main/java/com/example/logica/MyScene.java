@@ -1,11 +1,6 @@
 package com.example.logica;
 
-import com.example.lib.*;
-
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.PriorityQueue;
 import java.util.Random;
 
 public class MyScene implements Scene {

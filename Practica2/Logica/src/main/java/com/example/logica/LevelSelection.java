@@ -1,16 +1,5 @@
 package com.example.logica;
 
-import com.example.lib.Engine;
-import com.example.lib.IEventHandler;
-import com.example.lib.IFont;
-import com.example.lib.IImage;
-import com.example.lib.ISound;
-import com.example.lib.Scene;
-import com.example.lib.Vector2D;
-
-import java.awt.geom.Point2D;
-import java.util.HashMap;
-
 public class LevelSelection implements Scene {
 
     private Button button5;

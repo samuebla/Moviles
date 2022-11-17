@@ -1,10 +1,5 @@
 package com.example.logica;
 
-import com.example.lib.Engine;
-import com.example.lib.IEventHandler;
-import com.example.lib.Scene;
-import com.example.lib.Vector2D;
-
 public class MainMenuScene implements Scene {
 
     private Engine engine;
@@ -82,6 +77,11 @@ public class MainMenuScene implements Scene {
             //Te lleva a la pantalla de seleccion
             LevelSelection levelScene = new LevelSelection(this.engine);
             this.engine.setScene(levelScene);
+        }
+        if (inputReceived(this.historyMode.getPos(), this.historyMode.getSize())) {
+            //Te lleva a la pantalla de seleccion
+            HistoryModeMenu historyMode = new HistoryModeMenu(this.engine);
+            this.engine.setScene(historyMode);
         }
     }
 }
