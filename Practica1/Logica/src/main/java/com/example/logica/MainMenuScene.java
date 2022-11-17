@@ -2,20 +2,14 @@ package com.example.logica;
 
 import com.example.lib.Engine;
 import com.example.lib.IEventHandler;
-import com.example.lib.IFont;
-import com.example.lib.IImage;
-import com.example.lib.ISound;
 import com.example.lib.Scene;
 import com.example.lib.Vector2D;
-
-import java.awt.geom.Point2D;
-import java.io.File;
-import java.util.HashMap;
 
 public class MainMenuScene implements Scene {
 
     private Engine engine;
-    private Button play;
+    private Button fastPlay;
+    private Button historyMode;
 
     public MainMenuScene(Engine engineAux) {
         this.engine = engineAux;
@@ -56,8 +50,9 @@ public class MainMenuScene implements Scene {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        this.play = new Button(this.engine.getWidth() / 2 - (engine.getWidth()/6), this.engine.getHeight() / 2.5, engine.getWidth()/3, engine.getHeight()/4.8);
-        System.out.println("Boton[X] " + this.play.pos.getX() +" [Y] " + this.play.pos.getY());
+        this.fastPlay = new Button(this.engine.getWidth() / 2 - (engine.getWidth()/6), this.engine.getHeight() / 5, engine.getWidth()/3, engine.getHeight()/4.8);
+
+        this.historyMode = new Button(this.engine.getWidth() / 2 - (engine.getWidth()/6), this.engine.getHeight() / 2, engine.getWidth()/3, engine.getHeight()/4.8);
     }
 
     @Override
@@ -73,15 +68,17 @@ public class MainMenuScene implements Scene {
     public void render() {
         //Titulo
         this.engine.drawText("NONOGRAMAS", (int) (this.engine.getWidth() / 2), (int) (this.engine.getHeight() / 10.8), "Black", "Cooper", 0);
-        //Boton
-        this.engine.drawImage((int)this.play.getPos().getX(),(int)(play.getPos().getY()) ,(int)(this.play.getSize ().getX()), (int)(this.play.getSize ().getY()), "PlayButton");
+
+        //Botones
+        this.engine.drawImage((int)this.fastPlay.getPos().getX(),(int)(fastPlay.getPos().getY()) ,(int)(this.fastPlay.getSize ().getX()), (int)(this.fastPlay.getSize ().getY()), "PlayButton");
+        this.engine.drawImage((int)this.historyMode.getPos().getX(),(int)(historyMode.getPos().getY()) ,(int)(this.historyMode.getSize ().getX()), (int)(this.historyMode.getSize ().getY()), "PlayButton");
 
     }
 
     @Override
     public void handleInput() {
         //Si pulsas el boton...
-        if (inputReceived(this.play.getPos(), this.play.getSize())) {
+        if (inputReceived(this.fastPlay.getPos(), this.fastPlay.getSize())) {
             //Te lleva a la pantalla de seleccion
             LevelSelection levelScene = new LevelSelection(this.engine);
             this.engine.setScene(levelScene);
