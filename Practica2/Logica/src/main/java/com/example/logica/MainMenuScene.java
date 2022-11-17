@@ -83,5 +83,10 @@ public class MainMenuScene implements Scene {
             LevelSelection levelScene = new LevelSelection(this.engine);
             this.engine.setScene(levelScene);
         }
+        if (inputReceived(this.historyMode.getPos(), this.historyMode.getSize())) {
+            //Te lleva a la pantalla de seleccion
+            HistoryModeMenu historyMode = new HistoryModeMenu(this.engine);
+            this.engine.setScene(historyMode);
+        }
     }
 }
