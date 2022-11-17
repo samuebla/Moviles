@@ -1,7 +1,5 @@
-package com.example.lib;
+package com.example.engineandroid;
 
-
-import java.awt.geom.Point2D;
 
 public interface Scene {
     //Main Functions

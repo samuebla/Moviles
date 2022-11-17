@@ -3,11 +3,7 @@ package com.example.engineandroid;
 import android.view.View;
 import android.view.MotionEvent;
 
-import com.example.lib.IEventHandler;
-import com.example.lib.Input;
-import com.example.lib.Vector2D;
-
-public class InputAndroid implements Input {
+public class InputAndroid {
 
     private TouchListener touchlistener;
     private MotionListener motionlistener;
@@ -16,29 +12,25 @@ public class InputAndroid implements Input {
 
     private float scaleFactor = 1.0f;
 
-    public InputAndroid(IEventHandler eHandler){
+    public InputAndroid(EventHandler eHandler){
         this.touchCoords = new Vector2D(-1,-1);
         this.touchlistener = new TouchListener(this, eHandler);
         this.motionlistener = new MotionListener(this, eHandler);
         offset = new Vector2D();
     }
 
-    @Override
     public Vector2D getRawCoords() {
         return new Vector2D(this.touchCoords.getX(), this.touchCoords.getY());
     }
 
-    @Override
     public Vector2D getScaledCoords() {
         return new Vector2D((getRawCoords().getX() - offset.getX())/scaleFactor, (getRawCoords().getY()  - offset.getY())/scaleFactor);
     }
 
-    @Override
     public void setRawCoords(int x, int y) {
         this.touchCoords.set(x, y);
     }
 
-    @Override
     public void setScaleFactor(float scale) {
         this.scaleFactor = scale;
     }
@@ -57,9 +49,9 @@ public class InputAndroid implements Input {
 
 class TouchListener implements View.OnTouchListener {
     InputAndroid inputAndroid;
-    IEventHandler eventHandler;
+    EventHandler eventHandler;
 
-    public TouchListener(InputAndroid iAndroid, IEventHandler eHandler){
+    public TouchListener(InputAndroid iAndroid, EventHandler eHandler){
         this.inputAndroid = iAndroid;
         this.eventHandler = eHandler;
     }
@@ -74,16 +66,16 @@ class TouchListener implements View.OnTouchListener {
         if(e.getAction() == MotionEvent.ACTION_DOWN){
             this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
             System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
-            this.eventHandler.sendEvent(IEventHandler.EventType.TOUCH);
+            this.eventHandler.sendEvent(EventHandler.EventType.TOUCH);
         }
     }
 }
 
 class MotionListener implements View.OnGenericMotionListener {
     InputAndroid inputAndroid;
-    IEventHandler eventHandler;
+    EventHandler eventHandler;
 
-    public MotionListener(InputAndroid iAndroid, IEventHandler eHandler){
+    public MotionListener(InputAndroid iAndroid, EventHandler eHandler){
         this.inputAndroid = iAndroid;
         this.eventHandler = eHandler;
     }
@@ -98,7 +90,7 @@ class MotionListener implements View.OnGenericMotionListener {
         if(e.getAction() == MotionEvent.ACTION_DOWN){
             this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
             System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
-            this.eventHandler.sendEvent(IEventHandler.EventType.TOUCH);
+            this.eventHandler.sendEvent(EventHandler.EventType.TOUCH);
         }
     }
 }

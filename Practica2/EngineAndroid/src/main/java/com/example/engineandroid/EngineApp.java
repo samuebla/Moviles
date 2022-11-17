@@ -5,13 +5,13 @@ import com.example.lib.*;
 import android.content.res.AssetManager;
 import android.view.SurfaceView;
 
-public class EngineApp implements Engine,Runnable{
+public class EngineApp implements Runnable{
 
     private SurfaceView view;
 
     private RenderAndroid render;
     private InputAndroid input;
-    private IEventHandler eventHandler;
+    private EventHandler eventHandler;
     private AudioAndroid audioMngr;
 
     private Thread renderThread;
@@ -23,17 +23,7 @@ public class EngineApp implements Engine,Runnable{
     public EngineApp(SurfaceView myView){
         this.view = myView;
         this.render = new RenderAndroid(this.view, 4.0f/6.0f);
-        this.eventHandler = new IEventHandler() {
-            @Override
-            public IEvent getEvent() {
-                return event;
-            }
-
-            @Override
-            public void sendEvent(EventType type) {
-                event.eventType = type;
-            }
-        };
+        this.eventHandler = new EventHandler();
         this.input = new InputAndroid(this.eventHandler);
         this.view.setOnTouchListener(this.input.getTouchListener());
 
@@ -41,39 +31,34 @@ public class EngineApp implements Engine,Runnable{
     }
 
 
-    @Override
-    public IGraphics getGraphics(){
+
+    public RenderAndroid getGraphics(){
         return render;
     }
-    @Override
-    public IAudio getAudio(){
+
+    public AudioAndroid getAudio(){
         return audioMngr;
     }
 
     //<<Input>>
-    @Override
-    public Input getInput(){
+    public InputAndroid getInput(){
         return input;
     }
 
-    @Override
-    public IEventHandler getEventMngr() {
+    public EventHandler getEventMngr() {
         return eventHandler;
     }
 
-    @Override
     public int getWidth() {
         int w = this.render.getWidth();
         return w;
     }
 
-    @Override
     public int getHeight() {
         return this.render.getHeight();
     }
     //<<Fin Input>>
 
-    @Override
     public void paintCell(int x, int y, int w, int h, int celltype){
         this.render.paintCell(x, y, w, h, celltype);
     }
@@ -89,36 +74,29 @@ public class EngineApp implements Engine,Runnable{
     //-1 Alineamiento a la izquierda
     //0 Alineamiento en el centro
     //1 Alineamiento a la derecho
-    @Override
     public void drawText(String text, int x, int y, String color, String font, int alignType){
         this.render.drawText(text, x, y, color,font, alignType);
     }
 
-    @Override
     public void drawCircle(float x, float y, float r, String color) {
         this.render.drawCircle(x,y,r,color);
     }
 
-    @Override
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String image){
         this.render.drawImage(x, y, desiredWidth, desiredHeight, image);
     }
 
-    @Override
     public void setScene(Scene newScene) {
         this.sceneMngr.pushScene(newScene);
     }
 
-    @Override
     public void setSceneMngr(ISceneMngr sceneMngrAux){this.sceneMngr = (SceneMngrAndroid) sceneMngrAux;}
 
-    @Override
     public void popScene() {
         this.sceneMngr.popScene();
     }
 
     //blucle principal
-    @Override
     public void run() {
         if (renderThread != Thread.currentThread()) {
             // Evita que cualquiera que no sea esta clase llame a este Runnable en un Thread

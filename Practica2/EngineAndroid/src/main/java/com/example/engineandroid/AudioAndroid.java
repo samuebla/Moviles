@@ -6,12 +6,9 @@ import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 
-import com.example.lib.IAudio;
-import com.example.lib.ISound;
-
 import java.util.HashMap;
 
-public class AudioAndroid implements IAudio {
+public class AudioAndroid {
     private static final String PATH = "";
     private HashMap<String,SoundApp> sounds;
     private SoundPool soundPool;
@@ -44,13 +41,11 @@ public class AudioAndroid implements IAudio {
         this.assets = assetsAux;
     }
 
-    @Override
-    public ISound newSound(String audioName, String path) {
+    public SoundApp newSound(String audioName, String path) {
         //Guarda en los sounds y crea el nuevo sonido
         return this.sounds.put(audioName, new SoundApp(this.soundPool, PATH + path, this.assets));
     }
 
-    @Override
     public void loadMusic(String audioName, String path){
         //Inicializamos la musica
         this.mediaPlayer.reset();
@@ -68,7 +63,6 @@ public class AudioAndroid implements IAudio {
         this.mediaPlayer.setLooping(true);
     }
 
-    @Override
     public void playSound(String audioName, int type) {
         if (type == 0){
             this.mediaPlayer.start();
@@ -78,7 +72,6 @@ public class AudioAndroid implements IAudio {
         }
     }
 
-    @Override
     public void setLoop(String audioName) {
         this.sounds.get(audioName).setLoop(1);
     }

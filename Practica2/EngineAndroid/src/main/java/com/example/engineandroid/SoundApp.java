@@ -5,9 +5,7 @@ import android.content.res.AssetManager;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 
-import com.example.lib.ISound;
-
-public class SoundApp implements ISound {
+public class SoundApp {
 
     private SoundPool soundPool;
 
@@ -45,17 +43,14 @@ public class SoundApp implements ISound {
         this.volume = volumeAux;
     }
 
-    @Override
     public void play() {
         this.soundPool.play(this.soundID, this.volume, this.volume, this.priority, this.loop, this.rate);
     }
 
-    @Override
     public void stop() {
         this.soundPool.stop(soundID);
     }
 
-    @Override
     public void startLoop() {
         this.loop = 1;
     }

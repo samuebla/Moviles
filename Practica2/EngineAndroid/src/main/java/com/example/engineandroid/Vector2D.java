@@ -1,4 +1,4 @@
-package com.example.lib;
+package com.example.engineandroid;
 
 public class Vector2D {
     private float x, y;

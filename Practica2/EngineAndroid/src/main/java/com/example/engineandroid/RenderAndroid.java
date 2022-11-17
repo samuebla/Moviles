@@ -8,15 +8,9 @@ import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.lib.IFont;
-import com.example.lib.IGraphics;
-import com.example.lib.IImage;
-import com.example.lib.Vector2D;
-
-import java.io.File;
 import java.util.HashMap;
 
-public class RenderAndroid implements IGraphics {
+public class RenderAndroid{
 
     private SurfaceView myView;
     private SurfaceHolder holder;
@@ -119,11 +113,11 @@ public class RenderAndroid implements IGraphics {
 
     }
 
-    @Override
+
     public int getWidth() {
         return (int)(this.frameSize.getX() + posCanvas.getX());
     }
-    @Override
+
     public int getHeight() {
         return (int)(this.frameSize.getY() + posCanvas.getY());
     }
@@ -155,12 +149,12 @@ public class RenderAndroid implements IGraphics {
         return this.posCanvas;
     }
 
-    @Override
+
     public void setResolution(double width, double height) {
         this.canvas.scale((float) width, (float) height);
     }
 
-    @Override
+
     public void setColor(int color) {
         this.paint.setColor(color);
     }
@@ -169,13 +163,13 @@ public class RenderAndroid implements IGraphics {
         this.assets = assetsAux;
     }
 
-    @Override
-    public IImage newImage(String imageName,String path) {
+
+    public ImageAndroid newImage(String imageName,String path) {
         return images.put(imageName,new ImageAndroid(this.assets, path));
     }
 
-    @Override
-    public IFont newFont(String fontName,String path,int type, int size) {
+
+    public Font_Android newFont(String fontName,String path,int type, int size) {
         try{
             return fonts.put(fontName,new Font_Android(path,type,size, this.assets));
         }catch (Exception e){
@@ -184,7 +178,7 @@ public class RenderAndroid implements IGraphics {
         }
     }
 
-    @Override
+
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String imageAux) {
         ImageAndroid image = images.get(imageAux);
         Bitmap map = image.getImage();
@@ -192,7 +186,7 @@ public class RenderAndroid implements IGraphics {
         canvas.drawBitmap(scaledMap, (int)(x), (int)(y), this.paint);
     }
 
-    @Override
+
     public void drawRectangle(int x, int y, int w, int h, boolean fill) {
         if(!fill)
             this.canvas.drawRect(x, y, x + w, y + h, this.paint);
@@ -203,7 +197,7 @@ public class RenderAndroid implements IGraphics {
         }
     }
 
-    @Override
+
     public void drawLine(int x, int y, int w, int h) {
         this.canvas.drawLine(x, y, x + w, y + h, this.paint);
     }
@@ -212,7 +206,7 @@ public class RenderAndroid implements IGraphics {
     //-1 Alineamiento a la izquierda
     //0 Alineamiento en el centro
     //1 Alineamiento a la derecho
-    @Override
+
     public void drawText(String text, int x, int y, String color, String fontAux, int alignType) {
         int prevColor = this.paint.getColor();
         Font_Android font = this.fonts.get(fontAux);

@@ -7,11 +7,10 @@ import android.graphics.Typeface;
 import android.graphics.fonts.Font;
 import android.graphics.fonts.FontStyle;
 
-import com.example.lib.IFont;
 
 import java.io.IOException;
 
-public class Font_Android implements IFont {
+public class Font_Android{
 
     Typeface font;
     int size;
@@ -42,22 +41,18 @@ public class Font_Android implements IFont {
         return font;
     }
 
-    @Override
     public int getSize() {
         return this.size;
     }
 
-    @Override
     public void setSize(int type, int size) {
         this.size = size;
     }
 
-    @Override
     public boolean isBold() {
         return font.isBold();
     }
 
-    @Override
     public boolean isItalic() {
         return font.isItalic();
     }
