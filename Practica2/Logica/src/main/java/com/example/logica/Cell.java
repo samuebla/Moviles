@@ -1,8 +1,5 @@
 package com.example.logica;
 
-import com.example.lib.Engine;
-import com.example.lib.Vector2D;
-
 //Struct
 public class Cell extends Interactive {
 

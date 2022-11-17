@@ -1,10 +1,5 @@
 package com.example.logica;
 
-import com.example.lib.Engine;
-import com.example.lib.IEventHandler;
-import com.example.lib.Scene;
-import com.example.lib.Vector2D;
-
 public class MainMenuScene implements Scene {
 
     private Engine engine;
