@@ -1,5 +1,7 @@
-package com.example.logica;
-import com.example.engineandroid.*;
+package com.example.practica1;
+
+import com.example.engineandroid.EngineApp;
+import com.example.engineandroid.Vector2D;
 
 //Struct
 public class Cell extends Interactive {

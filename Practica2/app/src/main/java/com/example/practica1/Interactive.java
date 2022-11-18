@@ -1,6 +1,7 @@
-package com.example.logica;
+package com.example.practica1;
 
-import com.example.engineandroid.*;
+import com.example.engineandroid.EngineApp;
+import com.example.engineandroid.Vector2D;
 
 //Clase Abstracta para todos los elementos que tengan Input
 public class Interactive {

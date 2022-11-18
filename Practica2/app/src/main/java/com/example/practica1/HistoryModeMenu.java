@@ -1,6 +1,9 @@
-package com.example.logica;
+package com.example.practica1;
 
-import com.example.engineandroid.*;
+import com.example.engineandroid.EngineApp;
+import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.Scene;
+import com.example.engineandroid.Vector2D;
 
 public class HistoryModeMenu implements Scene {
 
@@ -60,13 +63,13 @@ public class HistoryModeMenu implements Scene {
     public void handleInput(){
         //ThemeMode
         if (inputReceived(this.themeButtonMode.getPos(), this.themeButtonMode.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 5);
+            QuickGameScene playScene = new QuickGameScene(this.engine, 5, 5);
             this.engine.setScene(playScene);
         }
 
         //DificultyMode
         if (inputReceived(this.dificultyButtonMode.getPos(), this.dificultyButtonMode.getSize())){
-            MyScene playScene = new MyScene(this.engine, 8, 8);
+            QuickGameScene playScene = new QuickGameScene(this.engine, 8, 8);
             this.engine.setScene(playScene);
         }
 

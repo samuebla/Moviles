@@ -1,11 +1,15 @@
-package com.example.logica;
+package com.example.practica1;
+
+import com.example.engineandroid.EngineApp;
+import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.Scene;
+import com.example.engineandroid.Vector2D;
+
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.example.engineandroid.*;
-
-public class MyScene implements Scene {
+public class QuickGameScene implements Scene{
 
     private EngineApp engine;
 
@@ -38,7 +42,7 @@ public class MyScene implements Scene {
     boolean showAnswers;
     boolean auxShowAnswer;
 
-    public MyScene(EngineApp engine, int rows, int cols) {
+    public QuickGameScene(EngineApp engine, int rows, int cols) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
@@ -342,7 +346,7 @@ public class MyScene implements Scene {
         //El cuadrado se mantiene aunque ganes porque es muy bonito
         this.engine.drawImage((int)(auxCuadradoInicio.getX()-((double)(this.engine.getWidth())/100.0)), (int)(auxCuadradoInicio.getY()-((double)(this.engine.getHeight())/150)),
                 (int)(auxCuadradoFinal.getX()-auxCuadradoInicio.getX() + engine.getWidth()/50 + this.engine.getWidth()*0.075)
-               , (int)(auxCuadradoFinal.getY()-auxCuadradoInicio.getY() + engine.getHeight()/65 + this.engine.getHeight()*0.05), "Board");
+                , (int)(auxCuadradoFinal.getY()-auxCuadradoInicio.getY() + engine.getHeight()/65 + this.engine.getHeight()*0.05), "Board");
 
         //Si ya he ganado...
         if (won) {

@@ -1,5 +1,9 @@
-package com.example.logica;
-import com.example.engineandroid.*;
+package com.example.practica1;
+
+import com.example.engineandroid.EngineApp;
+import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.Scene;
+import com.example.engineandroid.Vector2D;
 
 public class LevelSelection implements Scene {
 
@@ -83,37 +87,37 @@ public class LevelSelection implements Scene {
     public void handleInput(){
         //5x5
         if (inputReceived(this.button5.getPos(), this.button5.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 5);
+            QuickGameScene playScene = new QuickGameScene(this.engine, 5, 5);
             this.engine.setScene(playScene);
         }
 
         //8x8
         if (inputReceived(this.button8.getPos(), this.button8.getSize())){
-            MyScene playScene = new MyScene(this.engine, 8, 8);
+            QuickGameScene playScene = new QuickGameScene(this.engine, 8, 8);
             this.engine.setScene(playScene);
         }
 
         //10x10
         if (inputReceived(this.button10.getPos(), this.button10.getSize())){
-            MyScene playScene = new MyScene(this.engine, 10, 10);
+            QuickGameScene playScene = new QuickGameScene(this.engine, 10, 10);
             this.engine.setScene(playScene);
         }
 
         //5x8
         if (inputReceived(this.button5x8.getPos(), this.button5x8.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 8);
+            QuickGameScene playScene = new QuickGameScene(this.engine, 5, 8);
             this.engine.setScene(playScene);
         }
 
         //8x10
         if (inputReceived(this.button8x10.getPos(), this.button8x10.getSize())){
-            MyScene playScene = new MyScene(this.engine, 8, 10);
+            QuickGameScene playScene = new QuickGameScene(this.engine, 8, 10);
             this.engine.setScene(playScene);
         }
 
         //5x10
         if (inputReceived(this.button5x10.getPos(), this.button5x10.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 10);
+            QuickGameScene playScene = new QuickGameScene(this.engine, 5, 10);
             this.engine.setScene(playScene);
         }
 

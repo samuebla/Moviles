@@ -2,8 +2,6 @@ package com.example.practica1;
 
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.SceneMngrAndroid;
-import com.example.logica.MainMenuScene;
-import com.example.logica.MyScene;
 
 import androidx.appcompat.app.AppCompatActivity;
 

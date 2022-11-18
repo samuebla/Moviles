@@ -1,8 +1,10 @@
-package com.example.logica;
+package com.example.practica1;
 
 import com.example.engineandroid.EngineApp;
+import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.Scene;
+import com.example.engineandroid.Vector2D;
 
-import com.example.engineandroid.*;
 
 public class MainMenuScene implements Scene {
 
