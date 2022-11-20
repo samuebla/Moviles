@@ -5,6 +5,20 @@ import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
+//Ads
+import android.content.Context;
+import android.graphics.Rect;
+import android.os.Bundle;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
+import androidx.appcompat.app.AppCompatActivity;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdSize;
+//import com.google.android.gms.ads.AdView;
+//import com.google.android.gms.ads.MobileAds;
+//import com.google.android.gms.ads.initialization.InitializationStatus;
+//import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 
 public class MainMenuScene implements Scene {
 
@@ -12,9 +26,24 @@ public class MainMenuScene implements Scene {
     private Button fastPlay;
     private Button historyMode;
 
-    public MainMenuScene(EngineApp engineAux) {
+    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
+//    private AdView adView;
+
+    private FrameLayout addContainerView;
+//    private AdSize adsize;
+//    private AdRequest addRequest;
+    Context baseContext;
+    private boolean initialLayoutComplete = false;
+
+    public MainMenuScene(EngineApp engineAux, FrameLayout addContainerViewAux, Context contextAux) {
         this.engine = engineAux;
+        this.addContainerView = addContainerViewAux;
+//        this.adsize = size;
+//        this.addRequest = addRequestAux;
+        this.baseContext = contextAux;
     }
+
+
 
     @Override
     public boolean inputReceived(Vector2D pos, Vector2D size) {
@@ -54,6 +83,26 @@ public class MainMenuScene implements Scene {
         this.fastPlay = new Button(this.engine.getWidth() / 2 - (engine.getWidth() / 6), this.engine.getHeight() / 5, engine.getWidth() / 3, engine.getHeight() / 4.8);
 
         this.historyMode = new Button(this.engine.getWidth() / 2 - (engine.getWidth() / 6), this.engine.getHeight() / 2, engine.getWidth() / 3, engine.getHeight() / 4.8);
+
+
+
+
+
+        //Creacion anuncio
+//        adView = new AdView(this.baseContext);
+//        addContainerView.addView(adView);
+//        // Since we're loading the banner based on the adContainerView size, we need
+//        // to wait until this view is laid out before we can get the width.
+//        addContainerView.getViewTreeObserver().addOnGlobalLayoutListener(
+//                new ViewTreeObserver.OnGlobalLayoutListener() {
+//                    @Override
+//                    public void onGlobalLayout() {
+//                        if (!initialLayoutComplete) {
+//                            initialLayoutComplete = true;
+//                            loadBanner();
+//                        }
+//                    }
+//                });
     }
 
     @Override
@@ -90,4 +139,14 @@ public class MainMenuScene implements Scene {
             this.engine.setScene(historyMode);
         }
     }
+
+//    private void loadBanner() {
+//        adView.setAdUnitId(AD_UNIT_ID);
+//
+//        AdSize adSize = this.adsize;
+//        adView.setAdSize(adSize);
+//
+//        // Start loading the ad in the background.
+//        adView.loadAd(this.addRequest);
+//    }
 }
