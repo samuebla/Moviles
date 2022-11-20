@@ -29,16 +29,16 @@ public class IntentHandler {
     public void checkResolver(){
         Intent share = new Intent(android.content.Intent. ACTION_SEND);
         share.setType( "image/jpeg" );
-        List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(share , 0);
-        if (!resInfo.isEmpty()){
-            for (ResolveInfo info : resInfo) {
-                if (info.activityInfo .packageName .toLowerCase().contains(nameApp) ||
-                        info. activityInfo .name.toLowerCase().contains(nameApp)) {
-                    share.setPackage(info.activityInfo.packageName);
-                // add other info if necessary
-                }
-            }
-            context.startActivity(share) ;
-        }
+//        List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(share , 0);
+//        if (!resInfo.isEmpty()){
+//            for (ResolveInfo info : resInfo) {
+//                if (info.activityInfo .packageName .toLowerCase().contains(nameApp) ||
+//                        info. activityInfo .name.toLowerCase().contains(nameApp)) {
+//                    share.setPackage(info.activityInfo.packageName);
+//                // add other info if necessary
+//                }
+//            }
+//            context.startActivity(share) ;
+//        }
     }
 }

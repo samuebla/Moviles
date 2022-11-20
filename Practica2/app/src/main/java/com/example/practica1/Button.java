@@ -26,18 +26,18 @@ public class Button extends Interactive {
 
     @Override
     public void setSize(int w, int h){
-        setSize(w,h);
+        super.setSize(w,h);
     };
     @Override
     public void setPos(int x, int y){
-        setPos(x, y);
+        super.setPos(x, y);
     };
 
     public Vector2D getPos(){
-        return getPos();
+        return super.getPos();
     }
 
     public Vector2D getSize(){
-        return getSize();
+        return super.getSize();
     }
 }

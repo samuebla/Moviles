@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
         this.engine.setSceneMngr(this.sceneMngr);
 
-        engine.resume();
-//        MainMenuScene mainMenuScene = new MainMenuScene(this.engine);
-//        this.engine.setScene(mainMenuScene);
+        MainMenuScene mainMenuScene = new MainMenuScene(this.engine);
+        this.engine.setScene(mainMenuScene);
+        this.engine.resume();
     }
 
     @Override
