@@ -7,13 +7,12 @@ import com.example.engineandroid.Vector2D;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 
-public class GameScene implements Scene {
+public class HistoryModeGameScene implements Scene {
     private EngineApp engine;
 
     //Tenemos una matriz donde guardaremos las casillas seleccionadas
-    private Cell[][] matriz;
+    private CellHistoryMode[][] matriz;
 
     int rows_, cols_;
 
@@ -38,9 +37,8 @@ public class GameScene implements Scene {
     double timer;
     boolean won;
     boolean showAnswers;
-    boolean auxShowAnswer;
 
-    public GameScene(EngineApp engine, int rows, int cols, File file) {
+    public HistoryModeGameScene(EngineApp engine, int rows, int cols, File file) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
@@ -48,13 +46,12 @@ public class GameScene implements Scene {
         init();
 
         //Creamos la matriz con el tamaño
-        this.matriz = new Cell[cols][rows];
+        this.matriz = new CellHistoryMode[cols][rows];
 
         //Seteamos valores iniciales
         remainingCells = 0;
         wrongCells = 0;
         showAnswers = false;
-        auxShowAnswer = false;
         won = false;
         timer = 0;
 
@@ -84,17 +81,17 @@ public class GameScene implements Scene {
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
                 //Primero J que son las columnas en X y luego las filas en Y
-                this.matriz[j][i] = new Cell((int)((double)this.engine.getWidth()*0.125) + (int)((double)this.engine.getWidth()*0.083333) * j,
-                        (int)((double)this.engine.getHeight()*0.296296296) + (int)((double)this.engine.getHeight()*0.055555555) * i, (int)((double)this.engine.getWidth()*0.075), (int)((double)this.engine.getHeight()*0.05));
+                this.matriz[j][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * j,
+                        (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05));
             }
         }
 
         //Tamaño de las cuadriculas que recubren el nonograma
-        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int)((double)this.engine.getWidth()*0.0625);
-        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + (int)((double)this.engine.getHeight()*0.0601851));
+        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int) ((double) this.engine.getWidth() * 0.0625);
+        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + (int) ((double) this.engine.getHeight() * 0.0601851));
 
-        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + (int)((double)this.engine.getWidth()*0.0902777);
-        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - (int)((double)this.engine.getHeight()*0.111111111));
+        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + (int) ((double) this.engine.getWidth() * 0.0902777);
+        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - (int) ((double) this.engine.getHeight() * 0.111111111));
     }
 
     @Override
@@ -125,10 +122,10 @@ public class GameScene implements Scene {
         }
 
         //Seteamos los botones
-        this.giveUpButton = new Button((double)this.engine.getWidth()*0.01388888, (double)this.engine.getHeight()*0.04629629,
-                (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.10);
-        this.backButton = new Button((double)this.engine.getWidth()*0.44444444, (double)this.engine.getHeight()/1.1,
-                (double)this.engine.getWidth()/10, (double)this.engine.getHeight()/15);
+        this.giveUpButton = new Button((double) this.engine.getWidth() * 0.01388888, (double) this.engine.getHeight() * 0.04629629,
+                (double) this.engine.getWidth() * 0.1666666, (double) this.engine.getHeight() * 0.10);
+        this.backButton = new Button((double) this.engine.getWidth() * 0.44444444, (double) this.engine.getHeight() / 1.1,
+                (double) this.engine.getWidth() / 10, (double) this.engine.getHeight() / 15);
     }
 
     @Override
@@ -147,30 +144,19 @@ public class GameScene implements Scene {
         //Timer del boton de comprobar
         if (timer > 0) {
             timer -= deltaTime;
-        } else if (auxShowAnswer) {
-            showAnswers = false;
-            wrongCells = 0;
-            for (int i = 0; i < matriz.length; i++) {
-                for (int j = 0; j < matriz[i].length; j++) {
-                    this.matriz[i][j].changeEmptyCells();
-                }
-            }
-            auxShowAnswer = false;
-            if (win())
-                won = true;
         }
     }
 
     @Override
     public void render() {
 
-        Vector2D auxCuadradoFinal = this.matriz[cols_-1][rows_-1].getPos();
+        Vector2D auxCuadradoFinal = this.matriz[cols_ - 1][rows_ - 1].getPos();
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 
         //El cuadrado se mantiene aunque ganes porque es muy bonito
-        this.engine.drawImage((int)(auxCuadradoInicio.getX()-((double)(this.engine.getWidth())/100.0)), (int)(auxCuadradoInicio.getY()-((double)(this.engine.getHeight())/150)),
-                (int)(auxCuadradoFinal.getX()-auxCuadradoInicio.getX() + engine.getWidth()/50 + this.engine.getWidth()*0.075)
-                , (int)(auxCuadradoFinal.getY()-auxCuadradoInicio.getY() + engine.getHeight()/65 + this.engine.getHeight()*0.05), "Board");
+        this.engine.drawImage((int) (auxCuadradoInicio.getX() - ((double) (this.engine.getWidth()) / 100.0)), (int) (auxCuadradoInicio.getY() - ((double) (this.engine.getHeight()) / 150)),
+                (int) (auxCuadradoFinal.getX() - auxCuadradoInicio.getX() + engine.getWidth() / 50 + this.engine.getWidth() * 0.075)
+                , (int) (auxCuadradoFinal.getY() - auxCuadradoInicio.getY() + engine.getHeight() / 65 + this.engine.getHeight() * 0.05), "Board");
 
         //Si ya he ganado...
         if (won) {
@@ -182,33 +168,33 @@ public class GameScene implements Scene {
             }
 
             //Mensaje de enhorabuena
-            this.engine.drawText("ENHORABUENA!", (int)((double)this.engine.getWidth()*0.5), (int)((double)this.engine.getHeight()*0.1111111), "Black", "Cooper", 0);
+            this.engine.drawText("ENHORABUENA!", (int) ((double) this.engine.getWidth() * 0.5), (int) ((double) this.engine.getHeight() * 0.1111111), "Black", "Cooper", 0);
 
             //BackButton
-            this.engine.drawImage((int)(backButton.getPos().getX()), (int)(backButton.getPos().getY()), (int)(backButton.getSize().getX()), (int)(backButton.getSize().getY()), "Back");
+            this.engine.drawImage((int) (backButton.getPos().getX()), (int) (backButton.getPos().getY()), (int) (backButton.getSize().getX()), (int) (backButton.getSize().getY()), "Back");
 
             //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
-                //Renderiza rojo si esta mal
-                for (int i = 0; i < matriz.length; i++) {
-                    for (int j = 0; j < matriz[i].length; j++) {
-                        this.matriz[i][j].trueRender(engine);
-                    }
+            //Renderiza rojo si esta mal
+            for (int i = 0; i < matriz.length; i++) {
+                for (int j = 0; j < matriz[i].length; j++) {
+                    this.matriz[i][j].render(engine);
                 }
+            }
 
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                engine.drawText(xNumberTopToBottom[i], (int)(auxCuadradoInicio.getX()-((double)(this.engine.getWidth())/90.0)), (int)((double)this.engine.getHeight()*0.3240740) + (int)((double)this.engine.getHeight()*0.0555555) * i, "Black", "CalibriSmall", 1);
+                engine.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - ((double) (this.engine.getWidth()) / 90.0)), (int) ((double) this.engine.getHeight() * 0.3240740) + (int) ((double) this.engine.getHeight() * 0.0555555) * i, "Black", "CalibriSmall", 1);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    engine.drawText(xNumberLeftToRight[i].get(j), (int)((double)this.engine.getWidth()*0.155) + (int)((double)this.engine.getWidth()*0.083333) * i, (int)((double)this.engine.getHeight()*0.185185) + (int)((double)this.engine.getHeight()*0.027777) * j, "Black", "CalibriSmall", 0);
+                    engine.drawText(xNumberLeftToRight[i].get(j), (int) ((double) this.engine.getWidth() * 0.155) + (int) ((double) this.engine.getWidth() * 0.083333) * i, (int) ((double) this.engine.getHeight() * 0.185185) + (int) ((double) this.engine.getHeight() * 0.027777) * j, "Black", "CalibriSmall", 0);
                 }
             }
 
             //BOTONES
-            this.engine.drawImage((int)((double)giveUpButton.getPos().getX()), (int)((double)giveUpButton.getPos().getY()), (int)((double)giveUpButton.getSize().getX()), (int)((double)giveUpButton.getSize().getY()), "GiveUp");
+            this.engine.drawImage((int) ((double) giveUpButton.getPos().getX()), (int) ((double) giveUpButton.getPos().getY()), (int) ((double) giveUpButton.getSize().getX()), (int) ((double) giveUpButton.getSize().getY()), "GiveUp");
         }
     }
 
@@ -259,11 +245,11 @@ public class GameScene implements Scene {
     }
 
     //Metodos de lectura y guardado
-    public void loadFromFile(String file){
+    public void loadFromFile(String file) {
 
     }
 
-    public void saveToFile(String fileName){
+    public void saveToFile(String fileName) {
 
     }
 
