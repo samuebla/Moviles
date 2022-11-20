@@ -14,7 +14,7 @@ public class QuickGameScene implements Scene{
     private EngineApp engine;
 
     //Tenemos una matriz donde guardaremos las casillas seleccionadas
-    private Cell[][] matriz;
+    private CellQuickGame[][] matriz;
 
     int rows_, cols_;
 
@@ -53,7 +53,7 @@ public class QuickGameScene implements Scene{
         Random random = new Random();
 
         //Creamos la matriz con el tamaño
-        this.matriz = new Cell[cols][rows];
+        this.matriz = new CellQuickGame[cols][rows];
 
         //Seteamos valores iniciales
         remainingCells = 0;
@@ -89,7 +89,7 @@ public class QuickGameScene implements Scene{
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
                 //Primero J que son las columnas en X y luego las filas en Y
-                this.matriz[j][i] = new Cell((int)((double)this.engine.getWidth()*0.125) + (int)((double)this.engine.getWidth()*0.083333) * j,
+                this.matriz[j][i] = new CellQuickGame((int)((double)this.engine.getWidth()*0.125) + (int)((double)this.engine.getWidth()*0.083333) * j,
                         (int)((double)this.engine.getHeight()*0.296296296) + (int)((double)this.engine.getHeight()*0.055555555) * i, (int)((double)this.engine.getWidth()*0.075), (int)((double)this.engine.getHeight()*0.05));
             }
         }
