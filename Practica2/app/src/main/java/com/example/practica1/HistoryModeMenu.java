@@ -63,7 +63,7 @@ public class HistoryModeMenu implements Scene {
     public void handleInput(){
         //ThemeMode
         if (inputReceived(this.themeButtonMode.getPos(), this.themeButtonMode.getSize())){
-            QuickGameScene playScene = new QuickGameScene(this.engine, 5, 5);
+            ThemeModeMenu playScene = new ThemeModeMenu(this.engine);
             this.engine.setScene(playScene);
         }
 
