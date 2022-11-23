@@ -5,6 +5,8 @@ import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
+import java.io.File;
+
 public class ThemeModeMenu implements Scene {
 
 
@@ -79,23 +81,23 @@ public class ThemeModeMenu implements Scene {
     public void handleInput(){
         //Tetarracas
         if (inputReceived(this.tetarracasButtonMode.getPos(), this.tetarracasButtonMode.getSize())){
-            QuickGameScene playScene = new QuickGameScene(this.engine, 5, 5);
+            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, new File("mypepeAAAAAAAAA"));
             this.engine.setScene(playScene);
         }
 
         //Mamelungas
         if (inputReceived(this.mamelungasButtonMode.getPos(), this.mamelungasButtonMode.getSize())){
-            QuickGameScene playScene = new QuickGameScene(this.engine, 8, 8);
+            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 8, 8,new File("mypepeAAAAAAAAA"));
             this.engine.setScene(playScene);
         }
         //Bubalongas
         if (inputReceived(this.bubalongasButtonMode.getPos(), this.bubalongasButtonMode.getSize())){
-            QuickGameScene playScene = new QuickGameScene(this.engine, 5, 5);
+            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,new File("mypepeAAAAAAAAA"));
             this.engine.setScene(playScene);
         }
         //Bakugans
         if (inputReceived(this.bakugansButtonMode.getPos(), this.bakugansButtonMode.getSize())){
-            QuickGameScene playScene = new QuickGameScene(this.engine, 5, 5);
+            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,new File("mypepeAAAAAAAAA"));
             this.engine.setScene(playScene);
         }
 

@@ -16,8 +16,11 @@ public class HistoryModeGameScene implements Scene {
 
     int rows_, cols_;
 
+    //LAS MONEDAS TIENEN QUE ESTAS EN UN TXT A PARTE PARA SUMAR Y RESTAR SIN IMPORTAR EL NIVEL Y QUE SIEMPRE SE GUARDEN AAAAA
+    int lives,coins;
+
     //Para mostrar en pantallas la info de las celdas
-    int remainingCells, wrongCells, maxCellsSolution;
+    int remainingCells, maxCellsSolution;
 
     private Button giveUpButton;
     private Button backButton;
@@ -50,10 +53,10 @@ public class HistoryModeGameScene implements Scene {
 
         //Seteamos valores iniciales
         remainingCells = 0;
-        wrongCells = 0;
         showAnswers = false;
         won = false;
         timer = 0;
+        lives = 3;
 
         rows_ = rows;
         cols_ = cols;
@@ -172,7 +175,6 @@ public class HistoryModeGameScene implements Scene {
 
             //BackButton
             this.engine.drawImage((int) (backButton.getPos().getX()), (int) (backButton.getPos().getY()), (int) (backButton.getSize().getX()), (int) (backButton.getSize().getY()), "Back");
-
             //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
@@ -195,6 +197,15 @@ public class HistoryModeGameScene implements Scene {
 
             //BOTONES
             this.engine.drawImage((int) ((double) giveUpButton.getPos().getX()), (int) ((double) giveUpButton.getPos().getY()), (int) ((double) giveUpButton.getSize().getX()), (int) ((double) giveUpButton.getSize().getY()), "GiveUp");
+
+            //ESTO ESTA SIN TESTEAR.
+            //MONEDAS
+            this.engine.drawText(Integer.toString(coins),engine.getWidth()- 50, 15,"Black","CalibriSmall",0);
+            this.engine.drawImage((int)(engine.getWidth() - 30), 30,30,30,"Back");
+            //CORAZONES
+            for(int i=0;i<lives;i++){
+                this.engine.drawImage((int)(engine.getWidth()/2) + i*20, (int)(engine.getHeight()/1.4),20,20,"Back");
+            }
         }
     }
 
@@ -207,24 +218,17 @@ public class HistoryModeGameScene implements Scene {
                     this.matriz[i][j].handleInput(engine);
                     //1 Si esta mal
                     //2 Si lo seleccionas y esta bien
-                    //3 Si estaba mal seleccionado y lo deseleccionas
-                    //4 Si estaba bien seleccionado y lo deseleccionas
                     int key = this.matriz[i][j].keyCell();
+                    //Fallo
                     if (key == 1) {
-                        wrongCells++;
+                        //Restamos una vida
+                        lives--;
+                    //Acierto
                     } else if (key == 2) {
                         remainingCells--;
                         if (win()) {
                             won = true;
                         }
-                    } else if (key == 3) {
-                        //Lo eliminamos de estas celdas
-                        wrongCells--;
-                        if (win()) {
-                            won = true;
-                        }
-                    } else if (key == 4) {
-                        remainingCells++;
                     }
                     //Y playeamos el sonido
                     engine.getAudio().playSound("effect", 1);
@@ -255,6 +259,6 @@ public class HistoryModeGameScene implements Scene {
 
     //Comprueba si has ganado o no
     private boolean win() {
-        return remainingCells == 0 && wrongCells == 0;
+        return remainingCells == 0;
     }
 }
