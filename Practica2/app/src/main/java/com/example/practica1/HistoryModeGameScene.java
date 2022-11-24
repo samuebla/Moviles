@@ -1,11 +1,20 @@
 package com.example.practica1;
 
+import android.os.Environment;
+import android.util.Log;
+
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class HistoryModeGameScene implements Scene {
@@ -17,7 +26,7 @@ public class HistoryModeGameScene implements Scene {
     int rows_, cols_;
 
     //LAS MONEDAS TIENEN QUE ESTAS EN UN TXT A PARTE PARA SUMAR Y RESTAR SIN IMPORTAR EL NIVEL Y QUE SIEMPRE SE GUARDEN AAAAA
-    int lives,coins;
+    int lives, coins;
 
     //Para mostrar en pantallas la info de las celdas
     int remainingCells, maxCellsSolution;
@@ -41,12 +50,11 @@ public class HistoryModeGameScene implements Scene {
     boolean won;
     boolean showAnswers;
 
-    public HistoryModeGameScene(EngineApp engine, int rows, int cols, File file) {
+    public HistoryModeGameScene(EngineApp engine, int rows, int cols, String file) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
 
-        init();
 
         //Creamos la matriz con el tamaño
         this.matriz = new CellHistoryMode[cols][rows];
@@ -88,6 +96,10 @@ public class HistoryModeGameScene implements Scene {
                         (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05));
             }
         }
+        //Cargamos la info de la matriz
+        loadFromFile(file);
+
+        init();
 
         //Tamaño de las cuadriculas que recubren el nonograma
         widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int) ((double) this.engine.getWidth() * 0.0625);
@@ -200,11 +212,11 @@ public class HistoryModeGameScene implements Scene {
 
             //ESTO ESTA SIN TESTEAR.
             //MONEDAS
-            this.engine.drawText(Integer.toString(coins),engine.getWidth()- 50, 15,"Black","CalibriSmall",0);
-            this.engine.drawImage((int)(engine.getWidth() - 30), 30,30,30,"Back");
+            this.engine.drawText(Integer.toString(coins), engine.getWidth() - 50, 15, "Black", "CalibriSmall", 0);
+            this.engine.drawImage((int) (engine.getWidth() - 30), 30, 30, 30, "Back");
             //CORAZONES
-            for(int i=0;i<lives;i++){
-                this.engine.drawImage((int)(engine.getWidth()/2) + i*20, (int)(engine.getHeight()/1.4),20,20,"Back");
+            for (int i = 0; i < lives; i++) {
+                this.engine.drawImage((int) (engine.getWidth() / 2) + i * 20, (int) (engine.getHeight() / 1.4), 20, 20, "Back");
             }
         }
     }
@@ -223,7 +235,7 @@ public class HistoryModeGameScene implements Scene {
                     if (key == 1) {
                         //Restamos una vida
                         lives--;
-                    //Acierto
+                        //Acierto
                     } else if (key == 2) {
                         remainingCells--;
                         if (win()) {
@@ -250,6 +262,30 @@ public class HistoryModeGameScene implements Scene {
 
     //Metodos de lectura y guardado
     public void loadFromFile(String file) {
+        try {
+            InputStream inputStream = this.engine.getContext().openFileInput(file);
+
+            if (inputStream != null) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ((receiveString = bufferedReader.readLine()) != null) {
+
+
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+                inputStream.close();
+            }
+        } catch (
+                FileNotFoundException e) {
+            Log.e("Error", "File not found: " + e.toString());
+        } catch (
+                IOException e) {
+            Log.e("Reading Error", "Can not read file: " + e.toString());
+        }
 
     }
 
