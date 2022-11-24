@@ -2,6 +2,12 @@ package com.example.practica1;
 
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.SceneMngrAndroid;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 //import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.AdSize;
 //import com.google.android.gms.ads.MobileAds;
@@ -31,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     private FrameLayout adContainerView;
 
+    AdView mAdView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +47,11 @@ public class MainActivity extends AppCompatActivity {
         this.renderView = new SurfaceView(this);
         setContentView(this.renderView);
 
-        // Initialize the Mobile Ads SDK.
-//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-//            @Override
-//            public void onInitializationComplete(InitializationStatus initializationStatus) { }
-//        });
+        //Initialize the Mobile Ads SDK.
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) { }
+        });
 
         getSupportActionBar().hide();
         this.engine = new EngineApp(this.renderView);
@@ -58,6 +66,13 @@ public class MainActivity extends AppCompatActivity {
 
         //AAAAAAAAAAAAAAAAAAAAA
 //        this.adContainerView = findViewById(R.id.ad_view_container);
+
+        mAdView = new AdView(this);
+        mAdView.setAdSize(AdSize.BANNER);
+        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         MainMenuScene mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
         this.engine.setScene(mainMenuScene);

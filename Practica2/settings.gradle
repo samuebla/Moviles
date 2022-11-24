@@ -11,6 +11,11 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
 rootProject.name = "Practica2"
 include ':app'
