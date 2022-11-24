@@ -2,9 +2,11 @@ package com.example.practica1;
 
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.SceneMngrAndroid;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -14,16 +16,26 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 //import com.google.android.gms.ads.initialization.InitializationStatus;
 //import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Rect;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.WindowMetrics;
 import android.widget.FrameLayout;
 
 import java.io.File;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,9 +55,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_main);
+
         //Creamos el SurfaceView que "contendrá" nuestra escena
-        this.renderView = new SurfaceView(this);
-        setContentView(this.renderView);
+        this.renderView = findViewById(R.id.surfaceView);
+
+
+
 
         //Initialize the Mobile Ads SDK.
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -66,15 +82,76 @@ public class MainActivity extends AppCompatActivity {
 
         this.engine.setSceneMngr(this.sceneMngr);
 
-        //AAAAAAAAAAAAAAAAAAAAA
-//        this.adContainerView = findViewById(R.id.ad_view_container);
-
-        mAdView = new AdView(this);
-        mAdView.setAdSize(AdSize.BANNER);
-        mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-
+        //Add Initialization ----------------------------------------------
+        mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+            }
+
+            @Override
+            public void onAdImpression() {
+                // Code to be executed when an impression is recorded
+                // for an ad.
+            }
+
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+        });
+
+        //---------------------------------------------------------------------
+
+        //Intent example
+        //sendIntent(0, "https://twitter.com/intent/tweet", "oh wow Prueba");
+
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+//        if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
+//            CharSequence name = getString(R.string.channel_name) ;
+//            String description = getString(R.string.channel_description) ;
+//            int importance = NotificationManager. IMPORTANCE_DEFAULT;
+//            NotificationChannel channel = new NotificationChannel(NotificationChannel.DEFAULT_CHANNEL_ID , name, importance) ;
+//            channel.setDescription(description) ;
+//            // Register the channel with the system; you can't change the importance
+//            // or other notification behaviors after this
+//            NotificationManager notificationManager = getSystemService(NotificationManager. class);
+//            notificationManager.createNotificationChannel(channel);
+//        }
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder( this, CHANNEL_ID)
+//                .setSmallIcon(R.drawable.notification_icon)
+//                .setContentTitle( "My notification" )
+//                .setContentText( "Much longer text that cannot fit one line..." )
+//                .setStyle( new NotificationCompat.BigTextStyle()
+//                        .bigText( "Much longer text that cannot fit one line..." ))
+//                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
+
+
+
+
 
         MainMenuScene mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
         this.engine.setScene(mainMenuScene);
@@ -91,6 +168,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         this.engine.pause();
+    }
+
+    public void sendIntent(int sendType, String url, String message){
+        Uri builtURI = Uri. parse(url ).buildUpon()
+                .appendQueryParameter( "text", message)
+                .build() ; //Genera la URl https://twitter.com/intent/tweet?text=Este%20es%20mi%20texto%20a%20tweettear
+        Intent intent = new Intent(Intent. ACTION_VIEW, builtURI);
+        this.startActivity(intent) ; // inicializa el intent
+    }
+
+    //Para comprobar la lista de aplicaciones que pueden abrir el intent
+    public void checkResolver(){
+        Intent share = new Intent(android.content.Intent. ACTION_SEND);
+        share.setType( "image/jpeg" );
+//        List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(share , 0);
+//        if (!resInfo.isEmpty()){
+//            for (ResolveInfo info : resInfo) {
+//                if (info.activityInfo .packageName .toLowerCase().contains(nameApp) ||
+//                        info. activityInfo .name.toLowerCase().contains(nameApp)) {
+//                    share.setPackage(info.activityInfo.packageName);
+//                // add other info if necessary
+//                }
+//            }
+//            context.startActivity(share) ;
+//        }
     }
 
 //    private AdRequest getAdRequest() {

@@ -123,7 +123,8 @@ public class RenderAndroid{
     }
 
     public int getViewWidth() {
-        return this.myView.getWidth();
+        int width = this.myView.getWidth();
+        return width;
     }
 
     public int getViewHeight() {
