@@ -2,6 +2,7 @@ package com.example.practica1;
 
 import android.os.Environment;
 import android.util.Log;
+import android.util.Pair;
 
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
@@ -263,7 +264,7 @@ public class HistoryModeGameScene implements Scene {
     //Metodos de lectura y guardado
     public void loadFromFile(String file) {
         try {
-            InputStream inputStream = this.engine.getContext().openFileInput(file);
+            InputStream inputStream = this.engine.getContext().getAssets().open(file);
 
             if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -271,11 +272,24 @@ public class HistoryModeGameScene implements Scene {
                 String receiveString = "";
                 StringBuilder stringBuilder = new StringBuilder();
 
-                while ((receiveString = bufferedReader.readLine()) != null) {
+                while (bufferedReader.ready()) {
+                    receiveString += bufferedReader.readLine();
 
-
-                    stringBuilder.append("\n").append(receiveString);
                 }
+                String [] fileRead;
+                fileRead = receiveString.split(" ");
+                rows_ = Integer.parseInt(fileRead[0]);
+                rows_ = Integer.parseInt(fileRead[1]);
+                int w = 0;
+                for(int i = 2; i < rows_+2; ++i){
+                    for(int j = 2; j < cols_+2; ++j){
+                        System.out.print(fileRead[j+i]);
+                    }
+                    System.out.println();
+                }
+                System.out.println("CHUAKALA" + receiveString);
+                stringBuilder.append(" ").append(receiveString);
+                System.out.println("CHUAKALA" + receiveString);
 
                 inputStream.close();
             }
