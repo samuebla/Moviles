@@ -279,17 +279,13 @@ public class HistoryModeGameScene implements Scene {
                 String [] fileRead;
                 fileRead = receiveString.split(" ");
                 rows_ = Integer.parseInt(fileRead[0]);
-                rows_ = Integer.parseInt(fileRead[1]);
-                int w = 0;
-                for(int i = 2; i < rows_+2; ++i){
+                cols_ = Integer.parseInt(fileRead[1]);
+                for(int i = 0; i < rows_; ++i){
                     for(int j = 2; j < cols_+2; ++j){
-                        System.out.print(fileRead[j+i]);
+                        System.out.print(fileRead[rows_*i+j]);
                     }
                     System.out.println();
                 }
-                System.out.println("CHUAKALA" + receiveString);
-                stringBuilder.append(" ").append(receiveString);
-                System.out.println("CHUAKALA" + receiveString);
 
                 inputStream.close();
             }
