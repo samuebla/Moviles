@@ -12,12 +12,14 @@ public class HistoryModeMenu implements Scene {
 
     private Button backButton;
 
+    private Integer coins;
+    private Integer coinSize;
     private EngineApp engine;
 
     public HistoryModeMenu(EngineApp engineAux){
 
         this.engine = engineAux;
-
+        coinSize = engine.getWidth()/10;
         init();
     }
 
@@ -33,7 +35,7 @@ public class HistoryModeMenu implements Scene {
         //Botones selectores del nivel
         this.themeButtonMode = new Button(engine.getWidth()/4  - engine.getWidth()/8, engine.getHeight()/2, engine.getWidth()/4, engine.getHeight()/6);
         this.dificultyButtonMode = new Button(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/2, engine.getWidth()/4, engine.getHeight()/6);
-        this.backButton = new Button(engine.getWidth()/72 + engine.getWidth()/44, engine.getHeight()/22, engine.getWidth()/10, engine.getHeight()/15);
+        this.backButton = new Button(10 + engine.getWidth()/44, 30, engine.getWidth()/10, engine.getHeight()/15);
     }
 
     public void update(double deltaTime){
@@ -54,10 +56,11 @@ public class HistoryModeMenu implements Scene {
         this.engine.drawText("Dificultad", (int)(dificultyButtonMode.getPos().getX() + dificultyButtonMode.getSize().getX()/2), (int)(dificultyButtonMode.getPos().getY() - dificultyButtonMode.getSize().getY()*0.5), "Black","Amor", 0);
 
         //Back Button
-        this.engine.drawImage(engine.getWidth()/72, engine.getHeight()/22,(int)(backButton.getSize().getX()),(int)(backButton.getSize().getY()), "Back");
+        this.engine.drawImage((int)backButton.getPos().getX(), (int)backButton.getPos().getY(),(int)(backButton.getSize().getX()),(int)(backButton.getSize().getY()), "Back");
 
         //Texto indicativo
         this.engine.drawText("Selecciona el modo de Juego", (int)(engine.getWidth()/2), (int)(engine.getHeight()/5.4), "Black", "Amor", 0);
+        this.engine.drawImage(engine.getWidth()-coinSize -10, 10,coinSize,coinSize,"Coin");
     }
 
     public void handleInput(){
