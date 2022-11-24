@@ -1,5 +1,6 @@
 package com.example.engineandroid;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.view.SurfaceView;
 
@@ -17,6 +18,8 @@ public class EngineApp implements Runnable{
     private boolean running;
 
     private SceneMngrAndroid sceneMngr;
+
+    private Context context;
 
     public EngineApp(SurfaceView myView){
         this.view = myView;
@@ -64,6 +67,14 @@ public class EngineApp implements Runnable{
     public void setAssetsContext(AssetManager assetsAux){
         this.render.setAssetContext(assetsAux);
         this.audioMngr.setAssetsManager(assetsAux);
+    }
+
+    public void setBaseContext(Context con){
+        this.context = con;
+    }
+
+    public Context getContext(){
+        return this.context;
     }
 
     //<<< API >>>

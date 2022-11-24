@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         this.assetManager = this.getBaseContext().getAssets();
 
+        this.engine.setBaseContext(this.getBaseContext());
+
         this.engine.setAssetsContext(this.assetManager);
 
         this.sceneMngr = new SceneMngrAndroid();
