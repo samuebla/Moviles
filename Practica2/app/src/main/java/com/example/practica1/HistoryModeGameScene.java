@@ -236,9 +236,14 @@ public class HistoryModeGameScene implements Scene {
                     if (key == 1) {
                         //Restamos una vida
                         lives--;
-                        //Acierto
+                        //5 Si lo seleccionas
+                        this.matriz[i][j].key = 5;
+                    //Acierto
                     } else if (key == 2) {
                         remainingCells--;
+                        //5 Si lo seleccionas
+                        this.matriz[i][j].key = 5;
+                        
                         if (win()) {
                             won = true;
                         }
@@ -276,13 +281,38 @@ public class HistoryModeGameScene implements Scene {
                     receiveString += bufferedReader.readLine();
 
                 }
-                String [] fileRead;
+                String[] fileRead;
                 fileRead = receiveString.split(" ");
                 rows_ = Integer.parseInt(fileRead[0]);
                 cols_ = Integer.parseInt(fileRead[1]);
-                for(int i = 0; i < rows_; ++i){
-                    for(int j = 2; j < cols_+2; ++j){
-                        System.out.print(fileRead[rows_*i+j]);
+
+                for (int i = 0; i < rows_; i++) {
+
+                    for (int j = 2; j < cols_ + 2; j++) {
+                        System.out.print(fileRead[rows_ * i + j]);
+
+                        int aux = Integer.parseInt(fileRead[rows_ * i + j]);
+
+                        //Si es 0 NO SE RELLENA
+                        if (aux == 0) {
+
+                            this.matriz[j-2][i].setSolution(false);
+                        }
+                        //Si es 1 se rellena
+                        else if (aux == 1) {
+                            //Lo añadimos a la lista de celdas que tiene que acertar el jugador
+                            remainingCells++;
+
+                            this.matriz[j-2][i].setSolution(true);
+
+                        }
+                        //Si esta mal seleccionada y esta roja...
+                        else if(aux==2){
+                            this.matriz[j-2][i].setSolution(true);
+
+                            //Con esto seteamos que no es la solucion pero está mal seleccionado
+                            this.matriz[j-2][i].key = 1;
+                        }
                     }
                     System.out.println();
                 }
