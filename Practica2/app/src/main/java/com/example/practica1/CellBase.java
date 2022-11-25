@@ -8,20 +8,8 @@ public class CellBase extends Interactive{
     cellType type;
     boolean solution = false;
 
-
-
-
-
-
-
-    //CREO QUE KEY ES SOLO DE QUICKGAME LUEGO LO MIRARE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
     //Para el contador de celdas restantes y erroneas
     int key;
-
-
-
-
 
     public enum cellType {EMPTY, SELECTED, CROSSED, WRONG}
 

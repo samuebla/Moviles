@@ -238,12 +238,11 @@ public class HistoryModeGameScene implements Scene {
                         lives--;
                         //5 Si lo seleccionas
                         this.matriz[i][j].key = 5;
-                    //Acierto
+                        //Acierto
                     } else if (key == 2) {
                         remainingCells--;
                         //5 Si lo seleccionas
                         this.matriz[i][j].key = 5;
-                        
                         if (win()) {
                             won = true;
                         }
@@ -296,26 +295,40 @@ public class HistoryModeGameScene implements Scene {
                         //Si es 0 NO SE RELLENA
                         if (aux == 0) {
 
-                            this.matriz[j-2][i].setSolution(false);
+                            this.matriz[j - 2][i].setSolution(false);
                         }
                         //Si es 1 se rellena
                         else if (aux == 1) {
                             //Lo añadimos a la lista de celdas que tiene que acertar el jugador
                             remainingCells++;
 
-                            this.matriz[j-2][i].setSolution(true);
+                            this.matriz[j - 2][i].setSolution(true);
 
                         }
                         //Si esta mal seleccionada y esta roja...
-                        else if(aux==2){
-                            this.matriz[j-2][i].setSolution(true);
+                        else if (aux == 2) {
+                            this.matriz[j - 2][i].setSolution(true);
 
                             //Con esto seteamos que no es la solucion pero está mal seleccionado
-                            this.matriz[j-2][i].key = 1;
+                            this.matriz[j - 2][i].key = 1;
                         }
                     }
                     System.out.println();
                 }
+
+                int contador = 0;
+                int numAux = 0;
+                //Ahora leemos las filas y columnas para colocar los indicadores laterales
+
+                //LECTURA INDICACION VERTICAL IZQUIERDA
+                for (int i = 0; i < rows_; i++) {
+                    numAux = Integer.parseInt(fileRead[rows_ * cols_ + 2 + contador]);
+                    for (int j = 0; j < numAux; j++) {
+                        xPositionsTopToBottom[i].add(Integer.parseInt(fileRead[(rows_ * cols_ + 2) + contador + j + 1]));
+                    }
+                    contador += numAux + 1;
+                }
+
 
                 inputStream.close();
             }
