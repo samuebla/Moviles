@@ -329,6 +329,16 @@ public class HistoryModeGameScene implements Scene {
                     contador += numAux + 1;
                 }
 
+                //LECTURA INDICACION HORIZONTAL SUPERIOR
+                for (int i = 0; i < cols_; i++) {
+                    numAux = Integer.parseInt(fileRead[rows_ * cols_ + 2 + contador]);
+                    for (int j = 0; j < numAux; j++) {
+                        xPositionsLeftToRight[i].add(Integer.parseInt(fileRead[(rows_ * cols_ + 2) + contador + j + 1]));
+                    }
+                    contador += numAux + 1;
+                }
+
+
 
                 inputStream.close();
             }
