@@ -12,7 +12,7 @@ public class HistoryModeMenu implements Scene {
 
     private Button backButton;
 
-    private Integer coins;
+    private Integer coins = 0;
     private Integer coinSize;
     private EngineApp engine;
 
@@ -60,7 +60,11 @@ public class HistoryModeMenu implements Scene {
 
         //Texto indicativo
         this.engine.drawText("Selecciona el modo de Juego", (int)(engine.getWidth()/2), (int)(engine.getHeight()/5.4), "Black", "Amor", 0);
-        this.engine.drawImage(engine.getWidth()-coinSize -10, 10,coinSize,coinSize,"Coin");
+
+        //Moneda
+        //MONEDAS
+        this.engine.drawText(Integer.toString(coins), engine.getWidth() - coinSize-10, (int)engine.getHeight()/15, "Black", "CooperBold", 1);
+        this.engine.drawImage(engine.getWidth()-coinSize -10, (int)engine.getHeight()/72,coinSize,coinSize,"Coin");
     }
 
     public void handleInput(){

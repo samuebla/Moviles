@@ -26,8 +26,10 @@ public class HistoryModeGameScene implements Scene {
 
     int rows_, cols_;
 
-    //LAS MONEDAS TIENEN QUE ESTAS EN UN TXT A PARTE PARA SUMAR Y RESTAR SIN IMPORTAR EL NIVEL Y QUE SIEMPRE SE GUARDEN AAAAA
-    int lives, coins;
+    int lives;
+
+    private Integer coins;
+    private Integer coinSize;
 
     //Para mostrar en pantallas la info de las celdas
     int remainingCells, maxCellsSolution;
@@ -56,7 +58,6 @@ public class HistoryModeGameScene implements Scene {
         //Asociamos el engine correspondiente
         this.engine = engine;
 
-
         //Creamos la matriz con el tamaño
         this.matriz = new CellHistoryMode[cols][rows];
 
@@ -66,6 +67,10 @@ public class HistoryModeGameScene implements Scene {
         won = false;
         timer = 0;
         lives = 3;
+        coinSize = engine.getWidth()/10;
+
+        //AAA DEBUG ELIMINAR ESTO AAAAAAAAAAAAAAAAAAAA
+        coins = 0;
 
         rows_ = rows;
         cols_ = cols;
@@ -213,8 +218,9 @@ public class HistoryModeGameScene implements Scene {
 
             //ESTO ESTA SIN TESTEAR.
             //MONEDAS
-            this.engine.drawText(Integer.toString(coins), engine.getWidth() - 50, 15, "Black", "CalibriSmall", 0);
-            this.engine.drawImage((int) (engine.getWidth() - 30), 30, 30, 30, "Back");
+            this.engine.drawText(Integer.toString(coins), engine.getWidth() - coinSize-10, (int)engine.getHeight()/15, "Black", "CooperBold", 1);
+            this.engine.drawImage(engine.getWidth()-coinSize -10, (int)engine.getHeight()/72,coinSize,coinSize,"Coin");
+
             //CORAZONES
             for (int i = 0; i < lives; i++) {
                 this.engine.drawImage((int) (engine.getWidth() / 2) + i * 20, (int) (engine.getHeight() / 1.4), 20, 20, "Back");
@@ -224,31 +230,34 @@ public class HistoryModeGameScene implements Scene {
 
     @Override
     public void handleInput() {
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[i].length; j++) {
-                if (inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
-                    //Aqui se guarda si te has equivocado...
-                    this.matriz[i][j].handleInput(engine);
-                    //1 Si esta mal
-                    //2 Si lo seleccionas y esta bien
-                    int key = this.matriz[i][j].keyCell();
-                    //Fallo
-                    if (key == 1) {
-                        //Restamos una vida
-                        lives--;
-                        //5 Si lo seleccionas
-                        this.matriz[i][j].key = 5;
-                        //Acierto
-                    } else if (key == 2) {
-                        remainingCells--;
-                        //5 Si lo seleccionas
-                        this.matriz[i][j].key = 5;
-                        if (win()) {
-                            won = true;
+        //Solo podra interactuar con el tablero si tiene vidas
+        if(lives>0){
+            for (int i = 0; i < matriz.length; i++) {
+                for (int j = 0; j < matriz[i].length; j++) {
+                    if (inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
+                        //Aqui se guarda si te has equivocado...
+                        this.matriz[i][j].handleInput(engine);
+                        //1 Si esta mal
+                        //2 Si lo seleccionas y esta bien
+                        int key = this.matriz[i][j].keyCell();
+                        //Fallo
+                        if (key == 1) {
+                            //Restamos una vida
+                            lives--;
+                            //5 Si lo seleccionas
+                            this.matriz[i][j].key = 5;
+                            //Acierto
+                        } else if (key == 2) {
+                            remainingCells--;
+                            //5 Si lo seleccionas
+                            this.matriz[i][j].key = 5;
+                            if (win()) {
+                                won = true;
+                            }
                         }
+                        //Y playeamos el sonido
+                        engine.getAudio().playSound("effect", 1);
                     }
-                    //Y playeamos el sonido
-                    engine.getAudio().playSound("effect", 1);
                 }
             }
         }
@@ -337,8 +346,6 @@ public class HistoryModeGameScene implements Scene {
                     }
                     contador += numAux + 1;
                 }
-
-
 
                 inputStream.close();
             }

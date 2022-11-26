@@ -19,8 +19,12 @@ public class ThemeModeMenu implements Scene {
 
     private EngineApp engine;
 
+    private Integer coins = 0;
+    private Integer coinSize;
+
     public ThemeModeMenu(EngineApp engineAux){
         this.engine = engineAux;
+        coinSize = engine.getWidth()/10;
         init();
     }
 
@@ -76,6 +80,12 @@ public class ThemeModeMenu implements Scene {
 
         //Texto indicativo
         this.engine.drawText("Elige la categoria que quieres jugar", (int)(engine.getWidth()/2), (int)(engine.getHeight()/5.4), "Black", "Amor", 0);
+
+        //Moneas
+        //MONEDAS
+        this.engine.drawText(Integer.toString(coins), engine.getWidth() - coinSize-10, (int)engine.getHeight()/15, "Black", "CooperBold", 1);
+        this.engine.drawImage(engine.getWidth()-coinSize -10, (int)engine.getHeight()/72,coinSize,coinSize,"Coin");
+
     }
 
     public void handleInput(){
