@@ -189,7 +189,7 @@ public class HistoryModeGameScene implements Scene {
             }
 
             //Mensaje de enhorabuena
-            this.engine.drawText("ENHORABUENA!", (int) ((double) this.engine.getWidth() * 0.5), (int) ((double) this.engine.getHeight() * 0.1111111), "Black", "Cooper", 0);
+            this.engine.drawText("¡ENHORABUENA!", (int) ((double) this.engine.getWidth() * 0.5),(int) ((double) this.engine.getHeight() /15), "Black", "Cooper", 0);
 
             //BackButton
             this.engine.drawImage((int) (backButton.getPos().getX()), (int) (backButton.getPos().getY()), (int) (backButton.getSize().getX()), (int) (backButton.getSize().getY()), "Back");
@@ -224,6 +224,12 @@ public class HistoryModeGameScene implements Scene {
             //CORAZONES
             for (int i = lives; i > 0; i--) {
                 this.engine.drawImage((int) (engine.getWidth() / 2) + i * 100, (int) (engine.getHeight() / 1.4), 100, 100, "Heart");
+            }
+
+            if(lives<=0){
+                //Mensaje de enhorabuena
+                this.engine.drawText("¡HAS PERDIDO!", (int) ((double) this.engine.getWidth() * 0.5), (int) ((double) this.engine.getHeight() /15), "Black", "Cooper", 0);
+
             }
         }
     }
