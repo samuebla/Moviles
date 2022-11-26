@@ -222,8 +222,8 @@ public class HistoryModeGameScene implements Scene {
             this.engine.drawImage(engine.getWidth()-coinSize -10, (int)engine.getHeight()/72,coinSize,coinSize,"Coin");
 
             //CORAZONES
-            for (int i = 0; i < lives; i++) {
-                this.engine.drawImage((int) (engine.getWidth() / 2) + i * 20, (int) (engine.getHeight() / 1.4), 20, 20, "Back");
+            for (int i = lives; i > 0; i--) {
+                this.engine.drawImage((int) (engine.getWidth() / 2) + i * 100, (int) (engine.getHeight() / 1.4), 100, 100, "Heart");
             }
         }
     }
