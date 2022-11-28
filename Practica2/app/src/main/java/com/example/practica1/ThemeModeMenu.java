@@ -91,23 +91,23 @@ public class ThemeModeMenu implements Scene {
     public void handleInput(){
         //Tetarracas
         if (inputReceived(this.tetarracasButtonMode.getPos(), this.tetarracasButtonMode.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "files/level");
+            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level");
             this.engine.setScene(playScene);
         }
 
         //Mamelungas
         if (inputReceived(this.mamelungasButtonMode.getPos(), this.mamelungasButtonMode.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 8, 8,"files/level");
+            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 8, 8,"level");
             this.engine.setScene(playScene);
         }
         //Bubalongas
         if (inputReceived(this.bubalongasButtonMode.getPos(), this.bubalongasButtonMode.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,"files/level");
+            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,"level");
             this.engine.setScene(playScene);
         }
         //Bakugans
         if (inputReceived(this.bakugansButtonMode.getPos(), this.bakugansButtonMode.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,"files/level");
+            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,"level");
             this.engine.setScene(playScene);
         }
 

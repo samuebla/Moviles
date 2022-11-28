@@ -1,5 +1,6 @@
 package com.example.practica1;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 import android.util.Pair;
@@ -11,11 +12,14 @@ import com.example.engineandroid.Vector2D;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class HistoryModeGameScene implements Scene {
@@ -44,6 +48,9 @@ public class HistoryModeGameScene implements Scene {
     //Esto es para coger los numeros de antes y mostrarlos en pantalla como un string
     private String[] xNumberTopToBottom;
     private ArrayList<String>[] xNumberLeftToRight;
+
+    //Archivo de guardado
+    String fileName;
 
     //Para los rectangulos que recubren las celdas y son meramente esteticos
     int widthAestheticCellX, heightAestheticCellX, widthAestheticCellY, heightAestheticCellY;
@@ -283,78 +290,91 @@ public class HistoryModeGameScene implements Scene {
     //Metodos de lectura y guardado
     public void loadFromFile(String file) {
         try {
-            InputStream inputStream = this.engine.getContext().getAssets().open(file);
-
-            if (inputStream != null) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            //Carga de archivo
+            String receiveString = "";
+            try {//Comprobar si existe en el almacenamiento interno
+                FileInputStream fis = this.engine.getContext().openFileInput(file);
+                InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
 
                 while (bufferedReader.ready()) {
                     receiveString += bufferedReader.readLine();
-
                 }
-                String[] fileRead;
-                fileRead = receiveString.split(" ");
-                rows_ = Integer.parseInt(fileRead[0]);
-                cols_ = Integer.parseInt(fileRead[1]);
+                inputStreamReader.close();
+            } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
+                e.printStackTrace();
+                InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/" + file));
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-                for (int i = 0; i < rows_; i++) {
-
-                    for (int j = 2; j < cols_ + 2; j++) {
-                        System.out.print(fileRead[rows_ * i + j]);
-
-                        int aux = Integer.parseInt(fileRead[rows_ * i + j]);
-
-                        //Si es 0 NO SE RELLENA
-                        if (aux == 0) {
-
-                            this.matriz[j - 2][i].setSolution(false);
-                        }
-                        //Si es 1 se rellena
-                        else if (aux == 1) {
-                            //Lo añadimos a la lista de celdas que tiene que acertar el jugador
-                            remainingCells++;
-
-                            this.matriz[j - 2][i].setSolution(true);
-
-                        }
-                        //Si esta mal seleccionada y esta roja...
-                        else if (aux == 2) {
-                            this.matriz[j - 2][i].setSolution(true);
-
-                            //Con esto seteamos que no es la solucion pero está mal seleccionado
-                            this.matriz[j - 2][i].key = 1;
-                        }
-                    }
-                    System.out.println();
+                while (bufferedReader.ready()) {
+                    receiveString += bufferedReader.readLine();
                 }
 
-                int contador = 0;
-                int numAux = 0;
-                //Ahora leemos las filas y columnas para colocar los indicadores laterales
-
-                //LECTURA INDICACION VERTICAL IZQUIERDA
-                for (int i = 0; i < rows_; i++) {
-                    numAux = Integer.parseInt(fileRead[rows_ * cols_ + 2 + contador]);
-                    for (int j = 0; j < numAux; j++) {
-                        xPositionsTopToBottom[i].add(Integer.parseInt(fileRead[(rows_ * cols_ + 2) + contador + j + 1]));
-                    }
-                    contador += numAux + 1;
-                }
-
-                //LECTURA INDICACION HORIZONTAL SUPERIOR
-                for (int i = 0; i < cols_; i++) {
-                    numAux = Integer.parseInt(fileRead[rows_ * cols_ + 2 + contador]);
-                    for (int j = 0; j < numAux; j++) {
-                        xPositionsLeftToRight[i].add(Integer.parseInt(fileRead[(rows_ * cols_ + 2) + contador + j + 1]));
-                    }
-                    contador += numAux + 1;
-                }
-
-                inputStream.close();
+                inputStreamReader.close();
+                //Copia del fichero
+                FileOutputStream fos = this.engine.getContext().openFileOutput(file, Context.MODE_PRIVATE);
+                fos.write(receiveString.getBytes());
+                fos.close();
             }
+            //Carga el nivel desde el string "RAW" de lectura
+            String[] fileRead;
+            fileRead = receiveString.split(" ");
+            rows_ = Integer.parseInt(fileRead[0]);
+            cols_ = Integer.parseInt(fileRead[1]);
+
+            for (int i = 0; i < rows_; i++) {
+
+                for (int j = 2; j < cols_ + 2; j++) {
+                    System.out.print(fileRead[rows_ * i + j]);
+
+                    int aux = Integer.parseInt(fileRead[rows_ * i + j]);
+
+                    //Si es 0 NO SE RELLENA
+                    if (aux == 0) {
+
+                        this.matriz[j - 2][i].setSolution(false);
+                    }
+                    //Si es 1 se rellena
+                    else if (aux == 1) {
+                        //Lo añadimos a la lista de celdas que tiene que acertar el jugador
+                        remainingCells++;
+
+                        this.matriz[j - 2][i].setSolution(true);
+
+                    }
+                    //Si esta mal seleccionada y esta roja...
+                    else if (aux == 2) {
+                        this.matriz[j - 2][i].setSolution(true);
+
+                        //Con esto seteamos que no es la solucion pero está mal seleccionado
+                        this.matriz[j - 2][i].key = 1;
+                    }
+                }
+                System.out.println();
+            }
+
+            int contador = 0;
+            int numAux = 0;
+            //Ahora leemos las filas y columnas para colocar los indicadores laterales
+
+            //LECTURA INDICACION VERTICAL IZQUIERDA
+            for (int i = 0; i < rows_; i++) {
+                numAux = Integer.parseInt(fileRead[rows_ * cols_ + 2 + contador]);
+                for (int j = 0; j < numAux; j++) {
+                    xPositionsTopToBottom[i].add(Integer.parseInt(fileRead[(rows_ * cols_ + 2) + contador + j + 1]));
+                }
+                contador += numAux + 1;
+            }
+
+            //LECTURA INDICACION HORIZONTAL SUPERIOR
+            for (int i = 0; i < cols_; i++) {
+                numAux = Integer.parseInt(fileRead[rows_ * cols_ + 2 + contador]);
+                for (int j = 0; j < numAux; j++) {
+                    xPositionsLeftToRight[i].add(Integer.parseInt(fileRead[(rows_ * cols_ + 2) + contador + j + 1]));
+                }
+                contador += numAux + 1;
+            }
+            fileName = file;
         } catch (
                 FileNotFoundException e) {
             Log.e("Error", "File not found: " + e.toString());
@@ -365,8 +385,18 @@ public class HistoryModeGameScene implements Scene {
 
     }
 
-    public void saveToFile(String fileName) {
+    public void saveToFile() {
+        try {
+            FileOutputStream fos = this.engine.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
+            //Guardado de la partida
 
+            fos.close();
+
+        } catch (FileNotFoundException e) {
+            Log.e("Error", "File not found: " + e.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //Comprueba si has ganado o no
