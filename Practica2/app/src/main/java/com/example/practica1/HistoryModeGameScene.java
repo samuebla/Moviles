@@ -282,6 +282,7 @@ public class HistoryModeGameScene implements Scene {
         //BOTONES
         //Si te rindes vuelves a la seleccion de nivel
         if (inputReceived(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
+            saveToFile();
             this.engine.popScene();
         }
         //Solo funciona si has ganado
@@ -296,17 +297,17 @@ public class HistoryModeGameScene implements Scene {
         try {
             //Carga de archivo
             String receiveString = "";
-            try {//Comprobar si existe en el almacenamiento interno
-                FileInputStream fis = this.engine.getContext().openFileInput(file);
-                InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                while (bufferedReader.ready()) {
-                    receiveString += bufferedReader.readLine();
-                }
-                inputStreamReader.close();
-            } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
-                e.printStackTrace();
+//            try {//Comprobar si existe en el almacenamiento interno
+//                FileInputStream fis = this.engine.getContext().openFileInput(file);
+//                InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+//
+//                while (bufferedReader.ready()) {
+//                    receiveString += bufferedReader.readLine();
+//                }
+//                inputStreamReader.close();
+//            } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
+//                e.printStackTrace();
                 String fileCarpet = "";
                 switch (mode){
                     case 1:
@@ -334,7 +335,7 @@ public class HistoryModeGameScene implements Scene {
                 FileOutputStream fos = this.engine.getContext().openFileOutput(file, Context.MODE_PRIVATE);
                 fos.write(receiveString.getBytes());
                 fos.close();
-            }
+            //}
             //Carga el nivel desde el string "RAW" de lectura
             String[] fileRead;
             fileRead = receiveString.split(" ");
@@ -363,6 +364,7 @@ public class HistoryModeGameScene implements Scene {
                     }
                     //Si esta mal seleccionada y esta roja...
                     else if (aux == 2) {
+                        //TODO QUE MIERDA ES ESTO REVISAR AAAAAAAAAA
                         this.matriz[j - 2][i].setSolution(true);
 
                         //Con esto seteamos que no es la solucion pero está mal seleccionado
@@ -408,6 +410,51 @@ public class HistoryModeGameScene implements Scene {
         try {
             FileOutputStream fos = this.engine.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
             //Guardado de la partida
+            String auxiliar = rows_ + " " + cols_ + " \n";
+            fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
+            auxiliar ="";
+            for(int i=0;i<rows_;i++){
+                for (int j=0;j<cols_;j++){
+                    switch (matriz[j][i].key){
+                        case -1:{
+                            auxiliar += "0 ";
+                            break;
+                        }
+                        case 2: {
+                            auxiliar += "1 ";
+                            break;
+                        }
+                        case 5: {
+                            auxiliar += "2 ";
+                            break;
+                        }
+                        default:{
+                            auxiliar += "0 ";
+                            break;
+                        }
+                    }
+                    if(matriz[j][i].key==1){
+                        auxiliar+= "0 ";
+                    }
+                }
+                auxiliar += "\n";
+            }
+            fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
+
+            for (int i=0;i<xNumberTopToBottom.length;i++){
+                auxiliar = xNumberTopToBottom[i].length() + " " + xNumberTopToBottom[i] + " \n";
+                fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
+            }
+
+            for (int i=0;i<xNumberLeftToRight.length;i++){
+                //TODO AAA
+                auxiliar = xNumberLeftToRight[i].size() + " ";
+                for(int j=0; j<xNumberLeftToRight[i].size();j++){
+                    auxiliar += xNumberLeftToRight[i].get(j) + " ";
+                }
+                auxiliar+="\n";
+                fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
+            }
 
             fos.close();
 

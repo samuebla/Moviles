@@ -39,6 +39,7 @@ public class CellBase extends Interactive{
     //3 Si estaba mal seleccionado y lo deseleccionas
     //4 Si estaba bien seleccionado y lo deseleccionas
     //5 Si lo has seleccionado y no puedes interactuar más
+    //6 SI ES UN EMPTY
 
     public int keyCell() {
         return key;
