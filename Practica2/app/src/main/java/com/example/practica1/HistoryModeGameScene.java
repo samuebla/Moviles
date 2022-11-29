@@ -330,10 +330,11 @@ public class HistoryModeGameScene implements Scene {
             fileRead = receiveString.split(" ");
             rows_ = Integer.parseInt(fileRead[0]);
             cols_ = Integer.parseInt(fileRead[1]);
+            lives = Integer.parseInt(fileRead[2]);
 
             //Iniciamos la matriz segun el fichero
             for (int i = 0; i < rows_; i++) {
-                for (int j = 2; j < cols_ +2; j++) {
+                for (int j = 3; j < cols_ +3; j++) {
                     System.out.print(fileRead[rows_ * i + j]);
 
                     int aux = Integer.parseInt(fileRead[rows_ * i + j]);
@@ -341,7 +342,7 @@ public class HistoryModeGameScene implements Scene {
 
                     //Si es 0 Esta EMPTY pero no es true
                     if (aux == 0) {
-                        this.matriz[j-2][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * j,
+                        this.matriz[j-3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * j,
                                 (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05), CellBase.cellType.EMPTY,false);
 
                     }
@@ -350,19 +351,19 @@ public class HistoryModeGameScene implements Scene {
                         //Lo añadimos a la lista de celdas que tiene que acertar el jugador
                         remainingCells++;
 
-                        this.matriz[j-2][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * j,
+                        this.matriz[j-3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * j,
                                 (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05), CellBase.cellType.EMPTY,true);
 
                     }
                     //Si esta mal seleccionada y esta roja...
                     else if (aux == 2) {
-                        this.matriz[j-2][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * j,
+                        this.matriz[j-3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * j,
                                 (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05), CellBase.cellType.WRONG,false);
 
                     }
                     //Si esta bien seleccionada y esta azul
                     else if (aux == 3) {
-                        this.matriz[j-2][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * j,
+                        this.matriz[j-3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * j,
                                 (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05), CellBase.cellType.SELECTED,true);
 
                     }
@@ -375,9 +376,9 @@ public class HistoryModeGameScene implements Scene {
 
             //LECTURA INDICACION VERTICAL IZQUIERDA
             for (int i = 0; i < rows_; i++) {
-                numAux = Integer.parseInt(fileRead[rows_ * cols_ + 2 + contador]);
+                numAux = Integer.parseInt(fileRead[rows_ * cols_ + 3 + contador]);
                 for (int j = 0; j < numAux; j++) {
-                    xPositionsTopToBottom[i].add(Integer.parseInt(fileRead[(rows_ * cols_ + 2) + contador + j + 1]));
+                    xPositionsTopToBottom[i].add(Integer.parseInt(fileRead[(rows_ * cols_ + 3) + contador + j + 1]));
                 }
                 contador += numAux + 1;
             }
@@ -386,7 +387,7 @@ public class HistoryModeGameScene implements Scene {
             for (int i = 0; i < cols_; i++) {
                 numAux = Integer.parseInt(fileRead[rows_ * cols_ + 2 + contador]);
                 for (int j = 0; j < numAux; j++) {
-                    xPositionsLeftToRight[i].add(Integer.parseInt(fileRead[(rows_ * cols_ + 2) + contador + j + 1]));
+                    xPositionsLeftToRight[i].add(Integer.parseInt(fileRead[(rows_ * cols_ + 3) + contador + j + 1]));
                 }
                 contador += numAux + 1;
             }
@@ -405,7 +406,7 @@ public class HistoryModeGameScene implements Scene {
         try {
             FileOutputStream fos = this.engine.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
             //Guardado de la partida
-            String auxiliar = rows_ + " " + cols_ + " \n";
+            String auxiliar = rows_ + " " + cols_ + " " + lives + " \n";
             fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
             auxiliar ="";
             for(int i=0;i<rows_;i++){
@@ -433,12 +434,11 @@ public class HistoryModeGameScene implements Scene {
             fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
 
             for (int i=0;i<xNumberTopToBottom.length;i++){
-                auxiliar = xNumberTopToBottom[i].length()/2 + " " + xNumberTopToBottom[i] + " \n";
+                auxiliar = xNumberTopToBottom[i].length()/2 + " " + xNumberTopToBottom[i] + "\n";
                 fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
             }
 
             for (int i=0;i<xNumberLeftToRight.length;i++){
-                //TODO AAA
                 auxiliar = xNumberLeftToRight[i].size() + " ";
                 for(int j=0; j<xNumberLeftToRight[i].size();j++){
                     auxiliar += xNumberLeftToRight[i].get(j) + " ";
