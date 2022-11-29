@@ -122,7 +122,7 @@ public class QuickGameScene implements Scene{
                         xPositionsTopToBottom[i].add(contAux);
                         contAux = 0;
                     }
-                    this.matriz[j][i].setSolution(false);
+                    this.matriz[j][i].solution = false;
 
                     //Para el valor de las columnas...
                     if (numAnterior[j] == 0) {
@@ -138,7 +138,7 @@ public class QuickGameScene implements Scene{
                     //Lo añadimos a la lista de celdas que tiene que acertar el jugador
                     remainingCells++;
 
-                    this.matriz[j][i].setSolution(true);
+                    this.matriz[j][i].solution = true;
                     numSolutionPerRows++;
 
                     //Para averiguar los numeros laterales de las celdas
@@ -172,7 +172,7 @@ public class QuickGameScene implements Scene{
             if (numSolutionPerRows == 0) {
                 int aux = random.nextInt(cols_);
                 //Minimo rellenamos una
-                this.matriz[aux][i].setSolution(true);
+                this.matriz[aux][i].solution = true;
                 xPositionsTopToBottom[i].add(1);
 
                 //Ahora limpiamos la columna correspondiente y volvemos a contar
@@ -181,7 +181,7 @@ public class QuickGameScene implements Scene{
                 int cont = 0;
                 //Recorremos la columna otra vez para rellenar correctamente la fila
                 for (int j = 0; j < rows_; j++) {
-                    if (this.matriz[aux][j].getSolution()) {
+                    if (this.matriz[aux][j].solution) {
                         cont++;
                     } else if (cont != 0) {
                         xPositionsLeftToRight[aux].add(cont);
@@ -200,7 +200,7 @@ public class QuickGameScene implements Scene{
             else if (numSolutionPerRows == cols_) {
                 int aux = random.nextInt(cols_);
                 //Dejamos al menos una vacia
-                this.matriz[aux][i].setSolution(false);
+                this.matriz[aux][i].solution = false;
 
                 //Vaciamos la lista
                 xPositionsTopToBottom[i].clear();
@@ -221,7 +221,7 @@ public class QuickGameScene implements Scene{
                 int cont = 0;
                 //Recorremos la columna otra vez para rellenar correctamente la fila
                 for (int j = 0; j < rows_; j++) {
-                    if (this.matriz[aux][j].getSolution()) {
+                    if (this.matriz[aux][j].solution) {
                         cont++;
                     } else if (cont != 0) {
                         xPositionsLeftToRight[aux].add(cont);
@@ -245,7 +245,7 @@ public class QuickGameScene implements Scene{
                 int randAux = random.nextInt(rows_);
 
                 //Minimo rellenamos una
-                this.matriz[i][randAux].setSolution(true);
+                this.matriz[i][randAux].solution = true;
                 xPositionsLeftToRight[i].add(1);
 
                 //Contabilizamos esa suma
@@ -257,7 +257,7 @@ public class QuickGameScene implements Scene{
                 int cont = 0;
                 //Recorremos la columna otra vez para rellenar correctamente la fila
                 for (int j = 0; j < cols_; j++) {
-                    if (this.matriz[j][randAux].getSolution()) {
+                    if (this.matriz[j][randAux].solution) {
                         cont++;
                     } else if (cont != 0) {
                         xPositionsTopToBottom[randAux].add(cont);

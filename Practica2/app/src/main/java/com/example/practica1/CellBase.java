@@ -8,9 +8,6 @@ public class CellBase extends Interactive{
     cellType type;
     boolean solution = false;
 
-    //Para el contador de celdas restantes y erroneas
-    int key;
-
     public enum cellType {EMPTY, SELECTED, CROSSED, WRONG}
 
     public void render(EngineApp engine){
@@ -26,24 +23,6 @@ public class CellBase extends Interactive{
     }
 
     public void handleInput(EngineApp engine){};
-
-    public void setSolution(boolean aux) {
-        solution = aux;
-    }
-
-    public boolean getSolution() {
-        return solution;
-    }
-    //1 Si esta mal
-    //2 Si lo seleccionas y esta bien
-    //3 Si estaba mal seleccionado y lo deseleccionas
-    //4 Si estaba bien seleccionado y lo deseleccionas
-    //5 Si lo has seleccionado y no puedes interactuar más
-    //6 SI ES UN EMPTY
-
-    public int keyCell() {
-        return key;
-    }
 
     //POSICIONES
     public Vector2D getSize(){return size;};

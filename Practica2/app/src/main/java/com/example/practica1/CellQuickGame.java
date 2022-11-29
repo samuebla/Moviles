@@ -5,6 +5,9 @@ import com.example.engineandroid.Vector2D;
 
 public class CellQuickGame extends CellBase {
 
+    //Para el contador de celdas restantes y erroneas
+    int key;
+
     public CellQuickGame(int x, int y, int width, int height) {
         this.setSize(width, height);
         this.setPos(x, y);
@@ -29,7 +32,6 @@ public class CellQuickGame extends CellBase {
                 break;
             case SELECTED:
                 type = cellType.CROSSED;
-
                 //3 si lo tenias seleccionado y estaba mal pero ahora no
                 if (!solution) {
                     key = 3;
@@ -44,6 +46,17 @@ public class CellQuickGame extends CellBase {
                 key = 0;
                 break;
         }
+    }
+
+    //1 Si lo seleccionas y esta mal
+    //2 Si lo seleccionas y esta bien
+    //3 Si estaba mal seleccionado y lo deseleccionas
+    //4 Si estaba bien seleccionado y lo deseleccionas
+    //5 Si lo has seleccionado y no puedes interactuar más
+    //6 SI ES UN EMPTY y es WRONG
+    //7 Si es un empty y es Selected
+    public int keyCell() {
+        return key;
     }
 
     //Para el boton de comprobar
