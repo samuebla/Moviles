@@ -32,6 +32,8 @@ public class HistoryModeGameScene implements Scene {
 
     int lives;
 
+    int mode;
+
     private Integer coins;
     private Integer coinSize;
 
@@ -60,7 +62,7 @@ public class HistoryModeGameScene implements Scene {
     boolean won;
     boolean showAnswers;
 
-    public HistoryModeGameScene(EngineApp engine, int rows, int cols, String file) {
+    public HistoryModeGameScene(EngineApp engine, int rows, int cols, String file,int modeAux) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
@@ -81,6 +83,8 @@ public class HistoryModeGameScene implements Scene {
 
         rows_ = rows;
         cols_ = cols;
+
+         mode = modeAux;
 
         xPositionsTopToBottom = new ArrayList[rows_];
         xPositionsLeftToRight = new ArrayList[cols_];
@@ -303,7 +307,22 @@ public class HistoryModeGameScene implements Scene {
                 inputStreamReader.close();
             } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
                 e.printStackTrace();
-                InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/" + file));
+                String fileCarpet = "";
+                switch (mode){
+                    case 1:
+                        fileCarpet = "queer/" + file;
+                        break;
+                    case 2:
+                        fileCarpet = "frutas/" + file;
+                        break;
+                    case 3:
+                        fileCarpet = "frutas/" + file;
+                        break;
+                    case 4:
+                        fileCarpet = "frutas/" + file;
+                        break;
+                }
+                InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/" + fileCarpet));
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
                 while (bufferedReader.ready()) {
