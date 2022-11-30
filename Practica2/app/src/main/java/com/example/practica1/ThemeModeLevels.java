@@ -7,11 +7,9 @@ import com.example.engineandroid.Vector2D;
 
 public class ThemeModeLevels implements Scene {
 
+    private Button[] lvls;
 
-    private Button lvl1;
-    private Button lvl2;
-    private Button lvl3;
-    private Button lvl4;
+    private String[] lvlImages;
 
     private Button backButton;
 
@@ -20,8 +18,18 @@ public class ThemeModeLevels implements Scene {
     private Integer coins = 0;
     private Integer coinSize;
 
-    public ThemeModeLevels(EngineApp engineAux,int levelsUnlocked){
+    private String[] categories = { "QUEER", "TETAS", "FRUTAS", "CAPITALISMO"};
+    private String selectedCategory;
+    private int category;
+
+    private int unlockedlevels;
+
+
+    public ThemeModeLevels(EngineApp engineAux,int levelsUnlocked, int selectedCategory){
         this.engine = engineAux;
+        this.selectedCategory = this.categories[selectedCategory - 1];
+        this.category = selectedCategory;
+        this.unlockedlevels = levelsUnlocked;
         coinSize = engine.getWidth()/10;
         init();
     }
@@ -36,10 +44,29 @@ public class ThemeModeLevels implements Scene {
 
     public void init() {
         //Botones selectores del nivel
-        this.lvl1 = new Button(engine.getWidth()/4  - engine.getWidth()/8, engine.getHeight()/6, engine.getWidth()/4, engine.getHeight()/6);
-        this.lvl2 = new Button(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/3, engine.getWidth()/4, engine.getHeight()/6);
-        this.lvl4 = new Button(engine.getWidth()/4 - engine.getWidth()/8, engine.getHeight()/3, engine.getWidth()/4, engine.getHeight()/6);
-        this.lvl3 = new Button(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/6, engine.getWidth()/4, engine.getHeight()/6);
+        this.lvls = new Button[20];
+        int contador = 0;
+        for (int i = 0; i < 5; ++i){
+            for (int j = 0; j < 4; ++j){
+                this.lvls[contador] = new Button(engine.getWidth()/25 + (engine.getWidth()/25) * j  + (engine.getWidth()/5) * j,
+                        (engine.getHeight()/4 + engine.getHeight()/48) + (engine.getHeight()/8 * i) + (engine.getHeight()/48 * i), engine.getWidth()/5, engine.getHeight()/8);
+                contador++;
+            }
+        }
+
+        this.lvlImages = new String[20];
+        //AAAAAAAAAAAAAAAAAA Asignar imagen distinta dependiendo del nivel
+        for (int i = 0; i < this.unlockedlevels; ++i){
+            this.lvlImages[i] = "Square";
+        }
+        //AAAAAAAAAAAAAAAAAAA Asignar imagen de desbloqueado
+        if (this.unlockedlevels < this.lvlImages.length){
+            this.lvlImages[this.unlockedlevels] = "Square";
+        }
+        //AAAAAAAAAAAAAAAAAAA Asignar imagen de bloqueado
+        for (int i = this.unlockedlevels + 1; i < this.lvlImages.length; ++i){
+            this.lvlImages[i] = "Square";
+        }
 
         this.backButton = new Button(10 + engine.getWidth()/44, 30, engine.getWidth()/10, engine.getHeight()/15);
 
@@ -56,17 +83,9 @@ public class ThemeModeLevels implements Scene {
     }
 
     public void render(){
-        //Lvl1
-        this.engine.drawImage((int)this.lvl1.getPos().getX(), (int)this.lvl1.getPos().getY(),(int)this.lvl1.getSize().getX(),(int)this.lvl1.getSize().getY(),"Square");
-
-        //Lvl2
-        this.engine.drawImage((int)this.lvl2.getPos().getX(), (int)this.lvl2.getPos().getY(),(int)this.lvl2.getSize().getX(),(int)this.lvl2.getSize().getY(),"Square");
-
-        //Lvl3
-        this.engine.drawImage((int)this.lvl3.getPos().getX(), (int)this.lvl3.getPos().getY(),(int)this.lvl3.getSize().getX(),(int)this.lvl3.getSize().getY(),"Square");
-
-        //Lvl4
-        this.engine.drawImage((int)this.lvl4.getPos().getX(), (int)this.lvl4.getPos().getY(),(int)this.lvl4.getSize().getX(),(int)this.lvl4.getSize().getY(),"Square");
+        for (int i = 0; i < lvls.length; ++i){
+            this.engine.drawImage((int)this.lvls[i].getPos().getX(), (int)this.lvls[i].getPos().getY(),(int)this.lvls[i].getSize().getX(),(int)this.lvls[i].getSize().getY(),lvlImages[i]);
+        }
 
         //----------------------------------------
 
@@ -84,26 +103,12 @@ public class ThemeModeLevels implements Scene {
     }
 
     public void handleInput(){
-        //Tetarracas
-        if (inputReceived(this.lvl1.getPos(), this.lvl1.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level1",1);
-            this.engine.setScene(playScene);
-        }
-
-        //Mamelungas
-        if (inputReceived(this.lvl2.getPos(), this.lvl2.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 8, 8,"level1",2);
-            this.engine.setScene(playScene);
-        }
-        //Bubalongas
-        if (inputReceived(this.lvl3.getPos(), this.lvl3.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,"level1",3);
-            this.engine.setScene(playScene);
-        }
-        //Bakugans
-        if (inputReceived(this.lvl4.getPos(), this.lvl4.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,"level1",4);
-            this.engine.setScene(playScene);
+        for (int i = 0; i < this.unlockedlevels; ++i){
+            if (inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
+                //AAAAAAAAAAAAAAAAAAAA Cambiar level1 por "level" + (i + 1)
+                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level1",this.category);
+                this.engine.setScene(playScene);
+            }
         }
 
         //Back button
