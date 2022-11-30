@@ -55,10 +55,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
 
         //Creamos el SurfaceView que "contendrá" nuestra escena
-        this.renderView = findViewById(R.id.surfaceView);
+        this.renderView = new SurfaceView(this);
+        setContentView(this.renderView);
 
 
 
