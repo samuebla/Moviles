@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
     private FrameLayout adContainerView;
 
+    MainMenuScene mainMenuScene;
+
 //    AdView mAdView;
 
     @Override
@@ -154,9 +156,15 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        MainMenuScene mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
+        mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
         this.engine.setScene(mainMenuScene);
         this.engine.resume();
+    }
+
+    @Override
+    protected void onDestroy(){
+        mainMenuScene.saveDataHistoryMode();
+        super.onDestroy();
     }
 
     @Override

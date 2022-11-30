@@ -132,18 +132,18 @@ public class MainMenuScene implements Scene {
         try {
 //            //Carga de archivo
             String receiveString = "";
-//            try {//Comprobar si existe en el almacenamiento interno
-//                FileInputStream fis = this.engine.getContext().openFileInput("saveData");
-//                InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
-//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-//
-//                while (bufferedReader.ready()) {
-//                    receiveString += bufferedReader.readLine();
-//                }
-//                inputStreamReader.close();
-//            } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
-//                e.printStackTrace();
-//            }
+            try {//Comprobar si existe en el almacenamiento interno
+                FileInputStream fis = this.engine.getContext().openFileInput("saveData");
+                InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                while (bufferedReader.ready()) {
+                    receiveString += bufferedReader.readLine();
+                }
+                inputStreamReader.close();
+            } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
+                e.printStackTrace();
+            }
             InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/saveData"));
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
@@ -173,6 +173,29 @@ public class MainMenuScene implements Scene {
         } catch (
                 IOException e) {
             Log.e("Reading Error", "Can not read save data file: " + e.toString());
+        }
+    }
+
+    //Y aqui el guardado, recomiendo que este metodo lo pongamos aqui y podamos acceder a el desde todas las escenas para
+    //que cada desbloqueo y cada transaccion de monedas se guarde al instante y no se tenga que salir
+    //Tambien habria que hacer un getter en esta clase para saber cuantas monedas y niveles tienes
+    public void saveDataHistoryMode(){   //Idtheme siempre debe ser desde 1
+        try {
+            FileOutputStream fos = this.engine.getContext().openFileOutput("saveData", Context.MODE_PRIVATE);
+            String writer = "";
+            //Monedas
+            writer += coins.get() + " \n";
+
+            for(int i = 0; i < this.progress.length; ++i){
+                writer += this.progress[i].get();
+            }
+
+            fos.write(writer.getBytes(StandardCharsets.UTF_8));
+            fos.close();
+        } catch (FileNotFoundException e) {
+            Log.e("Error", "File not found: " + e.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
