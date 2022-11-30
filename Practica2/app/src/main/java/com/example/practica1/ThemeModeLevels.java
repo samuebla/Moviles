@@ -108,8 +108,7 @@ public class ThemeModeLevels implements Scene {
     public void handleInput(){
         for (int i = 0; i < this.unlockedlevels.get(); ++i){
             if (inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
-                //AAAAAAAAAAAAAAAAAAAA Cambiar level1 por "level" + (i + 1)
-                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level1",this.category, this.coins, this.unlockedlevels, i + 1);
+                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1);
                 this.engine.setScene(playScene);
             }
         }

@@ -8,7 +8,7 @@ public class EventHandler {
          this.event= new IEvent();
     }
 
-    public enum EventType {NONE, TOUCH};
+    public enum EventType {NONE, TOUCH,RELEASE};
 
     class IEvent{
         public EventType eventType;

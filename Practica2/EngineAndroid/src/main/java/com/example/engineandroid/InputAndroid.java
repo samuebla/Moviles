@@ -68,6 +68,11 @@ class TouchListener implements View.OnTouchListener {
             System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
             this.eventHandler.sendEvent(EventHandler.EventType.TOUCH);
         }
+        else if(e.getAction() == MotionEvent.ACTION_UP){
+            this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
+            System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
+            this.eventHandler.sendEvent(EventHandler.EventType.RELEASE);
+        }
     }
 }
 
@@ -87,10 +92,10 @@ class MotionListener implements View.OnGenericMotionListener {
     }
 
     public void processMotion(MotionEvent e){
-        if(e.getAction() == MotionEvent.ACTION_DOWN){
-            this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
-            System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
-            this.eventHandler.sendEvent(EventHandler.EventType.TOUCH);
-        }
+//        if(e.getAction() == MotionEvent.ACTION_DOWN){
+//            this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
+//            System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
+//            this.eventHandler.sendEvent(EventHandler.EventType.TOUCH);
+//        }
     }
 }
