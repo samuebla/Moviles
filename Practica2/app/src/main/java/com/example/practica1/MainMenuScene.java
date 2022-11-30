@@ -77,6 +77,8 @@ public class MainMenuScene implements Scene {
             this.engine.getGraphics().newImage("PlayButton", "assets/playButton.png");
             this.engine.getGraphics().newImage("Coin", "assets/coin.png");
             this.engine.getGraphics().newImage("Heart", "assets/heart.png");
+            this.engine.getGraphics().newImage("Square", "assets/square.png");
+
 
         } catch (Exception e) {
             System.err.println(e.getMessage());

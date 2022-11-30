@@ -91,24 +91,23 @@ public class ThemeModeMenu implements Scene {
     public void handleInput(){
         //Tetarracas
         if (inputReceived(this.tetarracasButtonMode.getPos(), this.tetarracasButtonMode.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level",1);
-            this.engine.setScene(playScene);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,1);
+            this.engine.setScene(scene);
         }
-
         //Mamelungas
         if (inputReceived(this.mamelungasButtonMode.getPos(), this.mamelungasButtonMode.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 8, 8,"level",2);
-            this.engine.setScene(playScene);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,2);
+            this.engine.setScene(scene);
         }
         //Bubalongas
         if (inputReceived(this.bubalongasButtonMode.getPos(), this.bubalongasButtonMode.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,"level",3);
-            this.engine.setScene(playScene);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,3);
+            this.engine.setScene(scene);
         }
         //Bakugans
         if (inputReceived(this.bakugansButtonMode.getPos(), this.bakugansButtonMode.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,"level",4);
-            this.engine.setScene(playScene);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,4);
+            this.engine.setScene(scene);
         }
 
         //Back button

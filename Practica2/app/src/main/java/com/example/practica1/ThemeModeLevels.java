@@ -8,10 +8,10 @@ import com.example.engineandroid.Vector2D;
 public class ThemeModeLevels implements Scene {
 
 
-    private Button tetarracasButtonMode;
-    private Button mamelungasButtonMode;
-    private Button bubalongasButtonMode;
-    private Button bakugansButtonMode;
+    private Button lvl1;
+    private Button lvl2;
+    private Button lvl3;
+    private Button lvl4;
 
     private Button backButton;
 
@@ -20,7 +20,7 @@ public class ThemeModeLevels implements Scene {
     private Integer coins = 0;
     private Integer coinSize;
 
-    public ThemeModeLevels(EngineApp engineAux){
+    public ThemeModeLevels(EngineApp engineAux,int levelsUnlocked){
         this.engine = engineAux;
         coinSize = engine.getWidth()/10;
         init();
@@ -36,14 +36,15 @@ public class ThemeModeLevels implements Scene {
 
     public void init() {
         //Botones selectores del nivel
-        this.tetarracasButtonMode = new Button(engine.getWidth()/4  - engine.getWidth()/8, engine.getHeight()/2.4, engine.getWidth()/4, engine.getHeight()/6);
-        this.mamelungasButtonMode = new Button(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/1.2, engine.getWidth()/4, engine.getHeight()/6);
-        this.bakugansButtonMode = new Button(engine.getWidth()/4 - engine.getWidth()/8, engine.getHeight()/1.2, engine.getWidth()/4, engine.getHeight()/6);
-        this.bubalongasButtonMode = new Button(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/2.4, engine.getWidth()/4, engine.getHeight()/6);
-
-
+        this.lvl1 = new Button(engine.getWidth()/4  - engine.getWidth()/8, engine.getHeight()/6, engine.getWidth()/4, engine.getHeight()/6);
+        this.lvl2 = new Button(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/3, engine.getWidth()/4, engine.getHeight()/6);
+        this.lvl4 = new Button(engine.getWidth()/4 - engine.getWidth()/8, engine.getHeight()/3, engine.getWidth()/4, engine.getHeight()/6);
+        this.lvl3 = new Button(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/6, engine.getWidth()/4, engine.getHeight()/6);
 
         this.backButton = new Button(10 + engine.getWidth()/44, 30, engine.getWidth()/10, engine.getHeight()/15);
+
+        //TODO LevelsUnlocked es un int que le pasas de la escena anterior. Me desbloquea los niveles hasta ahi y el resto se ven
+        //TODO de otra manera y no puedes interactuar con ellos
     }
 
     public void update(double deltaTime){
@@ -55,21 +56,17 @@ public class ThemeModeLevels implements Scene {
     }
 
     public void render(){
-        //Tetarracas
-        this.engine.drawImage((int)this.tetarracasButtonMode.getPos().getX(), (int)this.tetarracasButtonMode.getPos().getY(),(int)this.tetarracasButtonMode.getSize().getX(),(int)this.tetarracasButtonMode.getSize().getY(),"PlayButton");
-        this.engine.drawText("Tetarracas", (int)(tetarracasButtonMode.getPos().getX() + tetarracasButtonMode.getSize().getX()/2), (int)(tetarracasButtonMode.getPos().getY() - tetarracasButtonMode.getSize().getY()/4), "Black","Amor", 0);
+        //Lvl1
+        this.engine.drawImage((int)this.lvl1.getPos().getX(), (int)this.lvl1.getPos().getY(),(int)this.lvl1.getSize().getX(),(int)this.lvl1.getSize().getY(),"Square");
 
-        //Mamelungas
-        this.engine.drawImage((int)this.mamelungasButtonMode.getPos().getX(), (int)this.mamelungasButtonMode.getPos().getY(),(int)this.mamelungasButtonMode.getSize().getX(),(int)this.mamelungasButtonMode.getSize().getY(),"PlayButton");
-        this.engine.drawText("Mmamelungas", (int)(mamelungasButtonMode.getPos().getX() + mamelungasButtonMode.getSize().getX()/2), (int)(mamelungasButtonMode.getPos().getY() - mamelungasButtonMode.getSize().getY()/4), "Black","Amor", 0);
+        //Lvl2
+        this.engine.drawImage((int)this.lvl2.getPos().getX(), (int)this.lvl2.getPos().getY(),(int)this.lvl2.getSize().getX(),(int)this.lvl2.getSize().getY(),"Square");
 
-        //Bubalongas
-        this.engine.drawImage((int)this.bubalongasButtonMode.getPos().getX(), (int)this.bubalongasButtonMode.getPos().getY(),(int)this.bubalongasButtonMode.getSize().getX(),(int)this.bubalongasButtonMode.getSize().getY(),"PlayButton");
-        this.engine.drawText("Bubalongas", (int)(bubalongasButtonMode.getPos().getX() + bubalongasButtonMode.getSize().getX()/2), (int)(bubalongasButtonMode.getPos().getY() - bubalongasButtonMode.getSize().getY()/4), "Black","Amor", 0);
+        //Lvl3
+        this.engine.drawImage((int)this.lvl3.getPos().getX(), (int)this.lvl3.getPos().getY(),(int)this.lvl3.getSize().getX(),(int)this.lvl3.getSize().getY(),"Square");
 
-        //Bakugans
-        this.engine.drawImage((int)this.bakugansButtonMode.getPos().getX(), (int)this.bakugansButtonMode.getPos().getY(),(int)this.bakugansButtonMode.getSize().getX(),(int)this.bakugansButtonMode.getSize().getY(),"PlayButton");
-        this.engine.drawText("Bakugans", (int)(bakugansButtonMode.getPos().getX() + bakugansButtonMode.getSize().getX()/2), (int)(bakugansButtonMode.getPos().getY() - bakugansButtonMode.getSize().getY()/4), "Black","Amor", 0);
+        //Lvl4
+        this.engine.drawImage((int)this.lvl4.getPos().getX(), (int)this.lvl4.getPos().getY(),(int)this.lvl4.getSize().getX(),(int)this.lvl4.getSize().getY(),"Square");
 
         //----------------------------------------
 
@@ -77,7 +74,7 @@ public class ThemeModeLevels implements Scene {
         this.engine.drawImage((int)backButton.getPos().getX(),(int)backButton.getPos().getY(),(int)(backButton.getSize().getX()),(int)(backButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        this.engine.drawText("Elige la categoria que quieres jugar", (int)(engine.getWidth()/2), (int)(engine.getHeight()/5.4), "Black", "Amor", 0);
+        this.engine.drawText("Categoria de mi pepe", (int)(engine.getWidth()/2), (int)(engine.getHeight()/8), "Black", "Amor", 0);
 
         //Moneas
         //MONEDAS
@@ -88,24 +85,24 @@ public class ThemeModeLevels implements Scene {
 
     public void handleInput(){
         //Tetarracas
-        if (inputReceived(this.tetarracasButtonMode.getPos(), this.tetarracasButtonMode.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level",1);
+        if (inputReceived(this.lvl1.getPos(), this.lvl1.getSize())){
+            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level1",1);
             this.engine.setScene(playScene);
         }
 
         //Mamelungas
-        if (inputReceived(this.mamelungasButtonMode.getPos(), this.mamelungasButtonMode.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 8, 8,"level",2);
+        if (inputReceived(this.lvl2.getPos(), this.lvl2.getSize())){
+            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 8, 8,"level1",2);
             this.engine.setScene(playScene);
         }
         //Bubalongas
-        if (inputReceived(this.bubalongasButtonMode.getPos(), this.bubalongasButtonMode.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,"level",3);
+        if (inputReceived(this.lvl3.getPos(), this.lvl3.getSize())){
+            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,"level1",3);
             this.engine.setScene(playScene);
         }
         //Bakugans
-        if (inputReceived(this.bakugansButtonMode.getPos(), this.bakugansButtonMode.getSize())){
-            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,"level",4);
+        if (inputReceived(this.lvl4.getPos(), this.lvl4.getSize())){
+            HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5,"level1",4);
             this.engine.setScene(playScene);
         }
 

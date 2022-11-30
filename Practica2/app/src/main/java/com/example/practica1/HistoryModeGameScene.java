@@ -303,13 +303,13 @@ public class HistoryModeGameScene implements Scene {
                         fileCarpet = "queer/" + file;
                         break;
                     case 2:
-                        fileCarpet = "frutas/" + file;
+                        fileCarpet = "tetas/" + file;
                         break;
                     case 3:
                         fileCarpet = "frutas/" + file;
                         break;
                     case 4:
-                        fileCarpet = "frutas/" + file;
+                        fileCarpet = "capìtalismo/" + file;
                         break;
                 }
                 InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/" + fileCarpet));
