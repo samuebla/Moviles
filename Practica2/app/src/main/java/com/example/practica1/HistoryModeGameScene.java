@@ -309,7 +309,7 @@ public class HistoryModeGameScene implements Scene {
                         fileCarpet = "frutas/" + file;
                         break;
                     case 4:
-                        fileCarpet = "capìtalismo/" + file;
+                        fileCarpet = "capitalismo/" + file;
                         break;
                 }
                 InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/" + fileCarpet));
