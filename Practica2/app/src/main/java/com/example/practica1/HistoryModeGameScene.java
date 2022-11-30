@@ -36,6 +36,8 @@ public class HistoryModeGameScene implements Scene {
     int mode;
 
     private AtomicReference<Integer> coins;
+    private AtomicReference<Integer> progress;
+    private Integer currentLevelNumber;
     private Integer coinSize;
 
     //Para mostrar en pantallas la info de las celdas
@@ -63,7 +65,7 @@ public class HistoryModeGameScene implements Scene {
     boolean won;
     boolean showAnswers;
 
-    public HistoryModeGameScene(EngineApp engine, int rows, int cols, String file,int modeAux, AtomicReference<Integer> coinsAux) {
+    public HistoryModeGameScene(EngineApp engine, int rows, int cols, String file,int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
@@ -80,6 +82,10 @@ public class HistoryModeGameScene implements Scene {
         coinSize = engine.getWidth() / 10;
 
         coins = coinsAux;
+        progress = progressAux;
+        this.currentLevelNumber = currentLevelNumberAux;
+
+        //AAAAAAAAAAAAAAAAAAA DEBUG
         coins.set(coins.get()+1);
 
         rows_ = rows;
@@ -271,12 +277,20 @@ public class HistoryModeGameScene implements Scene {
 
         //BOTONES
         //Si te rindes vuelves a la seleccion de nivel
-        if (inputReceived(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
-            saveToFile();
+        if (!won && inputReceived(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
+            if (lives <= 0){
+                saveToFile(true);
+            }else{
+                saveToFile(false);
+            }
             this.engine.popScene();
         }
         //Solo funciona si has ganado
         if (won && inputReceived(this.backButton.getPos(), this.backButton.getSize())) {
+            if (currentLevelNumber == this.progress.get()){
+                this.progress.set(this.progress.get() + 1);
+            }
+            saveToFile(true);
             this.engine.popScene();
             this.engine.popScene();
         }
@@ -404,27 +418,39 @@ public class HistoryModeGameScene implements Scene {
 
     }
 
-    public void saveToFile() {
+    public void saveToFile(boolean reset) {
         try {
             FileOutputStream fos = this.engine.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
             //Guardado de la partida
-            String auxiliar = rows_ + " " + cols_ + " " + lives + " \n";
+            String auxiliar = rows_ + " " + cols_ + " ";
+            if (reset){
+                auxiliar += 3 + " \n";
+            }else{
+                auxiliar += lives + " \n";
+            }
             fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
             auxiliar = "";
             for (int i = 0; i < rows_; i++) {
                 for (int j = 0; j < cols_; j++) {
-
-                    if (matriz[j][i].solution) {
-                        if (matriz[j][i].getCellType() == CellBase.cellType.EMPTY) {
+                    if (reset){
+                        if (matriz[j][i].solution){
                             auxiliar += "1 ";
-                        } else {
-                            auxiliar += "3 ";
-                        }
-                    } else {
-                        if (matriz[j][i].getCellType() == CellBase.cellType.EMPTY) {
+                        }else {
                             auxiliar += "0 ";
+                        }
+                    }else{
+                        if (matriz[j][i].solution) {
+                            if (matriz[j][i].getCellType() == CellBase.cellType.EMPTY) {
+                                auxiliar += "1 ";
+                            } else {
+                                auxiliar += "3 ";
+                            }
                         } else {
-                            auxiliar += "2 ";
+                            if (matriz[j][i].getCellType() == CellBase.cellType.EMPTY) {
+                                auxiliar += "0 ";
+                            } else {
+                                auxiliar += "2 ";
+                            }
                         }
                     }
                 }

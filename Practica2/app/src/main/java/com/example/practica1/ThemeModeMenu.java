@@ -96,22 +96,22 @@ public class ThemeModeMenu implements Scene {
     public void handleInput(){
         //Tetarracas
         if (inputReceived(this.tetarracasButtonMode.getPos(), this.tetarracasButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[0].get(), 1, this.coins);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[0], 1, this.coins);
             this.engine.setScene(scene);
         }
         //Mamelungas
         if (inputReceived(this.mamelungasButtonMode.getPos(), this.mamelungasButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[1].get(), 2, this.coins);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[1], 2, this.coins);
             this.engine.setScene(scene);
         }
         //Bubalongas
         if (inputReceived(this.bubalongasButtonMode.getPos(), this.bubalongasButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[2].get(), 3, this.coins);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[2], 3, this.coins);
             this.engine.setScene(scene);
         }
         //Bakugans
         if (inputReceived(this.bakugansButtonMode.getPos(), this.bakugansButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[3].get(), 4, this.coins);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[3], 4, this.coins);
             this.engine.setScene(scene);
         }
 

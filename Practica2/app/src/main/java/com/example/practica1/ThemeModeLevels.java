@@ -24,10 +24,10 @@ public class ThemeModeLevels implements Scene {
     private String selectedCategory;
     private int category;
 
-    private Integer unlockedlevels;
+    private AtomicReference<Integer> unlockedlevels;
 
 
-    public ThemeModeLevels(EngineApp engineAux,Integer levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux){
+    public ThemeModeLevels(EngineApp engineAux,AtomicReference<Integer> levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux){
         this.engine = engineAux;
         this.selectedCategory = this.categories[selectedCategory - 1];
         this.category = selectedCategory;
@@ -59,15 +59,15 @@ public class ThemeModeLevels implements Scene {
 
         this.lvlImages = new String[20];
         //AAAAAAAAAAAAAAAAAA Asignar imagen distinta dependiendo del nivel
-        for (int i = 0; i < this.unlockedlevels; ++i){
+        for (int i = 0; i < this.unlockedlevels.get(); ++i){
             this.lvlImages[i] = "Square";
         }
         //AAAAAAAAAAAAAAAAAAA Asignar imagen de desbloqueado
-        if (this.unlockedlevels < this.lvlImages.length){
-            this.lvlImages[this.unlockedlevels] = "Square";
+        if (this.unlockedlevels.get() < this.lvlImages.length){
+            this.lvlImages[this.unlockedlevels.get()] = "Square";
         }
         //AAAAAAAAAAAAAAAAAAA Asignar imagen de bloqueado
-        for (int i = this.unlockedlevels + 1; i < this.lvlImages.length; ++i){
+        for (int i = this.unlockedlevels.get() + 1; i < this.lvlImages.length; ++i){
             this.lvlImages[i] = "Square";
         }
 
@@ -106,10 +106,10 @@ public class ThemeModeLevels implements Scene {
     }
 
     public void handleInput(){
-        for (int i = 0; i < this.unlockedlevels; ++i){
+        for (int i = 0; i < this.unlockedlevels.get(); ++i){
             if (inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
                 //AAAAAAAAAAAAAAAAAAAA Cambiar level1 por "level" + (i + 1)
-                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level1",this.category, this.coins);
+                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level1",this.category, this.coins, this.unlockedlevels, i + 1);
                 this.engine.setScene(playScene);
             }
         }
