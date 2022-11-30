@@ -166,6 +166,8 @@ public class MainMenuScene implements Scene {
             for (int i = 0; i < this.progress.length; ++i) {
                 this.progress[i] = new AtomicReference<Integer>(Integer.parseInt(fileRead[i + 1]));
             }
+            //AAAAAAAAAAAAAAAAAAAAAAAAAA
+            int patata = 0;
 
         } catch (
                 FileNotFoundException e) {
@@ -188,6 +190,7 @@ public class MainMenuScene implements Scene {
 
             for(int i = 0; i < this.progress.length; ++i){
                 writer += this.progress[i].get();
+                writer += " ";
             }
 
             fos.write(writer.getBytes(StandardCharsets.UTF_8));

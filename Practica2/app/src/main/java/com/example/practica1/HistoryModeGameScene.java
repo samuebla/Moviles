@@ -222,7 +222,7 @@ public class HistoryModeGameScene implements Scene {
 
             //ESTO ESTA SIN TESTEAR.
             //MONEDAS
-            this.engine.drawText(Integer.toString(coins), engine.getWidth() - coinSize - 10, (int) engine.getHeight() / 15, "Black", "CooperBold", 1);
+            this.engine.drawText(Integer.toString(coins.get()), engine.getWidth() - coinSize - 10, (int) engine.getHeight() / 15, "Black", "CooperBold", 1);
             this.engine.drawImage(engine.getWidth() - coinSize - 10, (int) engine.getHeight() / 72, coinSize, coinSize, "Coin");
 
             //CORAZONES

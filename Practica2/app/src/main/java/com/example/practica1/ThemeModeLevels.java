@@ -24,10 +24,10 @@ public class ThemeModeLevels implements Scene {
     private String selectedCategory;
     private int category;
 
-    private int unlockedlevels;
+    private Integer unlockedlevels;
 
 
-    public ThemeModeLevels(EngineApp engineAux,int levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux){
+    public ThemeModeLevels(EngineApp engineAux,Integer levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux){
         this.engine = engineAux;
         this.selectedCategory = this.categories[selectedCategory - 1];
         this.category = selectedCategory;
