@@ -5,6 +5,8 @@ import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class ThemeModeLevels implements Scene {
 
     private Button[] lvls;
@@ -15,7 +17,7 @@ public class ThemeModeLevels implements Scene {
 
     private EngineApp engine;
 
-    private Integer coins = 0;
+    private AtomicReference<Integer> coins;
     private Integer coinSize;
 
     private String[] categories = { "QUEER", "TETAS", "FRUTAS", "CAPITALISMO"};
@@ -25,11 +27,12 @@ public class ThemeModeLevels implements Scene {
     private int unlockedlevels;
 
 
-    public ThemeModeLevels(EngineApp engineAux,int levelsUnlocked, int selectedCategory){
+    public ThemeModeLevels(EngineApp engineAux,int levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux){
         this.engine = engineAux;
         this.selectedCategory = this.categories[selectedCategory - 1];
         this.category = selectedCategory;
         this.unlockedlevels = levelsUnlocked;
+        this.coins = coinsAux;
         coinSize = engine.getWidth()/10;
         init();
     }
@@ -97,7 +100,7 @@ public class ThemeModeLevels implements Scene {
 
         //Moneas
         //MONEDAS
-        this.engine.drawText(Integer.toString(coins), engine.getWidth() - coinSize-10, (int)engine.getHeight()/15, "Black", "CooperBold", 1);
+        this.engine.drawText(Integer.toString(coins.get()), engine.getWidth() - coinSize-10, (int)engine.getHeight()/15, "Black", "CooperBold", 1);
         this.engine.drawImage(engine.getWidth()-coinSize -10, (int)engine.getHeight()/72,coinSize,coinSize,"Coin");
 
     }
@@ -106,7 +109,7 @@ public class ThemeModeLevels implements Scene {
         for (int i = 0; i < this.unlockedlevels; ++i){
             if (inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
                 //AAAAAAAAAAAAAAAAAAAA Cambiar level1 por "level" + (i + 1)
-                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level1",this.category);
+                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level1",this.category, this.coins);
                 this.engine.setScene(playScene);
             }
         }

@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class HistoryModeGameScene implements Scene {
     private EngineApp engine;
@@ -34,7 +35,7 @@ public class HistoryModeGameScene implements Scene {
 
     int mode;
 
-    private Integer coins;
+    private AtomicReference<Integer> coins;
     private Integer coinSize;
 
     //Para mostrar en pantallas la info de las celdas
@@ -62,7 +63,7 @@ public class HistoryModeGameScene implements Scene {
     boolean won;
     boolean showAnswers;
 
-    public HistoryModeGameScene(EngineApp engine, int rows, int cols, String file,int modeAux) {
+    public HistoryModeGameScene(EngineApp engine, int rows, int cols, String file,int modeAux, AtomicReference<Integer> coinsAux) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
@@ -78,8 +79,8 @@ public class HistoryModeGameScene implements Scene {
         lives = 3;
         coinSize = engine.getWidth()/10;
 
-        //AAA DEBUG ELIMINAR ESTO AAAAAAAAAAAAAAAAAAAA
-        coins = 0;
+        coins = coinsAux;
+        coins.set(coins.get()+1);
 
         rows_ = rows;
         cols_ = cols;
@@ -221,7 +222,7 @@ public class HistoryModeGameScene implements Scene {
 
             //ESTO ESTA SIN TESTEAR.
             //MONEDAS
-            this.engine.drawText(Integer.toString(coins), engine.getWidth() - coinSize-10, (int)engine.getHeight()/15, "Black", "CooperBold", 1);
+            this.engine.drawText(Integer.toString(coins.get()), engine.getWidth() - coinSize-10, (int)engine.getHeight()/15, "Black", "CooperBold", 1);
             this.engine.drawImage(engine.getWidth()-coinSize -10, (int)engine.getHeight()/72,coinSize,coinSize,"Coin");
 
             //CORAZONES
