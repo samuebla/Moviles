@@ -27,6 +27,7 @@ public class EngineApp implements Runnable{
         this.eventHandler = new EventHandler();
         this.input = new InputAndroid(this.eventHandler);
         this.view.setOnTouchListener(this.input.getTouchListener());
+        this.view.setOnLongClickListener(this.input.getLongTouchListener());
 
         this.audioMngr = new AudioAndroid();
     }
