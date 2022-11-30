@@ -9,9 +9,20 @@ import com.example.engineandroid.Vector2D;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicReference;
 //import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.AdSize;
 //import com.google.android.gms.ads.AdView;
@@ -26,11 +37,15 @@ public class MainMenuScene implements Scene {
     private Button fastPlay;
     private Button historyMode;
 
+    //Player Data
+    private AtomicReference<Integer> coins;
+    private AtomicReference<Integer>[] progress;
+
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
 //    private AdView adView;
 
     private FrameLayout addContainerView;
-//    private AdSize adsize;
+    //    private AdSize adsize;
 //    private AdRequest addRequest;
     Context baseContext;
     private boolean initialLayoutComplete = false;
@@ -42,7 +57,6 @@ public class MainMenuScene implements Scene {
 //        this.addRequest = addRequestAux;
         this.baseContext = contextAux;
     }
-
 
 
     @Override
@@ -88,7 +102,12 @@ public class MainMenuScene implements Scene {
         this.historyMode = new Button(this.engine.getWidth() / 2 - (engine.getWidth() / 6), this.engine.getHeight() / 2, engine.getWidth() / 3, engine.getHeight() / 4.8);
 
 
-
+        loadFromFile();
+        System.out.print("Save data loaded: ");
+        System.out.print(this.coins);
+        for (int i = 0; i < this.progress.length; ++i) {
+            System.out.print(this.progress[i]);
+        }
 
 
         //Creacion anuncio
@@ -106,6 +125,55 @@ public class MainMenuScene implements Scene {
 //                        }
 //                    }
 //                });
+    }
+
+    //Metodos de lectura y guardado
+    public void loadFromFile() {
+        try {
+//            //Carga de archivo
+            String receiveString = "";
+//            try {//Comprobar si existe en el almacenamiento interno
+//                FileInputStream fis = this.engine.getContext().openFileInput("saveData");
+//                InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+//
+//                while (bufferedReader.ready()) {
+//                    receiveString += bufferedReader.readLine();
+//                }
+//                inputStreamReader.close();
+//            } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
+//                e.printStackTrace();
+//            }
+            InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/saveData"));
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            while (bufferedReader.ready()) {
+                receiveString += bufferedReader.readLine();
+            }
+
+            inputStreamReader.close();
+            //Copia del fichero
+            FileOutputStream fos = this.engine.getContext().openFileOutput("saveData", Context.MODE_PRIVATE);
+            fos.write(receiveString.getBytes());
+            fos.close();
+            //Carga el nivel desde el string "RAW" de lectura
+            String[] fileRead;
+            fileRead = receiveString.split(" ");
+            this.coins = new AtomicReference<Integer>(Integer.parseInt(fileRead[0]));
+
+            this.progress = new AtomicReference[4];
+
+            for (int i = 0; i < this.progress.length; ++i) {
+                this.progress[i] = new AtomicReference<Integer>(Integer.parseInt(fileRead[i + 1]));
+            }
+
+        } catch (
+                FileNotFoundException e) {
+            Log.e("Error", "Save data file not found: " + e.toString());
+        } catch (
+                IOException e) {
+            Log.e("Reading Error", "Can not read save data file: " + e.toString());
+        }
     }
 
     @Override
@@ -138,7 +206,7 @@ public class MainMenuScene implements Scene {
         }
         if (inputReceived(this.historyMode.getPos(), this.historyMode.getSize())) {
             //Te lleva a la pantalla de seleccion
-            HistoryModeMenu historyMode = new HistoryModeMenu(this.engine);
+            HistoryModeMenu historyMode = new HistoryModeMenu(this.engine, this.coins, this.progress);
             this.engine.setScene(historyMode);
         }
     }

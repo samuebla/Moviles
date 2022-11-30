@@ -6,6 +6,7 @@ import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
 import java.io.File;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ThemeModeMenu implements Scene {
 
@@ -19,11 +20,15 @@ public class ThemeModeMenu implements Scene {
 
     private EngineApp engine;
 
-    private Integer coins = 0;
+    private AtomicReference<Integer> coins;
     private Integer coinSize;
 
-    public ThemeModeMenu(EngineApp engineAux){
+    private AtomicReference<Integer>[] progress;
+
+    public ThemeModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux){
         this.engine = engineAux;
+        this.coins = coinsAux;
+        this.progress = progressAux;
         coinSize = engine.getWidth()/10;
         init();
     }
@@ -39,8 +44,8 @@ public class ThemeModeMenu implements Scene {
     public void init() {
         //Botones selectores del nivel
         this.tetarracasButtonMode = new Button(engine.getWidth()/4  - engine.getWidth()/8, engine.getHeight()/2.4, engine.getWidth()/4, engine.getHeight()/6);
-        this.mamelungasButtonMode = new Button(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/1.2, engine.getWidth()/4, engine.getHeight()/6);
-        this.bakugansButtonMode = new Button(engine.getWidth()/4 - engine.getWidth()/8, engine.getHeight()/1.2, engine.getWidth()/4, engine.getHeight()/6);
+        this.mamelungasButtonMode = new Button(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/1.5, engine.getWidth()/4, engine.getHeight()/6);
+        this.bakugansButtonMode = new Button(engine.getWidth()/4 - engine.getWidth()/8, engine.getHeight()/1.5, engine.getWidth()/4, engine.getHeight()/6);
         this.bubalongasButtonMode = new Button(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/2.4, engine.getWidth()/4, engine.getHeight()/6);
 
 
@@ -83,7 +88,7 @@ public class ThemeModeMenu implements Scene {
 
         //Moneas
         //MONEDAS
-        this.engine.drawText(Integer.toString(coins), engine.getWidth() - coinSize-10, (int)engine.getHeight()/15, "Black", "CooperBold", 1);
+        this.engine.drawText(Integer.toString(coins.get()), engine.getWidth() - coinSize-10, (int)engine.getHeight()/15, "Black", "CooperBold", 1);
         this.engine.drawImage(engine.getWidth()-coinSize -10, (int)engine.getHeight()/72,coinSize,coinSize,"Coin");
 
     }
@@ -91,22 +96,22 @@ public class ThemeModeMenu implements Scene {
     public void handleInput(){
         //Tetarracas
         if (inputReceived(this.tetarracasButtonMode.getPos(), this.tetarracasButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,1, 1);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[0].get(), 1, this.coins);
             this.engine.setScene(scene);
         }
         //Mamelungas
         if (inputReceived(this.mamelungasButtonMode.getPos(), this.mamelungasButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,2, 2);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[1].get(), 2, this.coins);
             this.engine.setScene(scene);
         }
         //Bubalongas
         if (inputReceived(this.bubalongasButtonMode.getPos(), this.bubalongasButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,3, 3);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[2].get(), 3, this.coins);
             this.engine.setScene(scene);
         }
         //Bakugans
         if (inputReceived(this.bakugansButtonMode.getPos(), this.bakugansButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,4, 4);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[3].get(), 4, this.coins);
             this.engine.setScene(scene);
         }
 
