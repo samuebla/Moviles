@@ -92,6 +92,8 @@ public class MainMenuScene implements Scene {
             this.engine.getGraphics().newImage("Coin", "assets/coin.png");
             this.engine.getGraphics().newImage("Heart", "assets/heart.png");
             this.engine.getGraphics().newImage("Square", "assets/square.png");
+            this.engine.getGraphics().newImage("Blocked", "assets/blockedLevel.png");
+            this.engine.getGraphics().newImage("Unlocked", "assets/unlockedLevel.png");
 
 
         } catch (Exception e) {

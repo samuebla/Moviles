@@ -59,16 +59,16 @@ public class ThemeModeLevels implements Scene {
 
         this.lvlImages = new String[20];
         //AAAAAAAAAAAAAAAAAA Asignar imagen distinta dependiendo del nivel
-        for (int i = 0; i < this.unlockedlevels.get(); ++i){
-            this.lvlImages[i] = "Square";
+        for (int i = 1; i < this.unlockedlevels.get(); ++i){
+            this.lvlImages[i-1] = "Square";
         }
         //AAAAAAAAAAAAAAAAAAA Asignar imagen de desbloqueado
         if (this.unlockedlevels.get() < this.lvlImages.length){
-            this.lvlImages[this.unlockedlevels.get()] = "Square";
+            this.lvlImages[this.unlockedlevels.get()-1] = "Unlocked";
         }
         //AAAAAAAAAAAAAAAAAAA Asignar imagen de bloqueado
-        for (int i = this.unlockedlevels.get() + 1; i < this.lvlImages.length; ++i){
-            this.lvlImages[i] = "Square";
+        for (int i = this.unlockedlevels.get() + 1; i < this.lvlImages.length+1; ++i){
+            this.lvlImages[i-1] = "Blocked";
         }
 
         this.backButton = new Button(10 + engine.getWidth()/44, 30, engine.getWidth()/10, engine.getHeight()/15);

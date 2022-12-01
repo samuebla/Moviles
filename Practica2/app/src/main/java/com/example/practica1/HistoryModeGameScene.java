@@ -280,7 +280,6 @@ public class HistoryModeGameScene implements Scene {
                             //Aqui se guarda si te has equivocado...
                             this.matriz[i][j].handleInput(engine);
                         }
-
                     }
                 }
             }
@@ -302,7 +301,6 @@ public class HistoryModeGameScene implements Scene {
                 this.progress.set(this.progress.get() + 1);
             }
             saveToFile(true);
-            this.engine.popScene();
             this.engine.popScene();
         }
     }
