@@ -27,9 +27,5 @@ public class SceneMngrAndroid {
         stack.peek().render();
     }
 
-    public void handleInput(){
-        stack.peek().handleInput();
-    }
-
     public Scene getScene(){return stack.peek();}
 }

@@ -67,13 +67,14 @@ class TouchListener implements View.OnTouchListener {
     }
 
     public boolean processEvent(MotionEvent e){
+        this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
+
         if(e.getAction() == MotionEvent.ACTION_UP){
             //Para que no se haga simple click despues de long touch
             if (cancel){
                 cancel = false;
                 return false;
             }
-            this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
             System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
             this.eventHandler.sendEvent(EventHandler.EventType.TOUCH);
             return true;

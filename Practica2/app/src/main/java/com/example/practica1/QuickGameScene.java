@@ -316,7 +316,7 @@ public class QuickGameScene implements Scene{
         }
 
         if (engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput();
+            handleInput(engine.getEventMngr().getEventType());
             engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
 
@@ -404,7 +404,7 @@ public class QuickGameScene implements Scene{
     }
 
     @Override
-    public void handleInput() {
+    public void handleInput(EventHandler.EventType type) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
                 if (inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {

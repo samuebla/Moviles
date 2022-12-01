@@ -56,7 +56,7 @@ public class ThemeModeMenu implements Scene {
     public void update(double deltaTime){
         //Para los eventos...
         if(engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput();
+            handleInput(engine.getEventMngr().getEventType());
             engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
     }
@@ -93,7 +93,8 @@ public class ThemeModeMenu implements Scene {
 
     }
 
-    public void handleInput(){
+    @Override
+    public void handleInput(EventHandler.EventType type){
         //Tetarracas
         if (inputReceived(this.tetarracasButtonMode.getPos(), this.tetarracasButtonMode.getSize())){
             ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[0], 1, this.coins);

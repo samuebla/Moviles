@@ -50,7 +50,7 @@ public class LevelSelection implements Scene {
     public void update(double deltaTime){
         //Para los eventos...
         if(engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput();
+            handleInput(engine.getEventMngr().getEventType());
             engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
     }
@@ -84,7 +84,7 @@ public class LevelSelection implements Scene {
     }
 
     @Override
-    public void handleInput(){
+    public void handleInput(EventHandler.EventType type){
         //5x5
         if (inputReceived(this.button5.getPos(), this.button5.getSize())){
             QuickGameScene playScene = new QuickGameScene(this.engine, 5, 5);

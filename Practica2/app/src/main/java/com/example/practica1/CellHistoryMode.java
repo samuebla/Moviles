@@ -16,7 +16,7 @@ public class CellHistoryMode extends CellBase {
     @Override
     public void handleInput(EngineApp engine) {
         //Solo puedes interaccionar si está empty
-        if (type == CellBase.cellType.EMPTY) {
+        if (type == CellBase.cellType.EMPTY ||type == cellType.CROSSED ) {
             //Si te has equivocado...
             if (!solution) {
                 type = cellType.WRONG;
@@ -25,6 +25,14 @@ public class CellHistoryMode extends CellBase {
             else {
                 type = cellType.SELECTED;
             }
+        }
+    }
+
+    public void setCrossed(){
+        System.out.println("A vel a vel: " + type.ordinal());
+        if (type == CellBase.cellType.EMPTY) {
+            System.out.println("a pues si");
+            type = cellType.CROSSED;
         }
     }
 

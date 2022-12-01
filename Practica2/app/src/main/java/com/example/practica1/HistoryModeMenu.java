@@ -63,7 +63,7 @@ public class HistoryModeMenu implements Scene {
     public void update(double deltaTime){
         //Para los eventos...
         if(engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput();
+            handleInput(engine.getEventMngr().getEventType());
             engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
     }
@@ -89,7 +89,8 @@ public class HistoryModeMenu implements Scene {
         this.engine.drawImage(engine.getWidth()-coinSize -10, (int)engine.getHeight()/72,coinSize,coinSize,"Coin");
     }
 
-    public void handleInput(){
+    @Override
+    public void handleInput(EventHandler.EventType type){
         //ThemeMode
         if (inputReceived(this.themeButtonMode.getPos(), this.themeButtonMode.getSize())){
             ThemeModeMenu playScene = new ThemeModeMenu(this.engine, this.coins, this.progress);

@@ -80,7 +80,7 @@ public class ThemeModeLevels implements Scene {
     public void update(double deltaTime){
         //Para los eventos...
         if(engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput();
+            handleInput(engine.getEventMngr().getEventType());
             engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
     }
@@ -105,7 +105,8 @@ public class ThemeModeLevels implements Scene {
 
     }
 
-    public void handleInput(){
+    @Override
+    public void handleInput(EventHandler.EventType type){
         for (int i = 0; i < this.unlockedlevels.get(); ++i){
             if (inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
                 HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1);

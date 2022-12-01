@@ -206,7 +206,7 @@ public class MainMenuScene implements Scene {
     public void update(double deltaTime) {
         //Para los eventos
         if (this.engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput();
+            handleInput(engine.getEventMngr().getEventType());
             this.engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
     }
@@ -223,7 +223,7 @@ public class MainMenuScene implements Scene {
     }
 
     @Override
-    public void handleInput() {
+    public void handleInput(EventHandler.EventType type) {
         //Si pulsas el boton...
         if (inputReceived(this.fastPlay.getPos(), this.fastPlay.getSize())) {
             //Te lleva a la pantalla de seleccion

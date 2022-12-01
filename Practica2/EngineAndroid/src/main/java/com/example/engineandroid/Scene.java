@@ -5,7 +5,7 @@ public interface Scene {
     //Main Functions
     public void update(double deltaTime);
     public void render();
-    public void handleInput();
+    public void handleInput(EventHandler.EventType type);
     public boolean inputReceived(Vector2D pos, Vector2D size);
     public void init();
     }

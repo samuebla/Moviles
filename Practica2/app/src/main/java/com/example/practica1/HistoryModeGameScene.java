@@ -65,7 +65,7 @@ public class HistoryModeGameScene implements Scene {
     boolean won;
     boolean showAnswers;
 
-    public HistoryModeGameScene(EngineApp engine, int rows, int cols, String file,int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux) {
+    public HistoryModeGameScene(EngineApp engine, int rows, int cols, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
@@ -86,7 +86,7 @@ public class HistoryModeGameScene implements Scene {
         this.currentLevelNumber = currentLevelNumberAux;
 
         //AAAAAAAAAAAAAAAAAAA DEBUG
-        coins.set(coins.get()+1);
+        coins.set(coins.get() + 1);
 
         rows_ = rows;
         cols_ = cols;
@@ -168,7 +168,7 @@ public class HistoryModeGameScene implements Scene {
         }
 
         if (engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput();
+            handleInput(engine.getEventMngr().getEventType());
             engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
 
@@ -245,31 +245,42 @@ public class HistoryModeGameScene implements Scene {
     }
 
     @Override
-    public void handleInput() {
+    public void handleInput(EventHandler.EventType type) {
         //Solo podra interactuar con el tablero si tiene vidas
         if (lives > 0) {
             for (int i = 0; i < matriz.length; i++) {
                 for (int j = 0; j < matriz[i].length; j++) {
                     if (inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
 
-                        //Aqui se guarda si te has equivocado...
-                        this.matriz[i][j].handleInput(engine);
-
-                        //Fallo
-                        if (this.matriz[i][j].getCellType() == CellBase.cellType.WRONG) {
-                            //Restamos una vida
-                            lives--;
-
-                            //Acierto
+                        //Si es un long touch...
+                        if (type == EventHandler.EventType.LONG_TOUCH) {
+                            //Intentamos cruzarlo
+                            this.matriz[i][j].setCrossed();
+                            //Y playeamos el sonido
+                            engine.getAudio().playSound("effect", 1);
                         } else {
-                            remainingCells--;
-
-                            if (win()) {
-                                won = true;
+                            //Fallo
+                            if (this.matriz[i][j].getCellType() == CellBase.cellType.EMPTY) {
+                                if (!this.matriz[i][j].solution) {
+                                    //Restamos una vida
+                                    lives--;
+                                    //Y playeamos el sonido
+                                    engine.getAudio().playSound("effect", 1);
+                                }
+                                //Acierto
+                                else {
+                                    remainingCells--;
+                                    if (win()) {
+                                        won = true;
+                                    }
+                                    //Y playeamos el sonido
+                                    engine.getAudio().playSound("effect", 1);
+                                }
                             }
+                            //Aqui se guarda si te has equivocado...
+                            this.matriz[i][j].handleInput(engine);
                         }
-                        //Y playeamos el sonido
-                        engine.getAudio().playSound("effect", 1);
+
                     }
                 }
             }
@@ -278,16 +289,16 @@ public class HistoryModeGameScene implements Scene {
         //BOTONES
         //Si te rindes vuelves a la seleccion de nivel
         if (!won && inputReceived(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
-            if (lives <= 0){
+            if (lives <= 0) {
                 saveToFile(true);
-            }else{
+            } else {
                 saveToFile(false);
             }
             this.engine.popScene();
         }
         //Solo funciona si has ganado
         if (won && inputReceived(this.backButton.getPos(), this.backButton.getSize())) {
-            if (currentLevelNumber == this.progress.get()){
+            if (currentLevelNumber == this.progress.get()) {
                 this.progress.set(this.progress.get() + 1);
             }
             saveToFile(true);
@@ -358,7 +369,7 @@ public class HistoryModeGameScene implements Scene {
 
                     //Si es 0 Esta EMPTY pero no es true
                     if (aux == 0) {
-                        this.matriz[j - 3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * (j-3),
+                        this.matriz[j - 3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * (j - 3),
                                 (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05), CellBase.cellType.EMPTY, false);
 
                     }
@@ -367,19 +378,19 @@ public class HistoryModeGameScene implements Scene {
                         //Lo añadimos a la lista de celdas que tiene que acertar el jugador
                         remainingCells++;
 
-                        this.matriz[j - 3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * (j-3),
+                        this.matriz[j - 3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * (j - 3),
                                 (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05), CellBase.cellType.EMPTY, true);
 
                     }
                     //Si esta mal seleccionada y esta roja...
                     else if (aux == 2) {
-                        this.matriz[j - 3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * (j-3),
+                        this.matriz[j - 3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * (j - 3),
                                 (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05), CellBase.cellType.WRONG, false);
 
                     }
                     //Si esta bien seleccionada y esta azul
                     else if (aux == 3) {
-                        this.matriz[j - 3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * (j-3),
+                        this.matriz[j - 3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * (j - 3),
                                 (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05), CellBase.cellType.SELECTED, true);
                     }
                 }
@@ -422,22 +433,22 @@ public class HistoryModeGameScene implements Scene {
             FileOutputStream fos = this.engine.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
             //Guardado de la partida
             String auxiliar = rows_ + " " + cols_ + " ";
-            if (reset){
+            if (reset) {
                 auxiliar += 3 + " \n";
-            }else{
+            } else {
                 auxiliar += lives + " \n";
             }
             fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
             auxiliar = "";
             for (int i = 0; i < rows_; i++) {
                 for (int j = 0; j < cols_; j++) {
-                    if (reset){
-                        if (matriz[j][i].solution){
+                    if (reset) {
+                        if (matriz[j][i].solution) {
                             auxiliar += "1 ";
-                        }else {
+                        } else {
                             auxiliar += "0 ";
                         }
-                    }else{
+                    } else {
                         if (matriz[j][i].solution) {
                             if (matriz[j][i].getCellType() == CellBase.cellType.EMPTY) {
                                 auxiliar += "1 ";
