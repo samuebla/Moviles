@@ -33,18 +33,26 @@ public class HistoryModeGameScene implements Scene {
 
     int lives;
 
+    //Para mostrar en pantallas la info de las celdas
+    int remainingCells, maxCellsSolution;
+
     int mode;
 
     private AtomicReference<Integer> coins;
     private AtomicReference<Integer> progress;
     private Integer currentLevelNumber;
     private Integer coinSize;
+    boolean showNewCoins;
 
-    //Para mostrar en pantallas la info de las celdas
-    int remainingCells, maxCellsSolution;
+    //Patron de colores
+    int colorfulPattern[];
+    int actualColorPattern;
 
     private Button giveUpButton;
     private Button backButton;
+    private Button getLifeButton;
+
+    private Button[] colorsButtons;
 
     //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de las casillas azules. Uno el horizontal y otro el vertical
     private ArrayList<Integer>[] xPositionsTopToBottom;
@@ -87,6 +95,11 @@ public class HistoryModeGameScene implements Scene {
 
         //AAAAAAAAAAAAAAAAAAA DEBUG
         coins.set(coins.get() + 1);
+
+        //Patron de colores
+        colorfulPattern = new int[4];
+        actualColorPattern = modeAux-1;
+        colorsButtons = new Button[4];
 
         rows_ = rows;
         cols_ = cols;
@@ -157,6 +170,18 @@ public class HistoryModeGameScene implements Scene {
                 (double) this.engine.getWidth() * 0.1666666, (double) this.engine.getHeight() * 0.10);
         this.backButton = new Button((double) this.engine.getWidth() * 0.44444444, (double) this.engine.getHeight() / 1.1,
                 (double) this.engine.getWidth() / 10, (double) this.engine.getHeight() / 15);
+        this.getLifeButton = new Button((double) this.engine.getWidth()/10, (double) this.engine.getHeight() / 1.2,
+                (double) this.engine.getWidth() / 8, (double) this.engine.getHeight() / 12);
+
+        for(int i=0;i<colorsButtons.length;i++){
+            this.colorsButtons[i] = new Button((double) this.engine.getWidth() /2.5 + 200*i, (double) this.engine.getHeight()/1.2,
+                    (double) this.engine.getWidth() * 0.1666666, (double) this.engine.getHeight() * 0.10);
+        }
+        colorfulPattern[0] = 0xFFFFFFFF;
+        colorfulPattern[1] = 0xFF00FFFF;
+        colorfulPattern[2] = 0xFFFF00FF;
+        colorfulPattern[3] = 0xFFFFFF00;
+
     }
 
     @Override
@@ -198,6 +223,13 @@ public class HistoryModeGameScene implements Scene {
                 }
             }
 
+            //Mostramos las monedas obtenidas
+            if(showNewCoins){
+                this.engine.drawText("+10",(int)(this.engine.getWidth()/2),(int)(this.engine.getHeight()/1.5),"Black","Cooper",0);
+                this.engine.drawImage(engine.getWidth()/2 + 30, (int) (engine.getHeight() / 1.5), coinSize, coinSize, "Coin");
+
+            }
+
             //Mensaje de enhorabuena
             this.engine.drawText("¡ENHORABUENA!", (int) ((double) this.engine.getWidth() * 0.5), (int) ((double) this.engine.getHeight() / 15), "Black", "Cooper", 0);
 
@@ -224,7 +256,16 @@ public class HistoryModeGameScene implements Scene {
             }
 
             //BOTONES
+            //TODO AAA NO SE HACER LOS PUTOS COLORES
+            this.engine.drawRectangle((int) ((double) colorsButtons[actualColorPattern].getPos().getX()), (int) ((double) colorsButtons[actualColorPattern].getPos().getY()), (int) ((double) colorsButtons[actualColorPattern].getSize().getX()), (int) ((double) colorsButtons[actualColorPattern].getSize().getY()), true,(int)(colorfulPattern[actualColorPattern] - 0x00A0A0A0));
+
             this.engine.drawImage((int) ((double) giveUpButton.getPos().getX()), (int) ((double) giveUpButton.getPos().getY()), (int) ((double) giveUpButton.getSize().getX()), (int) ((double) giveUpButton.getSize().getY()), "GiveUp");
+            for(int i=0;i<colorsButtons.length;i++){
+                this.engine.drawImage((int) ((double) colorsButtons[i].getPos().getX()), (int) ((double) colorsButtons[i].getPos().getY()), (int) ((double) colorsButtons[i].getSize().getX()), (int) ((double) colorsButtons[i].getSize().getY()), "GiveUp");
+            }
+            this.engine.drawImage((int) ((double) getLifeButton.getPos().getX()), (int) ((double) getLifeButton.getPos().getY()), (int) ((double) getLifeButton.getSize().getX()), (int) ((double) getLifeButton.getSize().getY()), "GiveUp");
+
+
 
             //ESTO ESTA SIN TESTEAR.
             //MONEDAS
@@ -272,6 +313,12 @@ public class HistoryModeGameScene implements Scene {
                                     remainingCells--;
                                     if (win()) {
                                         won = true;
+                                        //Si no te has pasado el nivel nunca...
+                                        if(currentLevelNumber == this.progress.get()){
+                                            //Sumamos las monedas del nivel
+                                            coins.set(coins.get()+10);
+                                            showNewCoins = true;
+                                        }
                                     }
                                     //Y playeamos el sonido
                                     engine.getAudio().playSound("effect", 1);
@@ -294,6 +341,7 @@ public class HistoryModeGameScene implements Scene {
                 saveToFile(false);
             }
             this.engine.popScene();
+            this.engine.setColorBackground(0xFFFFFFFF);
         }
         //Solo funciona si has ganado
         if (won && inputReceived(this.backButton.getPos(), this.backButton.getSize())) {
@@ -302,6 +350,17 @@ public class HistoryModeGameScene implements Scene {
             }
             saveToFile(true);
             this.engine.popScene();
+            this.engine.setColorBackground(0xFFFFFFFF);
+        }
+        for(int i=0;i<colorsButtons.length;i++){
+            if(inputReceived(this.colorsButtons[i].getPos(), this.colorsButtons[i].getSize())){
+                actualColorPattern = i;
+                this.engine.setColorBackground(colorfulPattern[i]);
+            }
+        }
+        //Si necesitas o quieres alguna vida...
+        if (lives<3 && inputReceived(this.getLifeButton.getPos(), this.getLifeButton.getSize())) {
+           //TODO AAA o compras vida por X dionero o miras anuncio
         }
     }
 

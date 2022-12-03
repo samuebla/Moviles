@@ -5,7 +5,7 @@ import android.content.res.AssetManager;
 import android.view.SurfaceView;
 import android.widget.LinearLayout;
 
-public class EngineApp implements Runnable{
+public class EngineApp implements Runnable {
 
     private SurfaceView view;
 
@@ -33,17 +33,16 @@ public class EngineApp implements Runnable{
     }
 
 
-
-    public RenderAndroid getGraphics(){
+    public RenderAndroid getGraphics() {
         return render;
     }
 
-    public AudioAndroid getAudio(){
+    public AudioAndroid getAudio() {
         return audioMngr;
     }
 
     //<<Input>>
-    public InputAndroid getInput(){
+    public InputAndroid getInput() {
         return input;
     }
 
@@ -61,20 +60,20 @@ public class EngineApp implements Runnable{
     }
     //<<Fin Input>>
 
-    public void paintCell(int x, int y, int w, int h, int celltype){
+    public void paintCell(int x, int y, int w, int h, int celltype) {
         this.render.paintCell(x, y, w, h, celltype);
     }
 
-    public void setAssetsContext(AssetManager assetsAux){
+    public void setAssetsContext(AssetManager assetsAux) {
         this.render.setAssetContext(assetsAux);
         this.audioMngr.setAssetsManager(assetsAux);
     }
 
-    public void setBaseContext(Context con){
+    public void setBaseContext(Context con) {
         this.context = con;
     }
 
-    public Context getContext(){
+    public Context getContext() {
         return this.context;
     }
 
@@ -84,23 +83,32 @@ public class EngineApp implements Runnable{
     //-1 Alineamiento a la izquierda
     //0 Alineamiento en el centro
     //1 Alineamiento a la derecho
-    public void drawText(String text, int x, int y, String color, String font, int alignType){
-        this.render.drawText(text, x, y, color,font, alignType);
+    public void drawText(String text, int x, int y, String color, String font, int alignType) {
+        this.render.drawText(text, x, y, color, font, alignType);
     }
 
     public void drawCircle(float x, float y, float r, String color) {
-        this.render.drawCircle(x,y,r,color);
+        this.render.drawCircle(x, y, r, color);
     }
 
-    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String image){
+    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String image) {
         this.render.drawImage(x, y, desiredWidth, desiredHeight, image);
+    }
+    public void drawRectangle(int x, int y, int w, int h,boolean fill,int color) {
+        this.render.drawRectangle(x, y, h,w,true,color);
     }
 
     public void setScene(Scene newScene) {
         this.sceneMngr.pushScene(newScene);
     }
 
-    public void setSceneMngr(SceneMngrAndroid sceneMngrAux){this.sceneMngr = sceneMngrAux;}
+    public void setSceneMngr(SceneMngrAndroid sceneMngrAux) {
+        this.sceneMngr = sceneMngrAux;
+    }
+
+    public void setColorBackground(int newColor) {
+        this.render.setColorBackground(newColor);
+    }
 
     public void popScene() {
         this.sceneMngr.popScene();
@@ -116,14 +124,14 @@ public class EngineApp implements Runnable{
 
         // Si el Thread se pone en marcha
         // muy rápido, la vista podría todavía no estar inicializada.
-        while(this.running && this.render.getWidth() == 0);
+        while (this.running && this.render.getWidth() == 0) ;
 
 
 
         //Escalado de la app
         this.render.setFrameSize();
         this.render.scaleAppView();
-        this.input.setOffset(0,this.render.getOffset().getY());
+        this.input.setOffset(0, this.render.getOffset().getY());
         this.sceneMngr.getScene().init();
         // Espera activa. Sería más elegante al menos dormir un poco.
 
