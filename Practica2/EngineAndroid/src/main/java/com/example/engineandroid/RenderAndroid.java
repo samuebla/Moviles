@@ -52,8 +52,7 @@ public class RenderAndroid {
         // "Borramos" el fondo.
         this.canvas.drawColor(0xFFFFFFFF); // ARGB
         this.canvas.translate(0, this.posCanvas.getY());
-        setColor(colorBackground);
-        drawRectangle(0, 0, this.getViewWidth(), (int) (this.frameSize.getY() / factorScale), true);
+        drawRectangle(0, 0, this.getViewWidth(), (int) (this.frameSize.getY() / factorScale), true,colorBackground);
     }
 
     public void setColorBackground(int newColor) {
@@ -194,7 +193,9 @@ public class RenderAndroid {
     }
 
 
-    public void drawRectangle(int x, int y, int w, int h, boolean fill) {
+    public void drawRectangle(int x, int y, int w, int h, boolean fill,int color) {
+        setColor(color);
+
         if (!fill)
             this.canvas.drawRect(x, y, x + w, y + h, this.paint);
         else {

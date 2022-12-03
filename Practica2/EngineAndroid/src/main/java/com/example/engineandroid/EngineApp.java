@@ -93,6 +93,9 @@ public class EngineApp implements Runnable {
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String image) {
         this.render.drawImage(x, y, desiredWidth, desiredHeight, image);
     }
+    public void drawRectangle(int x, int y, int w, int h,boolean fill,int color) {
+        this.render.drawRectangle(x, y, h,w,true,color);
+    }
 
     public void setScene(Scene newScene) {
         this.sceneMngr.pushScene(newScene);

@@ -173,6 +173,11 @@ public class HistoryModeGameScene implements Scene {
             this.colorsButtons[i] = new Button((double) this.engine.getWidth() /2.5 + 200*i, (double) this.engine.getHeight()/1.3,
                     (double) this.engine.getWidth() * 0.1666666, (double) this.engine.getHeight() * 0.10);
         }
+        colorfulPattern[0] = 0xFFFFFFFF;
+        colorfulPattern[1] = 0xFF00FFFF;
+        colorfulPattern[2] = 0xFFFF00FF;
+        colorfulPattern[3] = 0xFFFFFF00;
+
     }
 
     @Override
@@ -240,6 +245,9 @@ public class HistoryModeGameScene implements Scene {
             }
 
             //BOTONES
+            //TODO AAA NO SE HACER LOS PUTOS COLORES
+            this.engine.drawRectangle((int) ((double) colorsButtons[actualColorPattern].getPos().getX()), (int) ((double) colorsButtons[actualColorPattern].getPos().getY()), (int) ((double) colorsButtons[actualColorPattern].getSize().getX()), (int) ((double) colorsButtons[actualColorPattern].getSize().getY()), true,(int)(colorfulPattern[actualColorPattern] - 0x00A0A0A0));
+
             this.engine.drawImage((int) ((double) giveUpButton.getPos().getX()), (int) ((double) giveUpButton.getPos().getY()), (int) ((double) giveUpButton.getSize().getX()), (int) ((double) giveUpButton.getSize().getY()), "GiveUp");
             for(int i=0;i<colorsButtons.length;i++){
                 this.engine.drawImage((int) ((double) colorsButtons[i].getPos().getX()), (int) ((double) colorsButtons[i].getPos().getY()), (int) ((double) colorsButtons[i].getSize().getX()), (int) ((double) colorsButtons[i].getSize().getY()), "GiveUp");
@@ -315,6 +323,7 @@ public class HistoryModeGameScene implements Scene {
                 saveToFile(false);
             }
             this.engine.popScene();
+            this.engine.setColorBackground(0xFFFFFFFF);
         }
         //Solo funciona si has ganado
         if (won && inputReceived(this.backButton.getPos(), this.backButton.getSize())) {
@@ -323,10 +332,12 @@ public class HistoryModeGameScene implements Scene {
             }
             saveToFile(true);
             this.engine.popScene();
+            this.engine.setColorBackground(0xFFFFFFFF);
         }
         for(int i=0;i<colorsButtons.length;i++){
             if(inputReceived(this.colorsButtons[i].getPos(), this.colorsButtons[i].getSize())){
-                this.engine.setColorBackground(0xFFFF00FF);
+                actualColorPattern = i;
+                this.engine.setColorBackground(colorfulPattern[i]);
             }
         }
     }
