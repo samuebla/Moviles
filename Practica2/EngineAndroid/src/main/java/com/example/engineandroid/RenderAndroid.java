@@ -17,6 +17,7 @@ public class RenderAndroid {
     private Canvas canvas;
     private Paint paint;
 
+    int resetColor;
     int colorBackground;
 
     HashMap<String, Font_Android> fonts;
@@ -53,6 +54,7 @@ public class RenderAndroid {
         this.canvas.drawColor(0xFFFFFFFF); // ARGB
         this.canvas.translate(0, this.posCanvas.getY());
         drawRectangle(0, 0, this.getViewWidth(), (int) (this.frameSize.getY() / factorScale), true,colorBackground);
+
     }
 
     public void setColorBackground(int newColor) {
@@ -63,10 +65,17 @@ public class RenderAndroid {
         this.holder.unlockCanvasAndPost(canvas);
     }
 
-    public void paintCell(int x, int y, int w, int h, int celltype) {
+    public void paintCell(int x, int y, int w, int h, int celltype, int palleteColor) {
         int c;
         if (celltype == 1) {
-            c = 0xFF0000FF;
+            //Si hemos seteado una nueva paleta...
+            if(palleteColor !=-1){
+                //Seteamos el color deseado
+                c = palleteColor;
+            }
+            else{
+                c = 0xFF0000FF;
+            }
         } else if (celltype == 3) {
             c = 0xFFFF0000;
         } else if (celltype == 0) {
@@ -76,6 +85,7 @@ public class RenderAndroid {
         else {
             c = 0xFF000000;
         }
+        resetColor = this.paint.getColor();
         this.paint.setColor(c);
 
         if (celltype == -1 || celltype == 2) {
@@ -95,6 +105,7 @@ public class RenderAndroid {
             this.canvas.drawRect(x, y, x + w, y + h, this.paint);
             this.paint.setStyle(Paint.Style.STROKE);
         }
+        this.paint.setColor(resetColor);
     }
 
     public void drawCircle(float x, float y, float r, String color) {
@@ -194,6 +205,7 @@ public class RenderAndroid {
 
 
     public void drawRectangle(int x, int y, int w, int h, boolean fill,int color) {
+        resetColor = this.paint.getColor();
         setColor(color);
 
         if (!fill)
@@ -203,6 +215,7 @@ public class RenderAndroid {
             this.canvas.drawRect(x, y, x + w, y + h, this.paint);
             this.paint.setStyle(Paint.Style.STROKE);
         }
+        this.paint.setColor(resetColor);
     }
 
 

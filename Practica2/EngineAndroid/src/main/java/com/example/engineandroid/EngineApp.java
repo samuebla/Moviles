@@ -59,8 +59,8 @@ public class EngineApp implements Runnable {
     }
     //<<Fin Input>>
 
-    public void paintCell(int x, int y, int w, int h, int celltype) {
-        this.render.paintCell(x, y, w, h, celltype);
+    public void paintCell(int x, int y, int w, int h, int celltype,int palleteColor) {
+        this.render.paintCell(x, y, w, h, celltype,palleteColor);
     }
 
     public void setAssetsContext(AssetManager assetsAux) {
