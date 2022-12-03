@@ -10,15 +10,17 @@ import android.view.SurfaceView;
 
 import java.util.HashMap;
 
-public class RenderAndroid{
+public class RenderAndroid {
 
     private SurfaceView myView;
     private SurfaceHolder holder;
     private Canvas canvas;
     private Paint paint;
 
-    HashMap<String,Font_Android> fonts;
-    HashMap<String,ImageAndroid> images;
+    int colorBackground;
+
+    HashMap<String, Font_Android> fonts;
+    HashMap<String, ImageAndroid> images;
 
     private AssetManager assets;
 
@@ -40,6 +42,7 @@ public class RenderAndroid{
         this.images = new HashMap<>();
 
         this.factorScale = scale;
+        colorBackground = 0XFF00FFFF;
     }
 
     public void prepareFrame() {
@@ -49,8 +52,12 @@ public class RenderAndroid{
         // "Borramos" el fondo.
         this.canvas.drawColor(0xFFFFFFFF); // ARGB
         this.canvas.translate(0, this.posCanvas.getY());
-        setColor(0XFF00FFFF);
-        drawRectangle(0,0, this.getViewWidth(), (int)(this.frameSize.getY()/factorScale), true);
+        setColor(colorBackground);
+        drawRectangle(0, 0, this.getViewWidth(), (int) (this.frameSize.getY() / factorScale), true);
+    }
+
+    public void setColorBackground(int newColor) {
+        colorBackground = newColor;
     }
 
     public void clear() {
@@ -97,29 +104,28 @@ public class RenderAndroid{
             c = 0xFF0000FF;
         } else if (color == "red") {
             c = 0xFFFF0000;
-        }else if(color == "purple"){
+        } else if (color == "purple") {
             c = 0xFF6960EC;
-        }
-        else {
+        } else {
             c = 0xFFFFFFFF;
         }
 
         this.paint.setColor(c);
         this.paint.setStyle(Paint.Style.FILL);
-        this.canvas.drawCircle(x+r, y+r, r, this.paint);
+        this.canvas.drawCircle(x + r, y + r, r, this.paint);
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setColor(Color.BLACK);
-        this.canvas.drawCircle(x+r, y+r, r, this.paint);
+        this.canvas.drawCircle(x + r, y + r, r, this.paint);
 
     }
 
 
     public int getWidth() {
-        return (int)(this.frameSize.getX() + posCanvas.getX());
+        return (int) (this.frameSize.getX() + posCanvas.getX());
     }
 
     public int getHeight() {
-        return (int)(this.frameSize.getY() + posCanvas.getY());
+        return (int) (this.frameSize.getY() + posCanvas.getY());
     }
 
     public int getViewWidth() {
@@ -131,17 +137,17 @@ public class RenderAndroid{
         return this.myView.getHeight();
     }
 
-    public void scaleAppView(){
-        while(this.holder.getSurfaceFrame().width() == 0);
+    public void scaleAppView() {
+        while (this.holder.getSurfaceFrame().width() == 0) ;
         //obtenemos el tamaño del frame y lo guardamos como copia para la escala
         Vector2D surfaceFrame = new Vector2D(this.holder.getSurfaceFrame().width(), this.holder.getSurfaceFrame().height());
-        Vector2D scale = new Vector2D(surfaceFrame.getX()/frameSize.getX(), surfaceFrame.getY()/frameSize.getY());
+        Vector2D scale = new Vector2D(surfaceFrame.getX() / frameSize.getX(), surfaceFrame.getY() / frameSize.getY());
 
-        if(scale.getX() * this.factorScale < scale.getY()) scale.setY(scale.getX()/factorScale);
+        if (scale.getX() * this.factorScale < scale.getY()) scale.setY(scale.getX() / factorScale);
         else
-            scale.setX(scale.getY()/factorScale);
+            scale.setX(scale.getY() / factorScale);
 
-        posCanvas.set((int)(surfaceFrame.getX()-frameSize.getX()), (int)(surfaceFrame.getY()-frameSize.getY())/2*factorScale);
+        posCanvas.set((int) (surfaceFrame.getX() - frameSize.getX()), (int) (surfaceFrame.getY() - frameSize.getY()) / 2 * factorScale);
 
     }
 
@@ -160,20 +166,20 @@ public class RenderAndroid{
         this.paint.setColor(color);
     }
 
-    public void setAssetContext(AssetManager assetsAux){
+    public void setAssetContext(AssetManager assetsAux) {
         this.assets = assetsAux;
     }
 
 
-    public ImageAndroid newImage(String imageName,String path) {
-        return images.put(imageName,new ImageAndroid(this.assets, path));
+    public ImageAndroid newImage(String imageName, String path) {
+        return images.put(imageName, new ImageAndroid(this.assets, path));
     }
 
 
-    public Font_Android newFont(String fontName,String path,int type, int size) {
-        try{
-            return fonts.put(fontName,new Font_Android(path,type,size, this.assets));
-        }catch (Exception e){
+    public Font_Android newFont(String fontName, String path, int type, int size) {
+        try {
+            return fonts.put(fontName, new Font_Android(path, type, size, this.assets));
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -183,15 +189,15 @@ public class RenderAndroid{
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String imageAux) {
         ImageAndroid image = images.get(imageAux);
         Bitmap map = image.getImage();
-        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int)(desiredWidth), (int)(desiredHeight), false);
-        canvas.drawBitmap(scaledMap, (int)(x), (int)(y), this.paint);
+        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int) (desiredWidth), (int) (desiredHeight), false);
+        canvas.drawBitmap(scaledMap, (int) (x), (int) (y), this.paint);
     }
 
 
     public void drawRectangle(int x, int y, int w, int h, boolean fill) {
-        if(!fill)
+        if (!fill)
             this.canvas.drawRect(x, y, x + w, y + h, this.paint);
-        else{
+        else {
             this.paint.setStyle(Paint.Style.FILL);
             this.canvas.drawRect(x, y, x + w, y + h, this.paint);
             this.paint.setStyle(Paint.Style.STROKE);
@@ -211,11 +217,11 @@ public class RenderAndroid{
     public void drawText(String text, int x, int y, String color, String fontAux, int alignType) {
         int prevColor = this.paint.getColor();
         Font_Android font = this.fonts.get(fontAux);
-        int f = (int)(font.getSize() /factorScale);
+        int f = (int) (font.getSize() / factorScale);
         this.paint.setTextSize(f);
         this.paint.setTypeface(font.getFont());
 
-        switch (alignType){
+        switch (alignType) {
             case 0:
                 this.paint.setTextAlign(Paint.Align.CENTER);
                 break;
@@ -231,14 +237,14 @@ public class RenderAndroid{
 
         this.paint.setStyle(Paint.Style.FILL_AND_STROKE);
         int currentColor;
-        if (color == "red"){
+        if (color == "red") {
             currentColor = 0xFFFF0000;
-        } else{
+        } else {
             currentColor = 0xFF000000;
         }
         this.paint.setColor(currentColor);
 
-        this.canvas.drawText(text, (float)x, (float)y, this.paint);
+        this.canvas.drawText(text, (float) x, (float) y, this.paint);
         this.paint.setColor(prevColor);
         this.paint.setStyle(Paint.Style.STROKE);
     }

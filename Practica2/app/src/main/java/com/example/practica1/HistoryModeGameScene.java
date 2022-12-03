@@ -33,6 +33,9 @@ public class HistoryModeGameScene implements Scene {
 
     int lives;
 
+    //Para mostrar en pantallas la info de las celdas
+    int remainingCells, maxCellsSolution;
+
     int mode;
 
     private AtomicReference<Integer> coins;
@@ -40,11 +43,14 @@ public class HistoryModeGameScene implements Scene {
     private Integer currentLevelNumber;
     private Integer coinSize;
 
-    //Para mostrar en pantallas la info de las celdas
-    int remainingCells, maxCellsSolution;
+    //Patron de colores
+    int colorfulPattern[];
+    int actualColorPattern;
 
     private Button giveUpButton;
     private Button backButton;
+
+    private Button[] colorsButtons;
 
     //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de las casillas azules. Uno el horizontal y otro el vertical
     private ArrayList<Integer>[] xPositionsTopToBottom;
@@ -87,6 +93,11 @@ public class HistoryModeGameScene implements Scene {
 
         //AAAAAAAAAAAAAAAAAAA DEBUG
         coins.set(coins.get() + 1);
+
+        //Patron de colores
+        colorfulPattern = new int[4];
+        actualColorPattern = modeAux-1;
+        colorsButtons = new Button[4];
 
         rows_ = rows;
         cols_ = cols;
@@ -157,6 +168,11 @@ public class HistoryModeGameScene implements Scene {
                 (double) this.engine.getWidth() * 0.1666666, (double) this.engine.getHeight() * 0.10);
         this.backButton = new Button((double) this.engine.getWidth() * 0.44444444, (double) this.engine.getHeight() / 1.1,
                 (double) this.engine.getWidth() / 10, (double) this.engine.getHeight() / 15);
+
+        for(int i=0;i<colorsButtons.length;i++){
+            this.colorsButtons[i] = new Button((double) this.engine.getWidth() /2.5 + 200*i, (double) this.engine.getHeight()/1.3,
+                    (double) this.engine.getWidth() * 0.1666666, (double) this.engine.getHeight() * 0.10);
+        }
     }
 
     @Override
@@ -225,6 +241,11 @@ public class HistoryModeGameScene implements Scene {
 
             //BOTONES
             this.engine.drawImage((int) ((double) giveUpButton.getPos().getX()), (int) ((double) giveUpButton.getPos().getY()), (int) ((double) giveUpButton.getSize().getX()), (int) ((double) giveUpButton.getSize().getY()), "GiveUp");
+            for(int i=0;i<colorsButtons.length;i++){
+                this.engine.drawImage((int) ((double) colorsButtons[i].getPos().getX()), (int) ((double) colorsButtons[i].getPos().getY()), (int) ((double) colorsButtons[i].getSize().getX()), (int) ((double) colorsButtons[i].getSize().getY()), "GiveUp");
+            }
+
+
 
             //ESTO ESTA SIN TESTEAR.
             //MONEDAS
@@ -302,6 +323,11 @@ public class HistoryModeGameScene implements Scene {
             }
             saveToFile(true);
             this.engine.popScene();
+        }
+        for(int i=0;i<colorsButtons.length;i++){
+            if(inputReceived(this.colorsButtons[i].getPos(), this.colorsButtons[i].getSize())){
+                this.engine.setColorBackground(0xFFFF00FF);
+            }
         }
     }
 

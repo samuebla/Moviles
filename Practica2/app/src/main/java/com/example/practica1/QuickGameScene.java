@@ -47,6 +47,8 @@ public class QuickGameScene implements Scene{
         //Asociamos el engine correspondiente
         this.engine = engine;
 
+        this.engine.setColorBackground(0xFFFFFFFF);
+
         init();
 
         //Creamos el random
