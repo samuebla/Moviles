@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:visibility="visible"
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="409dp"-->
-<!--        android:layout_height="729dp"-->
-<!--        android:orientation="vertical"-->
-<!--        tools:layout_editor_absoluteX="1dp"-->
-<!--        tools:layout_editor_absoluteY="1dp">-->
+    >
 
-<!--        <com.google.android.gms.ads.AdView-->
-<!--            android:id="@+id/adView"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:layout_gravity="center_horizontal"-->
-<!--            app:adSize="BANNER"-->
-<!--            app:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>-->
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ></com.google.android.gms.ads.AdView>
 
-<!--        <SurfaceView-->
-<!--            android:id="@+id/surfaceView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="682dp" />-->
+        <SurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"/>
 
-<!--    </LinearLayout>-->
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

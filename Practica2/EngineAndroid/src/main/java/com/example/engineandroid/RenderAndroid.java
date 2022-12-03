@@ -7,12 +7,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.LinearLayout;
 
 import java.util.HashMap;
 
 public class RenderAndroid {
 
     private SurfaceView myView;
+    private LinearLayout screenLayout;
     private SurfaceHolder holder;
     private Canvas canvas;
     private Paint paint;
@@ -29,9 +31,10 @@ public class RenderAndroid {
     private Vector2D frameSize;
     private float factorScale;
 
-    public RenderAndroid(SurfaceView myView, float scale) {
+    public RenderAndroid(SurfaceView myView, float scale, LinearLayout screenLayoutAux) {
         // Intentamos crear el buffer strategy con 2 buffers.
         this.myView = myView;
+        this.screenLayout = screenLayoutAux;
         this.holder = this.myView.getHolder();
         this.paint = new Paint();
         this.paint.setColor(0xFF000000);
@@ -50,6 +53,7 @@ public class RenderAndroid {
         // Pintamos el framefsefsefdfs
         while (!this.holder.getSurface().isValid()) ;
         this.canvas = this.holder.lockCanvas();
+
         // "Borramos" el fondo.
         this.canvas.drawColor(0xFFFFFFFF); // ARGB
         this.canvas.translate(0, this.posCanvas.getY());
@@ -131,24 +135,18 @@ public class RenderAndroid {
 
 
     public int getWidth() {
-        return (int) (this.frameSize.getX() + posCanvas.getX());
+        return this.myView.getWidth();
     }
 
     public int getHeight() {
-        return (int) (this.frameSize.getY() + posCanvas.getY());
-    }
-
-    public int getViewWidth() {
-        int width = this.myView.getWidth();
-        return width;
+        return this.myView.getHeight();
     }
 
     public int getViewHeight() {
         return this.myView.getHeight();
     }
 
-    public void scaleAppView() {
-        while (this.holder.getSurfaceFrame().width() == 0) ;
+    public void scaleAppView(){
         //obtenemos el tamaño del frame y lo guardamos como copia para la escala
         Vector2D surfaceFrame = new Vector2D(this.holder.getSurfaceFrame().width(), this.holder.getSurfaceFrame().height());
         Vector2D scale = new Vector2D(surfaceFrame.getX() / frameSize.getX(), surfaceFrame.getY() / frameSize.getY());
@@ -158,6 +156,20 @@ public class RenderAndroid {
             scale.setX(scale.getY() / factorScale);
 
         posCanvas.set((int) (surfaceFrame.getX() - frameSize.getX()), (int) (surfaceFrame.getY() - frameSize.getY()) / 2 * factorScale);
+
+    }
+
+    public void setFrameSize(){
+        while(this.holder.getSurfaceFrame().width() == 0);
+        this.frameSize = new Vector2D(this.myView.getWidth(), this.myView.getHeight());
+        if (this.screenLayout.getWidth() - this.myView.getHeight()*(4.0/6.0) <= 0){
+            this.myView.setLeft(0);
+            this.myView.setRight(this.screenLayout.getRight());
+        }else{
+            this.myView.setLeft((this.screenLayout.getWidth() - (int)(this.myView.getHeight()*(4.0/6.0)))/2);
+            this.myView.setRight((this.screenLayout.getWidth() - (int)(this.myView.getHeight()*(4.0/6.0)))/2 + (int)(this.myView.getHeight()*(4.0/6.0)));
+        }
+
 
     }
 
