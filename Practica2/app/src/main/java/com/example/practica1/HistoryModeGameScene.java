@@ -42,6 +42,7 @@ public class HistoryModeGameScene implements Scene {
     private AtomicReference<Integer> progress;
     private Integer currentLevelNumber;
     private Integer coinSize;
+    boolean showNewCoins;
 
     //Patron de colores
     int colorfulPattern[];
@@ -49,6 +50,7 @@ public class HistoryModeGameScene implements Scene {
 
     private Button giveUpButton;
     private Button backButton;
+    private Button getLifeButton;
 
     private Button[] colorsButtons;
 
@@ -168,9 +170,11 @@ public class HistoryModeGameScene implements Scene {
                 (double) this.engine.getWidth() * 0.1666666, (double) this.engine.getHeight() * 0.10);
         this.backButton = new Button((double) this.engine.getWidth() * 0.44444444, (double) this.engine.getHeight() / 1.1,
                 (double) this.engine.getWidth() / 10, (double) this.engine.getHeight() / 15);
+        this.getLifeButton = new Button((double) this.engine.getWidth()/10, (double) this.engine.getHeight() / 1.2,
+                (double) this.engine.getWidth() / 8, (double) this.engine.getHeight() / 12);
 
         for(int i=0;i<colorsButtons.length;i++){
-            this.colorsButtons[i] = new Button((double) this.engine.getWidth() /2.5 + 200*i, (double) this.engine.getHeight()/1.3,
+            this.colorsButtons[i] = new Button((double) this.engine.getWidth() /2.5 + 200*i, (double) this.engine.getHeight()/1.2,
                     (double) this.engine.getWidth() * 0.1666666, (double) this.engine.getHeight() * 0.10);
         }
         colorfulPattern[0] = 0xFFFFFFFF;
@@ -219,6 +223,13 @@ public class HistoryModeGameScene implements Scene {
                 }
             }
 
+            //Mostramos las monedas obtenidas
+            if(showNewCoins){
+                this.engine.drawText("+10",(int)(this.engine.getWidth()/2),(int)(this.engine.getHeight()/1.5),"Black","Cooper",0);
+                this.engine.drawImage(engine.getWidth()/2 + 30, (int) (engine.getHeight() / 1.5), coinSize, coinSize, "Coin");
+
+            }
+
             //Mensaje de enhorabuena
             this.engine.drawText("¡ENHORABUENA!", (int) ((double) this.engine.getWidth() * 0.5), (int) ((double) this.engine.getHeight() / 15), "Black", "Cooper", 0);
 
@@ -252,6 +263,7 @@ public class HistoryModeGameScene implements Scene {
             for(int i=0;i<colorsButtons.length;i++){
                 this.engine.drawImage((int) ((double) colorsButtons[i].getPos().getX()), (int) ((double) colorsButtons[i].getPos().getY()), (int) ((double) colorsButtons[i].getSize().getX()), (int) ((double) colorsButtons[i].getSize().getY()), "GiveUp");
             }
+            this.engine.drawImage((int) ((double) getLifeButton.getPos().getX()), (int) ((double) getLifeButton.getPos().getY()), (int) ((double) getLifeButton.getSize().getX()), (int) ((double) getLifeButton.getSize().getY()), "GiveUp");
 
 
 
@@ -301,6 +313,12 @@ public class HistoryModeGameScene implements Scene {
                                     remainingCells--;
                                     if (win()) {
                                         won = true;
+                                        //Si no te has pasado el nivel nunca...
+                                        if(currentLevelNumber == this.progress.get()){
+                                            //Sumamos las monedas del nivel
+                                            coins.set(coins.get()+10);
+                                            showNewCoins = true;
+                                        }
                                     }
                                     //Y playeamos el sonido
                                     engine.getAudio().playSound("effect", 1);
@@ -339,6 +357,10 @@ public class HistoryModeGameScene implements Scene {
                 actualColorPattern = i;
                 this.engine.setColorBackground(colorfulPattern[i]);
             }
+        }
+        //Si necesitas o quieres alguna vida...
+        if (lives<3 && inputReceived(this.getLifeButton.getPos(), this.getLifeButton.getSize())) {
+           //TODO AAA o compras vida por X dionero o miras anuncio
         }
     }
 
