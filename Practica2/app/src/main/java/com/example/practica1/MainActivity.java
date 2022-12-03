@@ -2,14 +2,14 @@ package com.example.practica1;
 
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.SceneMngrAndroid;
-//import com.google.android.gms.ads.AdListener;
-//import com.google.android.gms.ads.AdRequest;
-//import com.google.android.gms.ads.AdSize;
-//import com.google.android.gms.ads.AdView;
-//import com.google.android.gms.ads.LoadAdError;
-//import com.google.android.gms.ads.MobileAds;
-//import com.google.android.gms.ads.initialization.InitializationStatus;
-//import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 //import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.AdSize;
 //import com.google.android.gms.ads.MobileAds;
@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.WindowMetrics;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import java.io.File;
 import java.net.URL;
@@ -49,31 +50,33 @@ public class MainActivity extends AppCompatActivity {
 
     private FrameLayout adContainerView;
 
+    LinearLayout screenLayout;
+
     MainMenuScene mainMenuScene;
 
-//    AdView mAdView;
+    AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        setContentView(R.layout.activity_main);
+        //Initialize the Mobile Ads SDK.
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) { }
+        });
+
+        setContentView(R.layout.activity_main);
+        this.screenLayout = findViewById(R.id.linearLayout);
 
         //Creamos el SurfaceView que "contendrá" nuestra escena
-        this.renderView = new SurfaceView(this);
-        setContentView(this.renderView);
+        this.renderView = findViewById(R.id.surfaceView);
 
+//        View screen = findViewById(R.id.constraint);
 
-
-
-        //Initialize the Mobile Ads SDK.
-//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-//            @Override
-//            public void onInitializationComplete(InitializationStatus initializationStatus) { }
-//        });
 
         getSupportActionBar().hide();
-        this.engine = new EngineApp(this.renderView);
+        this.engine = new EngineApp(this.renderView, this.screenLayout);
 
         this.assetManager = this.getBaseContext().getAssets();
 
@@ -86,44 +89,48 @@ public class MainActivity extends AppCompatActivity {
         this.engine.setSceneMngr(this.sceneMngr);
 
         //Add Initialization ----------------------------------------------
-//        mAdView = findViewById(R.id.adView);
-//        AdRequest adRequest = new AdRequest.Builder().build();
-//        mAdView.loadAd(adRequest);
-//
-//        mAdView.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdClicked() {
-//                // Code to be executed when the user clicks on an ad.
-//            }
-//
-//            @Override
-//            public void onAdClosed() {
-//                // Code to be executed when the user is about to return
-//                // to the app after tapping on an ad.
-//            }
-//
-//            @Override
-//            public void onAdFailedToLoad(LoadAdError adError) {
-//                // Code to be executed when an ad request fails.
-//            }
-//
-//            @Override
-//            public void onAdImpression() {
-//                // Code to be executed when an impression is recorded
-//                // for an ad.
-//            }
-//
-//            @Override
-//            public void onAdLoaded() {
-//                // Code to be executed when an ad finishes loading.
-//            }
-//
-//            @Override
-//            public void onAdOpened() {
-//                // Code to be executed when an ad opens an overlay that
-//                // covers the screen.
-//            }
-//        });
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+            }
+
+            @Override
+            public void onAdImpression() {
+                // Code to be executed when an impression is recorded
+                // for an ad.
+                engine.updateSurfaceSize();
+            }
+
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                super.onAdLoaded();
+                engine.updateSurfaceSize();
+
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+        });
 
         //---------------------------------------------------------------------
 

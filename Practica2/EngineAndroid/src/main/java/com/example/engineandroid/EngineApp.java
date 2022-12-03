@@ -3,6 +3,7 @@ package com.example.engineandroid;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.view.SurfaceView;
+import android.widget.LinearLayout;
 
 public class EngineApp implements Runnable{
 
@@ -21,9 +22,9 @@ public class EngineApp implements Runnable{
 
     private Context context;
 
-    public EngineApp(SurfaceView myView){
+    public EngineApp(SurfaceView myView, LinearLayout screenLayout){
         this.view = myView;
-        this.render = new RenderAndroid(this.view, 4.0f/6.0f);
+        this.render = new RenderAndroid(this.view, 4.0f/6.0f, screenLayout);
         this.eventHandler = new EventHandler();
         this.input = new InputAndroid(this.eventHandler);
         this.view.setOnTouchListener(this.input.getTouchListener());
@@ -117,7 +118,10 @@ public class EngineApp implements Runnable{
         // muy rápido, la vista podría todavía no estar inicializada.
         while(this.running && this.render.getWidth() == 0);
 
+
+
         //Escalado de la app
+        this.render.setFrameSize();
         this.render.scaleAppView();
         this.input.setOffset(0,this.render.getOffset().getY());
         this.sceneMngr.getScene().init();
@@ -130,8 +134,15 @@ public class EngineApp implements Runnable{
 
         long actualTime = System.currentTimeMillis();
 
+//        System.out.println(this.render.getViewWidth());
+//        System.out.println(this.render.getViewWidth());
+//        System.out.println(this.render.getViewWidth());
+//        System.out.println(this.render.getViewWidth());
+//        System.out.println(this.render.getViewWidth());
+
         // Bucle de juego principal.
         while(running) {
+            this.render.setFrameSize();
             long currentTime = System.nanoTime();
             long nanoElapsedTime = currentTime - lastFrameTime;
             lastFrameTime = currentTime;
@@ -157,6 +168,10 @@ public class EngineApp implements Runnable{
             this.sceneMngr.render();
             this.render.clear();
         }
+    }
+
+    public void updateSurfaceSize(){
+        this.render.setFrameSize();
     }
 
     protected void update(double deltaTime) {
