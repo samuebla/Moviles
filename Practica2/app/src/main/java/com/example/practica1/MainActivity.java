@@ -2,41 +2,41 @@ package com.example.practica1;
 
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.SceneMngrAndroid;
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 //import com.google.android.gms.ads.AdRequest;
 //import com.google.android.gms.ads.AdSize;
 //import com.google.android.gms.ads.MobileAds;
 //import com.google.android.gms.ads.initialization.InitializationStatus;
 //import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceView;
-import android.view.WindowMetrics;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
-import java.io.File;
-import java.net.URL;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
     MainMenuScene mainMenuScene;
 
     AdView mAdView;
+    private AtomicReference<RewardedAd> mRewardedAd;
+    private AtomicReference<MainActivity> mainActivity;
+    private final String TAG = "MainActivity";
+    private Button rewardButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Creamos el SurfaceView que "contendrá" nuestra escena
         this.renderView = findViewById(R.id.surfaceView);
+
+        this.rewardButton = findViewById(R.id.show_reward_button);
 
 //        View screen = findViewById(R.id.constraint);
 
@@ -132,6 +138,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mRewardedAd = new AtomicReference<RewardedAd>();
+        this.mainActivity = new AtomicReference<MainActivity>();
+        this.mainActivity.set(this);
+        AdRequest adRequest2 = new AdRequest.Builder().build();
+        RewardedAd.load(this, "ca-app-pub-3940256099942544/5224354917",
+                adRequest2, new RewardedAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error.
+                        Log.d(TAG, loadAdError.toString());
+                        mRewardedAd.set(null);
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                        mRewardedAd.set(rewardedAd);
+                        Log.d(TAG, "Ad was loaded.");
+                    }
+                });
+
+        rewardButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showRewardedAd();
+                    }
+                });
+
         //---------------------------------------------------------------------
 
         //Intent example
@@ -163,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
+        mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext(), mRewardedAd, this.mainActivity);
         this.engine.setScene(mainMenuScene);
         this.engine.resume();
     }
@@ -209,6 +243,54 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //            context.startActivity(share) ;
 //        }
+    }
+
+    public void showRewardedAd(){
+        mRewardedAd.get().setFullScreenContentCallback(new FullScreenContentCallback() {
+            @Override
+            public void onAdClicked() {
+                // Called when a click is recorded for an ad.
+                Log.d(TAG, "Ad was clicked.");
+            }
+
+            @Override
+            public void onAdDismissedFullScreenContent() {
+                // Called when ad is dismissed.
+                // Set the ad reference to null so you don't show the ad a second time.
+                Log.d(TAG, "Ad dismissed fullscreen content.");
+                mRewardedAd.set(null);
+            }
+
+            @Override
+            public void onAdFailedToShowFullScreenContent(AdError adError) {
+                // Called when ad fails to show.
+                Log.e(TAG, "Ad failed to show fullscreen content.");
+                mRewardedAd.set(null);
+            }
+
+            @Override
+            public void onAdImpression() {
+                // Called when an impression is recorded for an ad.
+                Log.d(TAG, "Ad recorded an impression.");
+            }
+
+            @Override
+            public void onAdShowedFullScreenContent() {
+                // Called when ad is shown.
+                Log.d(TAG, "Ad showed fullscreen content.");
+            }
+        });
+
+        Activity activityContext = MainActivity.this;
+        mRewardedAd.get().show(activityContext, new OnUserEarnedRewardListener() {
+            @Override
+            public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                // Handle the reward.
+                Log.d("MAIN ACTIVITY", "The user earned the reward.");
+                int rewardAmount = rewardItem.getAmount();
+                String rewardType = rewardItem.getType();
+            }
+        });
     }
 
 //    private AdRequest getAdRequest() {

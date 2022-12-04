@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -12,18 +12,38 @@
 
     >
 
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            app:adSize="BANNER"
-            app:adUnitId="ca-app-pub-3940256099942544/6300978111"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ></com.google.android.gms.ads.AdView>
-
-        <SurfaceView
-            android:id="@+id/surfaceView"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"/>
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="visible"
 
-</LinearLayout>
+            >
+
+                <com.google.android.gms.ads.AdView
+                    android:id="@+id/adView"
+                    app:adSize="BANNER"
+                    app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    ></com.google.android.gms.ads.AdView>
+
+                <SurfaceView
+                    android:id="@+id/surfaceView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/show_reward_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_reward"
+            android:translationX="200dp"
+            android:translationY="600dp" />
+
+</RelativeLayout>
