@@ -162,7 +162,8 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showRewardedAd();
+                        if(mRewardedAd.get() != null)
+                            showRewardedAd();
                     }
                 });
 
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext(), mRewardedAd, this.mainActivity);
+        mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
         this.engine.setScene(mainMenuScene);
         this.engine.resume();
     }
