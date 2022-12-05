@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:orientation="vertical"
     android:visibility="visible"
 
@@ -20,21 +19,20 @@
             android:orientation="vertical"
             android:visibility="visible"
 
-            >
+            tools:visibility="gone">
 
                 <com.google.android.gms.ads.AdView
                     android:id="@+id/adView"
-                    app:adSize="BANNER"
-                    app:adUnitId="ca-app-pub-3940256099942544/6300978111"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    ></com.google.android.gms.ads.AdView>
+                    app:adSize="BANNER"
+                    app:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
 
                 <SurfaceView
                     android:id="@+id/surfaceView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"/>
+                    android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
 
@@ -43,7 +41,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/show_reward"
-            android:translationX="200dp"
-            android:translationY="600dp" />
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.405"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.757" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
