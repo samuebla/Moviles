@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
     private Button rewardButton;
     private final String CHANNEL_ID = "NonogramChannelId";
+    NotificationManagerCompat notificationManager;
+    NotificationCompat.Builder notificationBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder( this, CHANNEL_ID)
+        notificationBuilder = new NotificationCompat.Builder( this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle( "My notification" )
                 .setContentText( "Much longer text that cannot fit one line..." )
@@ -200,11 +202,17 @@ public class MainActivity extends AppCompatActivity {
                         .bigText( "Much longer text that cannot fit one line..." ))
                 .setPriority(NotificationCompat. PRIORITY_DEFAULT);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager = NotificationManagerCompat.from(this);
 
-        // notificationId is a unique int for each notification that you must define
-        notificationManager.notify(347, builder.build());
-
+//        synchronized(notificationManager){
+//            try {
+//                notificationManager.wait(20000);
+//                // notificationId is a unique int for each notification that you must define
+//                notificationManager.notify(347, notificationBuilder.build());
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
 
         mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext(), this.rewardButton);
