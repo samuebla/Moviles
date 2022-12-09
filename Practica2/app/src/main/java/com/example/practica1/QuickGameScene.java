@@ -21,9 +21,9 @@ public class QuickGameScene implements Scene{
     //Para mostrar en pantallas la info de las celdas
     int remainingCells, wrongCells, maxCellsSolution;
 
-    private Button checkButton;
-    private Button giveUpButton;
-    private Button backButton;
+    private InputButton checkInputButton;
+    private InputButton giveUpInputButton;
+    private InputButton backInputButton;
 
     //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de las casillas azules. Uno el horizontal y otro el vertical
     private ArrayList<Integer>[] xPositionsTopToBottom;
@@ -301,11 +301,11 @@ public class QuickGameScene implements Scene{
     @Override
     public void init() {
         //Seteamos los botones
-        this.checkButton = new Button((double)this.engine.getWidth()*0.8, (double)this.engine.getHeight()*0.06,
+        this.checkInputButton = new InputButton((double)this.engine.getWidth()*0.8, (double)this.engine.getHeight()*0.06,
                 (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.10);
-        this.giveUpButton = new Button((double)this.engine.getWidth()*0.01388888, (double)this.engine.getHeight()*0.04629629,
+        this.giveUpInputButton = new InputButton((double)this.engine.getWidth()*0.01388888, (double)this.engine.getHeight()*0.04629629,
                 (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.10);
-        this.backButton = new Button((double)this.engine.getWidth()*0.44444444, (double)this.engine.getHeight()/1.1,
+        this.backInputButton = new InputButton((double)this.engine.getWidth()*0.44444444, (double)this.engine.getHeight()/1.1,
                 (double)this.engine.getWidth()/10, (double)this.engine.getHeight()/15);
     }
 
@@ -363,7 +363,7 @@ public class QuickGameScene implements Scene{
             this.engine.drawText("ENHORABUENA!", (int)((double)this.engine.getWidth()*0.5), (int)((double)this.engine.getHeight()*0.1111111), "Black", "Cooper", 0);
 
             //BackButton
-            this.engine.drawImage((int)(backButton.getPos().getX()), (int)(backButton.getPos().getY()), (int)(backButton.getSize().getX()), (int)(backButton.getSize().getY()), "Back");
+            this.engine.drawImage((int)(backInputButton.getPos().getX()), (int)(backInputButton.getPos().getY()), (int)(backInputButton.getSize().getX()), (int)(backInputButton.getSize().getY()), "Back");
 
             //Si sigo jugando...
         } else {
@@ -399,9 +399,9 @@ public class QuickGameScene implements Scene{
             }
 
             //BOTONES
-            this.engine.drawImage((int)((double)checkButton.getPos().getX()), (int)((double)checkButton.getPos().getY()), (int)((double)checkButton.getSize().getX()), (int)((double)checkButton.getSize().getY()), "Check");
+            this.engine.drawImage((int)((double) checkInputButton.getPos().getX()), (int)((double) checkInputButton.getPos().getY()), (int)((double) checkInputButton.getSize().getX()), (int)((double) checkInputButton.getSize().getY()), "Check");
 
-            this.engine.drawImage((int)((double)giveUpButton.getPos().getX()), (int)((double)giveUpButton.getPos().getY()), (int)((double)giveUpButton.getSize().getX()), (int)((double)giveUpButton.getSize().getY()), "GiveUp");
+            this.engine.drawImage((int)((double) giveUpInputButton.getPos().getX()), (int)((double) giveUpInputButton.getPos().getY()), (int)((double) giveUpInputButton.getSize().getX()), (int)((double) giveUpInputButton.getSize().getY()), "GiveUp");
         }
     }
 
@@ -441,18 +441,18 @@ public class QuickGameScene implements Scene{
 
         //BOTONES
         //Boton de comprobar
-        if (inputReceived(this.checkButton.getPos(), this.checkButton.getSize())) {
+        if (inputReceived(this.checkInputButton.getPos(), this.checkInputButton.getSize())) {
             //Mostramos el texto en pantalla
             showAnswers = true;
             auxShowAnswer = true;
             timer = timeCheckButton;
         }
         //Si te rindes vuelves a la seleccion de nivel
-        if (inputReceived(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
+        if (inputReceived(this.giveUpInputButton.getPos(), this.giveUpInputButton.getSize())) {
             this.engine.popScene();
         }
         //Solo funciona si has ganado
-        if (won && inputReceived(this.backButton.getPos(), this.backButton.getSize())) {
+        if (won && inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())) {
             this.engine.popScene();
             this.engine.popScene();
         }

@@ -4,9 +4,9 @@ import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.Vector2D;
 
 //Clase para todos los botones
-public class Button extends Interactive {
+public class InputButton extends Interactive {
 
-    public Button(double posX, double posY, double sizeW, double sizeH){
+    public InputButton(double posX, double posY, double sizeW, double sizeH){
         setPos((int)posX,(int)posY);
         setSize((int)sizeW,(int)sizeH);
     }

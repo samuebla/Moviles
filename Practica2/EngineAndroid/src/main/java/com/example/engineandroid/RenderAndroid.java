@@ -142,10 +142,6 @@ public class RenderAndroid {
         return this.myView.getHeight();
     }
 
-    public int getViewHeight() {
-        return this.myView.getHeight();
-    }
-
     public void scaleAppView(){
         //obtenemos el tamaño del frame y lo guardamos como copia para la escala
         Vector2D surfaceFrame = new Vector2D(this.holder.getSurfaceFrame().width(), this.holder.getSurfaceFrame().height());

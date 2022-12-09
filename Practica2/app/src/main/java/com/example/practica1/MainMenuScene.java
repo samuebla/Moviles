@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,14 +35,15 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MainMenuScene implements Scene {
 
     private EngineApp engine;
-    private Button fastPlay;
-    private Button historyMode;
+    private InputButton fastPlay;
+    private InputButton historyMode;
 
     //Player Data
     private AtomicReference<Integer> coins;
     private AtomicReference<Integer>[] progress;
 
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
+    private Button rewardButton;
 //    private AdView adView;
 
     private FrameLayout addContainerView;
@@ -50,12 +52,13 @@ public class MainMenuScene implements Scene {
     Context baseContext;
     private boolean initialLayoutComplete = false;
 
-    public MainMenuScene(EngineApp engineAux, FrameLayout addContainerViewAux, Context contextAux) {
+    public MainMenuScene(EngineApp engineAux, FrameLayout addContainerViewAux, Context contextAux, Button rewardButtonAux) {
         this.engine = engineAux;
         this.addContainerView = addContainerViewAux;
 //        this.adsize = size;
 //        this.addRequest = addRequestAux;
         this.baseContext = contextAux;
+        this.rewardButton = rewardButtonAux;
     }
 
 
@@ -99,9 +102,9 @@ public class MainMenuScene implements Scene {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        this.fastPlay = new Button(this.engine.getWidth() / 2 - (engine.getWidth() / 6), this.engine.getHeight() / 5, engine.getWidth() / 3, engine.getHeight() / 4.8);
+        this.fastPlay = new InputButton(this.engine.getWidth() / 2 - (engine.getWidth() / 6), this.engine.getHeight() / 5, engine.getWidth() / 3, engine.getHeight() / 4.8);
 
-        this.historyMode = new Button(this.engine.getWidth() / 2 - (engine.getWidth() / 6), this.engine.getHeight() / 2, engine.getWidth() / 3, engine.getHeight() / 4.8);
+        this.historyMode = new InputButton(this.engine.getWidth() / 2 - (engine.getWidth() / 6), this.engine.getHeight() / 2, engine.getWidth() / 3, engine.getHeight() / 4.8);
 
 
         loadFromFile();
@@ -234,7 +237,7 @@ public class MainMenuScene implements Scene {
         }
         if (inputReceived(this.historyMode.getPos(), this.historyMode.getSize())) {
             //Te lleva a la pantalla de seleccion
-            HistoryModeMenu historyMode = new HistoryModeMenu(this.engine, this.coins, this.progress);
+            HistoryModeMenu historyMode = new HistoryModeMenu(this.engine, this.coins, this.progress, this.rewardButton);
             this.engine.setScene(historyMode);
         }
     }

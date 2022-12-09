@@ -1,29 +1,21 @@
 package com.example.practica1;
 
-import android.content.Context;
-import android.util.Log;
-
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
+import android.widget.Button;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class HistoryModeMenu implements Scene {
 
-    private Button themeButtonMode;
-    private Button dificultyButtonMode;
+    private InputButton themeInputButtonMode;
+    private InputButton dificultyInputButtonMode;
 
-    private Button backButton;
+    private InputButton backInputButton;
+
+    Button rewardButton;
 
     AtomicReference<Integer> coins;
     private Integer coinSize;
@@ -33,12 +25,14 @@ public class HistoryModeMenu implements Scene {
 
     private EngineApp engine;
 
-    public HistoryModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux){
+    public HistoryModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux, Button rewardButtonAux){
 
         this.engine = engineAux;
 
         this.coins = coinsAux;
         this.progress = progressAux;
+
+        this.rewardButton = rewardButtonAux;
 
         coinSize = engine.getWidth()/10;
         init();
@@ -55,9 +49,9 @@ public class HistoryModeMenu implements Scene {
     public void init() {
 //        loadCoinsFromFile();
         //Botones selectores del nivel
-        this.themeButtonMode = new Button(engine.getWidth()/4  - engine.getWidth()/8, engine.getHeight()/2, engine.getWidth()/4, engine.getHeight()/6);
-        this.dificultyButtonMode = new Button(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/2, engine.getWidth()/4, engine.getHeight()/6);
-        this.backButton = new Button(10 + engine.getWidth()/44, 30, engine.getWidth()/10, engine.getHeight()/15);
+        this.themeInputButtonMode = new InputButton(engine.getWidth()/4  - engine.getWidth()/8, engine.getHeight()/2, engine.getWidth()/4, engine.getHeight()/6);
+        this.dificultyInputButtonMode = new InputButton(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/2, engine.getWidth()/4, engine.getHeight()/6);
+        this.backInputButton = new InputButton(10 + engine.getWidth()/44, 30, engine.getWidth()/10, engine.getHeight()/15);
     }
 
     public void update(double deltaTime){
@@ -70,15 +64,15 @@ public class HistoryModeMenu implements Scene {
 
     public void render(){
         //ThemeMode
-        this.engine.drawImage((int)this.themeButtonMode.getPos().getX(), (int)this.themeButtonMode.getPos().getY(),(int)this.themeButtonMode.getSize().getX(),(int)this.themeButtonMode.getSize().getY(),"PlayButton");
-        this.engine.drawText("Temático", (int)(themeButtonMode.getPos().getX() + themeButtonMode.getSize().getX()/2), (int)(themeButtonMode.getPos().getY() - themeButtonMode.getSize().getY()*0.5), "Black","Amor", 0);
+        this.engine.drawImage((int)this.themeInputButtonMode.getPos().getX(), (int)this.themeInputButtonMode.getPos().getY(),(int)this.themeInputButtonMode.getSize().getX(),(int)this.themeInputButtonMode.getSize().getY(),"PlayButton");
+        this.engine.drawText("Temático", (int)(themeInputButtonMode.getPos().getX() + themeInputButtonMode.getSize().getX()/2), (int)(themeInputButtonMode.getPos().getY() - themeInputButtonMode.getSize().getY()*0.5), "Black","Amor", 0);
 
         //DificultyMode
-        this.engine.drawImage((int)this.dificultyButtonMode.getPos().getX(), (int)this.dificultyButtonMode.getPos().getY(),(int)this.dificultyButtonMode.getSize().getX(),(int)this.dificultyButtonMode.getSize().getY(),"PlayButton");
-        this.engine.drawText("Dificultad", (int)(dificultyButtonMode.getPos().getX() + dificultyButtonMode.getSize().getX()/2), (int)(dificultyButtonMode.getPos().getY() - dificultyButtonMode.getSize().getY()*0.5), "Black","Amor", 0);
+        this.engine.drawImage((int)this.dificultyInputButtonMode.getPos().getX(), (int)this.dificultyInputButtonMode.getPos().getY(),(int)this.dificultyInputButtonMode.getSize().getX(),(int)this.dificultyInputButtonMode.getSize().getY(),"PlayButton");
+        this.engine.drawText("Dificultad", (int)(dificultyInputButtonMode.getPos().getX() + dificultyInputButtonMode.getSize().getX()/2), (int)(dificultyInputButtonMode.getPos().getY() - dificultyInputButtonMode.getSize().getY()*0.5), "Black","Amor", 0);
 
         //Back Button
-        this.engine.drawImage((int)backButton.getPos().getX(), (int)backButton.getPos().getY(),(int)(backButton.getSize().getX()),(int)(backButton.getSize().getY()), "Back");
+        this.engine.drawImage((int) backInputButton.getPos().getX(), (int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
         this.engine.drawText("Selecciona el modo de Juego", (int)(engine.getWidth()/2), (int)(engine.getHeight()/5.4), "Black", "Amor", 0);
@@ -92,19 +86,19 @@ public class HistoryModeMenu implements Scene {
     @Override
     public void handleInput(EventHandler.EventType type){
         //ThemeMode
-        if (inputReceived(this.themeButtonMode.getPos(), this.themeButtonMode.getSize())){
-            ThemeModeMenu playScene = new ThemeModeMenu(this.engine, this.coins, this.progress);
+        if (inputReceived(this.themeInputButtonMode.getPos(), this.themeInputButtonMode.getSize())){
+            ThemeModeMenu playScene = new ThemeModeMenu(this.engine, this.coins, this.progress, this.rewardButton);
             this.engine.setScene(playScene);
         }
 
         //DificultyMode
-        if (inputReceived(this.dificultyButtonMode.getPos(), this.dificultyButtonMode.getSize())){
+        if (inputReceived(this.dificultyInputButtonMode.getPos(), this.dificultyInputButtonMode.getSize())){
             QuickGameScene playScene = new QuickGameScene(this.engine, 8, 8);
             this.engine.setScene(playScene);
         }
 
         //Back button
-        if (inputReceived(this.backButton.getPos(), this.backButton.getSize())){
+        if (inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
             this.engine.popScene();
         }
     }

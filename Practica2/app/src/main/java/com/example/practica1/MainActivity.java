@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
+        mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext(), this.rewardButton);
         this.engine.setScene(mainMenuScene);
         this.engine.resume();
     }

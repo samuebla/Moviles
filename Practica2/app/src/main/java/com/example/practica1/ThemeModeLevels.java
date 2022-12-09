@@ -1,5 +1,7 @@
 package com.example.practica1;
 
+import android.widget.Button;
+
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.Scene;
@@ -9,11 +11,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class ThemeModeLevels implements Scene {
 
-    private Button[] lvls;
+    private InputButton[] lvls;
 
     private String[] lvlImages;
 
-    private Button backButton;
+    private InputButton backInputButton;
 
     private EngineApp engine;
 
@@ -24,16 +26,19 @@ public class ThemeModeLevels implements Scene {
     private String selectedCategory;
     private int category;
 
+    private Button rewardButton;
+
     private AtomicReference<Integer> unlockedlevels;
 
 
-    public ThemeModeLevels(EngineApp engineAux,AtomicReference<Integer> levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux){
+    public ThemeModeLevels(EngineApp engineAux,AtomicReference<Integer> levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux, Button rewardButtonAux){
         this.engine = engineAux;
         this.selectedCategory = this.categories[selectedCategory - 1];
         this.category = selectedCategory;
         this.unlockedlevels = levelsUnlocked;
         this.coins = coinsAux;
         coinSize = engine.getWidth()/10;
+        this.rewardButton = rewardButtonAux;
         init();
     }
 
@@ -47,11 +52,11 @@ public class ThemeModeLevels implements Scene {
 
     public void init() {
         //Botones selectores del nivel
-        this.lvls = new Button[20];
+        this.lvls = new InputButton[20];
         int contador = 0;
         for (int i = 0; i < 5; ++i){
             for (int j = 0; j < 4; ++j){
-                this.lvls[contador] = new Button(engine.getWidth()/25 + (engine.getWidth()/25) * j  + (engine.getWidth()/5) * j,
+                this.lvls[contador] = new InputButton(engine.getWidth()/25 + (engine.getWidth()/25) * j  + (engine.getWidth()/5) * j,
                         (engine.getHeight()/4 + engine.getHeight()/48) + (engine.getHeight()/8 * i) + (engine.getHeight()/48 * i), engine.getWidth()/5, engine.getHeight()/8);
                 contador++;
             }
@@ -71,7 +76,7 @@ public class ThemeModeLevels implements Scene {
             this.lvlImages[i-1] = "Blocked";
         }
 
-        this.backButton = new Button(10 + engine.getWidth()/44, 30, engine.getWidth()/10, engine.getHeight()/15);
+        this.backInputButton = new InputButton(10 + engine.getWidth()/44, 30, engine.getWidth()/10, engine.getHeight()/15);
 
         //TODO LevelsUnlocked es un int que le pasas de la escena anterior. Me desbloquea los niveles hasta ahi y el resto se ven
         //TODO de otra manera y no puedes interactuar con ellos
@@ -93,7 +98,7 @@ public class ThemeModeLevels implements Scene {
         //----------------------------------------
 
         //Back Button
-        this.engine.drawImage((int)backButton.getPos().getX(),(int)backButton.getPos().getY(),(int)(backButton.getSize().getX()),(int)(backButton.getSize().getY()), "Back");
+        this.engine.drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
         this.engine.drawText("Categoria de mi pepe", (int)(engine.getWidth()/2), (int)(engine.getHeight()/8), "Black", "Amor", 0);
@@ -109,13 +114,13 @@ public class ThemeModeLevels implements Scene {
     public void handleInput(EventHandler.EventType type){
         for (int i = 0; i < this.unlockedlevels.get(); ++i){
             if (inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
-                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1);
+                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1, this.rewardButton);
                 this.engine.setScene(playScene);
             }
         }
 
         //Back button
-        if (inputReceived(this.backButton.getPos(), this.backButton.getSize())){
+        if (inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
             this.engine.popScene();
         }
     }
