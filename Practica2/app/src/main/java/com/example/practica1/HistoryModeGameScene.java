@@ -2,7 +2,6 @@ package com.example.practica1;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
 import com.example.engineandroid.EngineApp;
@@ -40,6 +39,15 @@ public class HistoryModeGameScene implements Scene {
     private Integer currentLevelNumber;
     private Integer coinSize;
     boolean showNewCoins;
+
+    //Tamaño proporcional de las celdas adaptado a la pantalla
+    float tamProporcional;
+
+    //Variables auxiliares para posicionar correctamente a las celdas en funcion del tamaño de la pantalla
+    double xPos;
+    double yPos;
+    int posYTextAuxTopToBottom;
+    int posXTextAuxLeftToRight;
 
     private Button rewardButton;
 
@@ -250,24 +258,24 @@ public class HistoryModeGameScene implements Scene {
 
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                engine.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - ((double) (this.engine.getWidth()) / 90.0)), (int) ((double) this.engine.getHeight() * 0.3240740) + (int) ((double) this.engine.getHeight() * 0.0555555) * i, "Black", "CalibriSmall", 1);
+                //Con el margen de 1 celda no tendremos problema con las otras resoluciones
+                engine.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - tamProporcional/2), posYTextAuxTopToBottom + (int) (tamProporcional * 1.1 * i), "Black", "CalibriSmall", 1);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
-                for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    engine.drawText(xNumberLeftToRight[i].get(j), (int) ((double) this.engine.getWidth() * 0.155) + (int) ((double) this.engine.getWidth() * 0.083333) * i, (int) ((double) this.engine.getHeight() * 0.185185) + (int) ((double) this.engine.getHeight() * 0.027777) * j, "Black", "CalibriSmall", 0);
+                for (int j = xNumberLeftToRight[i].size()-1; j >= 0; j--) {
+                    engine.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcional * 1.1 * i), (int) (auxCuadradoInicio.getY() - tamProporcional/2 - (int) (tamProporcional/2.7f * j)), "Black", "CalibriSmall", 0);
                 }
             }
 
             //BOTONES
             //TODO AAA NO SE HACER LOS PUTOS COLORES
-            this.engine.drawRectangle((int) ((double) colorsInputButtons[actualColorPattern].getPos().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getPos().getY()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getY()), true, (int) (colorfulPattern[actualColorPattern]+0xAF000000));
+            this.engine.drawRectangle((int) ((double) colorsInputButtons[actualColorPattern].getPos().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getPos().getY()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getY()), true, (int) (colorfulPattern[actualColorPattern] + 0xAF000000));
 
             this.engine.drawImage((int) ((double) giveUpInputButton.getPos().getX()), (int) ((double) giveUpInputButton.getPos().getY()), (int) ((double) giveUpInputButton.getSize().getX()), (int) ((double) giveUpInputButton.getSize().getY()), "GiveUp");
             for (int i = 0; i < colorsInputButtons.length; i++) {
                 this.engine.drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), "GiveUp");
             }
             this.engine.drawImage((int) ((double) getLifeInputButton.getPos().getX()), (int) ((double) getLifeInputButton.getPos().getY()), (int) ((double) getLifeInputButton.getSize().getX()), (int) ((double) getLifeInputButton.getSize().getY()), "GiveUp");
-
 
             //ESTO ESTA SIN TESTEAR.
             //MONEDAS
@@ -430,6 +438,29 @@ public class HistoryModeGameScene implements Scene {
             cols_ = Integer.parseInt(fileRead[1]);
             lives = Integer.parseInt(fileRead[2]);
 
+            int numCeldas;
+            int tamTextoAux;
+
+            //AAA TODO Tamaño de la celda
+            //Nos quedamos con el mayor numero para hacer el reescalado
+            if (rows_ > cols_) {
+                //Si hay 10 filas como maximo puede haber 5 numeros + 5 espacios = rows
+                tamTextoAux = Math.round(rows_ / 3.0f);
+                //Hacemos una proporcion aproximada. 3 unidades (letras/espacios) es 1 casilla
+                numCeldas = rows_ + tamTextoAux;
+                //Y con eso sacamos el tamaño promedio de la celda
+                tamProporcional = this.engine.getWidth() / (numCeldas + 1);
+            } else {
+                //Si hay 10 columnas como maximo puede haber 5 numeros + 5 espacios = cols
+                tamTextoAux = Math.round(cols_ / 3.0f);
+                //Hacemos una proporcion aproximada. 3 unidades (letras/espacios) es 1 casilla
+                numCeldas = cols_ + tamTextoAux;
+                //Y con eso sacamos el tamaño promedio de la celda
+                tamProporcional = this.engine.getWidth() / (numCeldas + 1); //+1 Para que haya margen y quede bonito
+
+            }
+
+
             //Iniciamos la matriz segun el fichero
             for (int i = 0; i < rows_; i++) {
                 for (int j = 3; j < cols_ + 3; j++) {
@@ -437,35 +468,61 @@ public class HistoryModeGameScene implements Scene {
 
                     int aux = Integer.parseInt(fileRead[rows_ * i + j]);
 
+                    //Con la relacion del juego el largo siempre va a ser mayor que el ancho
+//                    double yPos = tamTextoAux * tamProporcional + ((tamProporcional * 1.1) * i);
+
+                    //Si es mas ancho que largo...
+                    if (rows_ >= cols_) {
+                        //Lo ajustamos al centro de la pantalla de largo
+                        yPos = this.engine.getHeight() / 2 - ((rows_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * i);
+
+                        xPos = tamTextoAux * tamProporcional + ((tamProporcional * 1.1) * (j - 3));
+
+                    }
+                    //Si es mas largo que ancho
+                    else {
+                        yPos = tamTextoAux * tamProporcional + ((tamProporcional * 1.1) * i);
+
+                        //Ajustamos el ancho al centro de la pantalla
+                        xPos = this.engine.getWidth() / 2 - ((cols_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * (j - 3));
+
+                    }
+
 
                     //Si es 0 Esta EMPTY pero no es true
                     if (aux == 0) {
-                        this.matriz[j - 3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * (j - 3),
-                                (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05), CellBase.cellType.EMPTY, false);
-
+                        this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
+                                (int) yPos, (int) tamProporcional, (int) tamProporcional, CellBase.cellType.EMPTY, false);
                     }
                     //Si es 1 Esta Empty pero es correcto
-                    else if (aux == 1) {
-                        //Lo añadimos a la lista de celdas que tiene que acertar el jugador
-                        remainingCells++;
+                    else {
 
-                        this.matriz[j - 3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * (j - 3),
-                                (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05), CellBase.cellType.EMPTY, true);
+                        if (aux == 1) {
+                            //Lo añadimos a la lista de celdas que tiene que acertar el jugador
+                            remainingCells++;
 
-                    }
-                    //Si esta mal seleccionada y esta roja...
-                    else if (aux == 2) {
-                        this.matriz[j - 3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * (j - 3),
-                                (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05), CellBase.cellType.WRONG, false);
+                            this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
+                                    (int) yPos, (int) tamProporcional, (int) tamProporcional, CellBase.cellType.EMPTY, true);
 
-                    }
-                    //Si esta bien seleccionada y esta azul
-                    else if (aux == 3) {
-                        this.matriz[j - 3][i] = new CellHistoryMode((int) ((double) this.engine.getWidth() * 0.125) + (int) ((double) this.engine.getWidth() * 0.083333) * (j - 3),
-                                (int) ((double) this.engine.getHeight() * 0.296296296) + (int) ((double) this.engine.getHeight() * 0.055555555) * i, (int) ((double) this.engine.getWidth() * 0.075), (int) ((double) this.engine.getHeight() * 0.05), CellBase.cellType.SELECTED, true);
+                        }
+                        //Si esta mal seleccionada y esta roja...
+                        else if (aux == 2) {
+                            this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
+                                    (int) yPos, (int) tamProporcional, (int) tamProporcional, CellBase.cellType.WRONG, false);
+
+                        }
+                        //Si esta bien seleccionada y esta azul
+                        else if (aux == 3) {
+                            this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
+                                    (int) yPos, (int) tamProporcional, (int) tamProporcional, CellBase.cellType.SELECTED, true);
+                        }
                     }
                 }
             }
+
+            //Para las posiciones del texto indicativo
+            posYTextAuxTopToBottom = (int) (matriz[0][0].getPos().getY() + (tamProporcional / 2));
+            posXTextAuxLeftToRight = (int) (matriz[0][0].getPos().getX() + (tamProporcional / 2));
 
             int contador = 0;
             int numAux = 0;
