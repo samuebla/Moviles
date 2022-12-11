@@ -89,16 +89,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         getSupportActionBar().hide();
-        this.engine = new EngineApp(this.renderView, this.screenLayout);
 
-//        if (savedInstanceState == null){
-//            this.sceneMngr = new SceneMngrAndroid();
-//
-//            this.engine.setSceneMngr(this.sceneMngr);
-//        }else{
-//            this.sceneMngr = (SceneMngrAndroid) savedInstanceState.getSerializable("sceneManager");
-//            this.engine.setSceneMngr(this.sceneMngr);
-//        }
+
+        if (savedInstanceState == null){
+            this.engine = new EngineApp(this.renderView, this.screenLayout);
+        }else{
+            //Conseguimos el engine si se ha reiniciado la aplicacion
+            this.engine = ((MainMenuScene) savedInstanceState.getSerializable("mainMenuScene")).getEngine();
+            this.engine.restart(this.renderView, this.screenLayout);
+        }
 
 
         //Add Initialization ----------------------------------------------

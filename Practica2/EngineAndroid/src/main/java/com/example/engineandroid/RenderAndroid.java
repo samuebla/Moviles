@@ -49,6 +49,20 @@ public class RenderAndroid {
         colorBackground = 0XFF00FFFF;
     }
 
+    public void restart(SurfaceView newView, LinearLayout newScreenLayout){
+        this.myView = newView;
+        this.screenLayout = newScreenLayout;
+        this.holder = this.myView.getHolder();
+        this.paint = new Paint();
+        this.paint.setColor(0xFF000000);
+
+        this.frameSize = new Vector2D(720, 1080);
+        this.posCanvas = new Vector2D();
+
+        this.fonts = new HashMap<>();
+        this.images = new HashMap<>();
+    }
+
     public void prepareFrame() {
         // Pintamos el framefsefsefdfs
         while (!this.holder.getSurface().isValid()) ;

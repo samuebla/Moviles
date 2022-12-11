@@ -45,6 +45,19 @@ public class EngineApp implements Runnable {
 
     }
 
+    public void restart(SurfaceView newView, LinearLayout newScreenLayout){
+        this.view = newView;
+        this.render.restart(newView, newScreenLayout);
+
+        this.view.setOnTouchListener(this.input.getTouchListener());
+        this.view.setOnLongClickListener(this.input.getLongTouchListener());
+
+        this.render.setAssetContext(newView.getContext().getAssets());
+        this.audioMngr.setAssetsManager(newView.getContext().getAssets());
+
+        this.context = newView.getContext();
+    }
+
 
     public RenderAndroid getGraphics() {
         return render;
@@ -98,6 +111,7 @@ public class EngineApp implements Runnable {
         this.render.scaleAppView();
         this.input.setOffset(0, this.render.getOffset().getY());
         this.primaryScene.loadResources(this);
+        this.sceneMngr.getScene().init();
         // Espera activa. Sería más elegante al menos dormir un poco.
 
         long lastFrameTime = System.nanoTime();

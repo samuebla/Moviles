@@ -151,8 +151,6 @@ public class MainMenuScene implements Scene, Serializable {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-
-        init();
     }
 
     //Metodos de lectura y guardado
@@ -270,6 +268,9 @@ public class MainMenuScene implements Scene, Serializable {
     public void onResume() {
         init();
     }
+
+    //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA muy feo pero no se me ocurre otra cosa, me quiero morir, lo siento
+    public EngineApp getEngine(){return engine;}
 
 //    @Override
 //    public int onClosed(){
