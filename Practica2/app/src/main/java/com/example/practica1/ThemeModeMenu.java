@@ -12,10 +12,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ThemeModeMenu implements Scene {
 
 
-    private InputButton tetarracasInputButtonMode;
-    private InputButton mamelungasInputButtonMode;
-    private InputButton bubalongasInputButtonMode;
-    private InputButton bakugansInputButtonMode;
+    private InputButton alfabetoInputButtonMode;
+    private InputButton geometriaInputButtonMode;
+    private InputButton fiestaInputButtonMode;
+    private InputButton animalesInputButtonMode;
 
     private InputButton backInputButton;
 
@@ -47,10 +47,10 @@ public class ThemeModeMenu implements Scene {
 
     public void init() {
         //Botones selectores del nivel
-        this.tetarracasInputButtonMode = new InputButton(engine.getWidth()/4  - engine.getWidth()/8, engine.getHeight()/2.4, engine.getWidth()/4, engine.getHeight()/6);
-        this.mamelungasInputButtonMode = new InputButton(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/1.5, engine.getWidth()/4, engine.getHeight()/6);
-        this.bakugansInputButtonMode = new InputButton(engine.getWidth()/4 - engine.getWidth()/8, engine.getHeight()/1.5, engine.getWidth()/4, engine.getHeight()/6);
-        this.bubalongasInputButtonMode = new InputButton(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/2.4, engine.getWidth()/4, engine.getHeight()/6);
+        this.alfabetoInputButtonMode = new InputButton(engine.getWidth()/4  - engine.getWidth()/8, engine.getHeight()/2.4, engine.getWidth()/4, engine.getHeight()/6);
+        this.geometriaInputButtonMode = new InputButton(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/1.5, engine.getWidth()/4, engine.getHeight()/6);
+        this.animalesInputButtonMode = new InputButton(engine.getWidth()/4 - engine.getWidth()/8, engine.getHeight()/1.5, engine.getWidth()/4, engine.getHeight()/6);
+        this.fiestaInputButtonMode = new InputButton(engine.getWidth()*3/4 - engine.getWidth()/8, engine.getHeight()/2.4, engine.getWidth()/4, engine.getHeight()/6);
 
 
 
@@ -66,29 +66,28 @@ public class ThemeModeMenu implements Scene {
     }
 
     public void render(){
-        //Tetarracas
-        this.engine.drawImage((int)this.tetarracasInputButtonMode.getPos().getX(), (int)this.tetarracasInputButtonMode.getPos().getY(),(int)this.tetarracasInputButtonMode.getSize().getX(),(int)this.tetarracasInputButtonMode.getSize().getY(),"PlayButton");
-        this.engine.drawText("Tetarracas", (int)(tetarracasInputButtonMode.getPos().getX() + tetarracasInputButtonMode.getSize().getX()/2), (int)(tetarracasInputButtonMode.getPos().getY() - tetarracasInputButtonMode.getSize().getY()/4), "Black","Amor", 0);
+        //ALFABETO
+        this.engine.drawImage((int)this.alfabetoInputButtonMode.getPos().getX(), (int)this.alfabetoInputButtonMode.getPos().getY(),(int)this.alfabetoInputButtonMode.getSize().getX(),(int)this.alfabetoInputButtonMode.getSize().getY(),"AlphabetPlay");
+        this.engine.drawText("ALFABETO", (int)(alfabetoInputButtonMode.getPos().getX() + alfabetoInputButtonMode.getSize().getX()/2), (int)(alfabetoInputButtonMode.getPos().getY() - alfabetoInputButtonMode.getSize().getY()/4), "Black","Cooper", 0);
 
-        //Mamelungas
-        this.engine.drawImage((int)this.mamelungasInputButtonMode.getPos().getX(), (int)this.mamelungasInputButtonMode.getPos().getY(),(int)this.mamelungasInputButtonMode.getSize().getX(),(int)this.mamelungasInputButtonMode.getSize().getY(),"PlayButton");
-        this.engine.drawText("Mmamelungas", (int)(mamelungasInputButtonMode.getPos().getX() + mamelungasInputButtonMode.getSize().getX()/2), (int)(mamelungasInputButtonMode.getPos().getY() - mamelungasInputButtonMode.getSize().getY()/4), "Black","Amor", 0);
+        //FIESTA
+        this.engine.drawImage((int)this.fiestaInputButtonMode.getPos().getX(), (int)this.fiestaInputButtonMode.getPos().getY(),(int)this.fiestaInputButtonMode.getSize().getX(),(int)this.fiestaInputButtonMode.getSize().getY(),"PartyPlay");
+        this.engine.drawText("FIESTA", (int)(fiestaInputButtonMode.getPos().getX() + fiestaInputButtonMode.getSize().getX()/2), (int)(fiestaInputButtonMode.getPos().getY() - fiestaInputButtonMode.getSize().getY()/4), "Black","Cooper", 0);
 
-        //Bubalongas
-        this.engine.drawImage((int)this.bubalongasInputButtonMode.getPos().getX(), (int)this.bubalongasInputButtonMode.getPos().getY(),(int)this.bubalongasInputButtonMode.getSize().getX(),(int)this.bubalongasInputButtonMode.getSize().getY(),"PlayButton");
-        this.engine.drawText("Bubalongas", (int)(bubalongasInputButtonMode.getPos().getX() + bubalongasInputButtonMode.getSize().getX()/2), (int)(bubalongasInputButtonMode.getPos().getY() - bubalongasInputButtonMode.getSize().getY()/4), "Black","Amor", 0);
+        //ANIMALES
+        this.engine.drawImage((int)this.animalesInputButtonMode.getPos().getX(), (int)this.animalesInputButtonMode.getPos().getY(),(int)this.animalesInputButtonMode.getSize().getX(),(int)this.animalesInputButtonMode.getSize().getY(),"AnimalsPlay");
+        this.engine.drawText("ANIMALES", (int)(animalesInputButtonMode.getPos().getX() + animalesInputButtonMode.getSize().getX()/2), (int)(animalesInputButtonMode.getPos().getY() - animalesInputButtonMode.getSize().getY()/4), "Black","Cooper", 0);
 
-        //Bakugans
-        this.engine.drawImage((int)this.bakugansInputButtonMode.getPos().getX(), (int)this.bakugansInputButtonMode.getPos().getY(),(int)this.bakugansInputButtonMode.getSize().getX(),(int)this.bakugansInputButtonMode.getSize().getY(),"PlayButton");
-        this.engine.drawText("Bakugans", (int)(bakugansInputButtonMode.getPos().getX() + bakugansInputButtonMode.getSize().getX()/2), (int)(bakugansInputButtonMode.getPos().getY() - bakugansInputButtonMode.getSize().getY()/4), "Black","Amor", 0);
-
+        //GEOMETRIA
+        this.engine.drawImage((int)this.geometriaInputButtonMode.getPos().getX(), (int)this.geometriaInputButtonMode.getPos().getY(),(int)this.geometriaInputButtonMode.getSize().getX(),(int)this.geometriaInputButtonMode.getSize().getY(),"GeometryPlay");
+        this.engine.drawText("GEOMETRIA", (int)(geometriaInputButtonMode.getPos().getX() + geometriaInputButtonMode.getSize().getX()/2), (int)(geometriaInputButtonMode.getPos().getY() - geometriaInputButtonMode.getSize().getY()/4), "Black","Cooper", 0);
         //----------------------------------------
 
         //Back Button
         this.engine.drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        this.engine.drawText("Elige la categoria que quieres jugar", (int)(engine.getWidth()/2), (int)(engine.getHeight()/5.4), "Black", "Amor", 0);
+        this.engine.drawText("Elige la categoria que quieres jugar", (int)(engine.getWidth()/2), (int)(engine.getHeight()/5.4), "Black", "Cooper", 0);
 
         //Moneas
         //MONEDAS
@@ -100,22 +99,22 @@ public class ThemeModeMenu implements Scene {
     @Override
     public void handleInput(EventHandler.EventType type){
         //Tetarracas
-        if (inputReceived(this.tetarracasInputButtonMode.getPos(), this.tetarracasInputButtonMode.getSize())){
+        if (inputReceived(this.alfabetoInputButtonMode.getPos(), this.alfabetoInputButtonMode.getSize())){
             ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[0], 1, this.coins, this.rewardButton);
             this.engine.setScene(scene);
         }
-        //Mamelungas
-        if (inputReceived(this.mamelungasInputButtonMode.getPos(), this.mamelungasInputButtonMode.getSize())){
+        //Bubalongas
+        if (inputReceived(this.fiestaInputButtonMode.getPos(), this.fiestaInputButtonMode.getSize())){
             ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[1], 2, this.coins, this.rewardButton);
             this.engine.setScene(scene);
         }
-        //Bubalongas
-        if (inputReceived(this.bubalongasInputButtonMode.getPos(), this.bubalongasInputButtonMode.getSize())){
+        //Bakugans
+        if (inputReceived(this.animalesInputButtonMode.getPos(), this.animalesInputButtonMode.getSize())){
             ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[2], 3, this.coins, this.rewardButton);
             this.engine.setScene(scene);
         }
-        //Bakugans
-        if (inputReceived(this.bakugansInputButtonMode.getPos(), this.bakugansInputButtonMode.getSize())){
+        //Mamelungas
+        if (inputReceived(this.geometriaInputButtonMode.getPos(), this.geometriaInputButtonMode.getSize())){
             ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[3], 4, this.coins, this.rewardButton);
             this.engine.setScene(scene);
         }
@@ -124,5 +123,11 @@ public class ThemeModeMenu implements Scene {
         if (inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
             this.engine.popScene();
         }
+    }
+
+    //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
+    @Override
+    public void onResume() {
+
     }
 }

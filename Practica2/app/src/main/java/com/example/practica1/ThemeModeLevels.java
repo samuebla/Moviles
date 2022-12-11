@@ -22,7 +22,7 @@ public class ThemeModeLevels implements Scene {
     private AtomicReference<Integer> coins;
     private Integer coinSize;
 
-    private String[] categories = { "QUEER", "TETAS", "FRUTAS", "CAPITALISMO"};
+    private String[] categories = { "Alphabet", "Party", "Animals", "Geometry"};
     private String selectedCategory;
     private int category;
 
@@ -65,7 +65,7 @@ public class ThemeModeLevels implements Scene {
         this.lvlImages = new String[20];
         //AAAAAAAAAAAAAAAAAA Asignar imagen distinta dependiendo del nivel
         for (int i = 1; i < this.unlockedlevels.get(); ++i){
-            this.lvlImages[i-1] = "Square";
+            this.lvlImages[i-1] = selectedCategory + "Play";
         }
         //AAAAAAAAAAAAAAAAAAA Asignar imagen de desbloqueado
         if (this.unlockedlevels.get() < this.lvlImages.length){
@@ -73,7 +73,7 @@ public class ThemeModeLevels implements Scene {
         }
         //AAAAAAAAAAAAAAAAAAA Asignar imagen de bloqueado
         for (int i = this.unlockedlevels.get() + 1; i < this.lvlImages.length+1; ++i){
-            this.lvlImages[i-1] = "Blocked";
+            this.lvlImages[i-1] = selectedCategory + "Level";
         }
 
         this.backInputButton = new InputButton(10 + engine.getWidth()/44, 30, engine.getWidth()/10, engine.getHeight()/15);
@@ -122,6 +122,17 @@ public class ThemeModeLevels implements Scene {
         //Back button
         if (inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
             this.engine.popScene();
+        }
+    }
+
+    //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
+    @Override
+    public void onResume() {
+        for (int i = 1; i < this.unlockedlevels.get(); ++i){
+            this.lvlImages[i-1] = selectedCategory + "Play";
+        }
+        if (this.unlockedlevels.get() < this.lvlImages.length){
+            this.lvlImages[this.unlockedlevels.get()-1] = "Unlocked";
         }
     }
 }

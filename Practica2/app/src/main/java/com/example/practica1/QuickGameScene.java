@@ -458,6 +458,12 @@ public class QuickGameScene implements Scene{
         }
     }
 
+    //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
+    @Override
+    public void onResume() {
+
+    }
+
     //Comprueba si has ganado o no
     private boolean win() {
         return remainingCells == 0 && wrongCells == 0;

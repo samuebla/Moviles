@@ -372,6 +372,12 @@ public class HistoryModeGameScene implements Scene {
         }
     }
 
+    //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
+    @Override
+    public void onResume() {
+
+    }
+
     //Metodos de lectura y guardado
     public void loadFromFile(String file) {
         try {

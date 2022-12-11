@@ -83,28 +83,42 @@ public class MainMenuScene implements Scene {
             this.engine.getGraphics().newFont("Amor", "assets/AmorRegular.ttf", 0, 50);
             this.engine.getGraphics().newFont("Calibri", "assets/CalibriRegular.ttf", 0, 40);
             this.engine.getGraphics().newFont("Cooper", "assets/CooperBlackRegular.ttf", 0, 50);
-            this.engine.getGraphics().newFont("CalibriSmall", "assets/CalibriRegular.ttf", 0, 30);
+            this.engine.getGraphics().newFont("CooperBig", "assets/CooperBlackRegular.ttf", 0, 80);
+            this.engine.getGraphics().newFont("CooperSmall", "assets/CooperBlackRegular.ttf", 0, 30);
             this.engine.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1, 40);
+            this.engine.getGraphics().newFont("CalibriSmall", "assets/CalibriRegular.ttf", 0, 30);
             this.engine.getGraphics().newFont("CalibriBold", "assets/CalibriRegular.ttf", 1, 30);
 
             this.engine.getGraphics().newImage("Board", "assets/board.png");
             this.engine.getGraphics().newImage("GiveUp", "assets/giveUpButton.png");
             this.engine.getGraphics().newImage("Back", "assets/backButton.png");
             this.engine.getGraphics().newImage("Check", "assets/checkButton.png");
-            this.engine.getGraphics().newImage("PlayButton", "assets/playButton.png");
             this.engine.getGraphics().newImage("Coin", "assets/coin.png");
             this.engine.getGraphics().newImage("Heart", "assets/heart.png");
             this.engine.getGraphics().newImage("Square", "assets/square.png");
             this.engine.getGraphics().newImage("Blocked", "assets/blockedLevel.png");
             this.engine.getGraphics().newImage("Unlocked", "assets/unlockedLevel.png");
+            this.engine.getGraphics().newImage("QuickPlay", "assets/quick_play.png");
+            this.engine.getGraphics().newImage("HistoryPlay", "assets/history_play.png");
+            this.engine.getGraphics().newImage("ThemePlay", "assets/theme_play.png");
+            this.engine.getGraphics().newImage("ChallengePlay", "assets/challenge_play.png");
+            this.engine.getGraphics().newImage("GeometryLevel", "assets/geometry_level.png");
+            this.engine.getGraphics().newImage("AnimalsLevel", "assets/animals_level.png");
+            this.engine.getGraphics().newImage("PartyLevel", "assets/party_level.png");
+            this.engine.getGraphics().newImage("AlphabetLevel", "assets/alphabet_level.png");
+
+            this.engine.getGraphics().newImage("GeometryPlay", "assets/geometry_play.png");
+            this.engine.getGraphics().newImage("AnimalsPlay", "assets/animals_play.png");
+            this.engine.getGraphics().newImage("PartyPlay", "assets/party_play.png");
+            this.engine.getGraphics().newImage("AlphabetPlay", "assets/alphabet_play.png");
 
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        this.fastPlay = new InputButton(this.engine.getWidth() / 2 - (engine.getWidth() / 6), this.engine.getHeight() / 5, engine.getWidth() / 3, engine.getHeight() / 4.8);
+        this.fastPlay = new InputButton(this.engine.getWidth() / 2 - (engine.getWidth() / 4), this.engine.getHeight() / 5, engine.getWidth() / 2, engine.getHeight() / 4.8);
 
-        this.historyMode = new InputButton(this.engine.getWidth() / 2 - (engine.getWidth() / 6), this.engine.getHeight() / 2, engine.getWidth() / 3, engine.getHeight() / 4.8);
+        this.historyMode = new InputButton(this.engine.getWidth() / 2 - (engine.getWidth() / 4), this.engine.getHeight() / 2, engine.getWidth() / 2, engine.getHeight() / 4.8);
 
 
         loadFromFile();
@@ -219,11 +233,11 @@ public class MainMenuScene implements Scene {
     @Override
     public void render() {
         //Titulo
-        this.engine.drawText("NONOGRAMAS", (int) (this.engine.getWidth() / 2), (int) (this.engine.getHeight() / 10.8), "Black", "Cooper", 0);
+        this.engine.drawText("NONOGRAMAS", (int) (this.engine.getWidth() / 2), (int) (this.engine.getHeight() / 10.8), "Black", "CooperBig", 0);
 
         //Botones
-        this.engine.drawImage((int) this.fastPlay.getPos().getX(), (int) (fastPlay.getPos().getY()), (int) (this.fastPlay.getSize().getX()), (int) (this.fastPlay.getSize().getY()), "PlayButton");
-        this.engine.drawImage((int) this.historyMode.getPos().getX(), (int) (historyMode.getPos().getY()), (int) (this.historyMode.getSize().getX()), (int) (this.historyMode.getSize().getY()), "PlayButton");
+        this.engine.drawImage((int) this.fastPlay.getPos().getX(), (int) (fastPlay.getPos().getY()), (int) (this.fastPlay.getSize().getX()), (int) (this.fastPlay.getSize().getY()), "QuickPlay");
+        this.engine.drawImage((int) this.historyMode.getPos().getX(), (int) (historyMode.getPos().getY()), (int) (this.historyMode.getSize().getX()), (int) (this.historyMode.getSize().getY()), "HistoryPlay");
 
     }
 
@@ -240,6 +254,12 @@ public class MainMenuScene implements Scene {
             HistoryModeMenu historyMode = new HistoryModeMenu(this.engine, this.coins, this.progress, this.rewardButton);
             this.engine.setScene(historyMode);
         }
+    }
+
+    //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
+    @Override
+    public void onResume() {
+
     }
 
 //    private void loadBanner() {

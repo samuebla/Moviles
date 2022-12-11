@@ -13,6 +13,9 @@ public class SceneMngrAndroid {
 
     public void popScene(){
         stack.pop();
+        if(!stack.empty()){
+            stack.peek().onResume();
+        }
     }
 
     public void pushScene(Scene scene){
