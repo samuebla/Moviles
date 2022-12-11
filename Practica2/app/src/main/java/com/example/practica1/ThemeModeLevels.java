@@ -107,11 +107,11 @@ public class ThemeModeLevels implements Scene, Serializable {
         this.engine.getGraphics().drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        this.engine.getGraphics().drawText("Categoria de mi pepe", (int)(engine.getGraphics().getWidth()/2), (int)(engine.getGraphics().getHeight()/8), "Black", "Amor", 0);
+        this.engine.getGraphics().drawText(selectedCategory + " Category", (int)(engine.getGraphics().getWidth()/2), (int)(engine.getGraphics().getHeight()/8), "Black", "CooperBold", 0);
 
         //Moneas
         //MONEDAS
-        this.engine.getGraphics().drawText(Integer.toString(coins.get()), engine.getGraphics().getWidth() - coinSize-10, (int)engine.getGraphics().getHeight()/15, "Black", "CooperBold", 1);
+        this.engine.getGraphics().drawText(Integer.toString(coins.get()), engine.getGraphics().getWidth() - coinSize-10, (int)(engine.getGraphics().getHeight()/72 + coinSize/1.7f), "Black", "CooperBold", 1);
         this.engine.getGraphics().drawImage(engine.getGraphics().getWidth()-coinSize -10, (int)engine.getGraphics().getHeight()/72,coinSize,coinSize,"Coin");
 
     }

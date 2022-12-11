@@ -177,8 +177,8 @@ public class HistoryModeGameScene implements Scene, Serializable {
         this.escapeInputButton = new InputButton(10 + engine.getGraphics().getWidth()/44, 30, engine.getGraphics().getWidth()/10, engine.getGraphics().getHeight()/15);
         this.winBackInputButton = new InputButton((double) this.engine.getGraphics().getWidth() * 0.44444444, (double) this.engine.getGraphics().getHeight() / 1.1,
                 (double) this.engine.getGraphics().getWidth() / 10, (double) this.engine.getGraphics().getHeight() / 15);
-        this.getLifeInputButton = new InputButton((double) this.engine.getGraphics().getWidth() / 10, (double) this.engine.getGraphics().getHeight() / 1.2,
-                (double) this.engine.getGraphics().getWidth() / 8, (double) this.engine.getGraphics().getHeight() / 12);
+        this.getLifeInputButton = new InputButton(0, this.engine.getGraphics().getHeight() - this.engine.getGraphics().getHeight()/10,
+                (double) this.engine.getGraphics().getWidth() / 6, (double) this.engine.getGraphics().getHeight() / 10);
 
         for (int i = 0; i < colorsInputButtons.length; i++) {
             this.colorsInputButtons[i] = new InputButton((double) this.engine.getGraphics().getWidth() / 2.5 + 200 * i, (double) this.engine.getGraphics().getHeight()-  this.engine.getGraphics().getHeight() * 0.10,
@@ -244,8 +244,8 @@ public class HistoryModeGameScene implements Scene, Serializable {
 
             //Mostramos las monedas obtenidas
             if (showNewCoins) {
-                this.engine.getGraphics().drawText("+10", (int) (this.engine.getGraphics().getWidth() / 2), (int) (this.engine.getGraphics().getHeight() / 1.5), "Black", "Cooper", 0);
-                this.engine.getGraphics().drawImage(engine.getGraphics().getWidth() / 2 + 30, (int) (engine.getGraphics().getHeight() / 1.5), coinSize, coinSize, "Coin");
+                this.engine.getGraphics().drawText("+10", (int) (this.engine.getGraphics().getWidth() / 2), (int) (engine.getGraphics().getHeight() / 12 + coinSize/1.7), "Black", "Cooper", 0);
+                this.engine.getGraphics().drawImage((int) (engine.getGraphics().getWidth() / 1.8), (int) (engine.getGraphics().getHeight() / 12), coinSize, coinSize, "Coin");
 
             }
 
@@ -271,7 +271,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = xNumberLeftToRight[i].size()-1; j >= 0; j--) {
-                    engine.getGraphics().drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcional * 1.1 * i), (int) (auxCuadradoInicio.getY() - tamProporcional/2 - (int) (tamProporcional/2.7f * j)), "Black", "CalibriSmall", 0);
+                    engine.getGraphics().drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcional * 1.1 * i), (int) (auxCuadradoInicio.getY() - tamProporcional/1.5 + (int) (tamProporcional/2.7f * j)), "Black", "CalibriSmall", 0);
                 }
             }
 
@@ -283,11 +283,13 @@ public class HistoryModeGameScene implements Scene, Serializable {
             for (int i = 0; i < colorsInputButtons.length; i++) {
                 this.engine.getGraphics().drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), "GiveUp");
             }
+
+            //AD PARA CONSEGUIR VIDAS
             this.engine.getGraphics().drawImage((int) ((double) getLifeInputButton.getPos().getX()), (int) ((double) getLifeInputButton.getPos().getY()), (int) ((double) getLifeInputButton.getSize().getX()), (int) ((double) getLifeInputButton.getSize().getY()), "GiveUp");
 
             //ESTO ESTA SIN TESTEAR.
             //MONEDAS
-            this.engine.getGraphics().drawText(Integer.toString(coins.get()), engine.getGraphics().getWidth() - coinSize - 10, (int) engine.getGraphics().getHeight() / 15, "Black", "CooperBold", 1);
+            this.engine.getGraphics().drawText(Integer.toString(coins.get()), engine.getGraphics().getWidth() - coinSize-10, (int)(engine.getGraphics().getHeight()/72 + coinSize/1.7f), "Black", "CooperBold", 1);
             this.engine.getGraphics().drawImage(engine.getGraphics().getWidth() - coinSize - 10, (int) engine.getGraphics().getHeight() / 72, coinSize, coinSize, "Coin");
 
             //CORAZONES

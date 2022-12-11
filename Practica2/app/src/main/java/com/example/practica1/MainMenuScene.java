@@ -120,7 +120,7 @@ public class MainMenuScene implements Scene, Serializable {
             this.engine.getGraphics().newFont("Cooper", "assets/CooperBlackRegular.ttf", 0, 50);
             this.engine.getGraphics().newFont("CooperBig", "assets/CooperBlackRegular.ttf", 0, 80);
             this.engine.getGraphics().newFont("CooperSmall", "assets/CooperBlackRegular.ttf", 0, 30);
-            this.engine.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1, 40);
+            this.engine.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1, 60);
             this.engine.getGraphics().newFont("CalibriSmall", "assets/CalibriRegular.ttf", 0, 50);
             this.engine.getGraphics().newFont("CalibriBold", "assets/CalibriRegular.ttf", 1, 30);
 
