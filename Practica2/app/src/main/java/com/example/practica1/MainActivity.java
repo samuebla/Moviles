@@ -1,6 +1,7 @@
 package com.example.practica1;
 
 import com.example.engineandroid.EngineApp;
+import com.example.engineandroid.Scene;
 import com.example.engineandroid.SceneMngrAndroid;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
@@ -51,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AssetManager assetManager;
 
-    private SceneMngrAndroid sceneMngr;
-
     private FrameLayout adContainerView;
 
     LinearLayout screenLayout;
@@ -92,15 +91,15 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         this.engine = new EngineApp(this.renderView, this.screenLayout);
 
-        this.assetManager = this.getBaseContext().getAssets();
+//        if (savedInstanceState == null){
+//            this.sceneMngr = new SceneMngrAndroid();
+//
+//            this.engine.setSceneMngr(this.sceneMngr);
+//        }else{
+//            this.sceneMngr = (SceneMngrAndroid) savedInstanceState.getSerializable("sceneManager");
+//            this.engine.setSceneMngr(this.sceneMngr);
+//        }
 
-        this.engine.setBaseContext(this.getBaseContext());
-
-        this.engine.setAssetsContext(this.assetManager);
-
-        this.sceneMngr = new SceneMngrAndroid();
-
-        this.engine.setSceneMngr(this.sceneMngr);
 
         //Add Initialization ----------------------------------------------
         mAdView = findViewById(R.id.adView);
@@ -128,14 +127,14 @@ public class MainActivity extends AppCompatActivity {
             public void onAdImpression() {
                 // Code to be executed when an impression is recorded
                 // for an ad.
-                engine.updateSurfaceSize();
+                engine.getGraphics().setFrameSize();
             }
 
             @Override
             public void onAdLoaded() {
                 // Code to be executed when an ad finishes loading.
                 super.onAdLoaded();
-                engine.updateSurfaceSize();
+                engine.getGraphics().setFrameSize();
 
             }
 
@@ -214,9 +213,14 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }
 
-
-        mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext(), this.rewardButton);
-        this.engine.setScene(mainMenuScene);
+        if(savedInstanceState == null){
+            mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext(), this.rewardButton);
+            this.engine.getSceneMngr().pushScene(mainMenuScene);
+            this.engine.setPrimaryScene(mainMenuScene);
+        }else{
+            mainMenuScene = (MainMenuScene) savedInstanceState.getSerializable("mainMenuScene");
+            this.engine.setPrimaryScene(mainMenuScene);
+        }
         this.engine.resume();
     }
 
@@ -224,6 +228,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy(){
         mainMenuScene.saveDataHistoryMode();
         super.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState (Bundle outState){
+//        outState.putInt("lastScene", this.engine.onForcedClose());
+        outState.putSerializable("mainMenuScene", this.mainMenuScene);
+        outState.putSerializable("sceneManager", this.engine.getSceneMngr());
+        super.onSaveInstanceState(outState);
     }
 
     @Override

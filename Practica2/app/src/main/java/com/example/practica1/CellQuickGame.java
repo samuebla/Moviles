@@ -64,9 +64,9 @@ public class CellQuickGame extends CellBase {
         //Si te has equivocado...
         if (key == 1) {
             //Renderizamos a rojo
-            engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), cellType.WRONG.ordinal(),-1);
+            engine.getGraphics().paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), cellType.WRONG.ordinal(),-1);
         } else {
-            engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal(),-1);
+            engine.getGraphics().paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal(),-1);
         }
     }
 

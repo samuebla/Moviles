@@ -6,10 +6,11 @@ import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class QuickGameScene implements Scene{
+public class QuickGameScene implements Scene, Serializable {
 
     private EngineApp engine;
 
@@ -49,8 +50,6 @@ public class QuickGameScene implements Scene{
 
         this.engine.setColorBackground(0xFFFFFFFF);
 
-        init();
-
         //Creamos el random
         Random random = new Random();
 
@@ -87,21 +86,7 @@ public class QuickGameScene implements Scene{
             xNumberLeftToRight[i] = new ArrayList<>();
         }
 
-        //Iniciamos la matriz
-        for (int i = 0; i < rows_; i++) {
-            for (int j = 0; j < cols_; j++) {
-                //Primero J que son las columnas en X y luego las filas en Y
-                this.matriz[j][i] = new CellQuickGame((int)((double)this.engine.getWidth()*0.125) + (int)((double)this.engine.getWidth()*0.083333) * j,
-                        (int)((double)this.engine.getHeight()*0.296296296) + (int)((double)this.engine.getHeight()*0.055555555) * i, (int)((double)this.engine.getWidth()*0.075), (int)((double)this.engine.getHeight()*0.05));
-            }
-        }
-
-        //Tamaño de las cuadriculas que recubren el nonograma
-        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int)((double)this.engine.getWidth()*0.0625);
-        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + (int)((double)this.engine.getHeight()*0.0601851));
-
-        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + (int)((double)this.engine.getWidth()*0.0902777);
-        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - (int)((double)this.engine.getHeight()*0.111111111));
+        init();
 
         //CREACION ALEATORIA DEL TABLERO
         for (int i = 0; i < rows_; i++) {
@@ -300,13 +285,35 @@ public class QuickGameScene implements Scene{
 
     @Override
     public void init() {
+
+        //Iniciamos la matriz
+        for (int i = 0; i < rows_; i++) {
+            for (int j = 0; j < cols_; j++) {
+                //Primero J que son las columnas en X y luego las filas en Y
+                this.matriz[j][i] = new CellQuickGame((int)((double)this.engine.getGraphics().getWidth()*0.125) + (int)((double)this.engine.getGraphics().getWidth()*0.083333) * j,
+                        (int)((double)this.engine.getGraphics().getHeight()*0.296296296) + (int)((double)this.engine.getGraphics().getHeight()*0.055555555) * i, (int)((double)this.engine.getGraphics().getWidth()*0.075), (int)((double)this.engine.getGraphics().getHeight()*0.05));
+            }
+        }
+
+        //Tamaño de las cuadriculas que recubren el nonograma
+        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int)((double)this.engine.getGraphics().getWidth()*0.0625);
+        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + (int)((double)this.engine.getGraphics().getHeight()*0.0601851));
+
+        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + (int)((double)this.engine.getGraphics().getWidth()*0.0902777);
+        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - (int)((double)this.engine.getGraphics().getHeight()*0.111111111));
+
         //Seteamos los botones
-        this.checkInputButton = new InputButton((double)this.engine.getWidth()*0.8, (double)this.engine.getHeight()*0.06,
-                (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.10);
-        this.giveUpInputButton = new InputButton((double)this.engine.getWidth()*0.01388888, (double)this.engine.getHeight()*0.04629629,
-                (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.10);
-        this.backInputButton = new InputButton((double)this.engine.getWidth()*0.44444444, (double)this.engine.getHeight()/1.1,
-                (double)this.engine.getWidth()/10, (double)this.engine.getHeight()/15);
+        this.checkInputButton = new InputButton((double)this.engine.getGraphics().getWidth()*0.8, (double)this.engine.getGraphics().getHeight()*0.06,
+                (double)this.engine.getGraphics().getWidth()*0.1666666, (double)this.engine.getGraphics().getHeight()*0.10);
+        this.giveUpInputButton = new InputButton((double)this.engine.getGraphics().getWidth()*0.01388888, (double)this.engine.getGraphics().getHeight()*0.04629629,
+                (double)this.engine.getGraphics().getWidth()*0.1666666, (double)this.engine.getGraphics().getHeight()*0.10);
+        this.backInputButton = new InputButton((double)this.engine.getGraphics().getWidth()*0.44444444, (double)this.engine.getGraphics().getHeight()/1.1,
+                (double)this.engine.getGraphics().getWidth()/10, (double)this.engine.getGraphics().getHeight()/15);
+    }
+
+    @Override
+    public void loadResources(EngineApp engineAux) {
+
     }
 
     @Override
@@ -346,9 +353,9 @@ public class QuickGameScene implements Scene{
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 
         //El cuadrado se mantiene aunque ganes porque es muy bonito
-        this.engine.drawImage((int)(auxCuadradoInicio.getX()-((double)(this.engine.getWidth())/100.0)), (int)(auxCuadradoInicio.getY()-((double)(this.engine.getHeight())/150)),
-                (int)(auxCuadradoFinal.getX()-auxCuadradoInicio.getX() + engine.getWidth()/50 + this.engine.getWidth()*0.075)
-                , (int)(auxCuadradoFinal.getY()-auxCuadradoInicio.getY() + engine.getHeight()/65 + this.engine.getHeight()*0.05), "Board");
+        this.engine.getGraphics().drawImage((int)(auxCuadradoInicio.getX()-((double)(this.engine.getGraphics().getWidth())/100.0)), (int)(auxCuadradoInicio.getY()-((double)(this.engine.getGraphics().getHeight())/150)),
+                (int)(auxCuadradoFinal.getX()-auxCuadradoInicio.getX() + engine.getGraphics().getWidth()/50 + this.engine.getGraphics().getWidth()*0.075)
+                , (int)(auxCuadradoFinal.getY()-auxCuadradoInicio.getY() + engine.getGraphics().getHeight()/65 + this.engine.getGraphics().getHeight()*0.05), "Board");
 
         //Si ya he ganado...
         if (won) {
@@ -360,18 +367,18 @@ public class QuickGameScene implements Scene{
             }
 
             //Mensaje de enhorabuena
-            this.engine.drawText("ENHORABUENA!", (int)((double)this.engine.getWidth()*0.5), (int)((double)this.engine.getHeight()*0.1111111), "Black", "Cooper", 0);
+            this.engine.getGraphics().drawText("ENHORABUENA!", (int)((double)this.engine.getGraphics().getWidth()*0.5), (int)((double)this.engine.getGraphics().getHeight()*0.1111111), "Black", "Cooper", 0);
 
             //BackButton
-            this.engine.drawImage((int)(backInputButton.getPos().getX()), (int)(backInputButton.getPos().getY()), (int)(backInputButton.getSize().getX()), (int)(backInputButton.getSize().getY()), "Back");
+            this.engine.getGraphics().drawImage((int)(backInputButton.getPos().getX()), (int)(backInputButton.getPos().getY()), (int)(backInputButton.getSize().getX()), (int)(backInputButton.getSize().getY()), "Back");
 
             //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
                 //Muestra el texto...
-                this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)this.engine.getWidth()/2), (int)((double)this.engine.getHeight()*0.1111111), "red", "Calibri", 0);
-                this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)this.engine.getWidth()/2), (int)((double)this.engine.getHeight()*0.1388888), "red", "Calibri", 0);
+                this.engine.getGraphics().drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)this.engine.getGraphics().getWidth()/2), (int)((double)this.engine.getGraphics().getHeight()*0.1111111), "red", "Calibri", 0);
+                this.engine.getGraphics().drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)this.engine.getGraphics().getWidth()/2), (int)((double)this.engine.getGraphics().getHeight()*0.1388888), "red", "Calibri", 0);
 
                 //Renderiza rojo si esta mal
                 for (int i = 0; i < matriz.length; i++) {
@@ -390,18 +397,18 @@ public class QuickGameScene implements Scene{
 
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                engine.drawText(xNumberTopToBottom[i], (int)(auxCuadradoInicio.getX()-((double)(this.engine.getWidth())/90.0)), (int)((double)this.engine.getHeight()*0.3240740) + (int)((double)this.engine.getHeight()*0.0555555) * i, "Black", "CalibriSmall", 1);
+                engine.getGraphics().drawText(xNumberTopToBottom[i], (int)(auxCuadradoInicio.getX()-((double)(this.engine.getGraphics().getWidth())/90.0)), (int)((double)this.engine.getGraphics().getHeight()*0.3240740) + (int)((double)this.engine.getGraphics().getHeight()*0.0555555) * i, "Black", "CalibriSmall", 1);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    engine.drawText(xNumberLeftToRight[i].get(j), (int)((double)this.engine.getWidth()*0.155) + (int)((double)this.engine.getWidth()*0.083333) * i, (int)((double)this.engine.getHeight()*0.185185) + (int)((double)this.engine.getHeight()*0.027777) * j, "Black", "CalibriSmall", 0);
+                    engine.getGraphics().drawText(xNumberLeftToRight[i].get(j), (int)((double)this.engine.getGraphics().getWidth()*0.155) + (int)((double)this.engine.getGraphics().getWidth()*0.083333) * i, (int)((double)this.engine.getGraphics().getHeight()*0.185185) + (int)((double)this.engine.getGraphics().getHeight()*0.027777) * j, "Black", "CalibriSmall", 0);
                 }
             }
 
             //BOTONES
-            this.engine.drawImage((int)((double) checkInputButton.getPos().getX()), (int)((double) checkInputButton.getPos().getY()), (int)((double) checkInputButton.getSize().getX()), (int)((double) checkInputButton.getSize().getY()), "Check");
+            this.engine.getGraphics().drawImage((int)((double) checkInputButton.getPos().getX()), (int)((double) checkInputButton.getPos().getY()), (int)((double) checkInputButton.getSize().getX()), (int)((double) checkInputButton.getSize().getY()), "Check");
 
-            this.engine.drawImage((int)((double) giveUpInputButton.getPos().getX()), (int)((double) giveUpInputButton.getPos().getY()), (int)((double) giveUpInputButton.getSize().getX()), (int)((double) giveUpInputButton.getSize().getY()), "GiveUp");
+            this.engine.getGraphics().drawImage((int)((double) giveUpInputButton.getPos().getX()), (int)((double) giveUpInputButton.getPos().getY()), (int)((double) giveUpInputButton.getSize().getX()), (int)((double) giveUpInputButton.getSize().getY()), "GiveUp");
         }
     }
 
@@ -449,19 +456,19 @@ public class QuickGameScene implements Scene{
         }
         //Si te rindes vuelves a la seleccion de nivel
         if (inputReceived(this.giveUpInputButton.getPos(), this.giveUpInputButton.getSize())) {
-            this.engine.popScene();
+            this.engine.getSceneMngr().popScene();
         }
         //Solo funciona si has ganado
         if (won && inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())) {
-            this.engine.popScene();
-            this.engine.popScene();
+            this.engine.getSceneMngr().popScene();
+            this.engine.getSceneMngr().popScene();
         }
     }
 
     //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
     @Override
     public void onResume() {
-
+        init();
     }
 
     //Comprueba si has ganado o no

@@ -7,6 +7,10 @@ public interface Scene {
     public void render();
     public void handleInput(EventHandler.EventType type);
     public void onResume();
+
     public boolean inputReceived(Vector2D pos, Vector2D size);
     public void init();
+
+    //Allows the loading of resources inside, only called automatically on the engine PrimaryScene
+    public void loadResources(EngineApp engineAux);
     }

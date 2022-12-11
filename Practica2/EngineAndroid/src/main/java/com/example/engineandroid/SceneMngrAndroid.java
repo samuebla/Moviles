@@ -1,9 +1,10 @@
 package com.example.engineandroid;
 
 
+import java.io.Serializable;
 import java.util.Stack;
 
-public class SceneMngrAndroid {
+public class SceneMngrAndroid implements Serializable {
 
     Stack<Scene> stack;
 
@@ -17,6 +18,14 @@ public class SceneMngrAndroid {
             stack.peek().onResume();
         }
     }
+
+    //Returns the scene identifier that's currently on pop and warns the scene about the close action
+//    public int handleClosed(){
+//        if (!stack.empty())
+//            return stack.peek().onClosed();
+//        else
+//            return -1;
+//    }
 
     public void pushScene(Scene scene){
         stack.push(scene);

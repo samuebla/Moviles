@@ -22,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicReference;
 //import com.google.android.gms.ads.AdRequest;
@@ -32,7 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
 //import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 
-public class MainMenuScene implements Scene {
+public class MainMenuScene implements Scene, Serializable {
 
     private EngineApp engine;
     private InputButton fastPlay;
@@ -73,6 +74,40 @@ public class MainMenuScene implements Scene {
 
     @Override
     public void init() {
+
+        this.fastPlay = new InputButton(this.engine.getGraphics().getWidth() / 2 - (engine.getGraphics().getWidth() / 4), this.engine.getGraphics().getHeight() / 5, engine.getGraphics().getWidth() / 2, engine.getGraphics().getHeight() / 4.8);
+
+        this.historyMode = new InputButton(this.engine.getGraphics().getWidth() / 2 - (engine.getGraphics().getWidth() / 4), this.engine.getGraphics().getHeight() / 2, engine.getGraphics().getWidth() / 2, engine.getGraphics().getHeight() / 4.8);
+
+
+        loadFromFile();
+        System.out.print("Save data loaded: ");
+        System.out.print(this.coins);
+        for (int i = 0; i < this.progress.length; ++i) {
+            System.out.print(this.progress[i]);
+        }
+
+
+        //Creacion anuncio
+//        adView = new AdView(this.baseContext);
+//        addContainerView.addView(adView);
+//        // Since we're loading the banner based on the adContainerView size, we need
+//        // to wait until this view is laid out before we can get the width.
+//        addContainerView.getViewTreeObserver().addOnGlobalLayoutListener(
+//                new ViewTreeObserver.OnGlobalLayoutListener() {
+//                    @Override
+//                    public void onGlobalLayout() {
+//                        if (!initialLayoutComplete) {
+//                            initialLayoutComplete = true;
+//                            loadBanner();
+//                        }
+//                    }
+//                });
+    }
+
+    @Override
+    public void loadResources(EngineApp engineAux) {
+        this.engine = engineAux;
         try {
             //La constructora del menu solo se llama una vez
             //Cargamos el fondo y lo playeamos
@@ -116,34 +151,8 @@ public class MainMenuScene implements Scene {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-        this.fastPlay = new InputButton(this.engine.getWidth() / 2 - (engine.getWidth() / 4), this.engine.getHeight() / 5, engine.getWidth() / 2, engine.getHeight() / 4.8);
 
-        this.historyMode = new InputButton(this.engine.getWidth() / 2 - (engine.getWidth() / 4), this.engine.getHeight() / 2, engine.getWidth() / 2, engine.getHeight() / 4.8);
-
-
-        loadFromFile();
-        System.out.print("Save data loaded: ");
-        System.out.print(this.coins);
-        for (int i = 0; i < this.progress.length; ++i) {
-            System.out.print(this.progress[i]);
-        }
-
-
-        //Creacion anuncio
-//        adView = new AdView(this.baseContext);
-//        addContainerView.addView(adView);
-//        // Since we're loading the banner based on the adContainerView size, we need
-//        // to wait until this view is laid out before we can get the width.
-//        addContainerView.getViewTreeObserver().addOnGlobalLayoutListener(
-//                new ViewTreeObserver.OnGlobalLayoutListener() {
-//                    @Override
-//                    public void onGlobalLayout() {
-//                        if (!initialLayoutComplete) {
-//                            initialLayoutComplete = true;
-//                            loadBanner();
-//                        }
-//                    }
-//                });
+        init();
     }
 
     //Metodos de lectura y guardado
@@ -233,11 +242,11 @@ public class MainMenuScene implements Scene {
     @Override
     public void render() {
         //Titulo
-        this.engine.drawText("NONOGRAMAS", (int) (this.engine.getWidth() / 2), (int) (this.engine.getHeight() / 10.8), "Black", "CooperBig", 0);
+        this.engine.getGraphics().drawText("NONOGRAMAS", (int) (this.engine.getGraphics().getWidth() / 2), (int) (this.engine.getGraphics().getHeight() / 10.8), "Black", "CooperBig", 0);
 
         //Botones
-        this.engine.drawImage((int) this.fastPlay.getPos().getX(), (int) (fastPlay.getPos().getY()), (int) (this.fastPlay.getSize().getX()), (int) (this.fastPlay.getSize().getY()), "QuickPlay");
-        this.engine.drawImage((int) this.historyMode.getPos().getX(), (int) (historyMode.getPos().getY()), (int) (this.historyMode.getSize().getX()), (int) (this.historyMode.getSize().getY()), "HistoryPlay");
+        this.engine.getGraphics().drawImage((int) this.fastPlay.getPos().getX(), (int) (fastPlay.getPos().getY()), (int) (this.fastPlay.getSize().getX()), (int) (this.fastPlay.getSize().getY()), "QuickPlay");
+        this.engine.getGraphics().drawImage((int) this.historyMode.getPos().getX(), (int) (historyMode.getPos().getY()), (int) (this.historyMode.getSize().getX()), (int) (this.historyMode.getSize().getY()), "HistoryPlay");
 
     }
 
@@ -247,20 +256,25 @@ public class MainMenuScene implements Scene {
         if (inputReceived(this.fastPlay.getPos(), this.fastPlay.getSize())) {
             //Te lleva a la pantalla de seleccion
             LevelSelection levelScene = new LevelSelection(this.engine);
-            this.engine.setScene(levelScene);
+            this.engine.getSceneMngr().pushScene(levelScene);
         }
         if (inputReceived(this.historyMode.getPos(), this.historyMode.getSize())) {
             //Te lleva a la pantalla de seleccion
             HistoryModeMenu historyMode = new HistoryModeMenu(this.engine, this.coins, this.progress, this.rewardButton);
-            this.engine.setScene(historyMode);
+            this.engine.getSceneMngr().pushScene(historyMode);
         }
     }
 
     //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
     @Override
     public void onResume() {
-
+        init();
     }
+
+//    @Override
+//    public int onClosed(){
+//
+//    }
 
 //    private void loadBanner() {
 //        adView.setAdUnitId(AD_UNIT_ID);
