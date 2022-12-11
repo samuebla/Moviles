@@ -417,16 +417,16 @@ public class HistoryModeGameScene implements Scene, Serializable {
             String fileCarpet = "";
             switch (mode) {
                 case 1:
-                    fileCarpet = "queer/" + file;
+                    fileCarpet = "alfabeto/" + file;
                     break;
                 case 2:
-                    fileCarpet = "tetas/" + file;
+                    fileCarpet = "fiesta/" + file;
                     break;
                 case 3:
-                    fileCarpet = "frutas/" + file;
+                    fileCarpet = "animales/" + file;
                     break;
                 case 4:
-                    fileCarpet = "capitalismo/" + file;
+                    fileCarpet = "geometria/" + file;
                     break;
             }
             InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/" + fileCarpet));
