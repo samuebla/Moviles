@@ -7,9 +7,10 @@ import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ThemeModeLevels implements Scene {
+public class ThemeModeLevels implements Scene, Serializable {
 
     private InputButton[] lvls;
 
@@ -37,7 +38,6 @@ public class ThemeModeLevels implements Scene {
         this.category = selectedCategory;
         this.unlockedlevels = levelsUnlocked;
         this.coins = coinsAux;
-        coinSize = engine.getWidth()/10;
         this.rewardButton = rewardButtonAux;
         init();
     }
@@ -51,13 +51,14 @@ public class ThemeModeLevels implements Scene {
     }
 
     public void init() {
+        coinSize = engine.getGraphics().getWidth()/10;
         //Botones selectores del nivel
         this.lvls = new InputButton[20];
         int contador = 0;
         for (int i = 0; i < 5; ++i){
             for (int j = 0; j < 4; ++j){
-                this.lvls[contador] = new InputButton(engine.getWidth()/25 + (engine.getWidth()/25) * j  + (engine.getWidth()/5) * j,
-                        (engine.getHeight()/4 + engine.getHeight()/48) + (engine.getHeight()/8 * i) + (engine.getHeight()/48 * i), engine.getWidth()/5, engine.getHeight()/8);
+                this.lvls[contador] = new InputButton(engine.getGraphics().getWidth()/25 + (engine.getGraphics().getWidth()/25) * j  + (engine.getGraphics().getWidth()/5) * j,
+                        (engine.getGraphics().getHeight()/4 + engine.getGraphics().getHeight()/48) + (engine.getGraphics().getHeight()/8 * i) + (engine.getGraphics().getHeight()/48 * i), engine.getGraphics().getWidth()/5, engine.getGraphics().getHeight()/8);
                 contador++;
             }
         }
@@ -76,10 +77,15 @@ public class ThemeModeLevels implements Scene {
             this.lvlImages[i-1] = selectedCategory + "Level";
         }
 
-        this.backInputButton = new InputButton(10 + engine.getWidth()/44, 30, engine.getWidth()/10, engine.getHeight()/15);
+        this.backInputButton = new InputButton(10 + engine.getGraphics().getWidth()/44, 30, engine.getGraphics().getWidth()/10, engine.getGraphics().getHeight()/15);
 
         //TODO LevelsUnlocked es un int que le pasas de la escena anterior. Me desbloquea los niveles hasta ahi y el resto se ven
         //TODO de otra manera y no puedes interactuar con ellos
+    }
+
+    @Override
+    public void loadResources(EngineApp engineAux) {
+
     }
 
     public void update(double deltaTime){
@@ -92,21 +98,21 @@ public class ThemeModeLevels implements Scene {
 
     public void render(){
         for (int i = 0; i < lvls.length; ++i){
-            this.engine.drawImage((int)this.lvls[i].getPos().getX(), (int)this.lvls[i].getPos().getY(),(int)this.lvls[i].getSize().getX(),(int)this.lvls[i].getSize().getY(),lvlImages[i]);
+            this.engine.getGraphics().drawImage((int)this.lvls[i].getPos().getX(), (int)this.lvls[i].getPos().getY(),(int)this.lvls[i].getSize().getX(),(int)this.lvls[i].getSize().getY(),lvlImages[i]);
         }
 
         //----------------------------------------
 
         //Back Button
-        this.engine.drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
+        this.engine.getGraphics().drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        this.engine.drawText("Categoria de mi pepe", (int)(engine.getWidth()/2), (int)(engine.getHeight()/8), "Black", "Amor", 0);
+        this.engine.getGraphics().drawText("Categoria de mi pepe", (int)(engine.getGraphics().getWidth()/2), (int)(engine.getGraphics().getHeight()/8), "Black", "Amor", 0);
 
         //Moneas
         //MONEDAS
-        this.engine.drawText(Integer.toString(coins.get()), engine.getWidth() - coinSize-10, (int)engine.getHeight()/15, "Black", "CooperBold", 1);
-        this.engine.drawImage(engine.getWidth()-coinSize -10, (int)engine.getHeight()/72,coinSize,coinSize,"Coin");
+        this.engine.getGraphics().drawText(Integer.toString(coins.get()), engine.getGraphics().getWidth() - coinSize-10, (int)engine.getGraphics().getHeight()/15, "Black", "CooperBold", 1);
+        this.engine.getGraphics().drawImage(engine.getGraphics().getWidth()-coinSize -10, (int)engine.getGraphics().getHeight()/72,coinSize,coinSize,"Coin");
 
     }
 
@@ -115,24 +121,19 @@ public class ThemeModeLevels implements Scene {
         for (int i = 0; i < this.unlockedlevels.get(); ++i){
             if (inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
                 HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1, this.rewardButton);
-                this.engine.setScene(playScene);
+                this.engine.getSceneMngr().pushScene(playScene);
             }
         }
 
         //Back button
         if (inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
-            this.engine.popScene();
+            this.engine.getSceneMngr().popScene();
         }
     }
 
     //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
     @Override
     public void onResume() {
-        for (int i = 1; i < this.unlockedlevels.get(); ++i){
-            this.lvlImages[i-1] = selectedCategory + "Play";
-        }
-        if (this.unlockedlevels.get() < this.lvlImages.length){
-            this.lvlImages[this.unlockedlevels.get()-1] = "Unlocked";
-        }
+        init();
     }
 }

@@ -12,14 +12,14 @@ public class CellBase extends Interactive{
     public enum cellType {EMPTY, SELECTED, CROSSED, WRONG}
 
     public void render(EngineApp engine){
-        engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal(),palleteColor);
+        engine.getGraphics().paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal(),palleteColor);
     };
 
     //Para la pantalla de Enhorabuena
     public void solutionRender(EngineApp engine) {
         //Solo renderizo si esta azul
         if (type == CellBase.cellType.SELECTED) {
-            engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal(),palleteColor);
+            engine.getGraphics().paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal(),palleteColor);
         }
     }
 

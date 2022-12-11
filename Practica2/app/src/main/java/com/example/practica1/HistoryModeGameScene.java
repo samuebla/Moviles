@@ -15,11 +15,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class HistoryModeGameScene implements Scene {
+public class HistoryModeGameScene implements Scene, Serializable {
     private EngineApp engine;
 
     //Tenemos una matriz donde guardaremos las casillas seleccionadas
@@ -71,6 +72,7 @@ public class HistoryModeGameScene implements Scene {
 
     //Archivo de guardado
     String fileName;
+    String fileToOpen;
 
     //Para los rectangulos que recubren las celdas y son meramente esteticos
     int widthAestheticCellX, heightAestheticCellX, widthAestheticCellY, heightAestheticCellY;
@@ -94,7 +96,6 @@ public class HistoryModeGameScene implements Scene {
         won = false;
         timer = 0;
         lives = 3;
-        coinSize = engine.getWidth() / 10;
 
         coins = coinsAux;
         progress = progressAux;
@@ -135,17 +136,9 @@ public class HistoryModeGameScene implements Scene {
             xNumberLeftToRight[i] = new ArrayList<>();
         }
 
-        //Cargamos la info de la matriz
-        loadFromFile(file);
+        this.fileToOpen = file;
 
         init();
-
-        //Tamaño de las cuadriculas que recubren el nonograma
-        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int) ((double) this.engine.getWidth() * 0.0625);
-        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + (int) ((double) this.engine.getHeight() * 0.0601851));
-
-        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + (int) ((double) this.engine.getWidth() * 0.0902777);
-        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - (int) ((double) this.engine.getHeight() * 0.111111111));
     }
 
     @Override
@@ -159,6 +152,11 @@ public class HistoryModeGameScene implements Scene {
 
     @Override
     public void init() {
+        coinSize = engine.getGraphics().getWidth() / 10;
+
+        //Cargamos la info de la matriz
+        loadFromFile(this.fileToOpen);
+
         //Establecemos el numero completo de casillas que resolver
         maxCellsSolution = remainingCells;
 
@@ -176,22 +174,33 @@ public class HistoryModeGameScene implements Scene {
         }
 
         //Seteamos los botones
-        this.giveUpInputButton = new InputButton((double) this.engine.getWidth() * 0.01388888, (double) this.engine.getHeight() * 0.04629629,
-                (double) this.engine.getWidth() * 0.1666666, (double) this.engine.getHeight() * 0.10);
-        this.backInputButton = new InputButton((double) this.engine.getWidth() * 0.44444444, (double) this.engine.getHeight() / 1.1,
-                (double) this.engine.getWidth() / 10, (double) this.engine.getHeight() / 15);
-        this.getLifeInputButton = new InputButton((double) this.engine.getWidth() / 10, (double) this.engine.getHeight() / 1.2,
-                (double) this.engine.getWidth() / 8, (double) this.engine.getHeight() / 12);
+        this.giveUpInputButton = new InputButton((double) this.engine.getGraphics().getWidth() * 0.01388888, (double) this.engine.getGraphics().getHeight() * 0.04629629,
+                (double) this.engine.getGraphics().getWidth() * 0.1666666, (double) this.engine.getGraphics().getHeight() * 0.10);
+        this.backInputButton = new InputButton((double) this.engine.getGraphics().getWidth() * 0.44444444, (double) this.engine.getGraphics().getHeight() / 1.1,
+                (double) this.engine.getGraphics().getWidth() / 10, (double) this.engine.getGraphics().getHeight() / 15);
+        this.getLifeInputButton = new InputButton((double) this.engine.getGraphics().getWidth() / 10, (double) this.engine.getGraphics().getHeight() / 1.2,
+                (double) this.engine.getGraphics().getWidth() / 8, (double) this.engine.getGraphics().getHeight() / 12);
 
         for (int i = 0; i < colorsInputButtons.length; i++) {
-            this.colorsInputButtons[i] = new InputButton((double) this.engine.getWidth() / 2.5 + 200 * i, (double) this.engine.getHeight() / 1.2,
-                    (double) this.engine.getWidth() * 0.1666666, (double) this.engine.getHeight() * 0.10);
+            this.colorsInputButtons[i] = new InputButton((double) this.engine.getGraphics().getWidth() / 2.5 + 200 * i, (double) this.engine.getGraphics().getHeight() / 1.2,
+                    (double) this.engine.getGraphics().getWidth() * 0.1666666, (double) this.engine.getGraphics().getHeight() * 0.10);
         }
         //CYA
         colorfulPattern[0] = 0xA0FFFFFF;
         colorfulPattern[1] = 0xA000FFFF;
         colorfulPattern[2] = 0xA0FF00FF;
         colorfulPattern[3] = 0xA0FFFF00;
+
+        //Tamaño de las cuadriculas que recubren el nonograma
+        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int) ((double) this.engine.getGraphics().getWidth() * 0.0625);
+        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + (int) ((double) this.engine.getGraphics().getHeight() * 0.0601851));
+
+        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + (int) ((double) this.engine.getGraphics().getWidth() * 0.0902777);
+        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - (int) ((double) this.engine.getGraphics().getHeight() * 0.111111111));
+    }
+
+    @Override
+    public void loadResources(EngineApp engineAux) {
 
     }
 
@@ -221,9 +230,9 @@ public class HistoryModeGameScene implements Scene {
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 
         //El cuadrado se mantiene aunque ganes porque es muy bonito
-        this.engine.drawImage((int) (auxCuadradoInicio.getX() - ((double) (this.engine.getWidth()) / 100.0)), (int) (auxCuadradoInicio.getY() - ((double) (this.engine.getHeight()) / 150)),
-                (int) (auxCuadradoFinal.getX() - auxCuadradoInicio.getX() + engine.getWidth() / 50 + this.engine.getWidth() * 0.075)
-                , (int) (auxCuadradoFinal.getY() - auxCuadradoInicio.getY() + engine.getHeight() / 65 + this.engine.getHeight() * 0.05), "Board");
+        this.engine.getGraphics().drawImage((int) (auxCuadradoInicio.getX() - ((double) (this.engine.getGraphics().getWidth()) / 100.0)), (int) (auxCuadradoInicio.getY() - ((double) (this.engine.getGraphics().getHeight()) / 150)),
+                (int) (auxCuadradoFinal.getX() - auxCuadradoInicio.getX() + engine.getGraphics().getWidth() / 50 + this.engine.getGraphics().getWidth() * 0.075)
+                , (int) (auxCuadradoFinal.getY() - auxCuadradoInicio.getY() + engine.getGraphics().getHeight() / 65 + this.engine.getGraphics().getHeight() * 0.05), "Board");
 
         //Si ya he ganado...
         if (won) {
@@ -236,16 +245,16 @@ public class HistoryModeGameScene implements Scene {
 
             //Mostramos las monedas obtenidas
             if (showNewCoins) {
-                this.engine.drawText("+10", (int) (this.engine.getWidth() / 2), (int) (this.engine.getHeight() / 1.5), "Black", "Cooper", 0);
-                this.engine.drawImage(engine.getWidth() / 2 + 30, (int) (engine.getHeight() / 1.5), coinSize, coinSize, "Coin");
+                this.engine.getGraphics().drawText("+10", (int) (this.engine.getGraphics().getWidth() / 2), (int) (this.engine.getGraphics().getHeight() / 1.5), "Black", "Cooper", 0);
+                this.engine.getGraphics().drawImage(engine.getGraphics().getWidth() / 2 + 30, (int) (engine.getGraphics().getHeight() / 1.5), coinSize, coinSize, "Coin");
 
             }
 
             //Mensaje de enhorabuena
-            this.engine.drawText("¡ENHORABUENA!", (int) ((double) this.engine.getWidth() * 0.5), (int) ((double) this.engine.getHeight() / 15), "Black", "Cooper", 0);
+            this.engine.getGraphics().drawText("¡ENHORABUENA!", (int) ((double) this.engine.getGraphics().getWidth() * 0.5), (int) ((double) this.engine.getGraphics().getHeight() / 15), "Black", "Cooper", 0);
 
             //BackButton
-            this.engine.drawImage((int) (backInputButton.getPos().getX()), (int) (backInputButton.getPos().getY()), (int) (backInputButton.getSize().getX()), (int) (backInputButton.getSize().getY()), "Back");
+            this.engine.getGraphics().drawImage((int) (backInputButton.getPos().getX()), (int) (backInputButton.getPos().getY()), (int) (backInputButton.getSize().getX()), (int) (backInputButton.getSize().getY()), "Back");
             //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
@@ -269,27 +278,27 @@ public class HistoryModeGameScene implements Scene {
 
             //BOTONES
             //TODO AAA NO SE HACER LOS PUTOS COLORES
-            this.engine.drawRectangle((int) ((double) colorsInputButtons[actualColorPattern].getPos().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getPos().getY()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getY()), true, (int) (colorfulPattern[actualColorPattern] + 0xAF000000));
+            this.engine.getGraphics().drawRectangle((int) ((double) colorsInputButtons[actualColorPattern].getPos().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getPos().getY()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getY()), true, (int) (colorfulPattern[actualColorPattern]+0xAF000000));
 
-            this.engine.drawImage((int) ((double) giveUpInputButton.getPos().getX()), (int) ((double) giveUpInputButton.getPos().getY()), (int) ((double) giveUpInputButton.getSize().getX()), (int) ((double) giveUpInputButton.getSize().getY()), "GiveUp");
+            this.engine.getGraphics().drawImage((int) ((double) giveUpInputButton.getPos().getX()), (int) ((double) giveUpInputButton.getPos().getY()), (int) ((double) giveUpInputButton.getSize().getX()), (int) ((double) giveUpInputButton.getSize().getY()), "GiveUp");
             for (int i = 0; i < colorsInputButtons.length; i++) {
-                this.engine.drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), "GiveUp");
+                this.engine.getGraphics().drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), "GiveUp");
             }
-            this.engine.drawImage((int) ((double) getLifeInputButton.getPos().getX()), (int) ((double) getLifeInputButton.getPos().getY()), (int) ((double) getLifeInputButton.getSize().getX()), (int) ((double) getLifeInputButton.getSize().getY()), "GiveUp");
+            this.engine.getGraphics().drawImage((int) ((double) getLifeInputButton.getPos().getX()), (int) ((double) getLifeInputButton.getPos().getY()), (int) ((double) getLifeInputButton.getSize().getX()), (int) ((double) getLifeInputButton.getSize().getY()), "GiveUp");
 
             //ESTO ESTA SIN TESTEAR.
             //MONEDAS
-            this.engine.drawText(Integer.toString(coins.get()), engine.getWidth() - coinSize - 10, (int) engine.getHeight() / 15, "Black", "CooperBold", 1);
-            this.engine.drawImage(engine.getWidth() - coinSize - 10, (int) engine.getHeight() / 72, coinSize, coinSize, "Coin");
+            this.engine.getGraphics().drawText(Integer.toString(coins.get()), engine.getGraphics().getWidth() - coinSize - 10, (int) engine.getGraphics().getHeight() / 15, "Black", "CooperBold", 1);
+            this.engine.getGraphics().drawImage(engine.getGraphics().getWidth() - coinSize - 10, (int) engine.getGraphics().getHeight() / 72, coinSize, coinSize, "Coin");
 
             //CORAZONES
             for (int i = lives; i > 0; i--) {
-                this.engine.drawImage((int) (engine.getWidth() / 2) + i * 100, (int) (engine.getHeight() / 1.4), 100, 100, "Heart");
+                this.engine.getGraphics().drawImage((int) (engine.getGraphics().getWidth() / 2) + i * 100, (int) (engine.getGraphics().getHeight() / 1.4), 100, 100, "Heart");
             }
 
             if (lives <= 0) {
                 //Mensaje de enhorabuena
-                this.engine.drawText("¡HAS PERDIDO!", (int) ((double) this.engine.getWidth() * 0.5), (int) ((double) this.engine.getHeight() / 15), "Black", "Cooper", 0);
+                this.engine.getGraphics().drawText("¡HAS PERDIDO!", (int) ((double) this.engine.getGraphics().getWidth() * 0.5), (int) ((double) this.engine.getGraphics().getHeight() / 15), "Black", "Cooper", 0);
 
             }
         }
@@ -350,7 +359,7 @@ public class HistoryModeGameScene implements Scene {
             } else {
                 saveToFile(false);
             }
-            this.engine.popScene();
+            this.engine.getSceneMngr().popScene();
             this.engine.setColorBackground(0xFFFFFFFF);
         }
         //Solo funciona si has ganado
@@ -359,7 +368,7 @@ public class HistoryModeGameScene implements Scene {
                 this.progress.set(this.progress.get() + 1);
             }
             saveToFile(true);
-            this.engine.popScene();
+            this.engine.getSceneMngr().popScene();
             this.engine.setColorBackground(0xFFFFFFFF);
         }
         for (int i = 0; i < colorsInputButtons.length; i++) {
