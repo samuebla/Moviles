@@ -56,8 +56,8 @@ public class HistoryModeGameScene implements Scene, Serializable {
     int colorfulPattern[];
     int actualColorPattern;
 
-    private InputButton giveUpInputButton;
-    private InputButton backInputButton;
+    private InputButton escapeInputButton;
+    private InputButton winBackInputButton;
     private InputButton getLifeInputButton;
 
     private InputButton[] colorsInputButtons;
@@ -174,15 +174,14 @@ public class HistoryModeGameScene implements Scene, Serializable {
         }
 
         //Seteamos los botones
-        this.giveUpInputButton = new InputButton((double) this.engine.getGraphics().getWidth() * 0.01388888, (double) this.engine.getGraphics().getHeight() * 0.04629629,
-                (double) this.engine.getGraphics().getWidth() * 0.1666666, (double) this.engine.getGraphics().getHeight() * 0.10);
-        this.backInputButton = new InputButton((double) this.engine.getGraphics().getWidth() * 0.44444444, (double) this.engine.getGraphics().getHeight() / 1.1,
+        this.escapeInputButton = new InputButton(10 + engine.getGraphics().getWidth()/44, 30, engine.getGraphics().getWidth()/10, engine.getGraphics().getHeight()/15);
+        this.winBackInputButton = new InputButton((double) this.engine.getGraphics().getWidth() * 0.44444444, (double) this.engine.getGraphics().getHeight() / 1.1,
                 (double) this.engine.getGraphics().getWidth() / 10, (double) this.engine.getGraphics().getHeight() / 15);
         this.getLifeInputButton = new InputButton((double) this.engine.getGraphics().getWidth() / 10, (double) this.engine.getGraphics().getHeight() / 1.2,
                 (double) this.engine.getGraphics().getWidth() / 8, (double) this.engine.getGraphics().getHeight() / 12);
 
         for (int i = 0; i < colorsInputButtons.length; i++) {
-            this.colorsInputButtons[i] = new InputButton((double) this.engine.getGraphics().getWidth() / 2.5 + 200 * i, (double) this.engine.getGraphics().getHeight() / 1.2,
+            this.colorsInputButtons[i] = new InputButton((double) this.engine.getGraphics().getWidth() / 2.5 + 200 * i, (double) this.engine.getGraphics().getHeight()-  this.engine.getGraphics().getHeight() * 0.10,
                     (double) this.engine.getGraphics().getWidth() * 0.1666666, (double) this.engine.getGraphics().getHeight() * 0.10);
         }
         //CYA
@@ -230,9 +229,9 @@ public class HistoryModeGameScene implements Scene, Serializable {
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 
         //El cuadrado se mantiene aunque ganes porque es muy bonito
-        this.engine.getGraphics().drawImage((int) (auxCuadradoInicio.getX() - ((double) (this.engine.getGraphics().getWidth()) / 100.0)), (int) (auxCuadradoInicio.getY() - ((double) (this.engine.getGraphics().getHeight()) / 150)),
-                (int) (auxCuadradoFinal.getX() - auxCuadradoInicio.getX() + engine.getGraphics().getWidth() / 50 + this.engine.getGraphics().getWidth() * 0.075)
-                , (int) (auxCuadradoFinal.getY() - auxCuadradoInicio.getY() + engine.getGraphics().getHeight() / 65 + this.engine.getGraphics().getHeight() * 0.05), "Board");
+        this.engine.getGraphics().drawImage((int) (auxCuadradoInicio.getX() - tamProporcional*0.1), (int) (auxCuadradoInicio.getY() -tamProporcional*0.1),
+                (int) (auxCuadradoFinal.getX() -auxCuadradoInicio.getX()+ tamProporcional + tamProporcional*0.2)
+                , (int) (auxCuadradoFinal.getY()-auxCuadradoInicio.getY()+ tamProporcional+tamProporcional*0.2), "Board");
 
         //Si ya he ganado...
         if (won) {
@@ -254,7 +253,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
             this.engine.getGraphics().drawText("¡ENHORABUENA!", (int) ((double) this.engine.getGraphics().getWidth() * 0.5), (int) ((double) this.engine.getGraphics().getHeight() / 15), "Black", "Cooper", 0);
 
             //BackButton
-            this.engine.getGraphics().drawImage((int) (backInputButton.getPos().getX()), (int) (backInputButton.getPos().getY()), (int) (backInputButton.getSize().getX()), (int) (backInputButton.getSize().getY()), "Back");
+            this.engine.getGraphics().drawImage((int) (winBackInputButton.getPos().getX()), (int) (winBackInputButton.getPos().getY()), (int) (winBackInputButton.getSize().getX()), (int) (winBackInputButton.getSize().getY()), "Back");
             //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
@@ -268,11 +267,11 @@ public class HistoryModeGameScene implements Scene, Serializable {
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
                 //Con el margen de 1 celda no tendremos problema con las otras resoluciones
-                engine.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - tamProporcional/2), posYTextAuxTopToBottom + (int) (tamProporcional * 1.1 * i), "Black", "CalibriSmall", 1);
+                engine.getGraphics().drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - tamProporcional/2), posYTextAuxTopToBottom + (int) (tamProporcional * 1.1 * i), "Black", "CalibriSmall", 1);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = xNumberLeftToRight[i].size()-1; j >= 0; j--) {
-                    engine.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcional * 1.1 * i), (int) (auxCuadradoInicio.getY() - tamProporcional/2 - (int) (tamProporcional/2.7f * j)), "Black", "CalibriSmall", 0);
+                    engine.getGraphics().drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcional * 1.1 * i), (int) (auxCuadradoInicio.getY() - tamProporcional/2 - (int) (tamProporcional/2.7f * j)), "Black", "CalibriSmall", 0);
                 }
             }
 
@@ -280,7 +279,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
             //TODO AAA NO SE HACER LOS PUTOS COLORES
             this.engine.getGraphics().drawRectangle((int) ((double) colorsInputButtons[actualColorPattern].getPos().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getPos().getY()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getY()), true, (int) (colorfulPattern[actualColorPattern]+0xAF000000));
 
-            this.engine.getGraphics().drawImage((int) ((double) giveUpInputButton.getPos().getX()), (int) ((double) giveUpInputButton.getPos().getY()), (int) ((double) giveUpInputButton.getSize().getX()), (int) ((double) giveUpInputButton.getSize().getY()), "GiveUp");
+            this.engine.getGraphics().drawImage((int) ((double) escapeInputButton.getPos().getX()), (int) ((double) escapeInputButton.getPos().getY()), (int) ((double) escapeInputButton.getSize().getX()), (int) ((double) escapeInputButton.getSize().getY()), "Back");
             for (int i = 0; i < colorsInputButtons.length; i++) {
                 this.engine.getGraphics().drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), "GiveUp");
             }
@@ -353,7 +352,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
 
         //BOTONES
         //Si te rindes vuelves a la seleccion de nivel
-        if (!won && inputReceived(this.giveUpInputButton.getPos(), this.giveUpInputButton.getSize())) {
+        if (!won && inputReceived(this.escapeInputButton.getPos(), this.escapeInputButton.getSize())) {
             if (lives <= 0) {
                 saveToFile(true);
             } else {
@@ -363,7 +362,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
             this.engine.setColorBackground(0xFFFFFFFF);
         }
         //Solo funciona si has ganado
-        if (won && inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())) {
+        if (won && inputReceived(this.winBackInputButton.getPos(), this.winBackInputButton.getSize())) {
             if (currentLevelNumber == this.progress.get()) {
                 this.progress.set(this.progress.get() + 1);
             }
@@ -458,14 +457,14 @@ public class HistoryModeGameScene implements Scene, Serializable {
                 //Hacemos una proporcion aproximada. 3 unidades (letras/espacios) es 1 casilla
                 numCeldas = rows_ + tamTextoAux;
                 //Y con eso sacamos el tamaño promedio de la celda
-                tamProporcional = this.engine.getWidth() / (numCeldas + 1);
+                tamProporcional = this.engine.getGraphics().getWidth() / (numCeldas + 1);
             } else {
                 //Si hay 10 columnas como maximo puede haber 5 numeros + 5 espacios = cols
                 tamTextoAux = Math.round(cols_ / 3.0f);
                 //Hacemos una proporcion aproximada. 3 unidades (letras/espacios) es 1 casilla
                 numCeldas = cols_ + tamTextoAux;
                 //Y con eso sacamos el tamaño promedio de la celda
-                tamProporcional = this.engine.getWidth() / (numCeldas + 1); //+1 Para que haya margen y quede bonito
+                tamProporcional = this.engine.getGraphics().getWidth() / (numCeldas + 1); //+1 Para que haya margen y quede bonito
 
             }
 
@@ -483,7 +482,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
                     //Si es mas ancho que largo...
                     if (rows_ >= cols_) {
                         //Lo ajustamos al centro de la pantalla de largo
-                        yPos = this.engine.getHeight() / 2 - ((rows_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * i);
+                        yPos = this.engine.getGraphics().getHeight() / 2 - ((rows_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * i);
 
                         xPos = tamTextoAux * tamProporcional + ((tamProporcional * 1.1) * (j - 3));
 
@@ -493,7 +492,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
                         yPos = tamTextoAux * tamProporcional + ((tamProporcional * 1.1) * i);
 
                         //Ajustamos el ancho al centro de la pantalla
-                        xPos = this.engine.getWidth() / 2 - ((cols_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * (j - 3));
+                        xPos = this.engine.getGraphics().getWidth() / 2 - ((cols_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * (j - 3));
 
                     }
 
