@@ -61,6 +61,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
     private InputButton getLifeInputButton;
 
     private InputButton[] colorsInputButtons;
+    private String[] colorsButtonsName ={"WhitePalette","BluePalette","PinkPalette","YellowPalette"};
 
     //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de las casillas azules. Uno el horizontal y otro el vertical
     private ArrayList<Integer>[] xPositionsTopToBottom;
@@ -281,7 +282,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
 
             this.engine.getGraphics().drawImage((int) ((double) escapeInputButton.getPos().getX()), (int) ((double) escapeInputButton.getPos().getY()), (int) ((double) escapeInputButton.getSize().getX()), (int) ((double) escapeInputButton.getSize().getY()), "Back");
             for (int i = 0; i < colorsInputButtons.length; i++) {
-                this.engine.getGraphics().drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), "GiveUp");
+                this.engine.getGraphics().drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), colorsButtonsName[i]);
             }
 
             //AD PARA CONSEGUIR VIDAS

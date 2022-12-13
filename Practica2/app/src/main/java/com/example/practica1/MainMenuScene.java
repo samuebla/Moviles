@@ -131,8 +131,16 @@ public class MainMenuScene implements Scene, Serializable {
             this.engine.getGraphics().newImage("Coin", "assets/coin.png");
             this.engine.getGraphics().newImage("Heart", "assets/heart.png");
             this.engine.getGraphics().newImage("Square", "assets/square.png");
+
+            //aaa todo quitar
             this.engine.getGraphics().newImage("Blocked", "assets/blockedLevel.png");
-            this.engine.getGraphics().newImage("Unlocked", "assets/unlockedLevel.png");
+
+            //NIVELES
+            this.engine.getGraphics().newImage("PartyUnlocked", "assets/party_unlocked.png");
+            this.engine.getGraphics().newImage("AnimalsUnlocked", "assets/animals_unlocked.png");
+            this.engine.getGraphics().newImage("GeometryUnlocked", "assets/geometry_unlocked.png");
+            this.engine.getGraphics().newImage("AlphabetUnlocked", "assets/alphabet_unlocked.png");
+
             this.engine.getGraphics().newImage("QuickPlay", "assets/quick_play.png");
             this.engine.getGraphics().newImage("HistoryPlay", "assets/history_play.png");
             this.engine.getGraphics().newImage("ThemePlay", "assets/theme_play.png");
@@ -146,6 +154,14 @@ public class MainMenuScene implements Scene, Serializable {
             this.engine.getGraphics().newImage("AnimalsPlay", "assets/animals_play.png");
             this.engine.getGraphics().newImage("PartyPlay", "assets/party_play.png");
             this.engine.getGraphics().newImage("AlphabetPlay", "assets/alphabet_play.png");
+            //-------------------------------
+
+            //Paletas de colores
+            this.engine.getGraphics().newImage("YellowPalette", "assets/yellow_palette.png");
+            this.engine.getGraphics().newImage("PinkPalette", "assets/pink_palette.png");
+            this.engine.getGraphics().newImage("BluePalette", "assets/blue_palette.png");
+            this.engine.getGraphics().newImage("WhitePalette", "assets/white_palette.png");
+
 
 
         } catch (Exception e) {

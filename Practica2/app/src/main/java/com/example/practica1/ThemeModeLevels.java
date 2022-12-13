@@ -70,7 +70,7 @@ public class ThemeModeLevels implements Scene, Serializable {
         }
         //AAAAAAAAAAAAAAAAAAA Asignar imagen de desbloqueado
         if (this.unlockedlevels.get() < this.lvlImages.length){
-            this.lvlImages[this.unlockedlevels.get()-1] = "Unlocked";
+            this.lvlImages[this.unlockedlevels.get()-1] = selectedCategory +"Unlocked";
         }
         //AAAAAAAAAAAAAAAAAAA Asignar imagen de bloqueado
         for (int i = this.unlockedlevels.get() + 1; i < this.lvlImages.length+1; ++i){
