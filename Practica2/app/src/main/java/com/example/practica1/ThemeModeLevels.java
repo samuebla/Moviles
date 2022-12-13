@@ -120,7 +120,7 @@ public class ThemeModeLevels implements Scene, Serializable {
     public void handleInput(EventHandler.EventType type){
         for (int i = 0; i < this.unlockedlevels.get(); ++i){
             if (inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
-                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, 5, 5, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1, this.rewardButton);
+                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1, this.rewardButton);
                 this.engine.getSceneMngr().pushScene(playScene);
             }
         }

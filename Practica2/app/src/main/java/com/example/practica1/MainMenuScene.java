@@ -42,6 +42,8 @@ public class MainMenuScene implements Scene, Serializable {
     //Player Data
     private AtomicReference<Integer> coins;
     private AtomicReference<Integer>[] progress;
+    private AtomicReference<Integer>[] palettes;
+
 
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
     private Button rewardButton;
@@ -132,9 +134,6 @@ public class MainMenuScene implements Scene, Serializable {
             this.engine.getGraphics().newImage("Heart", "assets/heart.png");
             this.engine.getGraphics().newImage("Square", "assets/square.png");
 
-            //aaa todo quitar
-            this.engine.getGraphics().newImage("Blocked", "assets/blockedLevel.png");
-
             //NIVELES
             this.engine.getGraphics().newImage("PartyUnlocked", "assets/party_unlocked.png");
             this.engine.getGraphics().newImage("AnimalsUnlocked", "assets/animals_unlocked.png");
@@ -204,12 +203,17 @@ public class MainMenuScene implements Scene, Serializable {
             this.coins = new AtomicReference<Integer>(Integer.parseInt(fileRead[0]));
 
             this.progress = new AtomicReference[4];
+            this.palettes = new AtomicReference[4];
 
             for (int i = 0; i < this.progress.length; ++i) {
                 this.progress[i] = new AtomicReference<Integer>(Integer.parseInt(fileRead[i + 1]));
             }
-            //AAAAAAAAAAAAAAAAAAAAAAAAAA
-            int patata = 0;
+
+            //Paletas de colores
+            for (int i = 0; i < this.palettes.length; ++i) {
+                this.palettes[i] = new AtomicReference<Integer>(Integer.parseInt(fileRead[this.progress.length + 1]));
+                System.out.print(this.progress[i]);
+            }
 
         } catch (
                 FileNotFoundException e) {
@@ -232,6 +236,12 @@ public class MainMenuScene implements Scene, Serializable {
 
             for(int i = 0; i < this.progress.length; ++i){
                 writer += this.progress[i].get();
+                writer += " ";
+            }
+            writer += "\n";
+
+            for(int i = 0; i < this.palettes.length; ++i){
+                writer += this.palettes[i].get();
                 writer += " ";
             }
 
@@ -285,7 +295,7 @@ public class MainMenuScene implements Scene, Serializable {
         init();
     }
 
-    //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA muy feo pero no se me ocurre otra cosa, me quiero morir, lo siento
+    //TODO AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA muy feo pero no se me ocurre otra cosa, me quiero morir, lo siento
     public EngineApp getEngine(){return engine;}
 
 //    @Override

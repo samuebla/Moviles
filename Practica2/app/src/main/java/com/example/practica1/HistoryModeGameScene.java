@@ -27,7 +27,6 @@ public class HistoryModeGameScene implements Scene, Serializable {
     private CellHistoryMode[][] matriz;
 
     int rows_, cols_;
-
     int lives;
 
     //Para mostrar en pantallas la info de las celdas
@@ -83,13 +82,10 @@ public class HistoryModeGameScene implements Scene, Serializable {
     boolean won;
     boolean showAnswers;
 
-    public HistoryModeGameScene(EngineApp engine, int rows, int cols, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux, Button rewardButtonAux) {
+    public HistoryModeGameScene(EngineApp engine, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux, Button rewardButtonAux) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
-
-        //Creamos la matriz con el tamaño
-        this.matriz = new CellHistoryMode[cols][rows];
 
         //Seteamos valores iniciales
         remainingCells = 0;
@@ -105,40 +101,17 @@ public class HistoryModeGameScene implements Scene, Serializable {
         this.rewardButton = rewardButtonAux;
 //        this.rewardButton.setVisibility(View.VISIBLE);
 
-        //AAAAAAAAAAAAAAAAAAA DEBUG
-//        coins.set(coins.get() + 1);
-
         //Patron de colores
         colorfulPattern = new int[4];
         actualColorPattern = modeAux - 1;
         colorsInputButtons = new InputButton[4];
 
-        rows_ = rows;
-        cols_ = cols;
 
         mode = modeAux;
 
-        xPositionsTopToBottom = new ArrayList[rows_];
-        xPositionsLeftToRight = new ArrayList[cols_];
-        xNumberTopToBottom = new String[rows_];
-        xNumberLeftToRight = new ArrayList[cols_];
-
-        for (int i = 0; i < rows_; i++) {
-            xPositionsTopToBottom[i] = new ArrayList<>();
-        }
-
-        int[] numAnterior = new int[cols_];
-        int[] contadorCols = new int[cols_];
-        //Inicializamos los valores a -1
-        for (int i = 0; i < cols_; i++) {
-            numAnterior[i] = -1;
-            contadorCols[i] = 1;
-            xPositionsLeftToRight[i] = new ArrayList<>();
-            xNumberLeftToRight[i] = new ArrayList<>();
-        }
-
         this.fileToOpen = file;
 
+        //Leemos el archivo y seteamos todos los datos
         init();
     }
 
@@ -206,9 +179,9 @@ public class HistoryModeGameScene implements Scene, Serializable {
 
     @Override
     public void update(double deltaTime) {
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[i].length; j++) {
-                this.matriz[i][j].update(deltaTime);
+        for (int i = 0; i < rows_; i++) {
+            for (int j = 0; j < cols_; j++) {
+                this.matriz[j][i].update(deltaTime);
             }
         }
 
@@ -237,9 +210,9 @@ public class HistoryModeGameScene implements Scene, Serializable {
         //Si ya he ganado...
         if (won) {
             //Solo renderizo las azules
-            for (int i = 0; i < matriz.length; i++) {
-                for (int j = 0; j < matriz[i].length; j++) {
-                    this.matriz[i][j].solutionRender(engine);
+            for (int i = 0; i < rows_; i++) {
+                for (int j = 0; j < cols_; j++) {
+                    this.matriz[j][i].solutionRender(engine);
                 }
             }
 
@@ -259,9 +232,9 @@ public class HistoryModeGameScene implements Scene, Serializable {
         } else {
             //Si tienes pulsado el boton de comprobar...
             //Renderiza rojo si esta mal
-            for (int i = 0; i < matriz.length; i++) {
-                for (int j = 0; j < matriz[i].length; j++) {
-                    this.matriz[i][j].render(engine);
+            for (int i = 0; i <rows_; i++) {
+                for (int j = 0; j <cols_; j++) {
+                    this.matriz[j][i].render(engine);
                 }
             }
 
@@ -310,20 +283,20 @@ public class HistoryModeGameScene implements Scene, Serializable {
     public void handleInput(EventHandler.EventType type) {
         //Solo podra interactuar con el tablero si tiene vidas
         if (lives > 0) {
-            for (int i = 0; i < matriz.length; i++) {
-                for (int j = 0; j < matriz[i].length; j++) {
-                    if (inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
+            for (int i = 0; i < rows_; i++) {
+                for (int j = 0; j < cols_; j++) {
+                    if (inputReceived(this.matriz[j][i].getPos(), this.matriz[j][i].getSize())) {
 
                         //Si es un long touch...
                         if (type == EventHandler.EventType.LONG_TOUCH) {
                             //Intentamos cruzarlo
-                            this.matriz[i][j].setCrossed();
+                            this.matriz[j][i].setCrossed();
                             //Y playeamos el sonido
                             engine.getAudio().playSound("effect", 1);
                         } else {
                             //Fallo
-                            if (this.matriz[i][j].getCellType() == CellBase.cellType.EMPTY) {
-                                if (!this.matriz[i][j].solution) {
+                            if (this.matriz[j][i].getCellType() == CellBase.cellType.EMPTY) {
+                                if (!this.matriz[j][i].solution) {
                                     //Restamos una vida
                                     lives--;
                                     //Y playeamos el sonido
@@ -346,7 +319,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
                                 }
                             }
                             //Aqui se guarda si te has equivocado...
-                            this.matriz[i][j].handleInput(engine);
+                            this.matriz[j][i].handleInput(engine);
                         }
                     }
                 }
@@ -377,10 +350,10 @@ public class HistoryModeGameScene implements Scene, Serializable {
             if (inputReceived(this.colorsInputButtons[i].getPos(), this.colorsInputButtons[i].getSize())) {
                 actualColorPattern = i;
                 this.engine.setColorBackground(colorfulPattern[i]);
-                for (int h = 0; h < matriz.length; h++) {
-                    for (int j = 0; j < matriz[h].length; j++) {
+                for (int h = 0; h < rows_; h++) {
+                    for (int j = 0; j < cols_; j++) {
                         //TODO AAA NO SE HACER COSAS EN HEXADECIMAL
-                        this.matriz[h][j].setPalleteColor(this.colorfulPattern[i] + 0xAF808080);
+                        this.matriz[j][h].setPalleteColor(this.colorfulPattern[i] + 0xAF808080);
                     }
                 }
             }
@@ -449,6 +422,29 @@ public class HistoryModeGameScene implements Scene, Serializable {
             cols_ = Integer.parseInt(fileRead[1]);
             lives = Integer.parseInt(fileRead[2]);
 
+            //Creamos la matriz con el tamaño
+            this.matriz = new CellHistoryMode[cols_][rows_];
+
+            //Seteamos el resto de valores
+            xPositionsTopToBottom = new ArrayList[rows_];
+            xPositionsLeftToRight = new ArrayList[cols_];
+            xNumberTopToBottom = new String[rows_];
+            xNumberLeftToRight = new ArrayList[cols_];
+
+            for (int i = 0; i < rows_; i++) {
+                xPositionsTopToBottom[i] = new ArrayList<>();
+            }
+
+            int[] numAnterior = new int[cols_];
+            int[] contadorCols = new int[cols_];
+            //Inicializamos los valores a -1
+            for (int i = 0; i < cols_; i++) {
+                numAnterior[i] = -1;
+                contadorCols[i] = 1;
+                xPositionsLeftToRight[i] = new ArrayList<>();
+                xNumberLeftToRight[i] = new ArrayList<>();
+            }
+
             int numCeldas;
             int tamTextoAux;
 
@@ -468,13 +464,12 @@ public class HistoryModeGameScene implements Scene, Serializable {
                 numCeldas = cols_ + tamTextoAux;
                 //Y con eso sacamos el tamaño promedio de la celda
                 tamProporcional = this.engine.getGraphics().getWidth() / (numCeldas + 1); //+1 Para que haya margen y quede bonito
-
             }
-
 
             //Iniciamos la matriz segun el fichero
             for (int i = 0; i < rows_; i++) {
                 for (int j = 3; j < cols_ + 3; j++) {
+
                     System.out.print(fileRead[rows_ * i + j]);
 
                     int aux = Integer.parseInt(fileRead[rows_ * i + j]);
@@ -498,7 +493,6 @@ public class HistoryModeGameScene implements Scene, Serializable {
                         xPos = this.engine.getGraphics().getWidth() / 2 - ((cols_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * (j - 3));
 
                     }
-
 
                     //Si es 0 Esta EMPTY pero no es true
                     if (aux == 0) {
