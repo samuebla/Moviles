@@ -10,7 +10,7 @@ import android.graphics.fonts.FontStyle;
 
 import java.io.IOException;
 
-public class Font_Android{
+public class Font_Android {
 
     Typeface font;
     int size;
@@ -20,7 +20,6 @@ public class Font_Android{
         assets.open(newFilePath);
         Typeface baseFont = Typeface.createFromAsset(assets, newFilePath);
         size = sizeAux;
-
         switch (type) {
             //NEGRITA
             case 1:
@@ -37,7 +36,7 @@ public class Font_Android{
         }
     }
 
-    public Typeface getFont(){
+    public Typeface getFont() {
         return font;
     }
 
@@ -45,8 +44,8 @@ public class Font_Android{
         return this.size;
     }
 
-    public void setSize(int type, int size) {
-        this.size = size;
+    public void setNewSize(int newSize) {
+        this.size = newSize;
     }
 
     public boolean isBold() {
