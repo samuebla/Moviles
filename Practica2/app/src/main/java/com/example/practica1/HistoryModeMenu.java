@@ -16,8 +16,6 @@ public class HistoryModeMenu implements Scene, Serializable {
 
     private InputButton backInputButton;
 
-    Button rewardButton;
-
     AtomicReference<Integer> coins;
     private Integer coinSize;
     int[] unlockedThemedLevels;
@@ -26,14 +24,12 @@ public class HistoryModeMenu implements Scene, Serializable {
 
     private EngineApp engine;
 
-    public HistoryModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux, Button rewardButtonAux){
+    public HistoryModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux){
 
         this.engine = engineAux;
 
         this.coins = coinsAux;
         this.progress = progressAux;
-
-        this.rewardButton = rewardButtonAux;
 
 
         init();
@@ -94,7 +90,7 @@ public class HistoryModeMenu implements Scene, Serializable {
     public void handleInput(EventHandler.EventType type){
         //ThemeMode
         if (inputReceived(this.themeInputButtonMode.getPos(), this.themeInputButtonMode.getSize())){
-            ThemeModeMenu playScene = new ThemeModeMenu(this.engine, this.coins, this.progress, this.rewardButton);
+            ThemeModeMenu playScene = new ThemeModeMenu(this.engine, this.coins, this.progress);
             this.engine.getSceneMngr().pushScene(playScene);
         }
 

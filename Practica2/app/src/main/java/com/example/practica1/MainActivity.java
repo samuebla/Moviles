@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
     MainMenuScene mainMenuScene;
 
-    AdView mAdView;
-    private AtomicReference<RewardedAd> mRewardedAd;
+    private AdView mAdView;
+
+//    AdView mAdView;
     private AtomicReference<MainActivity> mainActivity;
-    private final String TAG = "MainActivity";
     private Button rewardButton;
     private final String CHANNEL_ID = "NonogramChannelId";
     NotificationManagerCompat notificationManager;
@@ -71,22 +71,64 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Initialize the Mobile Ads SDK.
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) { }
-        });
-
         setContentView(R.layout.activity_main);
         this.screenLayout = findViewById(R.id.linearLayout);
 
         //Creamos el SurfaceView que "contendrá" nuestra escena
         this.renderView = findViewById(R.id.surfaceView);
 
-        this.rewardButton = findViewById(R.id.show_reward_button);
+//        this.rewardButton = findViewById(R.id.show_reward_button);
 
 //        View screen = findViewById(R.id.constraint);
 
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        //Initialize the Mobile Ads SDK.
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+                //Add Initialization ----------------------------------------------
+
+                mAdView.loadAd(adRequest);
+
+                mAdView.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdClicked() {
+                        // Code to be executed when the user clicks on an ad.
+                    }
+
+                    @Override
+                    public void onAdClosed() {
+                        // Code to be executed when the user is about to return
+                        // to the app after tapping on an ad.
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(LoadAdError adError) {
+                        // Code to be executed when an ad request fails.
+                    }
+
+                    @Override
+                    public void onAdImpression() {
+                        // Code to be executed when an impression is recorded
+                        // for an ad.
+                    }
+
+                    @Override
+                    public void onAdLoaded() {
+                        // Code to be executed when an ad finishes loading.
+                        super.onAdLoaded();
+                    }
+
+                    @Override
+                    public void onAdOpened() {
+                        // Code to be executed when an ad opens an overlay that
+                        // covers the screen.
+                    }
+                });
+            }
+        });
 
         getSupportActionBar().hide();
 
@@ -99,79 +141,34 @@ public class MainActivity extends AppCompatActivity {
             this.engine.restart(this.renderView, this.screenLayout);
         }
 
+//        mRewardedAd = new AtomicReference<RewardedAd>();
+//        this.mainActivity = new AtomicReference<MainActivity>();
+//        this.mainActivity.set(this);
+//        AdRequest adRequest2 = new AdRequest.Builder().build();
+//        RewardedAd.load(this, "ca-app-pub-3940256099942544/5224354917",
+//                adRequest2, new RewardedAdLoadCallback() {
+//                    @Override
+//                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+//                        // Handle the error.
+//                        Log.d(TAG, loadAdError.toString());
+//                        mRewardedAd.set(null);
+//                    }
+//
+//                    @Override
+//                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+//                        mRewardedAd.set(rewardedAd);
+//                        Log.d(TAG, "Ad was loaded.");
+//                    }
+//                });
 
-        //Add Initialization ----------------------------------------------
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
-            }
-
-            @Override
-            public void onAdFailedToLoad(LoadAdError adError) {
-                // Code to be executed when an ad request fails.
-            }
-
-            @Override
-            public void onAdImpression() {
-                // Code to be executed when an impression is recorded
-                // for an ad.
-                engine.getGraphics().setFrameSize();
-            }
-
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-                super.onAdLoaded();
-                engine.getGraphics().setFrameSize();
-
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
-            }
-        });
-
-        mRewardedAd = new AtomicReference<RewardedAd>();
-        this.mainActivity = new AtomicReference<MainActivity>();
-        this.mainActivity.set(this);
-        AdRequest adRequest2 = new AdRequest.Builder().build();
-        RewardedAd.load(this, "ca-app-pub-3940256099942544/5224354917",
-                adRequest2, new RewardedAdLoadCallback() {
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        // Handle the error.
-                        Log.d(TAG, loadAdError.toString());
-                        mRewardedAd.set(null);
-                    }
-
-                    @Override
-                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
-                        mRewardedAd.set(rewardedAd);
-                        Log.d(TAG, "Ad was loaded.");
-                    }
-                });
-
-        rewardButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(mRewardedAd.get() != null)
-                            showRewardedAd();
-                    }
-                });
+//        rewardButton.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        if(mRewardedAd.get() != null)
+//                            showRewardedAd();
+//                    }
+//                });
 
         //---------------------------------------------------------------------
 
@@ -180,27 +177,27 @@ public class MainActivity extends AppCompatActivity {
 
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
-            CharSequence name = getString(R.string.channel_name) ;
-            String description = getString(R.string.channel_description) ;
-            int importance = NotificationManager. IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID , name, importance) ;
-            channel.setDescription(description) ;
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager. class);
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        notificationBuilder = new NotificationCompat.Builder( this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle( "My notification" )
-                .setContentText( "Much longer text that cannot fit one line..." )
-                .setStyle( new NotificationCompat.BigTextStyle()
-                        .bigText( "Much longer text that cannot fit one line..." ))
-                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
-
-        notificationManager = NotificationManagerCompat.from(this);
+//        if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
+//            CharSequence name = getString(R.string.channel_name) ;
+//            String description = getString(R.string.channel_description) ;
+//            int importance = NotificationManager. IMPORTANCE_DEFAULT;
+//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID , name, importance) ;
+//            channel.setDescription(description) ;
+//            // Register the channel with the system; you can't change the importance
+//            // or other notification behaviors after this
+//            NotificationManager notificationManager = getSystemService(NotificationManager. class);
+//            notificationManager.createNotificationChannel(channel);
+//        }
+//
+//        notificationBuilder = new NotificationCompat.Builder( this, CHANNEL_ID)
+//                .setSmallIcon(R.drawable.ic_launcher_foreground)
+//                .setContentTitle( "My notification" )
+//                .setContentText( "Much longer text that cannot fit one line..." )
+//                .setStyle( new NotificationCompat.BigTextStyle()
+//                        .bigText( "Much longer text that cannot fit one line..." ))
+//                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
+//
+//        notificationManager = NotificationManagerCompat.from(this);
 
 //        synchronized(notificationManager){
 //            try {
@@ -213,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         if(savedInstanceState == null){
-            mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext(), this.rewardButton);
+            mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
             this.engine.getSceneMngr().pushScene(mainMenuScene);
             this.engine.setPrimaryScene(mainMenuScene);
         }else{
@@ -274,53 +271,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
-    public void showRewardedAd(){
-        mRewardedAd.get().setFullScreenContentCallback(new FullScreenContentCallback() {
-            @Override
-            public void onAdClicked() {
-                // Called when a click is recorded for an ad.
-                Log.d(TAG, "Ad was clicked.");
-            }
 
-            @Override
-            public void onAdDismissedFullScreenContent() {
-                // Called when ad is dismissed.
-                // Set the ad reference to null so you don't show the ad a second time.
-                Log.d(TAG, "Ad dismissed fullscreen content.");
-                mRewardedAd.set(null);
-            }
-
-            @Override
-            public void onAdFailedToShowFullScreenContent(AdError adError) {
-                // Called when ad fails to show.
-                Log.e(TAG, "Ad failed to show fullscreen content.");
-                mRewardedAd.set(null);
-            }
-
-            @Override
-            public void onAdImpression() {
-                // Called when an impression is recorded for an ad.
-                Log.d(TAG, "Ad recorded an impression.");
-            }
-
-            @Override
-            public void onAdShowedFullScreenContent() {
-                // Called when ad is shown.
-                Log.d(TAG, "Ad showed fullscreen content.");
-            }
-        });
-
-        Activity activityContext = MainActivity.this;
-        mRewardedAd.get().show(activityContext, new OnUserEarnedRewardListener() {
-            @Override
-            public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                // Handle the reward.
-                Log.d("MAIN ACTIVITY", "The user earned the reward.");
-                int rewardAmount = rewardItem.getAmount();
-                String rewardType = rewardItem.getType();
-            }
-        });
-    }
 
 //    private AdRequest getAdRequest() {
 //        // Create an ad request. Check your logcat output for the hashed device ID

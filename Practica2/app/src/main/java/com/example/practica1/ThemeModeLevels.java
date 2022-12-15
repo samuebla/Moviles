@@ -27,18 +27,15 @@ public class ThemeModeLevels implements Scene, Serializable {
     private String selectedCategory;
     private int category;
 
-    private Button rewardButton;
-
     private AtomicReference<Integer> unlockedlevels;
 
 
-    public ThemeModeLevels(EngineApp engineAux,AtomicReference<Integer> levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux, Button rewardButtonAux){
+    public ThemeModeLevels(EngineApp engineAux,AtomicReference<Integer> levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux){
         this.engine = engineAux;
         this.selectedCategory = this.categories[selectedCategory - 1];
         this.category = selectedCategory;
         this.unlockedlevels = levelsUnlocked;
         this.coins = coinsAux;
-        this.rewardButton = rewardButtonAux;
         init();
     }
 
@@ -120,7 +117,7 @@ public class ThemeModeLevels implements Scene, Serializable {
     public void handleInput(EventHandler.EventType type){
         for (int i = 0; i < this.unlockedlevels.get(); ++i){
             if (inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
-                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1, this.rewardButton);
+                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1);
                 this.engine.getSceneMngr().pushScene(playScene);
             }
         }

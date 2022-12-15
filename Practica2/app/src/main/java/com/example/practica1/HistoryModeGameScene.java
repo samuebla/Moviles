@@ -49,8 +49,6 @@ public class HistoryModeGameScene implements Scene, Serializable {
     int posYTextAuxTopToBottom;
     int posXTextAuxLeftToRight;
 
-    private Button rewardButton;
-
     //Patron de colores
     int colorfulPattern[];
     int actualColorPattern;
@@ -82,7 +80,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
     boolean won;
     boolean showAnswers;
 
-    public HistoryModeGameScene(EngineApp engine, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux, Button rewardButtonAux) {
+    public HistoryModeGameScene(EngineApp engine, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
@@ -98,7 +96,6 @@ public class HistoryModeGameScene implements Scene, Serializable {
         progress = progressAux;
         this.currentLevelNumber = currentLevelNumberAux;
 
-        this.rewardButton = rewardButtonAux;
 //        this.rewardButton.setVisibility(View.VISIBLE);
 
         //Patron de colores

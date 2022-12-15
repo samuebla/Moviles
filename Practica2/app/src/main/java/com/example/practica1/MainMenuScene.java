@@ -46,7 +46,6 @@ public class MainMenuScene implements Scene, Serializable {
 
 
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
-    private Button rewardButton;
 //    private AdView adView;
 
     private FrameLayout addContainerView;
@@ -55,13 +54,12 @@ public class MainMenuScene implements Scene, Serializable {
     Context baseContext;
     private boolean initialLayoutComplete = false;
 
-    public MainMenuScene(EngineApp engineAux, FrameLayout addContainerViewAux, Context contextAux, Button rewardButtonAux) {
+    public MainMenuScene(EngineApp engineAux, FrameLayout addContainerViewAux, Context contextAux) {
         this.engine = engineAux;
         this.addContainerView = addContainerViewAux;
 //        this.adsize = size;
 //        this.addRequest = addRequestAux;
         this.baseContext = contextAux;
-        this.rewardButton = rewardButtonAux;
     }
 
 
@@ -284,7 +282,7 @@ public class MainMenuScene implements Scene, Serializable {
         }
         if (inputReceived(this.historyMode.getPos(), this.historyMode.getSize())) {
             //Te lleva a la pantalla de seleccion
-            HistoryModeMenu historyMode = new HistoryModeMenu(this.engine, this.coins, this.progress, this.rewardButton);
+            HistoryModeMenu historyMode = new HistoryModeMenu(this.engine, this.coins, this.progress);
             this.engine.getSceneMngr().pushScene(historyMode);
         }
     }
