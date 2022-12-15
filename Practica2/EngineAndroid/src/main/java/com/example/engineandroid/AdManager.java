@@ -1,10 +1,17 @@
 package com.example.engineandroid;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
@@ -28,25 +35,71 @@ public class AdManager {
     private RewardedAd mRewardedAd;
 
 
+    private final String CHANNEL_ID = "NonogramChannelId";
+    NotificationManagerCompat notificationManager;
+    NotificationCompat.Builder notificationBuilder;
+
     public AdManager(Activity mainActivity) {
         this.mainActivity = mainActivity;
 
         AdRequest adRequest2 = new AdRequest.Builder().build();
-//        RewardedAd.load(this, "ca-app-pub-3940256099942544/5224354917",
-//                adRequest2, new RewardedAdLoadCallback() {
-//                    @Override
-//                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-//                        // Handle the error.
-//                        Log.d(TAG, loadAdError.toString());
-//                        mRewardedAd = null;
-//                    }
+        RewardedAd.load(this.mainActivity, "ca-app-pub-3940256099942544/5224354917",
+                adRequest2, new RewardedAdLoadCallback() {
+                    @Override
+                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                        // Handle the error.
+                        Log.d(TAG, loadAdError.toString());
+                        mRewardedAd = null;
+                    }
+
+                    @Override
+                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                        mRewardedAd = rewardedAd;
+                        Log.d(TAG, "Ad was loaded.");
+                    }
+                });
+
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+//        if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
+//            CharSequence name = this.mainActivity.getString(R.string.channel_name);
+//            String description = this.mainActivity.getString(R.string.channel_description);
+//            int importance = NotificationManager. IMPORTANCE_DEFAULT;
+//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID , name, importance) ;
+//            channel.setDescription(description) ;
+//            // Register the channel with the system; you can't change the importance
+//            // or other notification behaviors after this
+//            NotificationManager notificationManager = this.mainActivity.getSystemService(NotificationManager. class);
+//            notificationManager.createNotificationChannel(channel);
+//        }
 //
-//                    @Override
-//                    public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
-//                        mRewardedAd = rewardedAd;
-//                        Log.d(TAG, "Ad was loaded.");
-//                    }
-//                });
+//        notificationBuilder = new NotificationCompat.Builder(this.mainActivity, CHANNEL_ID)
+//                .setSmallIcon(R.drawable.ic_launcher_foreground)
+//                .setContentTitle( "My notification" )
+//                .setContentText( "Much longer text that cannot fit one line..." )
+//                .setStyle( new NotificationCompat.BigTextStyle()
+//                        .bigText( "Much longer text that cannot fit one line..." ))
+//                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
+//
+//        notificationManager = NotificationManagerCompat.from(this.mainActivity);
+//
+//        synchronized(notificationManager){
+//            try {
+//                notificationManager.wait(20000);
+//                // notificationId is a unique int for each notification that you must define
+//                notificationManager.notify(347, notificationBuilder.build());
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+    }
+
+    public void sendIntent(int sendType, String url, String message){
+        Uri builtURI = Uri. parse(url ).buildUpon()
+                .appendQueryParameter( "text", message)
+                .build() ; //Genera la URl https://twitter.com/intent/tweet?text=Este%20es%20mi%20texto%20a%20tweettear
+        Intent intent = new Intent(Intent. ACTION_VIEW, builtURI);
+        this.mainActivity.startActivity(intent) ; // inicializa el intent
     }
 
     public void showRewardedAd() {

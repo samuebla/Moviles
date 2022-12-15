@@ -63,9 +63,7 @@ public class MainActivity extends AppCompatActivity {
 //    AdView mAdView;
     private AtomicReference<MainActivity> mainActivity;
     private Button rewardButton;
-    private final String CHANNEL_ID = "NonogramChannelId";
-    NotificationManagerCompat notificationManager;
-    NotificationCompat.Builder notificationBuilder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,39 +173,6 @@ public class MainActivity extends AppCompatActivity {
         //Intent example
 //        sendIntent(0, "https://twitter.com/intent/tweet", "oh wow Prueba");
 
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-//        if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
-//            CharSequence name = getString(R.string.channel_name) ;
-//            String description = getString(R.string.channel_description) ;
-//            int importance = NotificationManager. IMPORTANCE_DEFAULT;
-//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID , name, importance) ;
-//            channel.setDescription(description) ;
-//            // Register the channel with the system; you can't change the importance
-//            // or other notification behaviors after this
-//            NotificationManager notificationManager = getSystemService(NotificationManager. class);
-//            notificationManager.createNotificationChannel(channel);
-//        }
-//
-//        notificationBuilder = new NotificationCompat.Builder( this, CHANNEL_ID)
-//                .setSmallIcon(R.drawable.ic_launcher_foreground)
-//                .setContentTitle( "My notification" )
-//                .setContentText( "Much longer text that cannot fit one line..." )
-//                .setStyle( new NotificationCompat.BigTextStyle()
-//                        .bigText( "Much longer text that cannot fit one line..." ))
-//                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
-//
-//        notificationManager = NotificationManagerCompat.from(this);
-
-//        synchronized(notificationManager){
-//            try {
-//                notificationManager.wait(20000);
-//                // notificationId is a unique int for each notification that you must define
-//                notificationManager.notify(347, notificationBuilder.build());
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
 
         if(savedInstanceState == null){
             mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
@@ -246,13 +211,7 @@ public class MainActivity extends AppCompatActivity {
         this.engine.pause();
     }
 
-    public void sendIntent(int sendType, String url, String message){
-        Uri builtURI = Uri. parse(url ).buildUpon()
-                .appendQueryParameter( "text", message)
-                .build() ; //Genera la URl https://twitter.com/intent/tweet?text=Este%20es%20mi%20texto%20a%20tweettear
-        Intent intent = new Intent(Intent. ACTION_VIEW, builtURI);
-        this.startActivity(intent) ; // inicializa el intent
-    }
+
 
     //Para comprobar la lista de aplicaciones que pueden abrir el intent
     public void checkResolver(){
