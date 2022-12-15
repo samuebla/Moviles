@@ -245,11 +245,16 @@ public class RenderAndroid {
         this.canvas.drawLine(x, y, x + w, y + h, this.paint);
     }
 
+    public void changeSizeText(String fontAux, int newSize){
+        //Cogemos l fuente
+        Font_Android font = this.fonts.get(fontAux);
+        //Y le cambiamos el tamaño
+        font.setNewSize(newSize);
+    }
     //AlignType:
     //-1 Alineamiento a la izquierda
     //0 Alineamiento en el centro
     //1 Alineamiento a la derecho
-
     public void drawText(String text, int x, int y, String color, String fontAux, int alignType) {
         int prevColor = this.paint.getColor();
         Font_Android font = this.fonts.get(fontAux);
@@ -279,7 +284,6 @@ public class RenderAndroid {
             currentColor = 0xFF000000;
         }
         this.paint.setColor(currentColor);
-
         this.canvas.drawText(text, (float) x, (float) y, this.paint);
         this.paint.setColor(prevColor);
         this.paint.setStyle(Paint.Style.STROKE);
