@@ -13,6 +13,10 @@ import java.util.HashMap;
 
 public class RenderAndroid {
 
+    //TODO Aqui guarda la relacion
+    int scaleWidth, scaleHeight;
+
+
     private SurfaceView myView;
     private LinearLayout screenLayout;
     private SurfaceHolder holder;
@@ -47,9 +51,12 @@ public class RenderAndroid {
 
         this.factorScale = scale;
         colorBackground = 0XFF00FFFF;
+        //Por defecto la escala es 1000x1000 pero creamos un setter por si alguien quiere alguna modificacion
+        scaleHeight = 1000;
+        scaleWidth = 1000;
     }
 
-    public void restart(SurfaceView newView, LinearLayout newScreenLayout){
+    public void restart(SurfaceView newView, LinearLayout newScreenLayout) {
         this.myView = newView;
         this.screenLayout = newScreenLayout;
         this.holder = this.myView.getHolder();
@@ -71,7 +78,7 @@ public class RenderAndroid {
         // "Borramos" el fondo.
         this.canvas.drawColor(0xFFFFFFFF); // ARGB
         this.canvas.translate(0, this.posCanvas.getY());
-        drawRectangle(0, 0, this.getWidth(), (int) (this.frameSize.getY() / factorScale), true,colorBackground);
+        drawRectangle(0, 0, this.getWidth()* scaleWidth / getWidth(), (int) (this.frameSize.getY() / factorScale)*scaleHeight/getHeight(), true, colorBackground);
 
     }
 
@@ -87,11 +94,10 @@ public class RenderAndroid {
         int c;
         if (celltype == 1) {
             //Si hemos seteado una nueva paleta...
-            if(palleteColor !=-1){
+            if (palleteColor != -1) {
                 //Seteamos el color deseado
                 c = palleteColor;
-            }
-            else{
+            } else {
                 c = 0xFF0000FF;
             }
         } else if (celltype == 3) {
@@ -110,17 +116,17 @@ public class RenderAndroid {
 
             this.paint.setStyle(Paint.Style.STROKE);
             this.paint.setStrokeWidth(3);
-            this.canvas.drawRect(x, y, x + w, y + h, this.paint);
+            this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
             //Cuadrado de la interfaz
             if (celltype == 2) {
-                this.canvas.drawLine(x, y, w + x, h + y, this.paint);
+                this.canvas.drawLine(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (w + x) * getWidth() / scaleWidth, (h + y) * getHeight() / scaleHeight, this.paint);
             }
             this.paint.setStrokeWidth(1);
 
         } else {
             //Cambiar para que tenga en cuenta las dimensiones de la ventana, los últimos dos valores son el ancho y alto
             this.paint.setStyle(Paint.Style.FILL);
-            this.canvas.drawRect(x, y, x + w, y + h, this.paint);
+            this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
             this.paint.setStyle(Paint.Style.STROKE);
         }
         this.paint.setColor(resetColor);
@@ -156,7 +162,7 @@ public class RenderAndroid {
         return this.myView.getHeight();
     }
 
-    public void scaleAppView(){
+    public void scaleAppView() {
         //obtenemos el tamaño del frame y lo guardamos como copia para la escala
         Vector2D surfaceFrame = new Vector2D(this.holder.getSurfaceFrame().width(), this.holder.getSurfaceFrame().height());
         Vector2D scale = new Vector2D(surfaceFrame.getX() / frameSize.getX(), surfaceFrame.getY() / frameSize.getY());
@@ -169,15 +175,15 @@ public class RenderAndroid {
 
     }
 
-    public void setFrameSize(){
-        while(this.holder.getSurfaceFrame().width() == 0);
+    public void setFrameSize() {
+        while (this.holder.getSurfaceFrame().width() == 0) ;
         this.frameSize = new Vector2D(this.myView.getWidth(), this.myView.getHeight());
-        if (this.screenLayout.getWidth() - this.myView.getHeight()*(4.0/6.0) <= 0){
+        if (this.screenLayout.getWidth() - this.myView.getHeight() * (4.0 / 6.0) <= 0) {
             this.myView.setLeft(0);
             this.myView.setRight(this.screenLayout.getRight());
-        }else{
-            this.myView.setLeft((this.screenLayout.getWidth() - (int)(this.myView.getHeight()*(4.0/6.0)))/2);
-            this.myView.setRight((this.screenLayout.getWidth() - (int)(this.myView.getHeight()*(4.0/6.0)))/2 + (int)(this.myView.getHeight()*(4.0/6.0)));
+        } else {
+            this.myView.setLeft((this.screenLayout.getWidth() - (int) (this.myView.getHeight() * (4.0 / 6.0))) / 2);
+            this.myView.setRight((this.screenLayout.getWidth() - (int) (this.myView.getHeight() * (4.0 / 6.0))) / 2 + (int) (this.myView.getHeight() * (4.0 / 6.0)));
         }
 
 
@@ -221,20 +227,20 @@ public class RenderAndroid {
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String imageAux) {
         ImageAndroid image = images.get(imageAux);
         Bitmap map = image.getImage();
-        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int) (desiredWidth), (int) (desiredHeight), false);
-        canvas.drawBitmap(scaledMap, (int) (x), (int) (y), this.paint);
+        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int) (desiredWidth * getWidth() / scaleWidth), (int) (desiredHeight * getHeight() / scaleHeight), false);
+        canvas.drawBitmap(scaledMap, (int) (x * getWidth() / scaleWidth), (int) (y * getHeight() / scaleHeight), this.paint);
     }
 
 
-    public void drawRectangle(int x, int y, int w, int h, boolean fill,int color) {
+    public void drawRectangle(int x, int y, int w, int h, boolean fill, int color) {
         resetColor = this.paint.getColor();
         setColor(color);
 
         if (!fill)
-            this.canvas.drawRect(x, y, x + w, y + h, this.paint);
+            this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
         else {
             this.paint.setStyle(Paint.Style.FILL);
-            this.canvas.drawRect(x, y, x + w, y + h, this.paint);
+            this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
             this.paint.setStyle(Paint.Style.STROKE);
         }
         this.paint.setColor(resetColor);
@@ -242,15 +248,16 @@ public class RenderAndroid {
 
 
     public void drawLine(int x, int y, int w, int h) {
-        this.canvas.drawLine(x, y, x + w, y + h, this.paint);
+        this.canvas.drawLine(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
     }
 
-    public void changeSizeText(String fontAux, int newSize){
+    public void changeSizeText(String fontAux, int newSize) {
         //Cogemos l fuente
         Font_Android font = this.fonts.get(fontAux);
         //Y le cambiamos el tamaño
         font.setNewSize(newSize);
     }
+
     //AlignType:
     //-1 Alineamiento a la izquierda
     //0 Alineamiento en el centro
@@ -284,9 +291,17 @@ public class RenderAndroid {
             currentColor = 0xFF000000;
         }
         this.paint.setColor(currentColor);
-        this.canvas.drawText(text, (float) x, (float) y, this.paint);
+        this.canvas.drawText(text, (float) x * getWidth() / scaleWidth, (float) y * getHeight() / scaleHeight, this.paint);
         this.paint.setColor(prevColor);
         this.paint.setStyle(Paint.Style.STROKE);
+    }
+
+    public void changeScaleWidth(int newScale) {
+        scaleWidth = newScale;
+    }
+
+    public void changeScaleHeight(int newScale) {
+        scaleHeight = newScale;
     }
 
 }

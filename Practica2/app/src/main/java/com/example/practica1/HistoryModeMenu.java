@@ -11,6 +11,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class HistoryModeMenu implements Scene, Serializable {
 
+    //TODO Aqui guarda la relacion
+    int scaleWidth, scaleHeight;
+
     private InputButton themeInputButtonMode;
     private InputButton dificultyInputButtonMode;
 
@@ -31,6 +34,9 @@ public class HistoryModeMenu implements Scene, Serializable {
         this.coins = coinsAux;
         this.progress = progressAux;
 
+        //Por defecto la escala es 1000x1000 pero creamos un setter por si alguien quiere alguna modificacion
+        scaleHeight=1000;
+        scaleWidth=1000;
 
         init();
     }
@@ -39,17 +45,17 @@ public class HistoryModeMenu implements Scene, Serializable {
         Vector2D coords = new Vector2D();
         coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
 
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+        return (coords.getX()*scaleWidth/engine.getGraphics().getWidth() >= pos.getX()  && coords.getX()*scaleWidth/engine.getGraphics().getWidth() <= pos.getX() + size.getX() &&
+                coords.getY()*scaleHeight/engine.getGraphics().getHeight() >= pos.getY() && coords.getY()*scaleHeight/engine.getGraphics().getHeight() <= pos.getY() + size.getY());
     }
 
     public void init() {
-        coinSize = engine.getGraphics().getWidth()/10;
+        coinSize = scaleWidth/10;
 //        loadCoinsFromFile();
         //Botones selectores del nivel
-        this.themeInputButtonMode = new InputButton(engine.getGraphics().getWidth()/4  - engine.getGraphics().getWidth()/8, engine.getGraphics().getHeight()/2, engine.getGraphics().getWidth()/4, engine.getGraphics().getHeight()/6);
-        this.dificultyInputButtonMode = new InputButton(engine.getGraphics().getWidth()*3/4 - engine.getGraphics().getWidth()/8, engine.getGraphics().getHeight()/2, engine.getGraphics().getWidth()/4, engine.getGraphics().getHeight()/6);
-        this.backInputButton = new InputButton(10 + engine.getGraphics().getWidth()/44, 30, engine.getGraphics().getWidth()/10, engine.getGraphics().getHeight()/15);
+        this.themeInputButtonMode = new InputButton(scaleWidth/4  - scaleWidth/8, scaleHeight/2, scaleWidth/4, scaleHeight/6);
+        this.dificultyInputButtonMode = new InputButton(scaleWidth*3/4 - scaleWidth/8, scaleHeight/2, scaleWidth/4, scaleHeight/6);
+        this.backInputButton = new InputButton(10,10, scaleWidth/10, scaleHeight/15);
     }
 
     @Override
@@ -78,12 +84,12 @@ public class HistoryModeMenu implements Scene, Serializable {
         this.engine.getGraphics().drawImage((int) backInputButton.getPos().getX(), (int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        this.engine.getGraphics().drawText("Selecciona el modo de Juego", (int)(engine.getGraphics().getWidth()/2), (int)(engine.getGraphics().getHeight()/5.4), "Black", "Cooper", 0);
+        this.engine.getGraphics().drawText("Selecciona el modo de Juego", (int)(scaleWidth/2), (int)(scaleHeight/5.4), "Black", "Cooper", 0);
 
         //Moneda
         //MONEDAS
-        this.engine.getGraphics().drawText(Integer.toString(coins.get()), engine.getGraphics().getWidth() - coinSize-10, (int)(engine.getGraphics().getHeight()/72 + coinSize/1.7f), "Black", "CooperBold", 1);
-        this.engine.getGraphics().drawImage(engine.getGraphics().getWidth()-coinSize -10, (int)engine.getGraphics().getHeight()/72,coinSize,coinSize,"Coin");
+        this.engine.getGraphics().drawText(Integer.toString(coins.get()),scaleWidth - coinSize-10, (int)(scaleHeight/72 + coinSize/1.7f), "Black", "CooperBold", 1);
+        this.engine.getGraphics().drawImage(scaleWidth-coinSize -10, (int)scaleHeight/72,coinSize,coinSize/2,"Coin");
     }
 
     @Override

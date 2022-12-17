@@ -5,6 +5,9 @@ import android.view.MotionEvent;
 
 public class InputAndroid {
 
+    //TODO Aqui guarda la relacion
+    int scaleWidth, scaleHeight;
+
     private TouchListener touchlistener;
     private MotionListener motionlistener;
     private LongTouchListener longTouchListener;
@@ -19,6 +22,10 @@ public class InputAndroid {
         this.motionlistener = new MotionListener(this, eHandler);
         this.longTouchListener = new LongTouchListener(this, eHandler, this.touchlistener);
         offset = new Vector2D();
+
+        //Por defecto la escala es 1000x1000 pero creamos un setter por si alguien quiere alguna modificacion
+        scaleHeight=1000;
+        scaleWidth=1000;
     }
 
     public Vector2D getRawCoords() {

@@ -35,6 +35,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class MainMenuScene implements Scene, Serializable {
 
+    //TODO A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
+    int scaleWidth = 1000;
+    int scaleHeight = 1000;
+
     private EngineApp engine;
     private InputButton fastPlay;
     private InputButton historyMode;
@@ -63,21 +67,23 @@ public class MainMenuScene implements Scene, Serializable {
     }
 
 
+    //TODO AAA QUITAR ESTO KE MAL KE MAL
+    //Actualmente Pos y Size se devuelve en unidades de 0 a 1000 pero el getScaledCoords esta en cordenadas reales por eso hago la conversion
     @Override
     public boolean inputReceived(Vector2D pos, Vector2D size) {
         Vector2D coords = new Vector2D();
         coords.set(engine.getInput().getScaledCoords().getX(), this.engine.getInput().getScaledCoords().getY());
 
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+        return (coords.getX()*scaleWidth/engine.getGraphics().getWidth() >= pos.getX()  && coords.getX()*scaleWidth/engine.getGraphics().getWidth() <= pos.getX() + size.getX() &&
+                coords.getY()*scaleHeight/engine.getGraphics().getHeight() >= pos.getY() && coords.getY()*scaleHeight/engine.getGraphics().getHeight() <= pos.getY() + size.getY());
     }
 
     @Override
     public void init() {
 
-        this.fastPlay = new InputButton(this.engine.getGraphics().getWidth() / 2 - (engine.getGraphics().getWidth() / 4), this.engine.getGraphics().getHeight() / 5, engine.getGraphics().getWidth() / 2, engine.getGraphics().getHeight() / 4.8);
+        this.fastPlay = new InputButton(scaleWidth / 2 - (scaleWidth/ 4), scaleHeight / 5, scaleWidth / 2, scaleHeight / 4.8);
 
-        this.historyMode = new InputButton(this.engine.getGraphics().getWidth() / 2 - (engine.getGraphics().getWidth() / 4), this.engine.getGraphics().getHeight() / 2, engine.getGraphics().getWidth() / 2, engine.getGraphics().getHeight() / 4.8);
+        this.historyMode = new InputButton(scaleWidth / 2 - (scaleWidth / 4), scaleHeight / 2, scaleWidth/ 2, scaleHeight/ 4.8);
 
 
         loadFromFile();
@@ -159,8 +165,9 @@ public class MainMenuScene implements Scene, Serializable {
             this.engine.getGraphics().newImage("BluePalette", "assets/blue_palette.png");
             this.engine.getGraphics().newImage("WhitePalette", "assets/white_palette.png");
 
-
-
+            //TODO AAA Cambiamos el texto del titulo a un tamaño adaptado a la resolucion nueva?
+            this.engine.getGraphics().changeSizeText("CooperBig",(int)(scaleWidth/15));
+            this.engine.getGraphics().changeSizeText("Cooper",(int)(scaleWidth/30));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -263,8 +270,10 @@ public class MainMenuScene implements Scene, Serializable {
 
     @Override
     public void render() {
+
+
         //Titulo
-        this.engine.getGraphics().drawText("NONOGRAMAS", (int) (this.engine.getGraphics().getWidth() / 2), (int) (this.engine.getGraphics().getHeight() / 10.8), "Black", "CooperBig", 0);
+        this.engine.getGraphics().drawText("NONOGRAMAS", (int) (scaleWidth / 2), (int) (scaleHeight / 10.8), "Black", "CooperBig", 0);
 
         //Botones
         this.engine.getGraphics().drawImage((int) this.fastPlay.getPos().getX(), (int) (fastPlay.getPos().getY()), (int) (this.fastPlay.getSize().getX()), (int) (this.fastPlay.getSize().getY()), "QuickPlay");

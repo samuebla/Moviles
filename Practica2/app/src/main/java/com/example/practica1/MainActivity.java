@@ -211,8 +211,6 @@ public class MainActivity extends AppCompatActivity {
         this.engine.pause();
     }
 
-
-
     //Para comprobar la lista de aplicaciones que pueden abrir el intent
     public void checkResolver(){
         Intent share = new Intent(android.content.Intent. ACTION_SEND);

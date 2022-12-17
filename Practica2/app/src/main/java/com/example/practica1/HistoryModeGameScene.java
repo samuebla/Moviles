@@ -23,6 +23,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public class HistoryModeGameScene implements Scene, Serializable {
     private EngineApp engine;
 
+    //TODO A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
+    int scaleWidth;
+    int scaleHeight;
+
     //Tenemos una matriz donde guardaremos las casillas seleccionadas
     private CellHistoryMode[][] matriz;
 
@@ -85,6 +89,9 @@ public class HistoryModeGameScene implements Scene, Serializable {
         //Asociamos el engine correspondiente
         this.engine = engine;
 
+        scaleHeight = 1000;
+        scaleWidth = 1000;
+
         //Seteamos valores iniciales
         remainingCells = 0;
         showAnswers = false;
@@ -117,13 +124,13 @@ public class HistoryModeGameScene implements Scene, Serializable {
         Vector2D coords = new Vector2D();
         coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
 
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+        return (coords.getX() * scaleWidth / engine.getGraphics().getWidth() >= pos.getX() && coords.getX() * scaleWidth / engine.getGraphics().getWidth() <= pos.getX() + size.getX() &&
+                coords.getY() * scaleHeight / engine.getGraphics().getHeight() >= pos.getY() && coords.getY() * scaleHeight / engine.getGraphics().getHeight() <= pos.getY() + size.getY());
     }
 
     @Override
     public void init() {
-        coinSize = engine.getGraphics().getWidth() / 10;
+        coinSize = scaleWidth / 10;
 
         //Cargamos la info de la matriz
         loadFromFile(this.fileToOpen);
@@ -145,15 +152,15 @@ public class HistoryModeGameScene implements Scene, Serializable {
         }
 
         //Seteamos los botones
-        this.escapeInputButton = new InputButton(10 + engine.getGraphics().getWidth() / 44, 30, engine.getGraphics().getWidth() / 10, engine.getGraphics().getHeight() / 15);
-        this.winBackInputButton = new InputButton((double) this.engine.getGraphics().getWidth() * 0.44444444, (double) this.engine.getGraphics().getHeight() / 1.1,
-                (double) this.engine.getGraphics().getWidth() / 10, (double) this.engine.getGraphics().getHeight() / 15);
-        this.getLifeInputButton = new InputButton(0, this.engine.getGraphics().getHeight() - this.engine.getGraphics().getHeight() / 10,
-                (double) this.engine.getGraphics().getWidth() / 6, (double) this.engine.getGraphics().getHeight() / 10);
+        this.escapeInputButton = new InputButton(10, 10, scaleWidth / 10, scaleHeight / 15);
+        this.winBackInputButton = new InputButton((double) scaleWidth / 2, (double) scaleHeight / 1.1,
+                (double) scaleWidth / 10, (double) scaleHeight / 15);
+        this.getLifeInputButton = new InputButton(0, scaleHeight - scaleHeight / 10,
+                (double) scaleWidth / 7, (double) scaleHeight / 10);
 
         for (int i = colorsInputButtons.length - 1; i >= 0; i--) {
-            this.colorsInputButtons[i] = new InputButton(this.engine.getGraphics().getWidth() - (this.engine.getGraphics().getWidth() * 0.15) * (i+1), (double) this.engine.getGraphics().getHeight() - this.engine.getGraphics().getHeight() * 0.10,
-                    (double) this.engine.getGraphics().getWidth() * 0.15, (double) this.engine.getGraphics().getHeight() * 0.10);
+            this.colorsInputButtons[i] = new InputButton(scaleWidth - (scaleWidth / 7) * (i + 1), (double) scaleHeight - scaleHeight * 0.10,
+                    (double) scaleWidth / 7, (double) scaleHeight * 0.10);
         }
         //CYA
         colorfulPattern[0] = 0xA0FFFFFF;
@@ -162,11 +169,11 @@ public class HistoryModeGameScene implements Scene, Serializable {
         colorfulPattern[3] = 0xA0FFFF00;
 
         //Tamaño de las cuadriculas que recubren el nonograma
-        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int) ((double) this.engine.getGraphics().getWidth() * 0.0625);
-        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + (int) ((double) this.engine.getGraphics().getHeight() * 0.0601851));
+        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int) ((double) scaleWidth * 0.0625);
+        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + (int) ((double) scaleHeight * 0.0601851));
 
-        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + (int) ((double) this.engine.getGraphics().getWidth() * 0.0902777);
-        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - (int) ((double) this.engine.getGraphics().getHeight() * 0.111111111));
+        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + (int) ((double) scaleWidth * 0.0902777);
+        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - (int) ((double) scaleHeight * 0.111111111));
     }
 
     @Override
@@ -215,13 +222,12 @@ public class HistoryModeGameScene implements Scene, Serializable {
 
             //Mostramos las monedas obtenidas
             if (showNewCoins) {
-                this.engine.getGraphics().drawText("+10", (int) (this.engine.getGraphics().getWidth() / 2), (int) (engine.getGraphics().getHeight() / 12 + coinSize / 1.7), "Black", "Cooper", 0);
-                this.engine.getGraphics().drawImage((int) (engine.getGraphics().getWidth() / 1.8), (int) (engine.getGraphics().getHeight() / 12), coinSize, coinSize, "Coin");
-
+                this.engine.getGraphics().drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize / 1.7), "Black", "Cooper", 0);
+                this.engine.getGraphics().drawImage((int) (scaleWidth / 1.8), (int) (scaleHeight / 12), coinSize, coinSize/2, "Coin");
             }
 
             //Mensaje de enhorabuena
-            this.engine.getGraphics().drawText("¡ENHORABUENA!", (int) ((double) this.engine.getGraphics().getWidth() * 0.5), (int) ((double) this.engine.getGraphics().getHeight() / 15), "Black", "Cooper", 0);
+            this.engine.getGraphics().drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
 
             //BackButton
             this.engine.getGraphics().drawImage((int) (winBackInputButton.getPos().getX()), (int) (winBackInputButton.getPos().getY()), (int) (winBackInputButton.getSize().getX()), (int) (winBackInputButton.getSize().getY()), "Back");
@@ -238,7 +244,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
                 //Con el margen de 1 celda no tendremos problema con las otras resoluciones
-                engine.getGraphics().drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() -(tamProporcional*0.1)), posYTextAuxTopToBottom + (int) (tamProporcional * 1.1 * i), "Black", "CalibriSmall", 1);
+                engine.getGraphics().drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcional * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcional * 1.1 * i), "Black", "CalibriSmall", 1);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = xNumberLeftToRight[i].size() - 1; j >= 0; j--) {
@@ -260,17 +266,17 @@ public class HistoryModeGameScene implements Scene, Serializable {
 
             //ESTO ESTA SIN TESTEAR.
             //MONEDAS
-            this.engine.getGraphics().drawText(Integer.toString(coins.get()), engine.getGraphics().getWidth() - coinSize - 10, (int) (engine.getGraphics().getHeight() / 72 + coinSize / 1.7f), "Black", "CooperBold", 1);
-            this.engine.getGraphics().drawImage(engine.getGraphics().getWidth() - coinSize - 10, (int) engine.getGraphics().getHeight() / 72, coinSize, coinSize, "Coin");
+            this.engine.getGraphics().drawText(Integer.toString(coins.get()), scaleWidth - coinSize - 10, (int) (scaleHeight / 72 + coinSize / 1.7f), "Black", "CooperBold", 1);
+            this.engine.getGraphics().drawImage(scaleWidth - coinSize - 10, (int) scaleHeight / 72, coinSize, coinSize/2, "Coin");
 
             //CORAZONES
             for (int i = lives; i > 0; i--) {
-                this.engine.getGraphics().drawImage((int) (engine.getGraphics().getWidth() / 2) + i * 100, (int) (engine.getGraphics().getHeight() / 1.4), 100, 100, "Heart");
+                this.engine.getGraphics().drawImage((int) (scaleWidth / 7) + (scaleWidth * 2 / 21) * (i-1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
             }
 
             if (lives <= 0) {
                 //Mensaje de enhorabuena
-                this.engine.getGraphics().drawText("¡HAS PERDIDO!", (int) ((double) this.engine.getGraphics().getWidth() * 0.5), (int) ((double) this.engine.getGraphics().getHeight() / 15), "Black", "Cooper", 0);
+                this.engine.getGraphics().drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
 
             }
         }
@@ -453,10 +459,10 @@ public class HistoryModeGameScene implements Scene, Serializable {
                 numCeldas = rows_ + 1;
 
                 //Y con eso sacamos el tamaño promedio de la celda
-                tamProporcional = this.engine.getGraphics().getWidth() / (numCeldas + 1); //+1 para que haya margen y quede bonito
+                tamProporcional = scaleWidth / (numCeldas + 1); //+1 para que haya margen y quede bonito
                 //Con este tamaño ajustamos el valor del texto tambien
-                tamTextoAux = tamProporcional/5;
-                this.engine.getGraphics().changeSizeText("CalibriSmall",(int)(tamTextoAux));
+                tamTextoAux = tamProporcional / 5;
+                this.engine.getGraphics().changeSizeText("CalibriSmall", (int) (tamTextoAux));
             } else {
                 //Si hay 10 filas como maximo puede haber 5 numeros + 5 espacios = rows
                 //Queremos que con el maximo de letras posible solo llene 1 celda de proporcion
@@ -464,10 +470,10 @@ public class HistoryModeGameScene implements Scene, Serializable {
 
                 //Y con eso sacamos el tamaño promedio de la celda
                 //TODO AAA ESTO TENDRIA QUE SET GETHEIGHT PERO ESTA MAL
-                tamProporcional = this.engine.getGraphics().getWidth() / (numCeldas + 1); //+1 para que haya margen y quede bonito
+                tamProporcional = scaleWidth / (numCeldas + 1); //+1 para que haya margen y quede bonito
                 //Con este tamaño ajustamos el valor del texto tambien
-                tamTextoAux = tamProporcional/5;
-                this.engine.getGraphics().changeSizeText("CalibriSmall",(int)(tamTextoAux));
+                tamTextoAux = tamProporcional / 5;
+                this.engine.getGraphics().changeSizeText("CalibriSmall", (int) (tamTextoAux));
             }
 
             //Iniciamos la matriz segun el fichero
@@ -484,7 +490,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
                     //Si es mas ancho que largo...
                     if (rows_ >= cols_) {
                         //Lo ajustamos al centro de la pantalla de largo
-                        yPos = this.engine.getGraphics().getHeight() / 2 - ((rows_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * i);
+                        yPos = scaleHeight / 2 - ((rows_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * i);
 
                         xPos = tamProporcional + ((tamProporcional * 1.1) * (j - 3));
 
@@ -495,7 +501,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
                         yPos = tamProporcional + ((tamProporcional * 1.1) * i);
 
                         //Ajustamos el ancho al centro de la pantalla
-                        xPos = this.engine.getGraphics().getWidth() / 2 - ((cols_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * (j - 3));
+                        xPos = scaleWidth / 2 - ((cols_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * (j - 3));
 
                     }
 
