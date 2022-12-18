@@ -31,7 +31,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
     private CellHistoryMode[][] matriz;
 
     int rows_, cols_;
-    int lives;
+    AtomicReference<Integer> lives;
 
     //Para mostrar en pantallas la info de las celdas
     int remainingCells, maxCellsSolution;
@@ -90,12 +90,14 @@ public class HistoryModeGameScene implements Scene, Serializable {
         scaleHeight = 1000;
         scaleWidth = 1000;
 
+        lives = new AtomicReference<Integer>();
+
         //Seteamos valores iniciales
         remainingCells = 0;
         showAnswers = false;
         won = false;
         timer = 0;
-        lives = 3;
+        lives.set(3);
 
         coins = coinsAux;
         progress = progressAux;
@@ -259,11 +261,11 @@ public class HistoryModeGameScene implements Scene, Serializable {
             this.engine.getGraphics().drawImage(scaleWidth - coinSize - scaleWidth / 100, (int) scaleHeight / 72, coinSize, coinSize / 2, "Coin");
 
             //CORAZONES
-            for (int i = lives; i > 0; i--) {
+            for (int i = lives.get(); i > 0; i--) {
                 this.engine.getGraphics().drawImage((int) (scaleWidth / 7) + (scaleWidth * 2 / 21) * (i - 1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
             }
 
-            if (lives <= 0) {
+            if (lives.get() <= 0) {
                 //Mensaje de enhorabuena
                 this.engine.getGraphics().drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
 
@@ -274,7 +276,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
     @Override
     public void handleInput(EventHandler.EventType type, AdManager adManager) {
         //Solo podra interactuar con el tablero si tiene vidas
-        if (lives > 0) {
+        if (lives.get() > 0) {
             for (int i = 0; i < rows_; i++) {
                 for (int j = 0; j < cols_; j++) {
                     if (inputReceived(this.matriz[j][i].getPos(), this.matriz[j][i].getSize())) {
@@ -290,7 +292,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
                             if (this.matriz[j][i].getCellType() == CellBase.cellType.EMPTY) {
                                 if (!this.matriz[j][i].solution) {
                                     //Restamos una vida
-                                    lives--;
+                                    lives.set(lives.get()-1);
                                     //Y playeamos el sonido
                                     engine.getAudio().playSound("effect", 1);
                                 }
@@ -321,7 +323,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
         //BOTONES
         //Si te rindes vuelves a la seleccion de nivel
         if (!won && inputReceived(this.escapeInputButton.getPos(), this.escapeInputButton.getSize())) {
-            if (lives <= 0) {
+            if (lives.get() <= 0) {
                 saveToFile(true);
             } else {
                 saveToFile(false);
@@ -351,8 +353,9 @@ public class HistoryModeGameScene implements Scene, Serializable {
             }
         }
         //Si necesitas o quieres alguna vida...
-        if (lives < 3 && inputReceived(this.getLifeInputButton.getPos(), this.getLifeInputButton.getSize())) {
-            //TODO AAA o compras vida por X dionero o miras anuncio
+        if (lives.get() < 3 && inputReceived(this.getLifeInputButton.getPos(), this.getLifeInputButton.getSize())) {
+            //Al mirar el anuncio se restaura un corazon
+            adManager.showRewardedAd(lives,1);
         }
     }
 
@@ -412,7 +415,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
             fileRead = receiveString.split(" ");
             rows_ = Integer.parseInt(fileRead[0]);
             cols_ = Integer.parseInt(fileRead[1]);
-            lives = Integer.parseInt(fileRead[2]);
+            lives.set(Integer.parseInt(fileRead[2]));
 
             //Creamos la matriz con el tamaño
             this.matriz = new CellHistoryMode[cols_][rows_];
