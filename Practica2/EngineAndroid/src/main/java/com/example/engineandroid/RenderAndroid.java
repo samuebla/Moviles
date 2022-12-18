@@ -32,9 +32,11 @@ public class RenderAndroid {
     private AssetManager assets;
 
     //AAAAAAAAAAAAAAAAAAAAAAAA Deprecated
+    @Deprecated
     private Vector2D posCanvas;
 //    private Vector2D frameSize;
     //AAAAAAAAAAAAAAAAAAAAAAAAA Deprecated
+    @Deprecated
     private float factorScale;
 
     public RenderAndroid(SurfaceView myView, float scale, LinearLayout screenLayoutAux) {
@@ -81,8 +83,6 @@ public class RenderAndroid {
         this.canvas.drawColor(0xFFFFFFFF); // ARGB
 //        this.canvas.translate(0, this.posCanvas.getY());
         drawRectangle(0, 0, scaleWidth, scaleHeight, true, colorBackground);
-        //AAAAAAAAAAAAAAA
-        int patat = 0;
     }
 
     public void setColorBackground(int newColor) {
