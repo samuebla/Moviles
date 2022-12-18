@@ -143,6 +143,23 @@ public class AdManager {
                         @Override
                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                             reward.set(reward.get() + amountToEarn);
+
+                            AdRequest adRequest2 = new AdRequest.Builder().build();
+                            RewardedAd.load(mainActivity, "ca-app-pub-3940256099942544/5224354917",
+                                    adRequest2, new RewardedAdLoadCallback() {
+                                        @Override
+                                        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                                            // Handle the error.
+                                            Log.d(TAG, loadAdError.toString());
+                                            mRewardedAd = null;
+                                        }
+
+                                        @Override
+                                        public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+                                            mRewardedAd = rewardedAd;
+                                            Log.d(TAG, "Ad was loaded.");
+                                        }
+                                    });
                             // Handle the reward.
                             // Log.d(TAG, "The user earned the reward.");
                             // int rewardAmount = rewardItem.getAmount();
