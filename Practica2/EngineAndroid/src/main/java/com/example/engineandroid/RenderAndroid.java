@@ -32,9 +32,11 @@ public class RenderAndroid {
     private AssetManager assets;
 
     //AAAAAAAAAAAAAAAAAAAAAAAA Deprecated
+    @Deprecated
     private Vector2D posCanvas;
 //    private Vector2D frameSize;
     //AAAAAAAAAAAAAAAAAAAAAAAAA Deprecated
+    @Deprecated
     private float factorScale;
 
     public RenderAndroid(SurfaceView myView, float scale, LinearLayout screenLayoutAux) {
