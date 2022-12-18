@@ -31,8 +31,8 @@ public class SceneMngrAndroid implements Serializable {
         stack.push(scene);
     }
 
-    public void update(double deltaTime){
-        stack.peek().update(deltaTime);
+    public void update(double deltaTime, AdManager adManager){
+        stack.peek().update(deltaTime, adManager);
     }
 
     public void render(){

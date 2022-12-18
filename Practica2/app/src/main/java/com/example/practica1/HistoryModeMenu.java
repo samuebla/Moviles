@@ -1,5 +1,6 @@
 package com.example.practica1;
 
+import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.Scene;
@@ -41,6 +42,7 @@ public class HistoryModeMenu implements Scene, Serializable {
         init();
     }
 
+    @Override
     public boolean inputReceived(Vector2D pos, Vector2D size){
         Vector2D coords = new Vector2D();
         coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
@@ -49,6 +51,7 @@ public class HistoryModeMenu implements Scene, Serializable {
                 coords.getY()*scaleHeight/engine.getGraphics().getHeight() >= pos.getY() && coords.getY()*scaleHeight/engine.getGraphics().getHeight() <= pos.getY() + size.getY());
     }
 
+    @Override
     public void init() {
         coinSize = scaleWidth/10;
 //        loadCoinsFromFile();
@@ -63,14 +66,16 @@ public class HistoryModeMenu implements Scene, Serializable {
 
     }
 
-    public void update(double deltaTime){
+    @Override
+    public void update(double deltaTime, AdManager adManager){
         //Para los eventos...
         if(engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput(engine.getEventMngr().getEventType());
+            handleInput(engine.getEventMngr().getEventType(), adManager);
             engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
     }
 
+    @Override
     public void render(){
         //ThemeMode
         this.engine.getGraphics().drawImage((int)this.themeInputButtonMode.getPos().getX(), (int)this.themeInputButtonMode.getPos().getY(),(int)this.themeInputButtonMode.getSize().getX(),(int)this.themeInputButtonMode.getSize().getY(),"ThemePlay");
@@ -93,7 +98,7 @@ public class HistoryModeMenu implements Scene, Serializable {
     }
 
     @Override
-    public void handleInput(EventHandler.EventType type){
+    public void handleInput(EventHandler.EventType type, AdManager adManager){
         //ThemeMode
         if (inputReceived(this.themeInputButtonMode.getPos(), this.themeInputButtonMode.getSize())){
             ThemeModeMenu playScene = new ThemeModeMenu(this.engine, this.coins, this.progress);

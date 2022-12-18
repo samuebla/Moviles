@@ -1,5 +1,6 @@
 package com.example.practica1;
 
+import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.Scene;
@@ -262,10 +263,10 @@ public class MainMenuScene implements Scene, Serializable {
     }
 
     @Override
-    public void update(double deltaTime) {
+    public void update(double deltaTime, AdManager adManager) {
         //Para los eventos
         if (this.engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput(engine.getEventMngr().getEventType());
+            handleInput(engine.getEventMngr().getEventType(), adManager);
             this.engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
     }
@@ -284,7 +285,7 @@ public class MainMenuScene implements Scene, Serializable {
     }
 
     @Override
-    public void handleInput(EventHandler.EventType type) {
+    public void handleInput(EventHandler.EventType type, AdManager adManager) {
         //Si pulsas el boton...
         if (inputReceived(this.fastPlay.getPos(), this.fastPlay.getSize())) {
             //Te lleva a la pantalla de seleccion

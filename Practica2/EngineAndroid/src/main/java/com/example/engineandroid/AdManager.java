@@ -39,9 +39,11 @@ public class AdManager {
     NotificationManagerCompat notificationManager;
     NotificationCompat.Builder notificationBuilder;
 
+
     public AdManager(Activity mainActivity) {
         this.mainActivity = mainActivity;
 
+        //Reward ad creation
         AdRequest adRequest2 = new AdRequest.Builder().build();
         RewardedAd.load(this.mainActivity, "ca-app-pub-3940256099942544/5224354917",
                 adRequest2, new RewardedAdLoadCallback() {
@@ -102,7 +104,8 @@ public class AdManager {
         this.mainActivity.startActivity(intent) ; // inicializa el intent
     }
 
-    public void showRewardedAd() {
+    //Aumenta la variable introducida por amountToEarn si el usuario ve el anuncio hasta el final.
+    public void showRewardedAd(AtomicReference<Integer> reward, Integer amountToEarn) {
         mainActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -139,6 +142,7 @@ public class AdManager {
                     mRewardedAd.show(mainActivity, new OnUserEarnedRewardListener() {
                         @Override
                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                            reward.set(reward.get() + amountToEarn);
                             // Handle the reward.
                             // Log.d(TAG, "The user earned the reward.");
                             // int rewardAmount = rewardItem.getAmount();

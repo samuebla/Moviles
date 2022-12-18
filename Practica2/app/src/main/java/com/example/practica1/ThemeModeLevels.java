@@ -2,6 +2,7 @@ package com.example.practica1;
 
 import android.widget.Button;
 
+import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.Scene;
@@ -9,6 +10,8 @@ import com.example.engineandroid.Vector2D;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
+
+import kotlinx.coroutines.ObsoleteCoroutinesApi;
 
 public class ThemeModeLevels implements Scene, Serializable {
 
@@ -45,6 +48,7 @@ public class ThemeModeLevels implements Scene, Serializable {
         init();
     }
 
+    @Override
     public boolean inputReceived(Vector2D pos, Vector2D size){
         Vector2D coords = new Vector2D();
         coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
@@ -53,6 +57,7 @@ public class ThemeModeLevels implements Scene, Serializable {
                 coords.getY()*scaleHeight/engine.getGraphics().getHeight() >= pos.getY() && coords.getY()*scaleHeight/engine.getGraphics().getHeight() <= pos.getY() + size.getY());
     }
 
+    @Override
     public void init() {
         coinSize = scaleWidth/10;
         //Botones selectores del nivel
@@ -91,10 +96,11 @@ public class ThemeModeLevels implements Scene, Serializable {
 
     }
 
-    public void update(double deltaTime){
+    @Override
+    public void update(double deltaTime, AdManager adManager){
         //Para los eventos...
         if(engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput(engine.getEventMngr().getEventType());
+            handleInput(engine.getEventMngr().getEventType(), adManager);
             engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
     }
@@ -120,7 +126,7 @@ public class ThemeModeLevels implements Scene, Serializable {
     }
 
     @Override
-    public void handleInput(EventHandler.EventType type){
+    public void handleInput(EventHandler.EventType type, AdManager adManager){
         for (int i = 0; i < this.unlockedlevels.get(); ++i){
             if (inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
                 HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1);

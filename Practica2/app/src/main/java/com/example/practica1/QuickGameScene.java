@@ -1,5 +1,6 @@
 package com.example.practica1;
 
+import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.Scene;
@@ -317,7 +318,7 @@ public class QuickGameScene implements Scene, Serializable {
     }
 
     @Override
-    public void update(double deltaTime) {
+    public void update(double deltaTime, AdManager adManager) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
                 this.matriz[i][j].update(deltaTime);
@@ -325,7 +326,7 @@ public class QuickGameScene implements Scene, Serializable {
         }
 
         if (engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput(engine.getEventMngr().getEventType());
+            handleInput(engine.getEventMngr().getEventType(), adManager);
             engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
 
@@ -413,7 +414,7 @@ public class QuickGameScene implements Scene, Serializable {
     }
 
     @Override
-    public void handleInput(EventHandler.EventType type) {
+    public void handleInput(EventHandler.EventType type, AdManager adManager) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
                 if (inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {

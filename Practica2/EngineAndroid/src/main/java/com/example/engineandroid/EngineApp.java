@@ -1,5 +1,6 @@
 package com.example.engineandroid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.view.SurfaceView;
@@ -13,6 +14,7 @@ public class EngineApp implements Runnable {
     private InputAndroid input;
     private EventHandler eventHandler;
     private AudioAndroid audioMngr;
+    private AdManager adManager;
 
     private Thread renderThread;
 
@@ -24,7 +26,7 @@ public class EngineApp implements Runnable {
 
     private Scene primaryScene;
 
-    public EngineApp(SurfaceView myView, LinearLayout screenLayout){
+    public EngineApp(SurfaceView myView, LinearLayout screenLayout, Activity mainActivity){
         this.view = myView;
 
 
@@ -42,6 +44,8 @@ public class EngineApp implements Runnable {
         this.context = myView.getContext();
 
         this.sceneMngr = new SceneMngrAndroid();
+
+        this.adManager = new AdManager(mainActivity);
 
     }
 
@@ -136,7 +140,6 @@ public class EngineApp implements Runnable {
 
             // Informe de FPS
             double elapsedTime = (double) nanoElapsedTime / 1.0E9;
-            this.update(elapsedTime);
             if (currentTime - informePrevio > 1000000000l) {
                 long fps = frames * 1000000000l / (currentTime - informePrevio);
                 System.out.println("" + fps + " fps");
@@ -148,17 +151,13 @@ public class EngineApp implements Runnable {
             long deltaTime = System.currentTimeMillis() - actualTime;
             actualTime += deltaTime;
 
-            this.sceneMngr.update(deltaTime / 1000.0);
+            this.sceneMngr.update(deltaTime / 1000.0, this.adManager);
 
             //Renderizado
             this.render.prepareFrame();
             this.sceneMngr.render();
             this.render.clear();
         }
-    }
-
-    protected void update(double deltaTime) {
-        this.sceneMngr.update(deltaTime);
     }
 
     //Métodos sincronización (parar y reiniciar aplicación)

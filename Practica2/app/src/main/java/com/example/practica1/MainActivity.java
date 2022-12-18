@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (savedInstanceState == null){
-            this.engine = new EngineApp(this.renderView, this.screenLayout);
+            this.engine = new EngineApp(this.renderView, this.screenLayout, this);
         }else{
             //Conseguimos el engine si se ha reiniciado la aplicacion
             this.engine = ((MainMenuScene) savedInstanceState.getSerializable("mainMenuScene")).getEngine();
