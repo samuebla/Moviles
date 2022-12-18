@@ -59,7 +59,7 @@ public class ThemeModeLevels implements Scene, Serializable {
 
     @Override
     public void init() {
-        coinSize = engine.getGraphics().getWidth()/10;
+        coinSize = scaleWidth/10;
         //Botones selectores del nivel
         this.lvls = new InputButton[20];
         int contador = 0;
@@ -120,8 +120,8 @@ public class ThemeModeLevels implements Scene, Serializable {
 
         //Moneas
         //MONEDAS
-        this.engine.getGraphics().drawText(Integer.toString(coins.get()), scaleWidth- coinSize-10, (int)(scaleHeight/72 + coinSize/1.7f), "Black", "CooperBold", 1);
-        this.engine.getGraphics().drawImage(scaleWidth-coinSize -10, (int)scaleHeight/72,coinSize,coinSize/2,"Coin");
+        this.engine.getGraphics().drawText(Integer.toString(coins.get()), scaleWidth- coinSize-scaleWidth/100, (int)(scaleHeight/72 + + coinSize/2.5), "Black", "CooperBold", 1);
+        this.engine.getGraphics().drawImage(scaleWidth-coinSize -scaleWidth/100, (int)scaleHeight/72,coinSize,coinSize/2,"Coin");
 
     }
 

@@ -93,8 +93,8 @@ public class HistoryModeMenu implements Scene, Serializable {
 
         //Moneda
         //MONEDAS
-        this.engine.getGraphics().drawText(Integer.toString(coins.get()),scaleWidth - coinSize-10, (int)(scaleHeight/72 + coinSize/1.7f), "Black", "CooperBold", 1);
-        this.engine.getGraphics().drawImage(scaleWidth-coinSize -10, (int)scaleHeight/72,coinSize,coinSize/2,"Coin");
+        this.engine.getGraphics().drawText(Integer.toString(coins.get()),scaleWidth - coinSize-scaleWidth/100, (int)(scaleHeight/72 + coinSize/2.5 ), "Black", "CooperBold", 1);
+        this.engine.getGraphics().drawImage(scaleWidth-coinSize -scaleWidth/100, (int)scaleHeight/72,coinSize,coinSize/2,"Coin");
     }
 
     @Override
