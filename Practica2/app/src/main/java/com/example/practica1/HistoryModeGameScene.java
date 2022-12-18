@@ -62,6 +62,9 @@ public class HistoryModeGameScene implements Scene, Serializable {
     private InputButton winBackInputButton;
     private InputButton getLifeInputButton;
 
+    //Con esta variable controlamos las paletas que hayas comprado
+    private AtomicReference<Integer>[] palettes;
+
     private InputButton[] colorsInputButtons;
     private String[] colorsButtonsName = {"WhitePalette", "BluePalette", "PinkPalette", "YellowPalette"};
 
@@ -82,7 +85,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
     boolean won;
     boolean showAnswers;
 
-    public HistoryModeGameScene(EngineApp engine, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux) {
+    public HistoryModeGameScene(EngineApp engine, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux, AtomicReference<Integer>[] palettesAux) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
@@ -101,13 +104,15 @@ public class HistoryModeGameScene implements Scene, Serializable {
 
         coins = coinsAux;
         progress = progressAux;
+        this.palettes = palettesAux;
+
         this.currentLevelNumber = currentLevelNumberAux;
 
 //        this.rewardButton.setVisibility(View.VISIBLE);
 
         //Patron de colores
         colorfulPattern = new int[4];
-        actualColorPattern = modeAux - 1;
+        actualColorPattern = 0;
         colorsInputButtons = new InputButton[4];
 
 
@@ -158,8 +163,8 @@ public class HistoryModeGameScene implements Scene, Serializable {
         this.getLifeInputButton = new InputButton(0, scaleHeight - scaleHeight / 10,
                 (double) scaleWidth / 7, (double) scaleHeight / 10);
 
-        for (int i = colorsInputButtons.length - 1; i >= 0; i--) {
-            this.colorsInputButtons[i] = new InputButton(scaleWidth - (scaleWidth / 7) * (i + 1), (double) scaleHeight - scaleHeight * 0.10,
+        for (int i = 0; i < colorsInputButtons.length; i++) {
+            this.colorsInputButtons[i] = new InputButton((scaleWidth * 3 / 7) + (scaleWidth / 7) * i, (double) scaleHeight - scaleHeight * 0.10,
                     (double) scaleWidth / 7, (double) scaleHeight * 0.10);
         }
         //CYA
@@ -214,7 +219,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
 
             //Mostramos las monedas obtenidas
             if (showNewCoins) {
-                this.engine.getGraphics().drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize/2.5f), "Black", "Cooper", 0);
+                this.engine.getGraphics().drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize / 2.5f), "Black", "Cooper", 0);
                 this.engine.getGraphics().drawImage((int) (scaleWidth / 1.8), (int) (scaleHeight / 12), coinSize, coinSize / 2, "Coin");
             }
 
@@ -248,9 +253,16 @@ public class HistoryModeGameScene implements Scene, Serializable {
             //TODO AAA NO SE HACER LOS PUTOS COLORES
             this.engine.getGraphics().drawRectangle((int) ((double) colorsInputButtons[actualColorPattern].getPos().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getPos().getY()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getY()), true, (int) (colorfulPattern[actualColorPattern] + 0xAF000000));
 
+            //BackButton
             this.engine.getGraphics().drawImage((int) ((double) escapeInputButton.getPos().getX()), (int) ((double) escapeInputButton.getPos().getY()), (int) ((double) escapeInputButton.getSize().getX()), (int) ((double) escapeInputButton.getSize().getY()), "Back");
+
+            //Paleta de colores
             for (int i = 0; i < colorsInputButtons.length; i++) {
                 this.engine.getGraphics().drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), colorsButtonsName[i]);
+                //Si no has desbloqueado todavia la paleta...
+                if (palettes[i].get() != 1)
+                    //Ponemos una imagen de bloqueo por encima con el numero de monedas
+                    this.engine.getGraphics().drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), "Coin");
             }
 
             //AD PARA CONSEGUIR VIDAS
@@ -292,7 +304,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
                             if (this.matriz[j][i].getCellType() == CellBase.cellType.EMPTY) {
                                 if (!this.matriz[j][i].solution) {
                                     //Restamos una vida
-                                    lives.set(lives.get()-1);
+                                    lives.set(lives.get() - 1);
                                     //Y playeamos el sonido
                                     engine.getAudio().playSound("effect", 1);
                                 }
@@ -342,12 +354,36 @@ public class HistoryModeGameScene implements Scene, Serializable {
         }
         for (int i = 0; i < colorsInputButtons.length; i++) {
             if (!won && inputReceived(this.colorsInputButtons[i].getPos(), this.colorsInputButtons[i].getSize())) {
-                actualColorPattern = i;
-                this.engine.setColorBackground(colorfulPattern[i]);
-                for (int h = 0; h < rows_; h++) {
-                    for (int j = 0; j < cols_; j++) {
-                        //TODO AAA NO SE HACER COSAS EN HEXADECIMAL
-                        this.matriz[j][h].setPalleteColor(this.colorfulPattern[i] + 0xAF808080);
+                //Si tienes la paleta bloqueada...
+                if (palettes[i].get() == 0) {
+
+                    //Si tienes monedas de sobra...
+                    if (coins.get() >= 10) {
+                        //Se resta
+                        coins.set(coins.get() - 10);
+
+                        //Lo cambiamos como desbloqueado en el archivo de datos
+                        palettes[i].set(1);
+
+                        //Y seteamos la nueva paleta
+                        actualColorPattern = i;
+                        this.engine.setColorBackground(colorfulPattern[i]);
+                        for (int h = 0; h < rows_; h++) {
+                            for (int j = 0; j < cols_; j++) {
+                                //TODO AAA NO SE HACER COSAS EN HEXADECIMAL
+                                this.matriz[j][h].setPalleteColor(this.colorfulPattern[i] + 0xAF808080);
+                            }
+                        }
+                    }
+                } else {
+
+                    actualColorPattern = i;
+                    this.engine.setColorBackground(colorfulPattern[i]);
+                    for (int h = 0; h < rows_; h++) {
+                        for (int j = 0; j < cols_; j++) {
+                            //TODO AAA NO SE HACER COSAS EN HEXADECIMAL
+                            this.matriz[j][h].setPalleteColor(this.colorfulPattern[i] + 0xAF808080);
+                        }
                     }
                 }
             }
@@ -355,7 +391,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
         //Si necesitas o quieres alguna vida...
         if (lives.get() < 3 && inputReceived(this.getLifeInputButton.getPos(), this.getLifeInputButton.getSize())) {
             //Al mirar el anuncio se restaura un corazon
-            adManager.showRewardedAd(lives,1);
+            adManager.showRewardedAd(lives, 1);
         }
     }
 

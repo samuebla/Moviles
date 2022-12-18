@@ -219,8 +219,8 @@ public class MainMenuScene implements Scene, Serializable {
 
             //Paletas de colores
             for (int i = 0; i < this.palettes.length; ++i) {
-                this.palettes[i] = new AtomicReference<Integer>(Integer.parseInt(fileRead[this.progress.length + 1]));
-                System.out.print(this.progress[i]);
+                this.palettes[i] = new AtomicReference<Integer>();
+                this.palettes[i].set(Integer.parseInt(fileRead[this.progress.length + 1 + i]));
             }
 
         } catch (
@@ -294,7 +294,7 @@ public class MainMenuScene implements Scene, Serializable {
         }
         if (inputReceived(this.historyMode.getPos(), this.historyMode.getSize())) {
             //Te lleva a la pantalla de seleccion
-            HistoryModeMenu historyMode = new HistoryModeMenu(this.engine, this.coins, this.progress);
+            HistoryModeMenu historyMode = new HistoryModeMenu(this.engine, this.coins, this.progress,this.palettes);
             this.engine.getSceneMngr().pushScene(historyMode);
         }
     }

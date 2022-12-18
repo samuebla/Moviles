@@ -28,14 +28,18 @@ public class ThemeModeMenu implements Scene, Serializable {
     private Integer coinSize;
 
     private AtomicReference<Integer>[] progress;
+    private AtomicReference<Integer>[] palettes;
 
-    public ThemeModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux){
+    public ThemeModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux,AtomicReference<Integer>[] palettesAux){
         this.engine = engineAux;
         this.coins = coinsAux;
         this.progress = progressAux;
+        this.palettes = palettesAux;
+
         //Por defecto la escala es 1000x1000 pero podemos cambiarlo (recordar llamar al engine para cambiarlo)
         scaleHeight=1000;
         scaleWidth=1000;
+
         init();
     }
 
@@ -112,22 +116,22 @@ public class ThemeModeMenu implements Scene, Serializable {
     public void handleInput(EventHandler.EventType type, AdManager adManager){
         //Tetarracas
         if (inputReceived(this.alfabetoInputButtonMode.getPos(), this.alfabetoInputButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[0], 1, this.coins);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[0], 1, this.coins,this.palettes);
             this.engine.getSceneMngr().pushScene(scene);
         }
         //Bubalongas
         if (inputReceived(this.fiestaInputButtonMode.getPos(), this.fiestaInputButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[1], 2, this.coins);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[1], 2, this.coins,this.palettes);
             this.engine.getSceneMngr().pushScene(scene);
         }
         //Bakugans
         if (inputReceived(this.animalesInputButtonMode.getPos(), this.animalesInputButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[2], 3, this.coins);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[2], 3, this.coins,this.palettes);
             this.engine.getSceneMngr().pushScene(scene);
         }
         //Mamelungas
         if (inputReceived(this.geometriaInputButtonMode.getPos(), this.geometriaInputButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[3], 4, this.coins);
+            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[3], 4, this.coins,this.palettes);
             this.engine.getSceneMngr().pushScene(scene);
         }
 

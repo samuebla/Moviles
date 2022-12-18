@@ -54,7 +54,7 @@ public class RenderAndroid {
         this.images = new HashMap<>();
 
         this.factorScale = scale;
-        colorBackground = 0XFF00FFFF;
+        colorBackground = 0XFFFFFFFF;
         //Por defecto la escala es 1000x1000 pero creamos un setter por si alguien quiere alguna modificacion
         scaleHeight = 1000;
         scaleWidth = 1000;

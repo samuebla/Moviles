@@ -25,15 +25,17 @@ public class HistoryModeMenu implements Scene, Serializable {
     int[] unlockedThemedLevels;
 
     private AtomicReference<Integer>[] progress;
+    private AtomicReference<Integer>[] palettes;
 
     private EngineApp engine;
 
-    public HistoryModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux){
+    public HistoryModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux,AtomicReference<Integer>[] palettesAux){
 
         this.engine = engineAux;
 
         this.coins = coinsAux;
         this.progress = progressAux;
+        this.palettes = palettesAux;
 
         //Por defecto la escala es 1000x1000 pero creamos un setter por si alguien quiere alguna modificacion
         scaleHeight=1000;
@@ -101,7 +103,7 @@ public class HistoryModeMenu implements Scene, Serializable {
     public void handleInput(EventHandler.EventType type, AdManager adManager){
         //ThemeMode
         if (inputReceived(this.themeInputButtonMode.getPos(), this.themeInputButtonMode.getSize())){
-            ThemeModeMenu playScene = new ThemeModeMenu(this.engine, this.coins, this.progress);
+            ThemeModeMenu playScene = new ThemeModeMenu(this.engine, this.coins, this.progress,this.palettes);
             this.engine.getSceneMngr().pushScene(playScene);
         }
 
