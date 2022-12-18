@@ -258,7 +258,7 @@ public class RenderAndroid {
         //Cogemos l fuente
         Font_Android font = this.fonts.get(fontAux);
         //Y le cambiamos el tamaño
-        font.setNewSize(newSize);
+        font.setNewSize(newSize*getWidth()/scaleWidth);
     }
 
     //AlignType:
