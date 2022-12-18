@@ -2,7 +2,6 @@ package com.example.practica1;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Button;
 
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
@@ -23,7 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class HistoryModeGameScene implements Scene, Serializable {
     private EngineApp engine;
 
-    //TODO A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
+    //A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
     int scaleWidth;
     int scaleHeight;
 
@@ -45,7 +44,8 @@ public class HistoryModeGameScene implements Scene, Serializable {
     boolean showNewCoins;
 
     //Tamaño proporcional de las celdas adaptado a la pantalla
-    float tamProporcional;
+    float tamProporcionalAncho;
+    float tamProporcionalAlto;
 
     //Variables auxiliares para posicionar correctamente a las celdas en funcion del tamaño de la pantalla
     double xPos;
@@ -75,9 +75,6 @@ public class HistoryModeGameScene implements Scene, Serializable {
     //Archivo de guardado
     String fileName;
     String fileToOpen;
-
-    //Para los rectangulos que recubren las celdas y son meramente esteticos
-    int widthAestheticCellX, heightAestheticCellX, widthAestheticCellY, heightAestheticCellY;
 
     private static final int timeCheckButton = 5;
     double timer;
@@ -167,13 +164,6 @@ public class HistoryModeGameScene implements Scene, Serializable {
         colorfulPattern[1] = 0xA000FFFF;
         colorfulPattern[2] = 0xA0FF00FF;
         colorfulPattern[3] = 0xA0FFFF00;
-
-        //Tamaño de las cuadriculas que recubren el nonograma
-        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int) ((double) scaleWidth * 0.0625);
-        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + (int) ((double) scaleHeight * 0.0601851));
-
-        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + (int) ((double) scaleWidth * 0.0902777);
-        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - (int) ((double) scaleHeight * 0.111111111));
     }
 
     @Override
@@ -202,14 +192,13 @@ public class HistoryModeGameScene implements Scene, Serializable {
 
     @Override
     public void render() {
-
         Vector2D auxCuadradoFinal = this.matriz[cols_ - 1][rows_ - 1].getPos();
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 
         //El cuadrado se mantiene aunque ganes porque es muy bonito
-        this.engine.getGraphics().drawImage((int) (auxCuadradoInicio.getX() - tamProporcional * 0.1), (int) (auxCuadradoInicio.getY() - tamProporcional * 0.1),
-                (int) (auxCuadradoFinal.getX() - auxCuadradoInicio.getX() + tamProporcional + tamProporcional * 0.2)
-                , (int) (auxCuadradoFinal.getY() - auxCuadradoInicio.getY() + tamProporcional + tamProporcional * 0.2), "Board");
+        this.engine.getGraphics().drawImage((int) (auxCuadradoInicio.getX() - tamProporcionalAncho * 0.1), (int) (auxCuadradoInicio.getY() - tamProporcionalAlto * 0.1),
+                (int) (auxCuadradoFinal.getX() - auxCuadradoInicio.getX() + tamProporcionalAncho + tamProporcionalAncho * 0.2)
+                , (int) (auxCuadradoFinal.getY() - auxCuadradoInicio.getY() + tamProporcionalAlto + tamProporcionalAlto * 0.2), "Board");
 
         //Si ya he ganado...
         if (won) {
@@ -222,8 +211,8 @@ public class HistoryModeGameScene implements Scene, Serializable {
 
             //Mostramos las monedas obtenidas
             if (showNewCoins) {
-                this.engine.getGraphics().drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize / 1.7), "Black", "Cooper", 0);
-                this.engine.getGraphics().drawImage((int) (scaleWidth / 1.8), (int) (scaleHeight / 12), coinSize, coinSize/2, "Coin");
+                this.engine.getGraphics().drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize/2.5f), "Black", "Cooper", 0);
+                this.engine.getGraphics().drawImage((int) (scaleWidth / 1.8), (int) (scaleHeight / 12), coinSize, coinSize / 2, "Coin");
             }
 
             //Mensaje de enhorabuena
@@ -244,11 +233,11 @@ public class HistoryModeGameScene implements Scene, Serializable {
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
                 //Con el margen de 1 celda no tendremos problema con las otras resoluciones
-                engine.getGraphics().drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcional * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcional * 1.1 * i), "Black", "CalibriSmall", 1);
+                engine.getGraphics().drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "CalibriSmall", 1);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = xNumberLeftToRight[i].size() - 1; j >= 0; j--) {
-                    engine.getGraphics().drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcional * 1.1 * i), (int) (auxCuadradoInicio.getY() - tamProporcional / 1.5 + (int) (tamProporcional / 2.7f * j)), "Black", "CalibriSmall", 0);
+                    engine.getGraphics().drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto * 0.7 / (rows_ / 2)) + (int) ((tamProporcionalAlto / rows_ * 1.3 * j))), "Black", "CalibriSmall", 0);
                 }
             }
 
@@ -264,14 +253,13 @@ public class HistoryModeGameScene implements Scene, Serializable {
             //AD PARA CONSEGUIR VIDAS
             this.engine.getGraphics().drawImage((int) ((double) getLifeInputButton.getPos().getX()), (int) ((double) getLifeInputButton.getPos().getY()), (int) ((double) getLifeInputButton.getSize().getX()), (int) ((double) getLifeInputButton.getSize().getY()), "GiveUp");
 
-            //ESTO ESTA SIN TESTEAR.
             //MONEDAS
-            this.engine.getGraphics().drawText(Integer.toString(coins.get()), scaleWidth - coinSize - 10, (int) (scaleHeight / 72 + coinSize / 1.7f), "Black", "CooperBold", 1);
-            this.engine.getGraphics().drawImage(scaleWidth - coinSize - 10, (int) scaleHeight / 72, coinSize, coinSize/2, "Coin");
+            this.engine.getGraphics().drawText(Integer.toString(coins.get()), scaleWidth - coinSize - scaleWidth / 100, (int) (scaleHeight / 72 + coinSize / 2.5f), "Black", "CooperBold", 1);
+            this.engine.getGraphics().drawImage(scaleWidth - coinSize - scaleWidth / 100, (int) scaleHeight / 72, coinSize, coinSize / 2, "Coin");
 
             //CORAZONES
             for (int i = lives; i > 0; i--) {
-                this.engine.getGraphics().drawImage((int) (scaleWidth / 7) + (scaleWidth * 2 / 21) * (i-1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
+                this.engine.getGraphics().drawImage((int) (scaleWidth / 7) + (scaleWidth * 2 / 21) * (i - 1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
             }
 
             if (lives <= 0) {
@@ -350,7 +338,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
             this.engine.setColorBackground(0xFFFFFFFF);
         }
         for (int i = 0; i < colorsInputButtons.length; i++) {
-            if (inputReceived(this.colorsInputButtons[i].getPos(), this.colorsInputButtons[i].getSize())) {
+            if (!won && inputReceived(this.colorsInputButtons[i].getPos(), this.colorsInputButtons[i].getSize())) {
                 actualColorPattern = i;
                 this.engine.setColorBackground(colorfulPattern[i]);
                 for (int h = 0; h < rows_; h++) {
@@ -448,33 +436,23 @@ public class HistoryModeGameScene implements Scene, Serializable {
                 xNumberLeftToRight[i] = new ArrayList<>();
             }
 
-            int numCeldas;
-            float tamTextoAux = -1;
+            //Dividimos la pantalla en casillas.
+            // Ancho: Cols +1(Para los numeros)
+            // Alto: Rows +1( Sin contar la interfaz de por encima y por debajo)
 
-            //AAA TODO Tamaño de la celda
-            //Nos quedamos con el mayor numero para hacer el reescalado
-            if (rows_ > cols_) {
-                //Si hay 10 filas como maximo puede haber 5 numeros + 5 espacios = rows
-                //Queremos que con el maximo de letras posible solo llene 1 celda de proporcion
-                numCeldas = rows_ + 1;
+            //+1 para los numeros laterales
+            //Y con eso sacamos el tamaño promedio de la celda
+            tamProporcionalAncho = scaleWidth / ((cols_ + 1) + 1);
 
-                //Y con eso sacamos el tamaño promedio de la celda
-                tamProporcional = scaleWidth / (numCeldas + 1); //+1 para que haya margen y quede bonito
-                //Con este tamaño ajustamos el valor del texto tambien
-                tamTextoAux = tamProporcional / 5;
-                this.engine.getGraphics().changeSizeText("CalibriSmall", (int) (tamTextoAux));
-            } else {
-                //Si hay 10 filas como maximo puede haber 5 numeros + 5 espacios = rows
-                //Queremos que con el maximo de letras posible solo llene 1 celda de proporcion
-                numCeldas = cols_ + 1;
+            //Restamos la interfaz de las paletas y los botones de arriba
+            tamProporcionalAlto = (scaleHeight - scaleHeight / 7 - scaleHeight / 15) / ((rows_ + 1) + 1);
 
-                //Y con eso sacamos el tamaño promedio de la celda
-                //TODO AAA ESTO TENDRIA QUE SET GETHEIGHT PERO ESTA MAL
-                tamProporcional = scaleWidth / (numCeldas + 1); //+1 para que haya margen y quede bonito
-                //Con este tamaño ajustamos el valor del texto tambien
-                tamTextoAux = tamProporcional / 5;
-                this.engine.getGraphics().changeSizeText("CalibriSmall", (int) (tamTextoAux));
-            }
+            int tamTexto = (int) (tamProporcionalAncho / 4.5f);
+            if (tamProporcionalAlto > tamProporcionalAncho)
+                //Nos quedamos con el tamaño mas grande para que el texto se ajuste a la peor situacion
+                tamTexto = (int) (tamProporcionalAlto / 4.5f);
+            //Con este tamaño ajustamos el valor del texto tambien
+            this.engine.getGraphics().changeSizeText("CalibriSmall", (int) (tamTexto));
 
             //Iniciamos la matriz segun el fichero
             for (int i = 0; i < rows_; i++) {
@@ -487,28 +465,17 @@ public class HistoryModeGameScene implements Scene, Serializable {
                     //Con la relacion del juego el largo siempre va a ser mayor que el ancho
 //                    double yPos = tamTextoAux * tamProporcional + ((tamProporcional * 1.1) * i);
 
-                    //Si es mas ancho que largo...
-                    if (rows_ >= cols_) {
-                        //Lo ajustamos al centro de la pantalla de largo
-                        yPos = scaleHeight / 2 - ((rows_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * i);
+                    //Lo ajustamos al centro de la pantalla de largo
+                    //Scale/15 para la interfaz de arriba + 1Celda para las letras
+                    yPos = (scaleHeight / 15 + tamProporcionalAlto) + ((tamProporcionalAlto * 1.1) * i);
 
-                        xPos = tamProporcional + ((tamProporcional * 1.1) * (j - 3));
-
-                    }
-                    //Si es mas largo que ancho
-                    else {
-                        //TODO AAA SI SE SOLAPAN CAMBIAR EL 1.1
-                        yPos = tamProporcional + ((tamProporcional * 1.1) * i);
-
-                        //Ajustamos el ancho al centro de la pantalla
-                        xPos = scaleWidth / 2 - ((cols_ / 2.0f) * tamProporcional) + ((tamProporcional * 1.1) * (j - 3));
-
-                    }
+                    //+1Celda para las letras
+                    xPos = tamProporcionalAncho + ((tamProporcionalAncho * 1.1) * (j - 3));
 
                     //Si es 0 Esta EMPTY pero no es true
                     if (aux == 0) {
                         this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
-                                (int) yPos, (int) tamProporcional, (int) tamProporcional, CellBase.cellType.EMPTY, false);
+                                (int) yPos, (int) tamProporcionalAncho, (int) tamProporcionalAlto, CellBase.cellType.EMPTY, false);
                     }
                     //Si es 1 Esta Empty pero es correcto
                     else {
@@ -518,27 +485,27 @@ public class HistoryModeGameScene implements Scene, Serializable {
                             remainingCells++;
 
                             this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
-                                    (int) yPos, (int) tamProporcional, (int) tamProporcional, CellBase.cellType.EMPTY, true);
+                                    (int) yPos, (int) tamProporcionalAncho, (int) tamProporcionalAlto, CellBase.cellType.EMPTY, true);
 
                         }
                         //Si esta mal seleccionada y esta roja...
                         else if (aux == 2) {
                             this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
-                                    (int) yPos, (int) tamProporcional, (int) tamProporcional, CellBase.cellType.WRONG, false);
+                                    (int) yPos, (int) tamProporcionalAncho, (int) tamProporcionalAlto, CellBase.cellType.WRONG, false);
 
                         }
                         //Si esta bien seleccionada y esta azul
                         else if (aux == 3) {
                             this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
-                                    (int) yPos, (int) tamProporcional, (int) tamProporcional, CellBase.cellType.SELECTED, true);
+                                    (int) yPos, (int) tamProporcionalAncho, (int) tamProporcionalAlto, CellBase.cellType.SELECTED, true);
                         }
                     }
                 }
             }
 
             //Para las posiciones del texto indicativo
-            posYTextAuxTopToBottom = (int) (matriz[0][0].getPos().getY() + (tamProporcional / 2));
-            posXTextAuxLeftToRight = (int) (matriz[0][0].getPos().getX() + (tamProporcional / 2));
+            posYTextAuxTopToBottom = (int) (matriz[0][0].getPos().getY() + (tamProporcionalAlto / 2));
+            posXTextAuxLeftToRight = (int) (matriz[0][0].getPos().getX() + (tamProporcionalAncho / 2));
 
             int contador = 0;
             int numAux = 0;
