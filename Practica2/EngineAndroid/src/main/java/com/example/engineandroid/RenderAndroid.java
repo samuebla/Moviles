@@ -83,8 +83,6 @@ public class RenderAndroid {
         this.canvas.drawColor(0xFFFFFFFF); // ARGB
 //        this.canvas.translate(0, this.posCanvas.getY());
         drawRectangle(0, 0, scaleWidth, scaleHeight, true, colorBackground);
-        //AAAAAAAAAAAAAAA
-        int patat = 0;
     }
 
     public void setColorBackground(int newColor) {
