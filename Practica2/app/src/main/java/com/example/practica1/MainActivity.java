@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        this.screenLayout = findViewById(R.id.linearLayout);
+//        this.screenLayout = findViewById(R.id.linearLayout);
 
         //Creamos el SurfaceView que "contendrá" nuestra escena
         this.renderView = findViewById(R.id.surfaceView);

@@ -31,8 +31,10 @@ public class RenderAndroid {
 
     private AssetManager assets;
 
+    //AAAAAAAAAAAAAAAAAAAAAAAA Deprecated
     private Vector2D posCanvas;
-    private Vector2D frameSize;
+//    private Vector2D frameSize;
+    //AAAAAAAAAAAAAAAAAAAAAAAAA Deprecated
     private float factorScale;
 
     public RenderAndroid(SurfaceView myView, float scale, LinearLayout screenLayoutAux) {
@@ -43,7 +45,7 @@ public class RenderAndroid {
         this.paint = new Paint();
         this.paint.setColor(0xFF000000);
 
-        this.frameSize = new Vector2D(720, 1080);
+//        this.frameSize = new Vector2D(720, 1080);
         this.posCanvas = new Vector2D();
 
         this.fonts = new HashMap<>();
@@ -63,7 +65,7 @@ public class RenderAndroid {
         this.paint = new Paint();
         this.paint.setColor(0xFF000000);
 
-        this.frameSize = new Vector2D(720, 1080);
+//        this.frameSize = new Vector2D(720, 1080);
         this.posCanvas = new Vector2D();
 
         this.fonts = new HashMap<>();
@@ -77,9 +79,10 @@ public class RenderAndroid {
 
         // "Borramos" el fondo.
         this.canvas.drawColor(0xFFFFFFFF); // ARGB
-        this.canvas.translate(0, this.posCanvas.getY());
-        drawRectangle(0, 0, this.getWidth()* scaleWidth / getWidth(), (int) (this.frameSize.getY() / factorScale)*scaleHeight/getHeight(), true, colorBackground);
-
+//        this.canvas.translate(0, this.posCanvas.getY());
+        drawRectangle(0, 0, scaleWidth, scaleHeight, true, colorBackground);
+        //AAAAAAAAAAAAAAA
+        int patat = 0;
     }
 
     public void setColorBackground(int newColor) {
@@ -162,32 +165,32 @@ public class RenderAndroid {
         return this.myView.getHeight();
     }
 
-    public void scaleAppView() {
-        //obtenemos el tamaño del frame y lo guardamos como copia para la escala
-        Vector2D surfaceFrame = new Vector2D(this.holder.getSurfaceFrame().width(), this.holder.getSurfaceFrame().height());
-        Vector2D scale = new Vector2D(surfaceFrame.getX() / frameSize.getX(), surfaceFrame.getY() / frameSize.getY());
+//    public void scaleAppView() {
+//        //obtenemos el tamaño del frame y lo guardamos como copia para la escala
+//        Vector2D surfaceFrame = new Vector2D(this.holder.getSurfaceFrame().width(), this.holder.getSurfaceFrame().height());
+//        Vector2D scale = new Vector2D(surfaceFrame.getX() / frameSize.getX(), surfaceFrame.getY() / frameSize.getY());
+//
+//        if (scale.getX() * this.factorScale < scale.getY()) scale.setY(scale.getX() / factorScale);
+//        else
+//            scale.setX(scale.getY() / factorScale);
+//
+//        posCanvas.set((int) (surfaceFrame.getX() - frameSize.getX()), (int) (surfaceFrame.getY() - frameSize.getY()) / 2 * factorScale);
+//
+//    }
 
-        if (scale.getX() * this.factorScale < scale.getY()) scale.setY(scale.getX() / factorScale);
-        else
-            scale.setX(scale.getY() / factorScale);
-
-        posCanvas.set((int) (surfaceFrame.getX() - frameSize.getX()), (int) (surfaceFrame.getY() - frameSize.getY()) / 2 * factorScale);
-
-    }
-
-    public void setFrameSize() {
-        while (this.holder.getSurfaceFrame().width() == 0) ;
-        this.frameSize = new Vector2D(this.myView.getWidth(), this.myView.getHeight());
-        if (this.screenLayout.getWidth() - this.myView.getHeight() * (4.0 / 6.0) <= 0) {
-            this.myView.setLeft(0);
-            this.myView.setRight(this.screenLayout.getRight());
-        } else {
-            this.myView.setLeft((this.screenLayout.getWidth() - (int) (this.myView.getHeight() * (4.0 / 6.0))) / 2);
-            this.myView.setRight((this.screenLayout.getWidth() - (int) (this.myView.getHeight() * (4.0 / 6.0))) / 2 + (int) (this.myView.getHeight() * (4.0 / 6.0)));
-        }
-
-
-    }
+//    public void setFrameSize() {
+//        while (this.holder.getSurfaceFrame().width() == 0) ;
+//        this.frameSize = new Vector2D(this.myView.getWidth(), this.myView.getHeight());
+//        if (this.screenLayout.getWidth() - this.myView.getHeight() * (4.0 / 6.0) <= 0) {
+//            this.myView.setLeft(0);
+//            this.myView.setRight(this.screenLayout.getRight());
+//        } else {
+//            this.myView.setLeft((this.screenLayout.getWidth() - (int) (this.myView.getHeight() * (4.0 / 6.0))) / 2);
+//            this.myView.setRight((this.screenLayout.getWidth() - (int) (this.myView.getHeight() * (4.0 / 6.0))) / 2 + (int) (this.myView.getHeight() * (4.0 / 6.0)));
+//        }
+//
+//
+//    }
 
 
     public Vector2D getOffset() {

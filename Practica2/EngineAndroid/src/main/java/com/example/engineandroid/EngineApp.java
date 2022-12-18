@@ -107,8 +107,8 @@ public class EngineApp implements Runnable {
 
 
         //Escalado de la app
-        this.render.setFrameSize();
-        this.render.scaleAppView();
+//        this.render.setFrameSize();
+//        this.render.scaleAppView();
         this.input.setOffset(0, this.render.getOffset().getY());
         this.primaryScene.loadResources(this);
         this.sceneMngr.getScene().init();
@@ -129,7 +129,7 @@ public class EngineApp implements Runnable {
 
         // Bucle de juego principal.
         while(running) {
-            this.render.setFrameSize();
+//            this.render.setFrameSize();
             long currentTime = System.nanoTime();
             long nanoElapsedTime = currentTime - lastFrameTime;
             lastFrameTime = currentTime;
