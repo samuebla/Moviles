@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Button;
 
+import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.Scene;
@@ -182,7 +183,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
     }
 
     @Override
-    public void update(double deltaTime) {
+    public void update(double deltaTime, AdManager adManager) {
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
                 this.matriz[j][i].update(deltaTime);
@@ -190,7 +191,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
         }
 
         if (engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput(engine.getEventMngr().getEventType());
+            handleInput(engine.getEventMngr().getEventType(), adManager);
             engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
 
@@ -283,7 +284,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
     }
 
     @Override
-    public void handleInput(EventHandler.EventType type) {
+    public void handleInput(EventHandler.EventType type, AdManager adManager) {
         //Solo podra interactuar con el tablero si tiene vidas
         if (lives > 0) {
             for (int i = 0; i < rows_; i++) {

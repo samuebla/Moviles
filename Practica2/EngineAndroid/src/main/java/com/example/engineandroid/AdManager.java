@@ -42,6 +42,7 @@ public class AdManager {
     public AdManager(Activity mainActivity) {
         this.mainActivity = mainActivity;
 
+        //Reward ad creation
         AdRequest adRequest2 = new AdRequest.Builder().build();
         RewardedAd.load(this.mainActivity, "ca-app-pub-3940256099942544/5224354917",
                 adRequest2, new RewardedAdLoadCallback() {
