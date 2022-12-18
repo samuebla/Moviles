@@ -65,6 +65,13 @@ public class MainMenuScene implements Scene, Serializable {
 //        this.adsize = size;
 //        this.addRequest = addRequestAux;
         this.baseContext = contextAux;
+
+        loadFromFile();
+        System.out.print("Save data loaded: ");
+        System.out.print(this.coins);
+        for (int i = 0; i < this.progress.length; ++i) {
+            System.out.print(this.progress[i]);
+        }
     }
 
 
@@ -85,14 +92,6 @@ public class MainMenuScene implements Scene, Serializable {
         this.fastPlay = new InputButton(scaleWidth / 2 - (scaleWidth/ 4), scaleHeight / 5, scaleWidth / 2, scaleHeight / 4.8);
 
         this.historyMode = new InputButton(scaleWidth / 2 - (scaleWidth / 4), scaleHeight / 2, scaleWidth/ 2, scaleHeight/ 4.8);
-
-
-        loadFromFile();
-        System.out.print("Save data loaded: ");
-        System.out.print(this.coins);
-        for (int i = 0; i < this.progress.length; ++i) {
-            System.out.print(this.progress[i]);
-        }
 
 
         //Creacion anuncio

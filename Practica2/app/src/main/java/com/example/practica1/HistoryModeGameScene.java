@@ -61,6 +61,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
     private InputButton escapeInputButton;
     private InputButton winBackInputButton;
     private InputButton getLifeInputButton;
+    private InputButton shareButton;
 
     //Con esta variable controlamos las paletas que hayas comprado
     private AtomicReference<Integer>[] palettes;
@@ -162,6 +163,8 @@ public class HistoryModeGameScene implements Scene, Serializable {
                 (double) scaleWidth / 10, (double) scaleHeight / 15);
         this.getLifeInputButton = new InputButton(0, scaleHeight - scaleHeight / 10,
                 (double) scaleWidth / 7, (double) scaleHeight / 10);
+        this.shareButton = new InputButton((double) scaleWidth / 4, (double) scaleHeight / 1.1,
+                (double) scaleWidth / 10, (double) scaleHeight / 15);
 
         for (int i = 0; i < colorsInputButtons.length; i++) {
             this.colorsInputButtons[i] = new InputButton((scaleWidth * 3 / 7) + (scaleWidth / 7) * i, (double) scaleHeight - scaleHeight * 0.10,
@@ -228,6 +231,8 @@ public class HistoryModeGameScene implements Scene, Serializable {
 
             //BackButton
             this.engine.getGraphics().drawImage((int) (winBackInputButton.getPos().getX()), (int) (winBackInputButton.getPos().getY()), (int) (winBackInputButton.getSize().getX()), (int) (winBackInputButton.getSize().getY()), "Back");
+            this.engine.getGraphics().drawImage((int) (shareButton.getPos().getX()), (int) (shareButton.getPos().getY()), (int) (shareButton.getSize().getX()), (int) (shareButton.getSize().getY()), "Coin");
+
             //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
@@ -352,6 +357,29 @@ public class HistoryModeGameScene implements Scene, Serializable {
             this.engine.getSceneMngr().popScene();
             this.engine.setColorBackground(0xFFFFFFFF);
         }
+
+        //Solo funciona si has ganado
+        if (won && inputReceived(this.shareButton.getPos(), this.shareButton.getSize())) {
+            switch (mode){
+                case 1:
+                    adManager.sendIntent(0, "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de alfabeto");
+                    break;
+                case 2:
+                    adManager.sendIntent(0, "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de fiesta");
+                    break;
+                case 3:
+                    adManager.sendIntent(0, "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de animales");
+                    break;
+                case 4:
+                    adManager.sendIntent(0, "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de geometria");
+                    break;
+                default:
+                    adManager.sendIntent(0, "https://twitter.com/intent/tweet", "oh wow soy la ostia jugando al nonograma que va a aprobar Antonio");
+                    break;
+            }
+
+        }
+
         for (int i = 0; i < colorsInputButtons.length; i++) {
             if (!won && inputReceived(this.colorsInputButtons[i].getPos(), this.colorsInputButtons[i].getSize())) {
                 //Si tienes la paleta bloqueada...
@@ -388,6 +416,7 @@ public class HistoryModeGameScene implements Scene, Serializable {
                 }
             }
         }
+
         //Si necesitas o quieres alguna vida...
         if (lives.get() < 3 && inputReceived(this.getLifeInputButton.getPos(), this.getLifeInputButton.getSize())) {
             //Al mirar el anuncio se restaura un corazon
