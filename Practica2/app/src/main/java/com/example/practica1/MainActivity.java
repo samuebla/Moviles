@@ -26,6 +26,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import android.app.Activity;
 import android.app.NotificationChannel;
@@ -40,6 +44,7 @@ import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.WorkSource;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
@@ -47,6 +52,8 @@ import android.widget.FrameLayout;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
@@ -77,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        WorkManager.getInstance(this).cancelAllWork();
 
         setContentView(R.layout.activity_main);
 //        this.screenLayout = findViewById(R.id.linearLayout);
@@ -199,9 +208,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         this.engine.resume();
     }
 
+    private void createWorkRequest(String title, String text){
+        HashMap<String, Object> dataValues = new HashMap<>();
+        dataValues.put("channelId", this.engine.getAdManager().getCHANNEL_ID());
+        dataValues.put("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
+        dataValues.put("contentTitle", title);
+        dataValues.put("contentText", text);
+        dataValues.put("notificationId", 437);
+        Data inputData = new Data.Builder().putAll(dataValues).build();
+
+        WorkRequest uploadWorkRequest =
+                new OneTimeWorkRequest.Builder(IntentWorkRequest.class)
+                    //Configuration
+                        .setInitialDelay(30, TimeUnit.SECONDS)
+                        .setInputData(inputData)
+                        .build();
+
+        WorkManager.getInstance(this).enqueue(uploadWorkRequest);
+    }
+
     @Override
     protected void onDestroy(){
         mainMenuScene.saveDataHistoryMode();
+        createWorkRequest("Nonogram", "Llevas mucho tiempo sin jugar... Te echamos de menos :(");
         super.onDestroy();
     }
 
@@ -219,6 +248,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onResume();
         sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
         this.engine.resume();
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        createWorkRequest("Nonogram", "Llevas mucho tiempo sin jugar... Te echamos de menos :(");
     }
 
     @Override
