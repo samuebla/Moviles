@@ -27,7 +27,6 @@ public class HistoryModeGameScene implements Scene {
     //A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
     int scaleWidth;
     int scaleHeight;
-
     //Tenemos una matriz donde guardaremos las casillas seleccionadas
     private CellHistoryMode[][] matriz;
 
@@ -48,6 +47,7 @@ public class HistoryModeGameScene implements Scene {
     //Tamaño proporcional de las celdas adaptado a la pantalla
     float tamProporcionalAncho;
     float tamProporcionalAlto;
+    int tamTexto;
 
     //Variables auxiliares para posicionar correctamente a las celdas en funcion del tamaño de la pantalla
     double xPos;
@@ -232,12 +232,12 @@ public class HistoryModeGameScene implements Scene {
 
             //Mostramos las monedas obtenidas
             if (showNewCoins) {
-                renderEngine.drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize / 2.5f), "Black", "Cooper", 0);
+                renderEngine.drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize / 2.5f), "Black", "Cooper", 0,scaleWidth/27);
                 renderEngine.drawImage((int) (scaleWidth / 1.8), (int) (scaleHeight / 12), coinSize, coinSize / 2, "Coin");
             }
 
             //Mensaje de enhorabuena
-            renderEngine.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
+            renderEngine.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0,scaleWidth/27);
 
             //BackButton
             renderEngine.drawImage((int) (winBackInputButton.getPos().getX()), (int) (winBackInputButton.getPos().getY()), (int) (winBackInputButton.getSize().getX()), (int) (winBackInputButton.getSize().getY()), "Back");
@@ -256,11 +256,11 @@ public class HistoryModeGameScene implements Scene {
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
                 //Con el margen de 1 celda no tendremos problema con las otras resoluciones
-                engine.getGraphics().drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "CalibriSmall", 1);
+                renderEngine.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1,tamTexto);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = xNumberLeftToRight[i].size() - 1; j >= 0; j--) {
-                    engine.getGraphics().drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto * 0.7 / (rows_ / 2)) + (int) ((tamProporcionalAlto / rows_ * 1.3 * j))), "Black", "CalibriSmall", 0);
+                    renderEngine.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto * 0.7 / (rows_ / 2)) + (int) ((tamProporcionalAlto / rows_ * 1.3 * j))), "Black", "Calibri", 0,tamTexto);
                 }
             }
 
@@ -283,7 +283,7 @@ public class HistoryModeGameScene implements Scene {
             renderEngine.drawImage((int) ((double) getLifeInputButton.getPos().getX()), (int) ((double) getLifeInputButton.getPos().getY()), (int) ((double) getLifeInputButton.getSize().getX()), (int) ((double) getLifeInputButton.getSize().getY()), "HeartAD");
 
             //MONEDAS
-            renderEngine.drawText(Integer.toString(coins.get()), scaleWidth - coinSize - scaleWidth / 100, (int) (scaleHeight / 72 + coinSize / 2.5f), "Black", "CooperBold", 1);
+            renderEngine.drawText(Integer.toString(coins.get()), scaleWidth - coinSize - scaleWidth / 100, (int) (scaleHeight / 72 + coinSize / 2.5f), "Black", "CooperBold", 1,scaleWidth/20);
             renderEngine.drawImage(scaleWidth - coinSize - scaleWidth / 100, (int) scaleHeight / 72, coinSize, coinSize / 2, "Coin");
 
             //CORAZONES
@@ -293,7 +293,7 @@ public class HistoryModeGameScene implements Scene {
 
             if (lives.get() <= 0) {
                 //Mensaje de enhorabuena
-                renderEngine.drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
+                renderEngine.drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0,scaleWidth/20);
 
             }
         }
@@ -526,12 +526,10 @@ public class HistoryModeGameScene implements Scene {
             //Restamos la interfaz de las paletas y los botones de arriba
             tamProporcionalAlto = (scaleHeight - scaleHeight / 7 - scaleHeight / 20) / ((rows_ + 1) +(0.1f*rows_));
 
-            int tamTexto = (int) (tamProporcionalAncho / 4.5f);
+            tamTexto = (int) (tamProporcionalAncho / 4.5f);
             if (tamProporcionalAlto > tamProporcionalAncho)
                 //Nos quedamos con el tamaño mas grande para que el texto se ajuste a la peor situacion
                 tamTexto = (int) (tamProporcionalAlto / 4.5f);
-            //Con este tamaño ajustamos el valor del texto tambien
-            this.engine.getGraphics().changeSizeText("CalibriSmall", (int) (tamTexto));
 
             //Iniciamos la matriz segun el fichero
             for (int i = 0; i < rows_; i++) {

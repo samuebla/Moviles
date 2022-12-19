@@ -219,9 +219,9 @@ public class RenderAndroid {
     }
 
 
-    public Font_Android newFont(String fontName, String path, int type, int size) {
+    public Font_Android newFont(String fontName, String path, int type) {
         try {
-            return fonts.put(fontName, new Font_Android(path, type, size, this.assets));
+            return fonts.put(fontName, new Font_Android(path, type, this.assets));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -256,21 +256,14 @@ public class RenderAndroid {
         this.canvas.drawLine(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
     }
 
-    public void changeSizeText(String fontAux, int newSize) {
-        //Cogemos l fuente
-        Font_Android font = this.fonts.get(fontAux);
-        //Y le cambiamos el tamaño
-        font.setNewSize(newSize*getWidth()/scaleWidth);
-    }
-
     //AlignType:
     //-1 Alineamiento a la izquierda
     //0 Alineamiento en el centro
     //1 Alineamiento a la derecho
-    public void drawText(String text, int x, int y, String color, String fontAux, int alignType) {
+    public void drawText(String text, int x, int y, String color, String fontAux, int alignType,int size) {
         int prevColor = this.paint.getColor();
         Font_Android font = this.fonts.get(fontAux);
-        int f = (int) (font.getSize() / factorScale);
+        int f = (int) ((size*getWidth()/scaleWidth)/ factorScale);
         this.paint.setTextSize(f);
         this.paint.setTypeface(font.getFont());
 

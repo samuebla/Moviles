@@ -30,6 +30,7 @@ public class QuickGameScene implements Scene {
     //Tamaño proporcional de las celdas adaptado a la pantalla
     float tamProporcionalAncho;
     float tamProporcionalAlto;
+    int tamTexto;
 
     //Para mostrar en pantallas la info de las celdas
     int remainingCells, wrongCells, maxCellsSolution;
@@ -307,34 +308,30 @@ public class QuickGameScene implements Scene {
         //+1 para los numeros laterales
         //0.1f por los margenes de espacio que hay entre cada celda
         //Y con eso sacamos el tamaño promedio de la celda
-        tamProporcionalAncho = scaleWidth / ((cols_ + 1) + (0.1f*cols_));
+        tamProporcionalAncho = scaleWidth / ((cols_ + 1) + (0.1f * cols_));
 
         //Restamos la interfaz de las paletas y los botones de arriba
-        tamProporcionalAlto = (scaleHeight - scaleHeight / 15) / ((rows_ + 1) +(0.1f*rows_));
+        tamProporcionalAlto = (scaleHeight - scaleHeight / 15) / ((rows_ + 1) + (0.1f * rows_));
 
-        int tamTexto = (int) (tamProporcionalAncho / 4.5f);
+        tamTexto = (int) (tamProporcionalAncho / 4.5f);
         if (tamProporcionalAlto > tamProporcionalAncho)
             //Nos quedamos con el tamaño mas grande para que el texto se ajuste a la peor situacion
             tamTexto = (int) (tamProporcionalAlto / 4.5f);
-        //Con este tamaño ajustamos el valor del texto tambien
-        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        this.engine.getGraphics().changeSizeText("CalibriSmall", (int) (tamTexto));
-
         //Lo ajustamos al centro de la pantalla de largo
-        //Scale/15 para la interfaz de arriba + 1Celda para las letras
         double yPos;
 
-        //+1Celda para las letras
         double xPos;
 
         //Iniciamos la matriz
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
+                //Scale/15 para la interfaz de arriba + 1Celda para las letras
                 yPos = ((scaleHeight / 15 + tamProporcionalAlto) + ((tamProporcionalAlto * 1.1) * i));
-                 xPos= (tamProporcionalAncho + ((tamProporcionalAncho * 1.1) * j));
+                //+1Celda para las letras
+                xPos = (tamProporcionalAncho + ((tamProporcionalAncho * 1.1) * j));
                 //Primero J que son las columnas en X y luego las filas en Y
-                this.matriz[j][i] = new CellQuickGame((int)(xPos),
-                        (int)yPos, (int)(tamProporcionalAncho), (int)(tamProporcionalAlto));
+                this.matriz[j][i] = new CellQuickGame((int) (xPos),
+                        (int) yPos, (int) (tamProporcionalAncho), (int) (tamProporcionalAlto));
             }
         }
 
@@ -343,11 +340,11 @@ public class QuickGameScene implements Scene {
         posXTextAuxLeftToRight = (int) (matriz[0][0].getPos().getX() + (tamProporcionalAncho / 2));
 
         //Seteamos los botones
-        this.checkInputButton = new InputButton(scaleWidth*0.9, 10,
-                scaleWidth * 0.10, scaleHeight/15);
-        this.giveUpInputButton = new InputButton(10,10,scaleWidth / 10, scaleHeight / 15);
-        this.backInputButton = new InputButton(scaleWidth/2, scaleHeight/1.1,
-                scaleWidth/10, scaleHeight/15);
+        this.checkInputButton = new InputButton(scaleWidth * 0.9, 10,
+                scaleWidth * 0.10, scaleHeight / 15);
+        this.giveUpInputButton = new InputButton(10, 10, scaleWidth / 10, scaleHeight / 15);
+        this.backInputButton = new InputButton(scaleWidth / 2, scaleHeight / 1.1,
+                scaleWidth / 10, scaleHeight / 15);
     }
 
     @Override
@@ -388,7 +385,7 @@ public class QuickGameScene implements Scene {
     @Override
     public void render(RenderAndroid render) {
 
-        Vector2D auxCuadradoFinal = this.matriz[cols_-1][rows_-1].getPos();
+        Vector2D auxCuadradoFinal = this.matriz[cols_ - 1][rows_ - 1].getPos();
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 
         //El cuadrado se mantiene aunque ganes porque es muy bonito
@@ -406,18 +403,18 @@ public class QuickGameScene implements Scene {
             }
 
             //Mensaje de enhorabuena
-            render.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
+            render.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0, scaleWidth / 27);
 
             //BackButton
-            render.drawImage((int)(backInputButton.getPos().getX()), (int)(backInputButton.getPos().getY()), (int)(backInputButton.getSize().getX()), (int)(backInputButton.getSize().getY()), "Back");
+            render.drawImage((int) (backInputButton.getPos().getX()), (int) (backInputButton.getPos().getY()), (int) (backInputButton.getSize().getX()), (int) (backInputButton.getSize().getY()), "Back");
 
             //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
                 //Muestra el texto...
-                render.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)scaleWidth/2), scaleHeight/22, "red", "Calibri", 0);
-                render.drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)scaleWidth/2), 10 + scaleHeight/11, "red", "Calibri", 0);
+                render.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int) ((double) scaleWidth / 2), scaleHeight / 22, "red", "Calibri", 0, scaleWidth / 22);
+                render.drawText("Tienes mal " + wrongCells + " casilla(s)", (int) ((double) scaleWidth / 2), 10 + scaleHeight / 11, "red", "Calibri", 0, scaleWidth / 22);
 
                 //Renderiza rojo si esta mal
                 for (int i = 0; i < matriz.length; i++) {
@@ -436,18 +433,18 @@ public class QuickGameScene implements Scene {
 
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                engine.getGraphics().drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "CalibriSmall", 1);
+                engine.getGraphics().drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1,tamTexto);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    engine.getGraphics().drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto * 0.7 / (rows_ / 2)) + (int) ((tamProporcionalAlto / rows_ * 1.3 * j))), "Black", "CalibriSmall", 0);
+                    engine.getGraphics().drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto * 0.7 / (rows_ / 2)) + (int) ((tamProporcionalAlto / rows_ * 1.3 * j))), "Black", "Calibri", 0,tamTexto);
                 }
             }
 
             //BOTONES
-            render.drawImage((int)((double) checkInputButton.getPos().getX()), (int)((double) checkInputButton.getPos().getY()), (int)((double) checkInputButton.getSize().getX()), (int)((double) checkInputButton.getSize().getY()), "Check");
+            render.drawImage((int) ((double) checkInputButton.getPos().getX()), (int) ((double) checkInputButton.getPos().getY()), (int) ((double) checkInputButton.getSize().getX()), (int) ((double) checkInputButton.getSize().getY()), "Check");
 
-            render.drawImage((int)((double) giveUpInputButton.getPos().getX()), (int)((double) giveUpInputButton.getPos().getY()), (int)((double) giveUpInputButton.getSize().getX()), (int)((double) giveUpInputButton.getSize().getY()), "GiveUp");
+            render.drawImage((int) ((double) giveUpInputButton.getPos().getX()), (int) ((double) giveUpInputButton.getPos().getY()), (int) ((double) giveUpInputButton.getSize().getX()), (int) ((double) giveUpInputButton.getSize().getY()), "GiveUp");
         }
     }
 

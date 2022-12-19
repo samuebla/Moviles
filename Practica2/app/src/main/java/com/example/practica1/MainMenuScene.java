@@ -121,14 +121,11 @@ public class MainMenuScene implements Scene {
             engineAux.getAudio().playSound("background", 0);
             engineAux.getAudio().newSound("effect", "assets/wiiClickSound.wav");
 
-            engineAux.getGraphics().newFont("Amor", "assets/AmorRegular.ttf", 0, 50);
-            engineAux.getGraphics().newFont("Calibri", "assets/CalibriRegular.ttf", 0, 60);
-            engineAux.getGraphics().newFont("Cooper", "assets/CooperBlackRegular.ttf", 0, 50);
-            engineAux.getGraphics().newFont("CooperBig", "assets/CooperBlackRegular.ttf", 0, 80);
-            engineAux.getGraphics().newFont("CooperSmall", "assets/CooperBlackRegular.ttf", 0, 30);
-            engineAux.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1, 60);
-            engineAux.getGraphics().newFont("CalibriSmall", "assets/CalibriRegular.ttf", 0, 50);
-            engineAux.getGraphics().newFont("CalibriBold", "assets/CalibriRegular.ttf", 1, 30);
+            engineAux.getGraphics().newFont("Amor", "assets/AmorRegular.ttf", 0);
+            engineAux.getGraphics().newFont("Calibri", "assets/CalibriRegular.ttf", 0);
+            engineAux.getGraphics().newFont("Cooper", "assets/CooperBlackRegular.ttf", 0);
+            engineAux.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1);
+            engineAux.getGraphics().newFont("CalibriBold", "assets/CalibriRegular.ttf", 1);
 
             engineAux.getGraphics().newImage("Board", "assets/board.png");
             engineAux.getGraphics().newImage("GiveUp", "assets/giveUpButton.png");
@@ -168,18 +165,6 @@ public class MainMenuScene implements Scene {
             engineAux.getGraphics().newImage("HeartAD", "assets/extra_heart.png");
             engineAux.getGraphics().newImage("CoinsCost", "assets/coste_monedas.png");
             engineAux.getGraphics().newImage("TwitterIcon", "assets/twitter_icon.png");
-
-
-
-
-            //Cambiamos el texto del titulo a un tamaño adaptado al escalado nuevo
-            engineAux.getGraphics().changeSizeText("CooperBig",(int)(scaleWidth/20));
-            engineAux.getGraphics().changeSizeText("Cooper",(int)(scaleWidth/27));
-            engineAux.getGraphics().changeSizeText("CooperBold",(int)(scaleWidth/20));
-            engineAux.getGraphics().changeSizeText("Amor",(int)(scaleWidth/22));
-            engineAux.getGraphics().changeSizeText("Calibri",(int)(scaleWidth/22));
-            engineAux.getGraphics().changeSizeText("Calibri",(int)(scaleWidth/22));
-
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -291,7 +276,7 @@ public class MainMenuScene implements Scene {
 
 
         //Titulo
-        render.drawText("NONOGRAMAS", (int) (scaleWidth / 2), (int) (scaleHeight / 10.8), "Black", "CooperBig", 0);
+        render.drawText("NONOGRAMAS", (int) (scaleWidth / 2), (int) (scaleHeight / 10.8), "Black", "Cooper", 0,(scaleWidth/20));
 
         //Botones
         render.drawImage((int) this.fastPlay.getPos().getX(), (int) (fastPlay.getPos().getY()), (int) (this.fastPlay.getSize().getX()), (int) (this.fastPlay.getSize().getY()), "QuickPlay");
