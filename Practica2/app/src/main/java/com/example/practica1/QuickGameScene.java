@@ -15,10 +15,20 @@ public class QuickGameScene implements Scene, Serializable {
 
     private EngineApp engine;
 
+    //A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
+    int scaleWidth;
+    int scaleHeight;
+
     //Tenemos una matriz donde guardaremos las casillas seleccionadas
     private CellQuickGame[][] matriz;
 
     int rows_, cols_;
+    int posYTextAuxTopToBottom;
+    int posXTextAuxLeftToRight;
+
+    //Tamaño proporcional de las celdas adaptado a la pantalla
+    float tamProporcionalAncho;
+    float tamProporcionalAlto;
 
     //Para mostrar en pantallas la info de las celdas
     int remainingCells, wrongCells, maxCellsSolution;
@@ -35,8 +45,6 @@ public class QuickGameScene implements Scene, Serializable {
     private String[] xNumberTopToBottom;
     private ArrayList<String>[] xNumberLeftToRight;
 
-    //Para los rectangulos que recubren las celdas y son meramente esteticos
-    int widthAestheticCellX, heightAestheticCellX, widthAestheticCellY, heightAestheticCellY;
 
     private static final int timeCheckButton = 5;
     double timer;
@@ -48,6 +56,10 @@ public class QuickGameScene implements Scene, Serializable {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
+
+        scaleHeight = 1000;
+        scaleWidth = 1000;
+
 
         this.engine.setColorBackground(0xFFFFFFFF);
 
@@ -280,36 +292,59 @@ public class QuickGameScene implements Scene, Serializable {
         Vector2D coords = new Vector2D();
         coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
 
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+        return (coords.getX() * scaleWidth / engine.getGraphics().getWidth() >= pos.getX() && coords.getX() * scaleWidth / engine.getGraphics().getWidth() <= pos.getX() + size.getX() &&
+                coords.getY() * scaleHeight / engine.getGraphics().getHeight() >= pos.getY() && coords.getY() * scaleHeight / engine.getGraphics().getHeight() <= pos.getY() + size.getY());
     }
 
     @Override
     public void init() {
 
+        //Dividimos la pantalla en casillas.
+        // Ancho: Cols +1(Para los numeros)
+        // Alto: Rows +1( Sin contar la interfaz de por encima y por debajo)
+
+        //+1 para los numeros laterales
+        //Y con eso sacamos el tamaño promedio de la celda
+        tamProporcionalAncho = scaleWidth / ((cols_ + 1) + 1);
+
+        //Restamos la interfaz de las paletas y los botones de arriba
+        tamProporcionalAlto = (scaleHeight - scaleHeight / 7 - scaleHeight / 15) / ((rows_ + 1) + 1);
+
+        int tamTexto = (int) (tamProporcionalAncho / 4.5f);
+        if (tamProporcionalAlto > tamProporcionalAncho)
+            //Nos quedamos con el tamaño mas grande para que el texto se ajuste a la peor situacion
+            tamTexto = (int) (tamProporcionalAlto / 4.5f);
+        //Con este tamaño ajustamos el valor del texto tambien
+        this.engine.getGraphics().changeSizeText("CalibriSmall", (int) (tamTexto));
+
+        //Lo ajustamos al centro de la pantalla de largo
+        //Scale/15 para la interfaz de arriba + 1Celda para las letras
+        double yPos;
+
+        //+1Celda para las letras
+        double xPos;
+
         //Iniciamos la matriz
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
+                yPos = ((scaleHeight / 15 + tamProporcionalAlto) + ((tamProporcionalAlto * 1.1) * i));
+                 xPos= (tamProporcionalAncho + ((tamProporcionalAncho * 1.1) * j));
                 //Primero J que son las columnas en X y luego las filas en Y
-                this.matriz[j][i] = new CellQuickGame((int)((double)this.engine.getGraphics().getWidth()*0.125) + (int)((double)this.engine.getGraphics().getWidth()*0.083333) * j,
-                        (int)((double)this.engine.getGraphics().getHeight()*0.296296296) + (int)((double)this.engine.getGraphics().getHeight()*0.055555555) * i, (int)((double)this.engine.getGraphics().getWidth()*0.075), (int)((double)this.engine.getGraphics().getHeight()*0.05));
+                this.matriz[j][i] = new CellQuickGame((int)(xPos),
+                        (int)yPos, (int)(tamProporcionalAncho), (int)(tamProporcionalAlto));
             }
         }
 
-        //Tamaño de las cuadriculas que recubren el nonograma
-        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int)((double)this.engine.getGraphics().getWidth()*0.0625);
-        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + (int)((double)this.engine.getGraphics().getHeight()*0.0601851));
-
-        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + (int)((double)this.engine.getGraphics().getWidth()*0.0902777);
-        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - (int)((double)this.engine.getGraphics().getHeight()*0.111111111));
+        //Para las posiciones del texto indicativo
+        posYTextAuxTopToBottom = (int) (matriz[0][0].getPos().getY() + (tamProporcionalAlto / 2));
+        posXTextAuxLeftToRight = (int) (matriz[0][0].getPos().getX() + (tamProporcionalAncho / 2));
 
         //Seteamos los botones
-        this.checkInputButton = new InputButton((double)this.engine.getGraphics().getWidth()*0.8, (double)this.engine.getGraphics().getHeight()*0.06,
-                (double)this.engine.getGraphics().getWidth()*0.1666666, (double)this.engine.getGraphics().getHeight()*0.10);
-        this.giveUpInputButton = new InputButton((double)this.engine.getGraphics().getWidth()*0.01388888, (double)this.engine.getGraphics().getHeight()*0.04629629,
-                (double)this.engine.getGraphics().getWidth()*0.1666666, (double)this.engine.getGraphics().getHeight()*0.10);
-        this.backInputButton = new InputButton((double)this.engine.getGraphics().getWidth()*0.44444444, (double)this.engine.getGraphics().getHeight()/1.1,
-                (double)this.engine.getGraphics().getWidth()/10, (double)this.engine.getGraphics().getHeight()/15);
+        this.checkInputButton = new InputButton(scaleWidth*0.8, scaleHeight*0.06,
+                scaleWidth * 0.1666666, scaleHeight*0.10);
+        this.giveUpInputButton = new InputButton(10,10,scaleWidth / 10, scaleHeight / 15);
+        this.backInputButton = new InputButton(scaleWidth/2, scaleHeight/1.1,
+                scaleWidth/10, scaleHeight/15);
     }
 
     @Override
@@ -354,9 +389,9 @@ public class QuickGameScene implements Scene, Serializable {
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 
         //El cuadrado se mantiene aunque ganes porque es muy bonito
-        this.engine.getGraphics().drawImage((int)(auxCuadradoInicio.getX()-((double)(this.engine.getGraphics().getWidth())/100.0)), (int)(auxCuadradoInicio.getY()-((double)(this.engine.getGraphics().getHeight())/150)),
-                (int)(auxCuadradoFinal.getX()-auxCuadradoInicio.getX() + engine.getGraphics().getWidth()/50 + this.engine.getGraphics().getWidth()*0.075)
-                , (int)(auxCuadradoFinal.getY()-auxCuadradoInicio.getY() + engine.getGraphics().getHeight()/65 + this.engine.getGraphics().getHeight()*0.05), "Board");
+        this.engine.getGraphics().drawImage((int) (auxCuadradoInicio.getX() - tamProporcionalAncho * 0.1), (int) (auxCuadradoInicio.getY() - tamProporcionalAlto * 0.1),
+                (int) (auxCuadradoFinal.getX() - auxCuadradoInicio.getX() + tamProporcionalAncho + tamProporcionalAncho * 0.2)
+                , (int) (auxCuadradoFinal.getY() - auxCuadradoInicio.getY() + tamProporcionalAlto + tamProporcionalAlto * 0.2), "Board");
 
         //Si ya he ganado...
         if (won) {
@@ -368,7 +403,7 @@ public class QuickGameScene implements Scene, Serializable {
             }
 
             //Mensaje de enhorabuena
-            this.engine.getGraphics().drawText("ENHORABUENA!", (int)((double)this.engine.getGraphics().getWidth()*0.5), (int)((double)this.engine.getGraphics().getHeight()*0.1111111), "Black", "Cooper", 0);
+            this.engine.getGraphics().drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
 
             //BackButton
             this.engine.getGraphics().drawImage((int)(backInputButton.getPos().getX()), (int)(backInputButton.getPos().getY()), (int)(backInputButton.getSize().getX()), (int)(backInputButton.getSize().getY()), "Back");
@@ -378,8 +413,8 @@ public class QuickGameScene implements Scene, Serializable {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
                 //Muestra el texto...
-                this.engine.getGraphics().drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)this.engine.getGraphics().getWidth()/2), (int)((double)this.engine.getGraphics().getHeight()*0.1111111), "red", "Calibri", 0);
-                this.engine.getGraphics().drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)this.engine.getGraphics().getWidth()/2), (int)((double)this.engine.getGraphics().getHeight()*0.1388888), "red", "Calibri", 0);
+                this.engine.getGraphics().drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)scaleWidth/2), (int)((double)scaleHeight*0.1111111), "red", "Calibri", 0);
+                this.engine.getGraphics().drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)scaleWidth/2), (int)((double)scaleHeight*0.1388888), "red", "Calibri", 0);
 
                 //Renderiza rojo si esta mal
                 for (int i = 0; i < matriz.length; i++) {
@@ -398,11 +433,11 @@ public class QuickGameScene implements Scene, Serializable {
 
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                engine.getGraphics().drawText(xNumberTopToBottom[i], (int)(auxCuadradoInicio.getX()-((double)(this.engine.getGraphics().getWidth())/90.0)), (int)((double)this.engine.getGraphics().getHeight()*0.3240740) + (int)((double)this.engine.getGraphics().getHeight()*0.0555555) * i, "Black", "CalibriSmall", 1);
+                engine.getGraphics().drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "CalibriSmall", 1);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    engine.getGraphics().drawText(xNumberLeftToRight[i].get(j), (int)((double)this.engine.getGraphics().getWidth()*0.155) + (int)((double)this.engine.getGraphics().getWidth()*0.083333) * i, (int)((double)this.engine.getGraphics().getHeight()*0.185185) + (int)((double)this.engine.getGraphics().getHeight()*0.027777) * j, "Black", "CalibriSmall", 0);
+                    engine.getGraphics().drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto * 0.7 / (rows_ / 2)) + (int) ((tamProporcionalAlto / rows_ * 1.3 * j))), "Black", "CalibriSmall", 0);
                 }
             }
 
