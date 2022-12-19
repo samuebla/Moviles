@@ -56,6 +56,8 @@ public class HistoryModeGameScene implements Scene {
 
     //Patron de colores
     int colorfulPattern[];
+    int colorfulPatternCells[];
+
     int actualColorPattern;
 
     private InputButton escapeInputButton;
@@ -113,6 +115,7 @@ public class HistoryModeGameScene implements Scene {
 
         //Patron de colores
         colorfulPattern = new int[4];
+        colorfulPatternCells = new int[4];
         actualColorPattern = 0;
         colorsInputButtons = new InputButton[4];
 
@@ -167,14 +170,20 @@ public class HistoryModeGameScene implements Scene {
                 (double) scaleWidth / 8, (double) scaleHeight / 10);
 
         for (int i = 0; i < colorsInputButtons.length; i++) {
-            this.colorsInputButtons[i] = new InputButton((scaleWidth * 3 / 7) + (scaleWidth / 7) * i, (double) scaleHeight - scaleHeight * 0.10,
+            this.colorsInputButtons[i] = new InputButton((scaleWidth / 7) + (scaleWidth / 7) * i, (double) scaleHeight - scaleHeight * 0.10,
                     (double) scaleWidth / 7, (double) scaleHeight * 0.10);
         }
-        //CYA
+        //ACYA
         colorfulPattern[0] = 0xA0FFFFFF;
         colorfulPattern[1] = 0xA000FFFF;
         colorfulPattern[2] = 0xA0FF00FF;
         colorfulPattern[3] = 0xA0FFFF00;
+
+        //RGB
+        colorfulPatternCells[0] = 0xFFFFFFFF;
+        colorfulPatternCells[1] = 0xFF0000FF;
+        colorfulPatternCells[2] = 0xFFFF00A0;
+        colorfulPatternCells[3] = 0xFF00FF00;
     }
 
     @Override
@@ -255,8 +264,7 @@ public class HistoryModeGameScene implements Scene {
             }
 
             //BOTONES
-            //TODO AAA NO SE HACER LOS PUTOS COLORES
-            this.engine.getGraphics().drawRectangle((int) ((double) colorsInputButtons[actualColorPattern].getPos().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getPos().getY()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getY()), true, (int) (colorfulPattern[actualColorPattern] + 0xAF000000));
+            this.engine.getGraphics().drawRectangle((int) ((double) colorsInputButtons[actualColorPattern].getPos().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getPos().getY()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getY()), true, (int) (colorfulPattern[actualColorPattern] - 0xAF000000));
 
             //BackButton
             this.engine.getGraphics().drawImage((int) ((double) escapeInputButton.getPos().getX()), (int) ((double) escapeInputButton.getPos().getY()), (int) ((double) escapeInputButton.getSize().getX()), (int) ((double) escapeInputButton.getSize().getY()), "Back");
@@ -279,7 +287,7 @@ public class HistoryModeGameScene implements Scene {
 
             //CORAZONES
             for (int i = lives.get(); i > 0; i--) {
-                this.engine.getGraphics().drawImage((int) (scaleWidth / 7) + (scaleWidth * 2 / 21) * (i - 1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
+                this.engine.getGraphics().drawImage((int) (scaleWidth *5 / 7) + (scaleWidth * 2 / 21) * (i - 1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
             }
 
             if (lives.get() <= 0) {
@@ -398,8 +406,8 @@ public class HistoryModeGameScene implements Scene {
                         this.engine.setColorBackground(colorfulPattern[i]);
                         for (int h = 0; h < rows_; h++) {
                             for (int j = 0; j < cols_; j++) {
-                                //TODO AAA NO SE HACER COSAS EN HEXADECIMAL
-                                this.matriz[j][h].setPalleteColor(this.colorfulPattern[i] + 0xAF808080);
+                                //ARGB
+                                this.matriz[j][h].setPalleteColor(this.colorfulPattern[i] + 0x00FF0000);
                             }
                         }
                     }
@@ -410,7 +418,7 @@ public class HistoryModeGameScene implements Scene {
                     for (int h = 0; h < rows_; h++) {
                         for (int j = 0; j < cols_; j++) {
                             //TODO AAA NO SE HACER COSAS EN HEXADECIMAL
-                            this.matriz[j][h].setPalleteColor(this.colorfulPattern[i] + 0xAF808080);
+                            this.matriz[j][h].setPalleteColor(this.colorfulPatternCells[i]);
                         }
                     }
                 }
