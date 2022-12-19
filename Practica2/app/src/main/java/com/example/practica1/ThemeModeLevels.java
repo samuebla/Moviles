@@ -32,8 +32,10 @@ public class ThemeModeLevels implements Scene {
     private final AtomicReference<Integer> unlockedlevels;
     private final AtomicReference<Integer>[] palettes;
 
+    private String folderName;
 
-    public ThemeModeLevels(EngineApp engineAux,AtomicReference<Integer> levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux,AtomicReference<Integer>[] palettesAux){
+
+    public ThemeModeLevels(EngineApp engineAux,AtomicReference<Integer> levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux,AtomicReference<Integer>[] palettesAux, String folder_){
         this.engine = engineAux;
         this.selectedCategory = this.categories[selectedCategory - 1];
         this.category = selectedCategory;
@@ -44,6 +46,8 @@ public class ThemeModeLevels implements Scene {
         //Por defecto la escala es 1000x1000 pero creamos un setter por si alguien quiere alguna modificacion
         scaleHeight=1000;
         scaleWidth=1000;
+        folderName = folder_;
+
         init();
     }
 
@@ -129,7 +133,7 @@ public class ThemeModeLevels implements Scene {
     public void handleInput(EventHandler.EventType type, AdManager adManager){
         for (int i = 0; i < this.unlockedlevels.get(); ++i){
             if (inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
-                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1,this.palettes);
+                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1,this.palettes, folderName);
                 this.engine.getSceneMngr().pushScene(playScene);
             }
         }

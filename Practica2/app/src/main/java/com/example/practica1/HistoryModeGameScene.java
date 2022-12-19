@@ -11,6 +11,7 @@ import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -81,15 +82,17 @@ public class HistoryModeGameScene implements Scene {
     private ArrayList<String>[] xNumberLeftToRight;
 
     //Archivo de guardado
-    String fileName;
-    String fileToOpen;
+    String rootFolder = "gamedata";
+    String fileName ;
+    String fileToOpen ;
+    String folder ;
 
     private static final int timeCheckButton = 5;
     double timer;
     boolean won;
     boolean showAnswers;
 
-    public HistoryModeGameScene(EngineApp engine, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux, AtomicReference<Integer>[] palettesAux) {
+    public HistoryModeGameScene(EngineApp engine, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux, AtomicReference<Integer>[] palettesAux, String folder_) {
 
         //Asociamos el engine correspondiente
         this.engine = engine;
@@ -124,6 +127,7 @@ public class HistoryModeGameScene implements Scene {
         mode = modeAux;
 
         this.fileToOpen = file;
+        this.folder = folder_;
 
         //Leemos el archivo y seteamos todos los datos
         init();
@@ -442,7 +446,13 @@ public class HistoryModeGameScene implements Scene {
             //Carga de archivo
             String receiveString = "";
             try {//Comprobar si existe en el almacenamiento interno
-                FileInputStream fis = this.engine.getContext().openFileInput(file);
+                Context context = this.engine.getContext();
+                String folderPath = context.getFilesDir().getAbsolutePath() + File.separator + rootFolder + File.separator + folder;
+
+                File subFolder = new File(folderPath);
+
+                FileInputStream fis = new FileInputStream(new File(subFolder, file));
+                //FileInputStream fis = this.engine.getContext().openFileInput(file);
                 InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
@@ -452,7 +462,7 @@ public class HistoryModeGameScene implements Scene {
                 inputStreamReader.close();
             } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
                 e.printStackTrace();
-            }
+
 
             String fileCarpet = "";
             switch (mode) {
@@ -469,18 +479,19 @@ public class HistoryModeGameScene implements Scene {
                     fileCarpet = "geometria/" + file;
                     break;
             }
-            InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/" + fileCarpet));
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/" + fileCarpet));
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-            while (bufferedReader.ready()) {
-                receiveString += bufferedReader.readLine();
+                while (bufferedReader.ready()) {
+                    receiveString += bufferedReader.readLine();
+                }
+
+                inputStreamReader.close();
             }
-
-            inputStreamReader.close();
             //Copia del fichero
-            FileOutputStream fos = this.engine.getContext().openFileOutput(file, Context.MODE_PRIVATE);
-            fos.write(receiveString.getBytes());
-            fos.close();
+//            FileOutputStream fos = this.engine.getContext().openFileOutput(file, Context.MODE_PRIVATE);
+//            fos.write(receiveString.getBytes());
+//            fos.close();
             //Carga el nivel desde el string "RAW" de lectura
             String[] fileRead;
             fileRead = receiveString.split(" ");
@@ -667,7 +678,27 @@ public class HistoryModeGameScene implements Scene {
 
     public void saveToFile(boolean reset) {
         try {
-            FileOutputStream fos = this.engine.getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
+            Context context = this.engine.getContext();
+            //Miramos el root del gamedata
+            String folderPath = context.getFilesDir().getAbsolutePath() + File.separator + rootFolder;
+
+            File subFolder = new File(folderPath);
+
+            if (!subFolder.exists()) {
+                subFolder.mkdirs();
+            }
+            //Miramos el subfolder de la tematica
+            folderPath = context.getFilesDir().getAbsolutePath() + File.separator + rootFolder + File.separator + folder;
+
+            subFolder = new File(folderPath);
+
+            if (!subFolder.exists()) {
+                subFolder.mkdirs();
+            }
+
+            FileOutputStream fos = new FileOutputStream(new File(subFolder, fileName));
+//            File fileDir = new File(this.engine.getContext().getDir(rootFolder+ "/" + folder,Context.MODE_PRIVATE), fileName);
+//            FileOutputStream fos = this.engine.getContext().openFileOutput(fileDir, Context.MODE_PRIVATE);
             //Guardado de la partida
             String auxiliar = rows_ + " " + cols_ + " ";
             if (reset) {
