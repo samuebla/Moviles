@@ -46,8 +46,8 @@ public class HistoryModeGameScene implements Scene {
     //Tamaño proporcional de las celdas adaptado a la pantalla
     float tamProporcionalAncho;
     float tamProporcionalAlto;
-    int tamTextoTopToBottom;
-    int tamTextoLeftToRight;
+    float tamTextoTopToBottom;
+    float tamTextoLeftToRight;
 
     //Variables auxiliares para posicionar correctamente a las celdas en funcion del tamaño de la pantalla
     double xPos;
@@ -232,12 +232,12 @@ public class HistoryModeGameScene implements Scene {
 
             //Mostramos las monedas obtenidas
             if (showNewCoins) {
-                renderEngine.drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize / 2.5f), "Black", "Cooper", 0,scaleWidth/27);
+                renderEngine.drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize / 2.5f), "Black", "Cooper", 0, scaleWidth / 27);
                 renderEngine.drawImage((int) (scaleWidth / 1.8), (int) (scaleHeight / 12), coinSize, coinSize / 2, "Coin");
             }
 
             //Mensaje de enhorabuena
-            renderEngine.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0,scaleWidth/27);
+            renderEngine.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0, scaleWidth / 27);
 
             //BackButton
             renderEngine.drawImage((int) (winBackInputButton.getPos().getX()), (int) (winBackInputButton.getPos().getY()), (int) (winBackInputButton.getSize().getX()), (int) (winBackInputButton.getSize().getY()), "Back");
@@ -256,11 +256,11 @@ public class HistoryModeGameScene implements Scene {
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
                 //Con el margen de 1 celda no tendremos problema con las otras resoluciones
-                renderEngine.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1, tamTextoTopToBottom);
+                renderEngine.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1, (int)tamTextoTopToBottom);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = xNumberLeftToRight[i].size() - 1; j >= 0; j--) {
-                    renderEngine.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto / (rows_ / 2)) + (tamProporcionalAlto/rows_/2)* j), "Black", "Calibri", 0, tamTextoLeftToRight);
+                    renderEngine.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - 20.0f - ((float)xNumberLeftToRight[i].size() / 2.0f * tamProporcionalAlto / ((float)rows_ / 2.0f)) + (tamTextoLeftToRight*0.6f *(float)j)), "Black", "Calibri", 0, (int)tamTextoLeftToRight);
                 }
             }
 
@@ -283,17 +283,17 @@ public class HistoryModeGameScene implements Scene {
             renderEngine.drawImage((int) ((double) getLifeInputButton.getPos().getX()), (int) ((double) getLifeInputButton.getPos().getY()), (int) ((double) getLifeInputButton.getSize().getX()), (int) ((double) getLifeInputButton.getSize().getY()), "HeartAD");
 
             //MONEDAS
-            renderEngine.drawText(Integer.toString(coins.get()), scaleWidth - coinSize - scaleWidth / 100, (int) (scaleHeight / 72 + coinSize / 2.5f), "Black", "CooperBold", 1,scaleWidth/14);
+            renderEngine.drawText(Integer.toString(coins.get()), scaleWidth - coinSize - scaleWidth / 100, (int) (scaleHeight / 72 + coinSize / 2.5f), "Black", "CooperBold", 1, scaleWidth / 14);
             renderEngine.drawImage(scaleWidth - coinSize - scaleWidth / 100, (int) scaleHeight / 72, coinSize, coinSize / 2, "Coin");
 
             //CORAZONES
             for (int i = lives.get(); i > 0; i--) {
-                renderEngine.drawImage((int) (scaleWidth *5 / 7) + (scaleWidth * 2 / 21) * (i - 1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
+                renderEngine.drawImage((int) (scaleWidth * 5 / 7) + (scaleWidth * 2 / 21) * (i - 1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
             }
 
             if (lives.get() <= 0) {
                 //Mensaje de enhorabuena
-                renderEngine.drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0,scaleWidth/14);
+                renderEngine.drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0, scaleWidth / 14);
 
             }
         }
@@ -369,21 +369,21 @@ public class HistoryModeGameScene implements Scene {
 
         //Solo funciona si has ganado
         if (won && inputReceived(this.shareButton.getPos(), this.shareButton.getSize())) {
-            switch (mode){
+            switch (mode) {
                 case 1:
-                    adManager.sendIntent( "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de alfabeto");
+                    adManager.sendIntent("https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de alfabeto");
                     break;
                 case 2:
-                    adManager.sendIntent( "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de fiesta");
+                    adManager.sendIntent("https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de fiesta");
                     break;
                 case 3:
-                    adManager.sendIntent( "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de animales");
+                    adManager.sendIntent("https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de animales");
                     break;
                 case 4:
-                    adManager.sendIntent( "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de geometria");
+                    adManager.sendIntent("https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de geometria");
                     break;
                 default:
-                    adManager.sendIntent( "https://twitter.com/intent/tweet", "oh wow soy la ostia jugando al nonograma que va a aprobar Antonio");
+                    adManager.sendIntent("https://twitter.com/intent/tweet", "oh wow soy la ostia jugando al nonograma que va a aprobar Antonio");
                     break;
             }
 
@@ -413,7 +413,6 @@ public class HistoryModeGameScene implements Scene {
                         }
                     }
                 } else {
-
                     actualColorPattern = i;
                     this.engine.setColorBackground(colorfulPattern[i]);
                     for (int h = 0; h < rows_; h++) {
@@ -435,7 +434,6 @@ public class HistoryModeGameScene implements Scene {
     //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
     @Override
     public void onResume() {
-
     }
 
     //Metodos de lectura y guardado
@@ -520,13 +518,13 @@ public class HistoryModeGameScene implements Scene {
             //+1 para los numeros laterales
             //0.1f por los margenes de espacio que hay entre cada celda
             //Y con eso sacamos el tamaño promedio de la celda
-            tamProporcionalAncho = scaleWidth / ((cols_ + 1) + (0.1f*cols_));
+            tamProporcionalAncho = scaleWidth / ((cols_ + 1) + (0.1f * cols_));
 
             //Restamos la interfaz de las paletas y los botones de arriba
-            tamProporcionalAlto = (scaleHeight - scaleHeight / 7 - scaleHeight / 20) / ((rows_ + 1) +(0.1f*rows_));
+            tamProporcionalAlto = (scaleHeight - scaleHeight / 7 - scaleHeight / 20) / ((rows_ + 1) + (0.1f * rows_));
 
             tamTextoTopToBottom = (int) (tamProporcionalAncho / 3f);
-            tamTextoLeftToRight = (int) (tamProporcionalAlto/1.8f);
+            tamTextoLeftToRight = (int) (tamProporcionalAlto / 1.8f);
 
             //Iniciamos la matriz segun el fichero
             for (int i = 0; i < rows_; i++) {
@@ -536,7 +534,7 @@ public class HistoryModeGameScene implements Scene {
                 for (int j = 3; j < cols_ + 3; j++) {
 
                     //Cogemos el numero obtenido
-                    int aux = Integer.parseInt(fileRead[3+ cols_ * i + (j-3)]);
+                    int aux = Integer.parseInt(fileRead[3 + cols_ * i + (j - 3)]);
 
                     //Lo ajustamos al centro de la pantalla de largo
                     //Scale/15 para la interfaz de arriba + 1Celda para las letras
