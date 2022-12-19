@@ -304,11 +304,12 @@ public class QuickGameScene implements Scene, Serializable {
         // Alto: Rows +1( Sin contar la interfaz de por encima y por debajo)
 
         //+1 para los numeros laterales
+        //0.1f por los margenes de espacio que hay entre cada celda
         //Y con eso sacamos el tamaño promedio de la celda
-        tamProporcionalAncho = scaleWidth / ((cols_ + 1) + 1);
+        tamProporcionalAncho = scaleWidth / ((cols_ + 1) + (0.1f*cols_));
 
         //Restamos la interfaz de las paletas y los botones de arriba
-        tamProporcionalAlto = (scaleHeight - scaleHeight / 7 - scaleHeight / 15) / ((rows_ + 1) + 1);
+        tamProporcionalAlto = (scaleHeight - scaleHeight / 15) / ((rows_ + 1) +(0.1f*rows_));
 
         int tamTexto = (int) (tamProporcionalAncho / 4.5f);
         if (tamProporcionalAlto > tamProporcionalAncho)
@@ -340,8 +341,8 @@ public class QuickGameScene implements Scene, Serializable {
         posXTextAuxLeftToRight = (int) (matriz[0][0].getPos().getX() + (tamProporcionalAncho / 2));
 
         //Seteamos los botones
-        this.checkInputButton = new InputButton(scaleWidth*0.8, scaleHeight*0.06,
-                scaleWidth * 0.1666666, scaleHeight*0.10);
+        this.checkInputButton = new InputButton(scaleWidth*0.9, 10,
+                scaleWidth * 0.10, scaleHeight*0.10);
         this.giveUpInputButton = new InputButton(10,10,scaleWidth / 10, scaleHeight / 15);
         this.backInputButton = new InputButton(scaleWidth/2, scaleHeight/1.1,
                 scaleWidth/10, scaleHeight/15);
