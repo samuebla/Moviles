@@ -165,6 +165,13 @@ public class MainMenuScene implements Scene {
             this.engine.getGraphics().newImage("BluePalette", "assets/blue_palette.png");
             this.engine.getGraphics().newImage("WhitePalette", "assets/white_palette.png");
 
+            this.engine.getGraphics().newImage("HeartAD", "assets/extra_heart.png");
+            this.engine.getGraphics().newImage("CoinsCost", "assets/coste_monedas.png");
+            this.engine.getGraphics().newImage("TwitterIcon", "assets/twitter_icon.png");
+
+
+
+
             //Cambiamos el texto del titulo a un tamaño adaptado al escalado nuevo
             this.engine.getGraphics().changeSizeText("CooperBig",(int)(scaleWidth/20));
             this.engine.getGraphics().changeSizeText("Cooper",(int)(scaleWidth/27));

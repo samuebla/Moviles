@@ -34,8 +34,13 @@ import androidx.work.WorkRequest;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,7 +56,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     private EngineApp engine;
 
@@ -70,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
     //    AdView mAdView;
     private AtomicReference<MainActivity> mainActivity;
     private Button rewardButton;
+
+    //Sensores
+    private SensorManager sensorManager;
+    private Sensor sensor;
 
 
     @Override
@@ -137,7 +146,12 @@ public class MainActivity extends AppCompatActivity {
 
         this.engine = new EngineApp(this.renderView, this.screenLayout, this);
 
-
+        //SENSOR
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
+        //registramos el listener
+        sensorManager .registerListener( this, sensor , SensorManager.SENSOR_DELAY_NORMAL);
+        
         mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
         this.engine.getSceneMngr().pushScene(mainMenuScene);
         this.engine.setPrimaryScene(mainMenuScene);
@@ -169,4 +183,41 @@ public class MainActivity extends AppCompatActivity {
         createWorkRequest("Nonogram", "Llevas mucho tiempo sin jugar... Te echamos de menos :(");
         super.onDestroy();
     }
+
+    @Override
+    protected void onSaveInstanceState (Bundle outState){
+        mainMenuScene.saveDataHistoryMode();
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+        this.engine.resume();
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        createWorkRequest("Nonogram", "Llevas mucho tiempo sin jugar... Te echamos de menos :(");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+        this.engine.pause();
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
 }
