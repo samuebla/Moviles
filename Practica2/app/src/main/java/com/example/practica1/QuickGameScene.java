@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class QuickGameScene implements Scene, Serializable {
+public class QuickGameScene implements Scene {
 
     private EngineApp engine;
 

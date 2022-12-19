@@ -10,7 +10,7 @@ import android.widget.Button;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class HistoryModeMenu implements Scene, Serializable {
+public class HistoryModeMenu implements Scene {
 
     //TODO Aqui guarda la relacion
     int scaleWidth, scaleHeight;

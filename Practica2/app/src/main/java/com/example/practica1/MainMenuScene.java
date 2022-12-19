@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicReference;
 //import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 
-public class MainMenuScene implements Scene, Serializable {
+public class MainMenuScene implements Scene {
 
     //TODO A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
     int scaleWidth = 1000;

@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import kotlinx.coroutines.ObsoleteCoroutinesApi;
 
-public class ThemeModeLevels implements Scene, Serializable {
+public class ThemeModeLevels implements Scene {
 
     //TODO Aqui guarda la relacion
     int scaleWidth, scaleHeight;

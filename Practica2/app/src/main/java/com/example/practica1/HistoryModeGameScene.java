@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class HistoryModeGameScene implements Scene, Serializable {
+public class HistoryModeGameScene implements Scene {
     private EngineApp engine;
 
     //A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
