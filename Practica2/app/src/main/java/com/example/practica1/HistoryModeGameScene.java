@@ -283,7 +283,7 @@ public class HistoryModeGameScene implements Scene {
             renderEngine.drawImage((int) ((double) getLifeInputButton.getPos().getX()), (int) ((double) getLifeInputButton.getPos().getY()), (int) ((double) getLifeInputButton.getSize().getX()), (int) ((double) getLifeInputButton.getSize().getY()), "HeartAD");
 
             //MONEDAS
-            renderEngine.drawText(Integer.toString(coins.get()), scaleWidth - coinSize - scaleWidth / 100, (int) (scaleHeight / 72 + coinSize / 2.5f), "Black", "CooperBold", 1,scaleWidth/20);
+            renderEngine.drawText(Integer.toString(coins.get()), scaleWidth - coinSize - scaleWidth / 100, (int) (scaleHeight / 72 + coinSize / 2.5f), "Black", "CooperBold", 1,scaleWidth/14);
             renderEngine.drawImage(scaleWidth - coinSize - scaleWidth / 100, (int) scaleHeight / 72, coinSize, coinSize / 2, "Coin");
 
             //CORAZONES
@@ -293,7 +293,7 @@ public class HistoryModeGameScene implements Scene {
 
             if (lives.get() <= 0) {
                 //Mensaje de enhorabuena
-                renderEngine.drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0,scaleWidth/20);
+                renderEngine.drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0,scaleWidth/14);
 
             }
         }
@@ -525,8 +525,8 @@ public class HistoryModeGameScene implements Scene {
             //Restamos la interfaz de las paletas y los botones de arriba
             tamProporcionalAlto = (scaleHeight - scaleHeight / 7 - scaleHeight / 20) / ((rows_ + 1) +(0.1f*rows_));
 
-            tamTextoTopToBottom = (int) (tamProporcionalAncho / 4.5f);
-            tamTextoLeftToRight = (int) (tamProporcionalAlto/2.6f);
+            tamTextoTopToBottom = (int) (tamProporcionalAncho / 3f);
+            tamTextoLeftToRight = (int) (tamProporcionalAlto/1.8f);
 
             //Iniciamos la matriz segun el fichero
             for (int i = 0; i < rows_; i++) {

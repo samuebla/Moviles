@@ -116,11 +116,11 @@ public class ThemeModeLevels implements Scene {
         render.drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        render.drawText(selectedCategory + " Category", scaleWidth/2, scaleHeight/8, "Black", "CooperBold", 0,scaleWidth/20);
+        render.drawText(selectedCategory + " Category", scaleWidth/2, scaleHeight/8, "Black", "CooperBold", 0,scaleWidth/14);
 
         //Moneas
         //MONEDAS
-        render.drawText(Integer.toString(coins.get()), scaleWidth- coinSize-scaleWidth/100, (int)(scaleHeight/72 + coinSize/2.5), "Black", "CooperBold", 1,scaleWidth/20);
+        render.drawText(Integer.toString(coins.get()), scaleWidth- coinSize-scaleWidth/100, (int)(scaleHeight/72 + coinSize/2.5), "Black", "CooperBold", 1,scaleWidth/14);
         render.drawImage(scaleWidth-coinSize -scaleWidth/100, (int)(scaleHeight/72.0),coinSize,coinSize/2,"Coin");
 
     }

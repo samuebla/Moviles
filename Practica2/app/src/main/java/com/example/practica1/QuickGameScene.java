@@ -313,10 +313,10 @@ public class QuickGameScene implements Scene {
         //Restamos la interfaz de las paletas y los botones de arriba
         tamProporcionalAlto = (scaleHeight - scaleHeight / 15) / ((rows_ + 1) + (0.1f * rows_));
 
-        tamTexto = (int) (tamProporcionalAncho / 4.5f);
+        tamTexto = (int) (tamProporcionalAncho / 3f);
         if (tamProporcionalAlto > tamProporcionalAncho)
             //Nos quedamos con el tamaño mas grande para que el texto se ajuste a la peor situacion
-            tamTexto = (int) (tamProporcionalAlto / 4.5f);
+            tamTexto = (int) (tamProporcionalAlto / 3f);
         //Lo ajustamos al centro de la pantalla de largo
         double yPos;
 
@@ -403,7 +403,7 @@ public class QuickGameScene implements Scene {
             }
 
             //Mensaje de enhorabuena
-            render.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0, scaleWidth / 27);
+            render.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0, scaleWidth / 18);
 
             //BackButton
             render.drawImage((int) (backInputButton.getPos().getX()), (int) (backInputButton.getPos().getY()), (int) (backInputButton.getSize().getX()), (int) (backInputButton.getSize().getY()), "Back");
@@ -413,8 +413,8 @@ public class QuickGameScene implements Scene {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
                 //Muestra el texto...
-                render.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int) ((double) scaleWidth / 2), scaleHeight / 22, "red", "Calibri", 0, scaleWidth / 22);
-                render.drawText("Tienes mal " + wrongCells + " casilla(s)", (int) ((double) scaleWidth / 2), 10 + scaleHeight / 11, "red", "Calibri", 0, scaleWidth / 22);
+                render.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int) ((double) scaleWidth / 2), scaleHeight / 22, "red", "Calibri", 0, scaleWidth / 15);
+                render.drawText("Tienes mal " + wrongCells + " casilla(s)", (int) ((double) scaleWidth / 2), 10 + scaleHeight / 11, "red", "Calibri", 0, scaleWidth / 15);
 
                 //Renderiza rojo si esta mal
                 for (int i = 0; i < matriz.length; i++) {

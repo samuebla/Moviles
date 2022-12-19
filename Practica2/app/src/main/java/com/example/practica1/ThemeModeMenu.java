@@ -82,30 +82,30 @@ public class ThemeModeMenu implements Scene {
     public void render(RenderAndroid render){
         //ALFABETO
         render.drawImage((int)this.alfabetoInputButtonMode.getPos().getX(), (int)this.alfabetoInputButtonMode.getPos().getY(),(int)this.alfabetoInputButtonMode.getSize().getX(),(int)this.alfabetoInputButtonMode.getSize().getY(),"AlphabetPlay");
-        render.drawText("ALFABETO", (int)(alfabetoInputButtonMode.getPos().getX() + alfabetoInputButtonMode.getSize().getX()/2), (int)(alfabetoInputButtonMode.getPos().getY() - alfabetoInputButtonMode.getSize().getY()/4), "Black","Cooper", 0,scaleWidth/27);
+        render.drawText("ALFABETO", (int)(alfabetoInputButtonMode.getPos().getX() + alfabetoInputButtonMode.getSize().getX()/2), (int)(alfabetoInputButtonMode.getPos().getY() - alfabetoInputButtonMode.getSize().getY()/4), "Black","Cooper", 0,scaleWidth/18);
 
         //FIESTA
         render.drawImage((int)this.fiestaInputButtonMode.getPos().getX(), (int)this.fiestaInputButtonMode.getPos().getY(),(int)this.fiestaInputButtonMode.getSize().getX(),(int)this.fiestaInputButtonMode.getSize().getY(),"PartyPlay");
-        render.drawText("FIESTA", (int)(fiestaInputButtonMode.getPos().getX() + fiestaInputButtonMode.getSize().getX()/2), (int)(fiestaInputButtonMode.getPos().getY() - fiestaInputButtonMode.getSize().getY()/4), "Black","Cooper", 0,scaleWidth/27);
+        render.drawText("FIESTA", (int)(fiestaInputButtonMode.getPos().getX() + fiestaInputButtonMode.getSize().getX()/2), (int)(fiestaInputButtonMode.getPos().getY() - fiestaInputButtonMode.getSize().getY()/4), "Black","Cooper", 0,scaleWidth/18);
 
         //ANIMALES
         render.drawImage((int)this.animalesInputButtonMode.getPos().getX(), (int)this.animalesInputButtonMode.getPos().getY(),(int)this.animalesInputButtonMode.getSize().getX(),(int)this.animalesInputButtonMode.getSize().getY(),"AnimalsPlay");
-        render.drawText("ANIMALES", (int)(animalesInputButtonMode.getPos().getX() + animalesInputButtonMode.getSize().getX()/2), (int)(animalesInputButtonMode.getPos().getY() - animalesInputButtonMode.getSize().getY()/4), "Black","Cooper", 0,scaleWidth/27);
+        render.drawText("ANIMALES", (int)(animalesInputButtonMode.getPos().getX() + animalesInputButtonMode.getSize().getX()/2), (int)(animalesInputButtonMode.getPos().getY() - animalesInputButtonMode.getSize().getY()/4), "Black","Cooper", 0,scaleWidth/18);
 
         //GEOMETRIA
         render.drawImage((int)this.geometriaInputButtonMode.getPos().getX(), (int)this.geometriaInputButtonMode.getPos().getY(),(int)this.geometriaInputButtonMode.getSize().getX(),(int)this.geometriaInputButtonMode.getSize().getY(),"GeometryPlay");
-        render.drawText("GEOMETRIA", (int)(geometriaInputButtonMode.getPos().getX() + geometriaInputButtonMode.getSize().getX()/2), (int)(geometriaInputButtonMode.getPos().getY() - geometriaInputButtonMode.getSize().getY()/4), "Black","Cooper", 0,scaleWidth/27);
+        render.drawText("GEOMETRIA", (int)(geometriaInputButtonMode.getPos().getX() + geometriaInputButtonMode.getSize().getX()/2), (int)(geometriaInputButtonMode.getPos().getY() - geometriaInputButtonMode.getSize().getY()/4), "Black","Cooper", 0,scaleWidth/18);
         //----------------------------------------
 
         //Back Button
         render.drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        render.drawText("Elige la categoria que quieres jugar", (int)(scaleWidth/2.0), (int)(scaleHeight/5.4), "Black", "Cooper", 0,scaleWidth/27);
+        render.drawText("Elige la categoria que quieres jugar", (int)(scaleWidth/2.0), (int)(scaleHeight/5.4), "Black", "Cooper", 0,scaleWidth/18);
 
         //Moneas
         //MONEDAS
-        render.drawText(Integer.toString(coins.get()), scaleWidth - coinSize-scaleWidth/100, (int)(scaleHeight/72 + coinSize/2.5f), "Black", "CooperBold", 1,scaleWidth/20);
+        render.drawText(Integer.toString(coins.get()), scaleWidth - coinSize-scaleWidth/100, (int)(scaleHeight/72 + coinSize/2.5f), "Black", "CooperBold", 1,scaleWidth/14);
         render.drawImage(scaleWidth-coinSize -scaleWidth/100, (int)(scaleHeight/72.0),coinSize,coinSize/2,"Coin");
 
     }
