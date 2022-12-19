@@ -30,8 +30,13 @@ import androidx.core.app.NotificationManagerCompat;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,7 +49,7 @@ import android.widget.LinearLayout;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     private EngineApp engine;
 
@@ -63,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
 //    AdView mAdView;
     private AtomicReference<MainActivity> mainActivity;
     private Button rewardButton;
+
+    //Sensores
+    private SensorManager sensorManager;
+    private Sensor sensor;
 
 
     @Override
@@ -173,7 +182,12 @@ public class MainActivity extends AppCompatActivity {
         //Intent example
 //        sendIntent(0, "https://twitter.com/intent/tweet", "oh wow Prueba");
 
-
+        //SENSOR
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
+        //registramos el listener
+        sensorManager .registerListener( this, sensor , SensorManager.SENSOR_DELAY_NORMAL);
+        
         if(savedInstanceState == null){
             mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
             this.engine.getSceneMngr().pushScene(mainMenuScene);
@@ -203,12 +217,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
         this.engine.resume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        sensorManager.unregisterListener(this);
         this.engine.pause();
     }
 
@@ -229,6 +245,15 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
 
 
 //    private AdRequest getAdRequest() {
