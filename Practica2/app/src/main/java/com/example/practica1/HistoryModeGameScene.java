@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
@@ -47,7 +46,8 @@ public class HistoryModeGameScene implements Scene {
     //Tamaño proporcional de las celdas adaptado a la pantalla
     float tamProporcionalAncho;
     float tamProporcionalAlto;
-    int tamTexto;
+    int tamTextoTopToBottom;
+    int tamTextoLeftToRight;
 
     //Variables auxiliares para posicionar correctamente a las celdas en funcion del tamaño de la pantalla
     double xPos;
@@ -256,11 +256,11 @@ public class HistoryModeGameScene implements Scene {
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
                 //Con el margen de 1 celda no tendremos problema con las otras resoluciones
-                renderEngine.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1,tamTexto);
+                renderEngine.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1, tamTextoTopToBottom);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = xNumberLeftToRight[i].size() - 1; j >= 0; j--) {
-                    renderEngine.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto * 0.7 / (rows_ / 2)) + (int) ((tamProporcionalAlto / rows_ * 1.3 * j))), "Black", "Calibri", 0,tamTexto);
+                    renderEngine.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto / (rows_ / 2)) + (tamProporcionalAlto/rows_/2)* j), "Black", "Calibri", 0, tamTextoLeftToRight);
                 }
             }
 
@@ -418,7 +418,6 @@ public class HistoryModeGameScene implements Scene {
                     this.engine.setColorBackground(colorfulPattern[i]);
                     for (int h = 0; h < rows_; h++) {
                         for (int j = 0; j < cols_; j++) {
-                            //TODO AAA NO SE HACER COSAS EN HEXADECIMAL
                             this.matriz[j][h].setPalleteColor(this.colorfulPatternCells[i]);
                         }
                     }
@@ -526,23 +525,18 @@ public class HistoryModeGameScene implements Scene {
             //Restamos la interfaz de las paletas y los botones de arriba
             tamProporcionalAlto = (scaleHeight - scaleHeight / 7 - scaleHeight / 20) / ((rows_ + 1) +(0.1f*rows_));
 
-            tamTexto = (int) (tamProporcionalAncho / 4.5f);
-            if (tamProporcionalAlto > tamProporcionalAncho)
-                //Nos quedamos con el tamaño mas grande para que el texto se ajuste a la peor situacion
-                tamTexto = (int) (tamProporcionalAlto / 4.5f);
+            tamTextoTopToBottom = (int) (tamProporcionalAncho / 4.5f);
+            tamTextoLeftToRight = (int) (tamProporcionalAlto/2.6f);
 
             //Iniciamos la matriz segun el fichero
             for (int i = 0; i < rows_; i++) {
                 //Contador de celdas azules por cada fila
                 int contAux = 0;
 
-                //Para evitar Filas vacias o llenas
-                int numSolutionPerRows = 0;
-
                 for (int j = 3; j < cols_ + 3; j++) {
 
                     //Cogemos el numero obtenido
-                    int aux = Integer.parseInt(fileRead[rows_ * i + j]);
+                    int aux = Integer.parseInt(fileRead[3+ cols_ * i + (j-3)]);
 
                     //Lo ajustamos al centro de la pantalla de largo
                     //Scale/15 para la interfaz de arriba + 1Celda para las letras
@@ -576,8 +570,6 @@ public class HistoryModeGameScene implements Scene {
 
                             this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
                                     (int) yPos, (int) tamProporcionalAncho, (int) tamProporcionalAlto, CellBase.cellType.EMPTY, true);
-
-                            numSolutionPerRows++;
 
                             //Para averiguar los numeros laterales de las celdas
                             contAux++;
@@ -625,7 +617,6 @@ public class HistoryModeGameScene implements Scene {
                         else if (aux == 3) {
                             this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
                                     (int) yPos, (int) tamProporcionalAncho, (int) tamProporcionalAlto, CellBase.cellType.SELECTED, true);
-                            numSolutionPerRows++;
 
                             //Para averiguar los numeros laterales de las celdas
                             contAux++;
