@@ -117,14 +117,16 @@ public class RenderAndroid {
 
         if (celltype == -1 || celltype == 2) {
 
+            float stroke = this.paint.getStrokeWidth();
             this.paint.setStyle(Paint.Style.STROKE);
+
             this.paint.setStrokeWidth(3);
             this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
             //Cuadrado de la interfaz
             if (celltype == 2) {
                 this.canvas.drawLine(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (w + x) * getWidth() / scaleWidth, (h + y) * getHeight() / scaleHeight, this.paint);
             }
-            this.paint.setStrokeWidth(1);
+            this.paint.setStrokeWidth(stroke);
 
         } else {
             //Cambiar para que tenga en cuenta las dimensiones de la ventana, los últimos dos valores son el ancho y alto
@@ -149,10 +151,10 @@ public class RenderAndroid {
 
         this.paint.setColor(c);
         this.paint.setStyle(Paint.Style.FILL);
-        this.canvas.drawCircle(x + r, y + r, r, this.paint);
+        this.canvas.drawCircle((x + r)* getWidth() / scaleWidth, (y + r)* getHeight() / scaleHeight, r* getWidth() / scaleWidth, this.paint);
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setColor(Color.BLACK);
-        this.canvas.drawCircle(x + r, y + r, r, this.paint);
+        this.canvas.drawCircle((x + r)* getWidth() / scaleWidth, (y + r)* getHeight() / scaleHeight, r* getWidth() / scaleWidth, this.paint);
 
     }
 

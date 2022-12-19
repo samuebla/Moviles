@@ -342,7 +342,7 @@ public class QuickGameScene implements Scene, Serializable {
 
         //Seteamos los botones
         this.checkInputButton = new InputButton(scaleWidth*0.9, 10,
-                scaleWidth * 0.10, scaleHeight*0.10);
+                scaleWidth * 0.10, scaleHeight/15);
         this.giveUpInputButton = new InputButton(10,10,scaleWidth / 10, scaleHeight / 15);
         this.backInputButton = new InputButton(scaleWidth/2, scaleHeight/1.1,
                 scaleWidth/10, scaleHeight/15);
@@ -414,8 +414,8 @@ public class QuickGameScene implements Scene, Serializable {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
                 //Muestra el texto...
-                this.engine.getGraphics().drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)scaleWidth/2), (int)((double)scaleHeight*0.1111111), "red", "Calibri", 0);
-                this.engine.getGraphics().drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)scaleWidth/2), (int)((double)scaleHeight*0.1388888), "red", "Calibri", 0);
+                this.engine.getGraphics().drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)scaleWidth/2), scaleHeight/22, "red", "Calibri", 0);
+                this.engine.getGraphics().drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)scaleWidth/2), 10 + scaleHeight/11, "red", "Calibri", 0);
 
                 //Renderiza rojo si esta mal
                 for (int i = 0; i < matriz.length; i++) {
