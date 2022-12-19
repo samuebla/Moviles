@@ -108,12 +108,6 @@ public class HistoryModeMenu implements Scene {
             this.engine.getSceneMngr().pushScene(playScene);
         }
 
-        //DificultyMode
-        if (inputReceived(this.dificultyInputButtonMode.getPos(), this.dificultyInputButtonMode.getSize())){
-            QuickGameScene playScene = new QuickGameScene(this.engine, 8, 8);
-            this.engine.getSceneMngr().pushScene(playScene);
-        }
-
         //Back button
         if (inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
             this.engine.getSceneMngr().popScene();
