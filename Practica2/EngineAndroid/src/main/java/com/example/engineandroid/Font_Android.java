@@ -13,13 +13,11 @@ import java.io.IOException;
 public class Font_Android {
 
     Typeface font;
-    int size;
 
-    public Font_Android(String filePath, int type, int sizeAux, AssetManager assets) throws IOException {
+    public Font_Android(String filePath, int type, AssetManager assets) throws IOException {
         String newFilePath = filePath.replaceAll("assets/", "");
         assets.open(newFilePath);
         Typeface baseFont = Typeface.createFromAsset(assets, newFilePath);
-        size = sizeAux;
         switch (type) {
             //NEGRITA
             case 1:
@@ -38,14 +36,6 @@ public class Font_Android {
 
     public Typeface getFont() {
         return font;
-    }
-
-    public int getSize() {
-        return this.size;
-    }
-
-    public void setNewSize(int newSize) {
-        this.size = newSize;
     }
 
     public boolean isBold() {
