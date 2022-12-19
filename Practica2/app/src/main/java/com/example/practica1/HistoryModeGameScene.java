@@ -533,14 +533,16 @@ public class HistoryModeGameScene implements Scene {
 
             //Iniciamos la matriz segun el fichero
             for (int i = 0; i < rows_; i++) {
+                //Contador de celdas azules por cada fila
+                int contAux = 0;
+
+                //Para evitar Filas vacias o llenas
+                int numSolutionPerRows = 0;
+
                 for (int j = 3; j < cols_ + 3; j++) {
 
-                    System.out.print(fileRead[rows_ * i + j]);
-
+                    //Cogemos el numero obtenido
                     int aux = Integer.parseInt(fileRead[rows_ * i + j]);
-
-                    //Con la relacion del juego el largo siempre va a ser mayor que el ancho
-//                    double yPos = tamTextoAux * tamProporcional + ((tamProporcional * 1.1) * i);
 
                     //Lo ajustamos al centro de la pantalla de largo
                     //Scale/15 para la interfaz de arriba + 1Celda para las letras
@@ -553,10 +555,21 @@ public class HistoryModeGameScene implements Scene {
                     if (aux == 0) {
                         this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
                                 (int) yPos, (int) tamProporcionalAncho, (int) tamProporcionalAlto, CellBase.cellType.EMPTY, false);
+
+                        //Si estabas sumando y luego te llego a 0...
+                        if (contAux != 0) {
+                            xPositionsTopToBottom[i].add(contAux);
+                            contAux = 0;
+                        }
+                        //Para el valor de las columnas...
+                        if (numAnterior[j - 3] == 0) {
+                            //Reseteamos
+                            contadorCols[j - 3] = 1;
+                            numAnterior[j - 3] = -1;
+                        }
                     }
                     //Si es 1 Esta Empty pero es correcto
                     else {
-
                         if (aux == 1) {
                             //Lo añadimos a la lista de celdas que tiene que acertar el jugador
                             remainingCells++;
@@ -564,19 +577,87 @@ public class HistoryModeGameScene implements Scene {
                             this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
                                     (int) yPos, (int) tamProporcionalAncho, (int) tamProporcionalAlto, CellBase.cellType.EMPTY, true);
 
+                            numSolutionPerRows++;
+
+                            //Para averiguar los numeros laterales de las celdas
+                            contAux++;
+
+                            //Si nunca se han añadido en la celda de arriba suya...
+                            if (numAnterior[j - 3] == -1) {
+
+                                //Metemos el primero...
+                                xPositionsLeftToRight[j - 3].add(1);
+
+                                //Y por lo tanto ya tenemos uno añadido
+                                numAnterior[j - 3] = 0;
+
+                                //Con esto solo entra si se ha añadido algo alguna vez
+                            } else if (numAnterior[j - 3] == 0) {
+
+                                //Sumamos el valor +1 porque la columna continua
+                                contadorCols[j - 3]++;
+
+                                //Eliminamos el anterior
+                                xPositionsLeftToRight[j - 3].remove(xPositionsLeftToRight[j - 3].size() - 1);
+
+                                //Y metemos el nuevo
+                                xPositionsLeftToRight[j - 3].add(xPositionsLeftToRight[j - 3].size(), contadorCols[j - 3]);
+                            }
                         }
                         //Si esta mal seleccionada y esta roja...
                         else if (aux == 2) {
                             this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
                                     (int) yPos, (int) tamProporcionalAncho, (int) tamProporcionalAlto, CellBase.cellType.WRONG, false);
 
+                            //Si estabas sumando y luego te llego a 0...
+                            if (contAux != 0) {
+                                xPositionsTopToBottom[i].add(contAux);
+                                contAux = 0;
+                            }
+                            //Para el valor de las columnas...
+                            if (numAnterior[j - 3] == 0) {
+                                //Reseteamos
+                                contadorCols[j - 3] = 1;
+                                numAnterior[j - 3] = -1;
+                            }
                         }
                         //Si esta bien seleccionada y esta azul
                         else if (aux == 3) {
                             this.matriz[j - 3][i] = new CellHistoryMode((int) xPos,
                                     (int) yPos, (int) tamProporcionalAncho, (int) tamProporcionalAlto, CellBase.cellType.SELECTED, true);
+                            numSolutionPerRows++;
+
+                            //Para averiguar los numeros laterales de las celdas
+                            contAux++;
+
+                            //Si nunca se han añadido en la celda de arriba suya...
+                            if (numAnterior[j - 3] == -1) {
+
+                                //Metemos el primero...
+                                xPositionsLeftToRight[j - 3].add(1);
+
+                                //Y por lo tanto ya tenemos uno añadido
+                                numAnterior[j - 3] = 0;
+
+                                //Con esto solo entra si se ha añadido algo alguna vez
+                            } else if (numAnterior[j - 3] == 0) {
+
+                                //Sumamos el valor +1 porque la columna continua
+                                contadorCols[j - 3]++;
+
+                                //Eliminamos el anterior
+                                xPositionsLeftToRight[j - 3].remove(xPositionsLeftToRight[j - 3].size() - 1);
+
+                                //Y metemos el nuevo
+                                xPositionsLeftToRight[j - 3].add(xPositionsLeftToRight[j - 3].size(), contadorCols[j - 3]);
+                            }
                         }
                     }
+
+                }
+                //Para meter en el lateral si el ultimo valor de la fila se ha seleccionado
+                if (contAux != 0) {
+                    xPositionsTopToBottom[i].add(contAux);
                 }
             }
 
@@ -584,27 +665,6 @@ public class HistoryModeGameScene implements Scene {
             posYTextAuxTopToBottom = (int) (matriz[0][0].getPos().getY() + (tamProporcionalAlto / 2));
             posXTextAuxLeftToRight = (int) (matriz[0][0].getPos().getX() + (tamProporcionalAncho / 2));
 
-            int contador = 0;
-            int numAux = 0;
-            //Ahora leemos las filas y columnas para colocar los indicadores laterales
-
-            //LECTURA INDICACION VERTICAL IZQUIERDA
-            for (int i = 0; i < rows_; i++) {
-                numAux = Integer.parseInt(fileRead[rows_ * cols_ + 3 + contador]);
-                for (int j = 0; j < numAux; j++) {
-                    xPositionsTopToBottom[i].add(Integer.parseInt(fileRead[(rows_ * cols_ + 3) + contador + j + 1]));
-                }
-                contador += numAux + 1;
-            }
-
-            //LECTURA INDICACION HORIZONTAL SUPERIOR
-            for (int i = 0; i < cols_; i++) {
-                numAux = Integer.parseInt(fileRead[rows_ * cols_ + 3 + contador]);
-                for (int j = 0; j < numAux; j++) {
-                    xPositionsLeftToRight[i].add(Integer.parseInt(fileRead[(rows_ * cols_ + 3) + contador + j + 1]));
-                }
-                contador += numAux + 1;
-            }
             fileName = file;
         } catch (
                 FileNotFoundException e) {
@@ -655,21 +715,6 @@ public class HistoryModeGameScene implements Scene {
                 auxiliar += "\n";
             }
             fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
-
-            for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                auxiliar = xNumberTopToBottom[i].length() / 2 + " " + xNumberTopToBottom[i] + "\n";
-                fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
-            }
-
-            for (int i = 0; i < xNumberLeftToRight.length; i++) {
-                auxiliar = xNumberLeftToRight[i].size() + " ";
-                for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    auxiliar += xNumberLeftToRight[i].get(j) + " ";
-                }
-                auxiliar += "\n";
-                fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
-            }
-
             fos.close();
 
         } catch (FileNotFoundException e) {
