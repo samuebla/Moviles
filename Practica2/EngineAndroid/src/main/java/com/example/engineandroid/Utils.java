@@ -8,7 +8,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Utils {
-    private static char[] hexDigits = "0123456789abcdef".toCharArray();
 
     public static String md5(InputStream is) throws IOException {
         String md5 = "";
@@ -23,14 +22,17 @@ public class Utils {
             }
 
             byte[] messageDigest = digest.digest();
-
+            //close the stream
+            is.close();
+            //This bytes[] has bytes in decimal format;
+            //Convert it to hexadecimal format
             StringBuilder sb = new StringBuilder(32);
 
             for (byte b : messageDigest) {
-                sb.append(hexDigits[(b >> 4) & 0x0f]);
-                sb.append(hexDigits[b & 0x0f]);
+                sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
             }
 
+            //return complete hash
             md5 = sb.toString();
         } catch (Exception e) {
             e.printStackTrace();

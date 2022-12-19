@@ -8,6 +8,7 @@ import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
+import com.example.engineandroid.Utils;
 import com.example.engineandroid.Vector2D;
 
 import java.io.BufferedReader;
@@ -447,19 +448,45 @@ public class HistoryModeGameScene implements Scene {
             String receiveString = "";
             try {//Comprobar si existe en el almacenamiento interno
                 Context context = this.engine.getContext();
-                String folderPath = context.getFilesDir().getAbsolutePath() + File.separator + rootFolder + File.separator + folder;
+
+                //CHECKSUM
+                //Comprobar archivo no ha sido modificado externamente o si existe
+                String folderPath = context.getFilesDir().getAbsolutePath() + File.separator + "salt" + File.separator + folder;
 
                 File subFolder = new File(folderPath);
 
                 FileInputStream fis = new FileInputStream(new File(subFolder, file));
-                //FileInputStream fis = this.engine.getContext().openFileInput(file);
                 InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
                 while (bufferedReader.ready()) {
                     receiveString += bufferedReader.readLine();
                 }
+
+                String md5Origin  = receiveString;//md5 del archivo origen
+                receiveString = "";
+
+                //Ahora sí cargamos el archivo
+                folderPath = context.getFilesDir().getAbsolutePath() + File.separator + rootFolder + File.separator + folder;
+
+                subFolder = new File(folderPath);
+                fis = new FileInputStream(new File(subFolder, file));
+                //FileInputStream fis = this.engine.getContext().openFileInput(file);
+                inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+                bufferedReader = new BufferedReader(inputStreamReader);
+
+                while (bufferedReader.ready()) {
+                    receiveString += bufferedReader.readLine();
+                }
                 inputStreamReader.close();
+
+                //MD5 actual del archivo
+                fis = new FileInputStream(new File(subFolder, file));
+                String md5Checksum    = Utils.md5(fis);
+                if (!md5Checksum.equals(md5Origin)) {    //si son iguales sigue, si no resetea el archivo con
+                    //file is not valid
+                    throw new FileNotFoundException("file was modified externally");
+                }
             } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
                 e.printStackTrace();
 
@@ -488,6 +515,7 @@ public class HistoryModeGameScene implements Scene {
 
                 inputStreamReader.close();
             }
+
             //Copia del fichero
 //            FileOutputStream fos = this.engine.getContext().openFileOutput(file, Context.MODE_PRIVATE);
 //            fos.write(receiveString.getBytes());
@@ -735,6 +763,34 @@ public class HistoryModeGameScene implements Scene {
                 auxiliar += "\n";
             }
             fos.write(auxiliar.getBytes(StandardCharsets.UTF_8));
+            fos.close();
+
+            ///
+            ///CHECKSUM
+            ///
+            //Obtenemos el checksum y guardamos en otro archivo
+            FileInputStream fis = new FileInputStream(new File(subFolder, fileName));
+            //MD5 del archivo
+            String md5Checksum = Utils.md5(fis);
+            //Miramos el root del salt
+            folderPath = context.getFilesDir().getAbsolutePath() + File.separator + "salt";
+
+            subFolder = new File(folderPath);
+
+            if (!subFolder.exists()) {
+                subFolder.mkdirs();
+            }
+            //Miramos el subfolder de la tematica
+            folderPath = context.getFilesDir().getAbsolutePath() + File.separator + "salt" + File.separator + folder;
+
+            subFolder = new File(folderPath);
+
+            if (!subFolder.exists()) {
+                subFolder.mkdirs();
+            }
+
+            fos = new FileOutputStream(new File(subFolder, fileName));
+            fos.write(md5Checksum.getBytes(StandardCharsets.UTF_8));
             fos.close();
 
         } catch (FileNotFoundException e) {
