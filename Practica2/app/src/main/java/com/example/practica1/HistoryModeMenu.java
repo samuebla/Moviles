@@ -6,9 +6,7 @@ import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
-import android.widget.Button;
 
-import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class HistoryModeMenu implements Scene {
@@ -23,12 +21,11 @@ public class HistoryModeMenu implements Scene {
 
     AtomicReference<Integer> coins;
     private Integer coinSize;
-    int[] unlockedThemedLevels;
 
-    private AtomicReference<Integer>[] progress;
-    private AtomicReference<Integer>[] palettes;
+    private final AtomicReference<Integer>[] progress;
+    private final AtomicReference<Integer>[] palettes;
 
-    private EngineApp engine;
+    private final EngineApp engine;
 
     public HistoryModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux,AtomicReference<Integer>[] palettesAux){
 
@@ -92,12 +89,12 @@ public class HistoryModeMenu implements Scene {
         render.drawImage((int) backInputButton.getPos().getX(), (int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        render.drawText("Selecciona el modo de Juego", (int)(scaleWidth/2), (int)(scaleHeight/5.4), "Black", "Cooper", 0,scaleWidth/27);
+        render.drawText("Selecciona el modo de Juego", (int)(scaleWidth/2.0), (int)(scaleHeight/5.4), "Black", "Cooper", 0,scaleWidth/27);
 
         //Moneda
         //MONEDAS
         render.drawText(Integer.toString(coins.get()),scaleWidth - coinSize-scaleWidth/100, (int)(scaleHeight/72 + coinSize/2.5 ), "Black", "CooperBold", 1,scaleWidth/20);
-        render.drawImage(scaleWidth-coinSize -scaleWidth/100, (int)scaleHeight/72,coinSize,coinSize/2,"Coin");
+        render.drawImage(scaleWidth-coinSize -scaleWidth/100, (int)(scaleHeight/72.0),coinSize,coinSize/2,"Coin");
     }
 
     @Override
@@ -119,83 +116,5 @@ public class HistoryModeMenu implements Scene {
     public void onResume() {
         init();
     }
-
-//    private void loadCoinsFromFile() {
-//        try {
-//            //Carga de archivo
-//            String receiveString = "";
-//            try {//Comprobar si existe en el almacenamiento interno
-//                FileInputStream fis = this.engine.getContext().openFileInput("saveData");
-//                InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
-//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-//
-//                while (bufferedReader.ready()) {
-//                    receiveString += bufferedReader.readLine();
-//                }
-//                inputStreamReader.close();
-//            } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
-//                e.printStackTrace();
-//                InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/" + "saveData"));
-//                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-//
-//                while (bufferedReader.ready()) {
-//                    receiveString += bufferedReader.readLine();
-//                }
-//
-//                inputStreamReader.close();
-//                //Copia del fichero
-//                FileOutputStream fos = this.engine.getContext().openFileOutput("saveData", Context.MODE_PRIVATE);
-//                fos.write(receiveString.getBytes());
-//                fos.close();
-//            }
-//            //Carga el numero de monedas
-//            String[] fileRead;
-//            fileRead = receiveString.split(" ");
-//            //Monedas
-//            coins = Integer.parseInt(fileRead[0]);
-//            //Niveles
-//            for(int i = 1; i < fileRead.length;i++)
-//                unlockedThemedLevels[i-1] = Integer.parseInt(fileRead[i]);
-//
-//        }
-//        catch (
-//                FileNotFoundException e) {
-//            Log.e("Error", "File not found: " + e.toString());
-//        } catch (
-//                IOException e) {
-//            Log.e("Reading Error", "Can not read file: " + e.toString());
-//        }
-//
-//    }
-
-    //Y aqui el guardado, recomiendo que este metodo lo pongamos aqui y podamos acceder a el desde todas las escenas para
-    //que cada desbloqueo y cada transaccion de monedas se guarde al instante y no se tenga que salir
-    //Tambien habria que hacer un getter en esta clase para saber cuantas monedas y niveles tienes
-//    public void saveDataHistoryMode(int coins_, int idTheme, int unlockedLevels){   //Idtheme siempre debe ser desde 1
-//        try {
-//            FileOutputStream fos = this.engine.getContext().openFileOutput("saveData", Context.MODE_PRIVATE);
-//            String writer = "";
-//            //Monedas
-//            if(coins_ >= 0)
-//                writer += coins_ + " \n";
-//            else
-//                writer += coins + " \n";
-//
-//            //Nivel desbloqueado
-//            if(idTheme > 0){
-//                unlockedThemedLevels[idTheme] = unlockedLevels;
-//            }
-//            //Escribimos los niveles
-//            for(int i = 1; i < unlockedThemedLevels.length;i++)
-//                writer += unlockedThemedLevels[i];
-//
-//            fos.write(writer.getBytes(StandardCharsets.UTF_8));
-//            fos.close();
-//        } catch (FileNotFoundException e) {
-//            Log.e("Error", "File not found: " + e.toString());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
 }

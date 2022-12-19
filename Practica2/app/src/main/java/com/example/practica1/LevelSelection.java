@@ -7,8 +7,6 @@ import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
-import java.io.Serializable;
-
 public class LevelSelection implements Scene {
 
     int scaleHeight;
@@ -22,7 +20,7 @@ public class LevelSelection implements Scene {
 
     private InputButton backInputButton;
 
-    private EngineApp engine;
+    private final EngineApp engine;
 
     public LevelSelection(EngineApp engineAux){
 
@@ -92,7 +90,7 @@ public class LevelSelection implements Scene {
         render.drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        render.drawText("Selecciona el tamaño del puzzle", (int)(scaleWidth/2), (int)(scaleHeight/5.4), "Black", "Amor", 0,scaleWidth/22);
+        render.drawText("Selecciona el tamaño del puzzle", (int)(scaleWidth/2.0), (int)(scaleHeight/5.4), "Black", "Amor", 0,scaleWidth/22);
     }
 
     @Override

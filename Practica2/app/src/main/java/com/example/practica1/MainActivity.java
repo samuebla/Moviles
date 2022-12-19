@@ -1,60 +1,32 @@
 package com.example.practica1;
 
 import com.example.engineandroid.EngineApp;
-import com.example.engineandroid.Scene;
-import com.example.engineandroid.SceneMngrAndroid;
-import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.gms.ads.rewarded.RewardItem;
-import com.google.android.gms.ads.rewarded.RewardedAd;
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
-//import com.google.android.gms.ads.AdRequest;
-//import com.google.android.gms.ads.AdSize;
-//import com.google.android.gms.ads.MobileAds;
-//import com.google.android.gms.ads.initialization.InitializationStatus;
-//import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
-import android.app.Activity;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.AssetManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.WorkSource;
-import android.util.Log;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -62,19 +34,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private SurfaceView renderView;
 
-    private AssetManager assetManager;
-
-    private FrameLayout adContainerView;
-
-    LinearLayout screenLayout;
-
     MainMenuScene mainMenuScene;
 
     private AdView mAdView;
-
-    //    AdView mAdView;
-    private AtomicReference<MainActivity> mainActivity;
-    private Button rewardButton;
 
     //Sensores
     private SensorManager sensorManager;
@@ -99,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Initialize the Mobile Ads SDK.
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
                 //Add Initialization ----------------------------------------------
 
                 mAdView.loadAd(adRequest);
@@ -117,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     }
 
                     @Override
-                    public void onAdFailedToLoad(LoadAdError adError) {
+                    public void onAdFailedToLoad(@NonNull LoadAdError adError) {
                         // Code to be executed when an ad request fails.
                     }
 
@@ -142,10 +104,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
 
-        this.engine = new EngineApp(this.renderView, this.screenLayout, this);
+        this.engine = new EngineApp(this.renderView, this);
 
         //SENSOR
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -153,18 +115,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //registramos el listener
         sensorManager .registerListener( this, sensor , SensorManager.SENSOR_DELAY_NORMAL);
         
-        mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
+        mainMenuScene = new MainMenuScene(this.engine, this.getBaseContext());
         this.engine.getSceneMngr().pushScene(mainMenuScene);
         this.engine.setPrimaryScene(mainMenuScene);
         this.engine.resume();
     }
 
-    private void createWorkRequest(String title, String text) {
+    private void createWorkRequest() {
         HashMap<String, Object> dataValues = new HashMap<>();
         dataValues.put("channelId", this.engine.getAdManager().getCHANNEL_ID());
         dataValues.put("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
-        dataValues.put("contentTitle", title);
-        dataValues.put("contentText", text);
+        dataValues.put("contentTitle", "Nonogram");
+        dataValues.put("contentText", "Llevas mucho tiempo sin jugar... Te echamos de menos :(");
         dataValues.put("notificationId", 437);
         Data inputData = new Data.Builder().putAll(dataValues).build();
 
@@ -181,12 +143,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onDestroy() {
         mainMenuScene.saveDataHistoryMode();
-        createWorkRequest("Nonogram", "Llevas mucho tiempo sin jugar... Te echamos de menos :(");
+        createWorkRequest();
         super.onDestroy();
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         mainMenuScene.saveDataHistoryMode();
         super.onSaveInstanceState(outState);
     }
@@ -201,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onStop() {
         super.onStop();
-        createWorkRequest("Nonogram", "Llevas mucho tiempo sin jugar... Te echamos de menos :(");
+        createWorkRequest();
     }
 
     @Override

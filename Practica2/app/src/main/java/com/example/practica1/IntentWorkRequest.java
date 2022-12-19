@@ -1,8 +1,6 @@
 package com.example.practica1;
 
-import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
@@ -13,9 +11,6 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.example.engineandroid.AdManager;
-
-import java.util.HashMap;
 import java.util.Map;
 
 public class IntentWorkRequest extends Worker {
@@ -44,7 +39,6 @@ public class IntentWorkRequest extends Worker {
         Intent activityIntent = new Intent(this.contextActivity, MainActivity.class);
         activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this.contextActivity, 0, activityIntent, PendingIntent.FLAG_IMMUTABLE);
-//        activityIntent.setComponent(new ComponentName("com.example.practica1", "com.example.practica1.MainActivity"));
         notificationBuilder = new NotificationCompat.Builder(this.contextActivity, channelId)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle( contentTitle )

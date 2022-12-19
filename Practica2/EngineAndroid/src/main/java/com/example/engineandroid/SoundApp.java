@@ -2,14 +2,13 @@ package com.example.engineandroid;
 
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
-import android.media.AudioAttributes;
 import android.media.SoundPool;
 
 public class SoundApp {
 
-    private SoundPool soundPool;
+    private final SoundPool soundPool;
 
-    private int soundID;
+    private final int soundID;
     private float volume = 1.0f;
     private int priority = 0;
     private int loop = 0;

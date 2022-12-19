@@ -4,8 +4,6 @@ import static android.graphics.Typeface.*;
 
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
-import android.graphics.fonts.Font;
-import android.graphics.fonts.FontStyle;
 
 
 import java.io.IOException;
@@ -36,13 +34,5 @@ public class Font_Android {
 
     public Typeface getFont() {
         return font;
-    }
-
-    public boolean isBold() {
-        return font.isBold();
-    }
-
-    public boolean isItalic() {
-        return font.isItalic();
     }
 }

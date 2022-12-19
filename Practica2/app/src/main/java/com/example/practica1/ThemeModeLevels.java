@@ -1,7 +1,5 @@
 package com.example.practica1;
 
-import android.widget.Button;
-
 import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
@@ -9,10 +7,7 @@ import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
-import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
-
-import kotlinx.coroutines.ObsoleteCoroutinesApi;
 
 public class ThemeModeLevels implements Scene {
 
@@ -25,17 +20,17 @@ public class ThemeModeLevels implements Scene {
 
     private InputButton backInputButton;
 
-    private EngineApp engine;
+    private final EngineApp engine;
 
-    private AtomicReference<Integer> coins;
+    private final AtomicReference<Integer> coins;
     private Integer coinSize;
 
-    private String[] categories = { "Alphabet", "Party", "Animals", "Geometry"};
-    private String selectedCategory;
-    private int category;
+    private final String[] categories = { "Alphabet", "Party", "Animals", "Geometry"};
+    private final String selectedCategory;
+    private final int category;
 
-    private AtomicReference<Integer> unlockedlevels;
-    private AtomicReference<Integer>[] palettes;
+    private final AtomicReference<Integer> unlockedlevels;
+    private final AtomicReference<Integer>[] palettes;
 
 
     public ThemeModeLevels(EngineApp engineAux,AtomicReference<Integer> levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux,AtomicReference<Integer>[] palettesAux){
@@ -121,12 +116,12 @@ public class ThemeModeLevels implements Scene {
         render.drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        render.drawText(selectedCategory + " Category", (int)(scaleWidth/2), (int)(scaleHeight/8), "Black", "CooperBold", 0,scaleWidth/20);
+        render.drawText(selectedCategory + " Category", scaleWidth/2, scaleHeight/8, "Black", "CooperBold", 0,scaleWidth/20);
 
         //Moneas
         //MONEDAS
-        render.drawText(Integer.toString(coins.get()), scaleWidth- coinSize-scaleWidth/100, (int)(scaleHeight/72 + + coinSize/2.5), "Black", "CooperBold", 1,scaleWidth/20);
-        render.drawImage(scaleWidth-coinSize -scaleWidth/100, (int)scaleHeight/72,coinSize,coinSize/2,"Coin");
+        render.drawText(Integer.toString(coins.get()), scaleWidth- coinSize-scaleWidth/100, (int)(scaleHeight/72 + coinSize/2.5), "Black", "CooperBold", 1,scaleWidth/20);
+        render.drawImage(scaleWidth-coinSize -scaleWidth/100, (int)(scaleHeight/72.0),coinSize,coinSize/2,"Coin");
 
     }
 

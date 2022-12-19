@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.LinearLayout;
 
 import java.util.HashMap;
 
@@ -17,11 +16,10 @@ public class RenderAndroid {
     int scaleWidth, scaleHeight;
 
 
-    private SurfaceView myView;
-    private LinearLayout screenLayout;
-    private SurfaceHolder holder;
+    private final SurfaceView myView;
+    private final SurfaceHolder holder;
     private Canvas canvas;
-    private Paint paint;
+    private final Paint paint;
 
     int resetColor;
     int colorBackground;
@@ -31,47 +29,22 @@ public class RenderAndroid {
 
     private AssetManager assets;
 
-    //AAAAAAAAAAAAAAAAAAAAAAAA Deprecated
-    @Deprecated
-    private Vector2D posCanvas;
-//    private Vector2D frameSize;
-    //AAAAAAAAAAAAAAAAAAAAAAAAA Deprecated
-    @Deprecated
-    private float factorScale;
-
-    public RenderAndroid(SurfaceView myView, float scale, LinearLayout screenLayoutAux) {
+    public RenderAndroid(SurfaceView myView) {
         // Intentamos crear el buffer strategy con 2 buffers.
         this.myView = myView;
-        this.screenLayout = screenLayoutAux;
         this.holder = this.myView.getHolder();
         this.paint = new Paint();
         this.paint.setColor(0xFF000000);
 
 //        this.frameSize = new Vector2D(720, 1080);
-        this.posCanvas = new Vector2D();
 
         this.fonts = new HashMap<>();
         this.images = new HashMap<>();
 
-        this.factorScale = scale;
         colorBackground = 0XFFFFFFFF;
         //Por defecto la escala es 1000x1000 pero creamos un setter por si alguien quiere alguna modificacion
         scaleHeight = 1000;
         scaleWidth = 1000;
-    }
-
-    public void restart(SurfaceView newView, LinearLayout newScreenLayout) {
-        this.myView = newView;
-        this.screenLayout = newScreenLayout;
-        this.holder = this.myView.getHolder();
-        this.paint = new Paint();
-        this.paint.setColor(0xFF000000);
-
-//        this.frameSize = new Vector2D(720, 1080);
-        this.posCanvas = new Vector2D();
-
-        this.fonts = new HashMap<>();
-        this.images = new HashMap<>();
     }
 
     public void prepareFrame() {
@@ -121,17 +94,17 @@ public class RenderAndroid {
             this.paint.setStyle(Paint.Style.STROKE);
 
             this.paint.setStrokeWidth(3);
-            this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
+            this.canvas.drawRect(x * getWidth() / (float)scaleWidth, y * getHeight() / (float)scaleHeight, (x + w) * getWidth() / (float)scaleWidth, (y + h) * getHeight() / (float)scaleHeight, this.paint);
             //Cuadrado de la interfaz
             if (celltype == 2) {
-                this.canvas.drawLine(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (w + x) * getWidth() / scaleWidth, (h + y) * getHeight() / scaleHeight, this.paint);
+                this.canvas.drawLine(x * getWidth() / (float)scaleWidth, y * getHeight() / (float)scaleHeight, (w + x) * getWidth() / (float)scaleWidth, (h + y) * getHeight() / (float)scaleHeight, this.paint);
             }
             this.paint.setStrokeWidth(stroke);
 
         } else {
             //Cambiar para que tenga en cuenta las dimensiones de la ventana, los últimos dos valores son el ancho y alto
             this.paint.setStyle(Paint.Style.FILL);
-            this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
+            this.canvas.drawRect(x * getWidth() / (float)scaleWidth, y * getHeight() / (float)scaleHeight, (x + w) * getWidth() / (float)scaleWidth, (y + h) * getHeight() / (float)scaleHeight, this.paint);
             this.paint.setStyle(Paint.Style.STROKE);
         }
         this.paint.setColor(resetColor);
@@ -139,14 +112,19 @@ public class RenderAndroid {
 
     public void drawCircle(float x, float y, float r, String color) {
         int c;
-        if (color == "blue") {
-            c = 0xFF0000FF;
-        } else if (color == "red") {
-            c = 0xFFFF0000;
-        } else if (color == "purple") {
-            c = 0xFF6960EC;
-        } else {
-            c = 0xFFFFFFFF;
+        switch (color) {
+            case "blue":
+                c = 0xFF0000FF;
+                break;
+            case "red":
+                c = 0xFFFF0000;
+                break;
+            case "purple":
+                c = 0xFF6960EC;
+                break;
+            default:
+                c = 0xFFFFFFFF;
+                break;
         }
 
         this.paint.setColor(c);
@@ -195,16 +173,6 @@ public class RenderAndroid {
 //    }
 
 
-    public Vector2D getOffset() {
-        return this.posCanvas;
-    }
-
-
-    public void setResolution(double width, double height) {
-        this.canvas.scale((float) width, (float) height);
-    }
-
-
     public void setColor(int color) {
         this.paint.setColor(color);
     }
@@ -214,26 +182,28 @@ public class RenderAndroid {
     }
 
 
-    public ImageAndroid newImage(String imageName, String path) {
-        return images.put(imageName, new ImageAndroid(this.assets, path));
+    public void newImage(String imageName, String path) {
+        images.put(imageName, new ImageAndroid(this.assets, path));
     }
 
 
-    public Font_Android newFont(String fontName, String path, int type) {
+    public void newFont(String fontName, String path, int type) {
         try {
-            return fonts.put(fontName, new Font_Android(path, type, this.assets));
+            fonts.put(fontName, new Font_Android(path, type, this.assets));
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
     }
 
 
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String imageAux) {
         ImageAndroid image = images.get(imageAux);
-        Bitmap map = image.getImage();
-        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int) (desiredWidth * getWidth() / scaleWidth), (int) (desiredHeight * getHeight() / scaleHeight), false);
-        canvas.drawBitmap(scaledMap, (int) (x * getWidth() / scaleWidth), (int) (y * getHeight() / scaleHeight), this.paint);
+        Bitmap map = null;
+        if (image != null) {
+            map = image.getImage();
+        }
+        Bitmap scaledMap = Bitmap.createScaledBitmap(map, desiredWidth * getWidth() / scaleWidth, desiredHeight * getHeight() / scaleHeight, false);
+        canvas.drawBitmap(scaledMap, x * getWidth() / (float)scaleWidth, y * getHeight() / (float)scaleHeight, this.paint);
     }
 
 
@@ -242,18 +212,13 @@ public class RenderAndroid {
         setColor(color);
 
         if (!fill)
-            this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
+            this.canvas.drawRect(x * getWidth() / (float)scaleWidth, y * getHeight() / (float)scaleHeight, (x + w) * getWidth() / (float)scaleWidth, (y + h) * getHeight() / (float)scaleHeight, this.paint);
         else {
             this.paint.setStyle(Paint.Style.FILL);
-            this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
+            this.canvas.drawRect(x * getWidth() / (float)scaleWidth, y * getHeight() / (float)scaleHeight, (x + w) * getWidth() / (float)scaleWidth, (y + h) * getHeight() / (float)scaleHeight, this.paint);
             this.paint.setStyle(Paint.Style.STROKE);
         }
         this.paint.setColor(resetColor);
-    }
-
-
-    public void drawLine(int x, int y, int w, int h) {
-        this.canvas.drawLine(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
     }
 
     //AlignType:
@@ -263,9 +228,11 @@ public class RenderAndroid {
     public void drawText(String text, int x, int y, String color, String fontAux, int alignType,int size) {
         int prevColor = this.paint.getColor();
         Font_Android font = this.fonts.get(fontAux);
-        int f = (int) ((size*getWidth()/scaleWidth)/ factorScale);
+        int f = size*getWidth()/scaleWidth;
         this.paint.setTextSize(f);
-        this.paint.setTypeface(font.getFont());
+        if (font != null) {
+            this.paint.setTypeface(font.getFont());
+        }
 
         switch (alignType) {
             case 0:
@@ -292,14 +259,6 @@ public class RenderAndroid {
         this.canvas.drawText(text, (float) x * getWidth() / scaleWidth, (float) y * getHeight() / scaleHeight, this.paint);
         this.paint.setColor(prevColor);
         this.paint.setStyle(Paint.Style.STROKE);
-    }
-
-    public void changeScaleWidth(int newScale) {
-        scaleWidth = newScale;
-    }
-
-    public void changeScaleHeight(int newScale) {
-        scaleHeight = newScale;
     }
 
 }

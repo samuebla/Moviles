@@ -1,7 +1,5 @@
 package com.example.practica1;
 
-import android.widget.Button;
-
 import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
@@ -9,7 +7,6 @@ import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
-import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ThemeModeMenu implements Scene {
@@ -23,13 +20,13 @@ public class ThemeModeMenu implements Scene {
 
     private InputButton backInputButton;
 
-    private EngineApp engine;
+    private final EngineApp engine;
 
-    private AtomicReference<Integer> coins;
+    private final AtomicReference<Integer> coins;
     private Integer coinSize;
 
-    private AtomicReference<Integer>[] progress;
-    private AtomicReference<Integer>[] palettes;
+    private final AtomicReference<Integer>[] progress;
+    private final AtomicReference<Integer>[] palettes;
 
     public ThemeModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux,AtomicReference<Integer>[] palettesAux){
         this.engine = engineAux;
@@ -104,12 +101,12 @@ public class ThemeModeMenu implements Scene {
         render.drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        render.drawText("Elige la categoria que quieres jugar", (int)(scaleWidth/2), (int)(scaleHeight/5.4), "Black", "Cooper", 0,scaleWidth/27);
+        render.drawText("Elige la categoria que quieres jugar", (int)(scaleWidth/2.0), (int)(scaleHeight/5.4), "Black", "Cooper", 0,scaleWidth/27);
 
         //Moneas
         //MONEDAS
         render.drawText(Integer.toString(coins.get()), scaleWidth - coinSize-scaleWidth/100, (int)(scaleHeight/72 + coinSize/2.5f), "Black", "CooperBold", 1,scaleWidth/20);
-        render.drawImage(scaleWidth-coinSize -scaleWidth/100, (int)scaleHeight/72,coinSize,coinSize/2,"Coin");
+        render.drawImage(scaleWidth-coinSize -scaleWidth/100, (int)(scaleHeight/72.0),coinSize,coinSize/2,"Coin");
 
     }
 
