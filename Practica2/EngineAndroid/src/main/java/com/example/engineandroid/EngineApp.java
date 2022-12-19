@@ -71,6 +71,8 @@ public class EngineApp implements Runnable {
         return audioMngr;
     }
 
+    public AdManager getAdManager() { return adManager; }
+
     //<<Input>>
     public InputAndroid getInput() {
         return input;

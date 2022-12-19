@@ -36,8 +36,8 @@ public class AdManager {
 
 
     private final String CHANNEL_ID = "NonogramChannelId";
-    NotificationManagerCompat notificationManager;
-    NotificationCompat.Builder notificationBuilder;
+
+
 
 
     public AdManager(Activity mainActivity) {
@@ -63,27 +63,20 @@ public class AdManager {
 
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
-//        if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
-//            CharSequence name = this.mainActivity.getString(R.string.channel_name);
-//            String description = this.mainActivity.getString(R.string.channel_description);
-//            int importance = NotificationManager. IMPORTANCE_DEFAULT;
-//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID , name, importance) ;
-//            channel.setDescription(description) ;
-//            // Register the channel with the system; you can't change the importance
-//            // or other notification behaviors after this
-//            NotificationManager notificationManager = this.mainActivity.getSystemService(NotificationManager. class);
-//            notificationManager.createNotificationChannel(channel);
-//        }
-//
-//        notificationBuilder = new NotificationCompat.Builder(this.mainActivity, CHANNEL_ID)
-//                .setSmallIcon(R.drawable.ic_launcher_foreground)
-//                .setContentTitle( "My notification" )
-//                .setContentText( "Much longer text that cannot fit one line..." )
-//                .setStyle( new NotificationCompat.BigTextStyle()
-//                        .bigText( "Much longer text that cannot fit one line..." ))
-//                .setPriority(NotificationCompat. PRIORITY_DEFAULT);
-//
-//        notificationManager = NotificationManagerCompat.from(this.mainActivity);
+        if (Build.VERSION. SDK_INT >= Build.VERSION_CODES. O) {
+            CharSequence name = "channel";
+            String description = "NotificationChannel";
+            int importance = NotificationManager. IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID , name, importance) ;
+            channel.setDescription(description) ;
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = this.mainActivity.getSystemService(NotificationManager. class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+
+
 //
 //        synchronized(notificationManager){
 //            try {
@@ -96,10 +89,14 @@ public class AdManager {
 //        }
     }
 
+    public String getCHANNEL_ID(){
+        return CHANNEL_ID;
+    }
+
     public void sendIntent(int sendType, String url, String message){
         Uri builtURI = Uri. parse(url ).buildUpon()
                 .appendQueryParameter( "text", message)
-                .build() ; //Genera la URl https://twitter.com/intent/tweet?text=Este%20es%20mi%20texto%20a%20tweettear
+                .build() ; //Genera la URl https://twitter.com/intent/tweet?text=message
         Intent intent = new Intent(Intent. ACTION_VIEW, builtURI);
         this.mainActivity.startActivity(intent) ; // inicializa el intent
     }
