@@ -6,6 +6,7 @@ import android.util.Log;
 import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
@@ -202,12 +203,12 @@ public class HistoryModeGameScene implements Scene {
     }
 
     @Override
-    public void render() {
+    public void render(RenderAndroid renderEngine) {
         Vector2D auxCuadradoFinal = this.matriz[cols_ - 1][rows_ - 1].getPos();
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 
         //El cuadrado se mantiene aunque ganes porque es muy bonito
-        this.engine.getGraphics().drawImage((int) (auxCuadradoInicio.getX() - tamProporcionalAncho * 0.1), (int) (auxCuadradoInicio.getY() - tamProporcionalAlto * 0.1),
+        renderEngine.drawImage((int) (auxCuadradoInicio.getX() - tamProporcionalAncho * 0.1), (int) (auxCuadradoInicio.getY() - tamProporcionalAlto * 0.1),
                 (int) (auxCuadradoFinal.getX() - auxCuadradoInicio.getX() + tamProporcionalAncho + tamProporcionalAncho * 0.2)
                 , (int) (auxCuadradoFinal.getY() - auxCuadradoInicio.getY() + tamProporcionalAlto + tamProporcionalAlto * 0.2), "Board");
 
@@ -216,22 +217,22 @@ public class HistoryModeGameScene implements Scene {
             //Solo renderizo las azules
             for (int i = 0; i < rows_; i++) {
                 for (int j = 0; j < cols_; j++) {
-                    this.matriz[j][i].solutionRender(engine);
+                    this.matriz[j][i].solutionRender(renderEngine);
                 }
             }
 
             //Mostramos las monedas obtenidas
             if (showNewCoins) {
-                this.engine.getGraphics().drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize / 2.5f), "Black", "Cooper", 0);
-                this.engine.getGraphics().drawImage((int) (scaleWidth / 1.8), (int) (scaleHeight / 12), coinSize, coinSize / 2, "Coin");
+                renderEngine.drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize / 2.5f), "Black", "Cooper", 0);
+                renderEngine.drawImage((int) (scaleWidth / 1.8), (int) (scaleHeight / 12), coinSize, coinSize / 2, "Coin");
             }
 
             //Mensaje de enhorabuena
-            this.engine.getGraphics().drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
+            renderEngine.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
 
             //BackButton
-            this.engine.getGraphics().drawImage((int) (winBackInputButton.getPos().getX()), (int) (winBackInputButton.getPos().getY()), (int) (winBackInputButton.getSize().getX()), (int) (winBackInputButton.getSize().getY()), "Back");
-            this.engine.getGraphics().drawImage((int) (shareButton.getPos().getX()), (int) (shareButton.getPos().getY()), (int) (shareButton.getSize().getX()), (int) (shareButton.getSize().getY()), "TwitterIcon");
+            renderEngine.drawImage((int) (winBackInputButton.getPos().getX()), (int) (winBackInputButton.getPos().getY()), (int) (winBackInputButton.getSize().getX()), (int) (winBackInputButton.getSize().getY()), "Back");
+            renderEngine.drawImage((int) (shareButton.getPos().getX()), (int) (shareButton.getPos().getY()), (int) (shareButton.getSize().getX()), (int) (shareButton.getSize().getY()), "TwitterIcon");
 
             //Si sigo jugando...
         } else {
@@ -239,7 +240,7 @@ public class HistoryModeGameScene implements Scene {
             //Renderiza rojo si esta mal
             for (int i = 0; i < rows_; i++) {
                 for (int j = 0; j < cols_; j++) {
-                    this.matriz[j][i].render(engine);
+                    this.matriz[j][i].render(renderEngine);
                 }
             }
 
@@ -256,35 +257,35 @@ public class HistoryModeGameScene implements Scene {
 
             //BOTONES
             //TODO AAA NO SE HACER LOS PUTOS COLORES
-            this.engine.getGraphics().drawRectangle((int) ((double) colorsInputButtons[actualColorPattern].getPos().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getPos().getY()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getY()), true, (int) (colorfulPattern[actualColorPattern] + 0xAF000000));
+            renderEngine.drawRectangle((int) ((double) colorsInputButtons[actualColorPattern].getPos().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getPos().getY()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getX()), (int) ((double) colorsInputButtons[actualColorPattern].getSize().getY()), true, (int) (colorfulPattern[actualColorPattern] + 0xAF000000));
 
             //BackButton
-            this.engine.getGraphics().drawImage((int) ((double) escapeInputButton.getPos().getX()), (int) ((double) escapeInputButton.getPos().getY()), (int) ((double) escapeInputButton.getSize().getX()), (int) ((double) escapeInputButton.getSize().getY()), "Back");
+            renderEngine.drawImage((int) ((double) escapeInputButton.getPos().getX()), (int) ((double) escapeInputButton.getPos().getY()), (int) ((double) escapeInputButton.getSize().getX()), (int) ((double) escapeInputButton.getSize().getY()), "Back");
 
             //Paleta de colores
             for (int i = 0; i < colorsInputButtons.length; i++) {
-                this.engine.getGraphics().drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), colorsButtonsName[i]);
+                renderEngine.drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), colorsButtonsName[i]);
                 //Si no has desbloqueado todavia la paleta...
                 if (palettes[i].get() != 1)
                     //Ponemos una imagen de bloqueo por encima con el numero de monedas
-                    this.engine.getGraphics().drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), "CoinsCost");
+                    renderEngine.drawImage((int) ((double) colorsInputButtons[i].getPos().getX()), (int) ((double) colorsInputButtons[i].getPos().getY()), (int) ((double) colorsInputButtons[i].getSize().getX()), (int) ((double) colorsInputButtons[i].getSize().getY()), "CoinsCost");
             }
 
             //AD PARA CONSEGUIR VIDAS
-            this.engine.getGraphics().drawImage((int) ((double) getLifeInputButton.getPos().getX()), (int) ((double) getLifeInputButton.getPos().getY()), (int) ((double) getLifeInputButton.getSize().getX()), (int) ((double) getLifeInputButton.getSize().getY()), "HeartAD");
+            renderEngine.drawImage((int) ((double) getLifeInputButton.getPos().getX()), (int) ((double) getLifeInputButton.getPos().getY()), (int) ((double) getLifeInputButton.getSize().getX()), (int) ((double) getLifeInputButton.getSize().getY()), "HeartAD");
 
             //MONEDAS
-            this.engine.getGraphics().drawText(Integer.toString(coins.get()), scaleWidth - coinSize - scaleWidth / 100, (int) (scaleHeight / 72 + coinSize / 2.5f), "Black", "CooperBold", 1);
-            this.engine.getGraphics().drawImage(scaleWidth - coinSize - scaleWidth / 100, (int) scaleHeight / 72, coinSize, coinSize / 2, "Coin");
+            renderEngine.drawText(Integer.toString(coins.get()), scaleWidth - coinSize - scaleWidth / 100, (int) (scaleHeight / 72 + coinSize / 2.5f), "Black", "CooperBold", 1);
+            renderEngine.drawImage(scaleWidth - coinSize - scaleWidth / 100, (int) scaleHeight / 72, coinSize, coinSize / 2, "Coin");
 
             //CORAZONES
             for (int i = lives.get(); i > 0; i--) {
-                this.engine.getGraphics().drawImage((int) (scaleWidth / 7) + (scaleWidth * 2 / 21) * (i - 1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
+                renderEngine.drawImage((int) (scaleWidth / 7) + (scaleWidth * 2 / 21) * (i - 1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
             }
 
             if (lives.get() <= 0) {
                 //Mensaje de enhorabuena
-                this.engine.getGraphics().drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
+                renderEngine.drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
 
             }
         }

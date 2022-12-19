@@ -157,7 +157,7 @@ public class EngineApp implements Runnable {
 
             //Renderizado
             this.render.prepareFrame();
-            this.sceneMngr.render();
+            this.sceneMngr.render(this.render);
             this.render.clear();
         }
     }

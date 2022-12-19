@@ -1,6 +1,7 @@
 package com.example.practica1;
 
 import com.example.engineandroid.EngineApp;
+import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Vector2D;
 
 public class CellQuickGame extends CellBase {
@@ -60,13 +61,13 @@ public class CellQuickGame extends CellBase {
     }
 
     //Para el boton de comprobar
-    public void trueRender(EngineApp engine) {
+    public void trueRender(RenderAndroid renderEngine) {
         //Si te has equivocado...
         if (key == 1) {
             //Renderizamos a rojo
-            engine.getGraphics().paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), cellType.WRONG.ordinal(),-1);
+            renderEngine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), cellType.WRONG.ordinal(),-1);
         } else {
-            engine.getGraphics().paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal(),-1);
+            renderEngine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal(),-1);
         }
     }
 

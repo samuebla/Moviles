@@ -4,7 +4,7 @@ package com.example.engineandroid;
 public interface Scene {
     //Main Functions
     public void update(double deltaTime, AdManager adManager);
-    public void render();
+    public void render(RenderAndroid render);
     public void handleInput(EventHandler.EventType type, AdManager adManager);
     public void onResume();
 

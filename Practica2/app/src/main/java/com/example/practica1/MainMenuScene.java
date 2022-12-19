@@ -3,6 +3,7 @@ package com.example.practica1;
 import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
@@ -113,71 +114,71 @@ public class MainMenuScene implements Scene {
 
     @Override
     public void loadResources(EngineApp engineAux) {
-        this.engine = engineAux;
         try {
             //La constructora del menu solo se llama una vez
             //Cargamos el fondo y lo playeamos
-            this.engine.getAudio().loadMusic("background", "assets/WiiBackgroundMusic.wav");
-            this.engine.getAudio().playSound("background", 0);
-            this.engine.getAudio().newSound("effect", "assets/wiiClickSound.wav");
+            engineAux.getAudio().loadMusic("background", "assets/WiiBackgroundMusic.wav");
+            engineAux.getAudio().playSound("background", 0);
+            engineAux.getAudio().newSound("effect", "assets/wiiClickSound.wav");
 
-            this.engine.getGraphics().newFont("Amor", "assets/AmorRegular.ttf", 0, 50);
-            this.engine.getGraphics().newFont("Calibri", "assets/CalibriRegular.ttf", 0, 60);
-            this.engine.getGraphics().newFont("Cooper", "assets/CooperBlackRegular.ttf", 0, 50);
-            this.engine.getGraphics().newFont("CooperBig", "assets/CooperBlackRegular.ttf", 0, 80);
-            this.engine.getGraphics().newFont("CooperSmall", "assets/CooperBlackRegular.ttf", 0, 30);
-            this.engine.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1, 60);
-            this.engine.getGraphics().newFont("CalibriSmall", "assets/CalibriRegular.ttf", 0, 50);
-            this.engine.getGraphics().newFont("CalibriBold", "assets/CalibriRegular.ttf", 1, 30);
+            engineAux.getGraphics().newFont("Amor", "assets/AmorRegular.ttf", 0, 50);
+            engineAux.getGraphics().newFont("Calibri", "assets/CalibriRegular.ttf", 0, 60);
+            engineAux.getGraphics().newFont("Cooper", "assets/CooperBlackRegular.ttf", 0, 50);
+            engineAux.getGraphics().newFont("CooperBig", "assets/CooperBlackRegular.ttf", 0, 80);
+            engineAux.getGraphics().newFont("CooperSmall", "assets/CooperBlackRegular.ttf", 0, 30);
+            engineAux.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1, 60);
+            engineAux.getGraphics().newFont("CalibriSmall", "assets/CalibriRegular.ttf", 0, 50);
+            engineAux.getGraphics().newFont("CalibriBold", "assets/CalibriRegular.ttf", 1, 30);
 
-            this.engine.getGraphics().newImage("Board", "assets/board.png");
-            this.engine.getGraphics().newImage("GiveUp", "assets/giveUpButton.png");
-            this.engine.getGraphics().newImage("Back", "assets/backButton.png");
-            this.engine.getGraphics().newImage("Check", "assets/checkButton.png");
-            this.engine.getGraphics().newImage("Coin", "assets/coin.png");
-            this.engine.getGraphics().newImage("Heart", "assets/heart.png");
-            this.engine.getGraphics().newImage("Square", "assets/square.png");
+            engineAux.getGraphics().newImage("Board", "assets/board.png");
+            engineAux.getGraphics().newImage("GiveUp", "assets/giveUpButton.png");
+            engineAux.getGraphics().newImage("Back", "assets/backButton.png");
+            engineAux.getGraphics().newImage("Check", "assets/checkButton.png");
+            engineAux.getGraphics().newImage("Coin", "assets/coin.png");
+            engineAux.getGraphics().newImage("Heart", "assets/heart.png");
+            engineAux.getGraphics().newImage("Square", "assets/square.png");
 
             //NIVELES
-            this.engine.getGraphics().newImage("PartyUnlocked", "assets/party_unlocked.png");
-            this.engine.getGraphics().newImage("AnimalsUnlocked", "assets/animals_unlocked.png");
-            this.engine.getGraphics().newImage("GeometryUnlocked", "assets/geometry_unlocked.png");
-            this.engine.getGraphics().newImage("AlphabetUnlocked", "assets/alphabet_unlocked.png");
+            engineAux.getGraphics().newImage("PartyUnlocked", "assets/party_unlocked.png");
+            engineAux.getGraphics().newImage("AnimalsUnlocked", "assets/animals_unlocked.png");
+            engineAux.getGraphics().newImage("GeometryUnlocked", "assets/geometry_unlocked.png");
+            engineAux.getGraphics().newImage("AlphabetUnlocked", "assets/alphabet_unlocked.png");
 
-            this.engine.getGraphics().newImage("QuickPlay", "assets/quick_play.png");
-            this.engine.getGraphics().newImage("HistoryPlay", "assets/history_play.png");
-            this.engine.getGraphics().newImage("ThemePlay", "assets/theme_play.png");
-            this.engine.getGraphics().newImage("ChallengePlay", "assets/challenge_play.png");
-            this.engine.getGraphics().newImage("GeometryLevel", "assets/geometry_level.png");
-            this.engine.getGraphics().newImage("AnimalsLevel", "assets/animals_level.png");
-            this.engine.getGraphics().newImage("PartyLevel", "assets/party_level.png");
-            this.engine.getGraphics().newImage("AlphabetLevel", "assets/alphabet_level.png");
+            engineAux.getGraphics().newImage("QuickPlay", "assets/quick_play.png");
+            engineAux.getGraphics().newImage("HistoryPlay", "assets/history_play.png");
+            engineAux.getGraphics().newImage("ThemePlay", "assets/theme_play.png");
+            engineAux.getGraphics().newImage("ChallengePlay", "assets/challenge_play.png");
+            engineAux.getGraphics().newImage("GeometryLevel", "assets/geometry_level.png");
+            engineAux.getGraphics().newImage("AnimalsLevel", "assets/animals_level.png");
+            engineAux.getGraphics().newImage("PartyLevel", "assets/party_level.png");
+            engineAux.getGraphics().newImage("AlphabetLevel", "assets/alphabet_level.png");
 
-            this.engine.getGraphics().newImage("GeometryPlay", "assets/geometry_play.png");
-            this.engine.getGraphics().newImage("AnimalsPlay", "assets/animals_play.png");
-            this.engine.getGraphics().newImage("PartyPlay", "assets/party_play.png");
-            this.engine.getGraphics().newImage("AlphabetPlay", "assets/alphabet_play.png");
+            engineAux.getGraphics().newImage("GeometryPlay", "assets/geometry_play.png");
+            engineAux.getGraphics().newImage("AnimalsPlay", "assets/animals_play.png");
+            engineAux.getGraphics().newImage("PartyPlay", "assets/party_play.png");
+            engineAux.getGraphics().newImage("AlphabetPlay", "assets/alphabet_play.png");
             //-------------------------------
 
             //Paletas de colores
-            this.engine.getGraphics().newImage("YellowPalette", "assets/yellow_palette.png");
-            this.engine.getGraphics().newImage("PinkPalette", "assets/pink_palette.png");
-            this.engine.getGraphics().newImage("BluePalette", "assets/blue_palette.png");
-            this.engine.getGraphics().newImage("WhitePalette", "assets/white_palette.png");
+            engineAux.getGraphics().newImage("YellowPalette", "assets/yellow_palette.png");
+            engineAux.getGraphics().newImage("PinkPalette", "assets/pink_palette.png");
+            engineAux.getGraphics().newImage("BluePalette", "assets/blue_palette.png");
+            engineAux.getGraphics().newImage("WhitePalette", "assets/white_palette.png");
 
-            this.engine.getGraphics().newImage("HeartAD", "assets/extra_heart.png");
-            this.engine.getGraphics().newImage("CoinsCost", "assets/coste_monedas.png");
-            this.engine.getGraphics().newImage("TwitterIcon", "assets/twitter_icon.png");
+            engineAux.getGraphics().newImage("HeartAD", "assets/extra_heart.png");
+            engineAux.getGraphics().newImage("CoinsCost", "assets/coste_monedas.png");
+            engineAux.getGraphics().newImage("TwitterIcon", "assets/twitter_icon.png");
 
 
 
 
             //Cambiamos el texto del titulo a un tamaño adaptado al escalado nuevo
-            this.engine.getGraphics().changeSizeText("CooperBig",(int)(scaleWidth/20));
-            this.engine.getGraphics().changeSizeText("Cooper",(int)(scaleWidth/27));
-            this.engine.getGraphics().changeSizeText("CooperBold",(int)(scaleWidth/20));
-            this.engine.getGraphics().changeSizeText("Amor",(int)(scaleWidth/22));
-            this.engine.getGraphics().changeSizeText("Calibri",(int)(scaleWidth/22));
+            engineAux.getGraphics().changeSizeText("CooperBig",(int)(scaleWidth/20));
+            engineAux.getGraphics().changeSizeText("Cooper",(int)(scaleWidth/27));
+            engineAux.getGraphics().changeSizeText("CooperBold",(int)(scaleWidth/20));
+            engineAux.getGraphics().changeSizeText("Amor",(int)(scaleWidth/22));
+            engineAux.getGraphics().changeSizeText("Calibri",(int)(scaleWidth/22));
+            engineAux.getGraphics().changeSizeText("Calibri",(int)(scaleWidth/22));
 
 
         } catch (Exception e) {
@@ -281,15 +282,15 @@ public class MainMenuScene implements Scene {
     }
 
     @Override
-    public void render() {
+    public void render(RenderAndroid render) {
 
 
         //Titulo
-        this.engine.getGraphics().drawText("NONOGRAMAS", (int) (scaleWidth / 2), (int) (scaleHeight / 10.8), "Black", "CooperBig", 0);
+        render.drawText("NONOGRAMAS", (int) (scaleWidth / 2), (int) (scaleHeight / 10.8), "Black", "CooperBig", 0);
 
         //Botones
-        this.engine.getGraphics().drawImage((int) this.fastPlay.getPos().getX(), (int) (fastPlay.getPos().getY()), (int) (this.fastPlay.getSize().getX()), (int) (this.fastPlay.getSize().getY()), "QuickPlay");
-        this.engine.getGraphics().drawImage((int) this.historyMode.getPos().getX(), (int) (historyMode.getPos().getY()), (int) (this.historyMode.getSize().getX()), (int) (this.historyMode.getSize().getY()), "HistoryPlay");
+        render.drawImage((int) this.fastPlay.getPos().getX(), (int) (fastPlay.getPos().getY()), (int) (this.fastPlay.getSize().getX()), (int) (this.fastPlay.getSize().getY()), "QuickPlay");
+        render.drawImage((int) this.historyMode.getPos().getX(), (int) (historyMode.getPos().getY()), (int) (this.historyMode.getSize().getX()), (int) (this.historyMode.getSize().getY()), "HistoryPlay");
 
     }
 

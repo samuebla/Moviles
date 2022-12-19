@@ -3,6 +3,7 @@ package com.example.practica1;
 import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 import android.widget.Button;
@@ -78,25 +79,25 @@ public class HistoryModeMenu implements Scene {
     }
 
     @Override
-    public void render(){
+    public void render(RenderAndroid render){
         //ThemeMode
-        this.engine.getGraphics().drawImage((int)this.themeInputButtonMode.getPos().getX(), (int)this.themeInputButtonMode.getPos().getY(),(int)this.themeInputButtonMode.getSize().getX(),(int)this.themeInputButtonMode.getSize().getY(),"ThemePlay");
-        this.engine.getGraphics().drawText("Temático", (int)(themeInputButtonMode.getPos().getX() + themeInputButtonMode.getSize().getX()/2), (int)(themeInputButtonMode.getPos().getY() - themeInputButtonMode.getSize().getY()*0.5), "Black","Cooper", 0);
+        render.drawImage((int)this.themeInputButtonMode.getPos().getX(), (int)this.themeInputButtonMode.getPos().getY(),(int)this.themeInputButtonMode.getSize().getX(),(int)this.themeInputButtonMode.getSize().getY(),"ThemePlay");
+        render.drawText("Temático", (int)(themeInputButtonMode.getPos().getX() + themeInputButtonMode.getSize().getX()/2), (int)(themeInputButtonMode.getPos().getY() - themeInputButtonMode.getSize().getY()*0.5), "Black","Cooper", 0);
 
         //DificultyMode
-        this.engine.getGraphics().drawImage((int)this.dificultyInputButtonMode.getPos().getX(), (int)this.dificultyInputButtonMode.getPos().getY(),(int)this.dificultyInputButtonMode.getSize().getX(),(int)this.dificultyInputButtonMode.getSize().getY(),"ChallengePlay");
-        this.engine.getGraphics().drawText("Dificultad", (int)(dificultyInputButtonMode.getPos().getX() + dificultyInputButtonMode.getSize().getX()/2), (int)(dificultyInputButtonMode.getPos().getY() - dificultyInputButtonMode.getSize().getY()*0.5), "Black","Cooper", 0);
+        render.drawImage((int)this.dificultyInputButtonMode.getPos().getX(), (int)this.dificultyInputButtonMode.getPos().getY(),(int)this.dificultyInputButtonMode.getSize().getX(),(int)this.dificultyInputButtonMode.getSize().getY(),"ChallengePlay");
+        render.drawText("Dificultad", (int)(dificultyInputButtonMode.getPos().getX() + dificultyInputButtonMode.getSize().getX()/2), (int)(dificultyInputButtonMode.getPos().getY() - dificultyInputButtonMode.getSize().getY()*0.5), "Black","Cooper", 0);
 
         //Back Button
-        this.engine.getGraphics().drawImage((int) backInputButton.getPos().getX(), (int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
+        render.drawImage((int) backInputButton.getPos().getX(), (int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        this.engine.getGraphics().drawText("Selecciona el modo de Juego", (int)(scaleWidth/2), (int)(scaleHeight/5.4), "Black", "Cooper", 0);
+        render.drawText("Selecciona el modo de Juego", (int)(scaleWidth/2), (int)(scaleHeight/5.4), "Black", "Cooper", 0);
 
         //Moneda
         //MONEDAS
-        this.engine.getGraphics().drawText(Integer.toString(coins.get()),scaleWidth - coinSize-scaleWidth/100, (int)(scaleHeight/72 + coinSize/2.5 ), "Black", "CooperBold", 1);
-        this.engine.getGraphics().drawImage(scaleWidth-coinSize -scaleWidth/100, (int)scaleHeight/72,coinSize,coinSize/2,"Coin");
+        render.drawText(Integer.toString(coins.get()),scaleWidth - coinSize-scaleWidth/100, (int)(scaleHeight/72 + coinSize/2.5 ), "Black", "CooperBold", 1);
+        render.drawImage(scaleWidth-coinSize -scaleWidth/100, (int)scaleHeight/72,coinSize,coinSize/2,"Coin");
     }
 
     @Override

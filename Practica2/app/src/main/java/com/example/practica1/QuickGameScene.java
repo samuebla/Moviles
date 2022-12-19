@@ -3,6 +3,7 @@ package com.example.practica1;
 import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
@@ -316,6 +317,7 @@ public class QuickGameScene implements Scene {
             //Nos quedamos con el tamaño mas grande para que el texto se ajuste a la peor situacion
             tamTexto = (int) (tamProporcionalAlto / 4.5f);
         //Con este tamaño ajustamos el valor del texto tambien
+        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         this.engine.getGraphics().changeSizeText("CalibriSmall", (int) (tamTexto));
 
         //Lo ajustamos al centro de la pantalla de largo
@@ -384,13 +386,13 @@ public class QuickGameScene implements Scene {
     }
 
     @Override
-    public void render() {
+    public void render(RenderAndroid render) {
 
         Vector2D auxCuadradoFinal = this.matriz[cols_-1][rows_-1].getPos();
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 
         //El cuadrado se mantiene aunque ganes porque es muy bonito
-        this.engine.getGraphics().drawImage((int) (auxCuadradoInicio.getX() - tamProporcionalAncho * 0.1), (int) (auxCuadradoInicio.getY() - tamProporcionalAlto * 0.1),
+        render.drawImage((int) (auxCuadradoInicio.getX() - tamProporcionalAncho * 0.1), (int) (auxCuadradoInicio.getY() - tamProporcionalAlto * 0.1),
                 (int) (auxCuadradoFinal.getX() - auxCuadradoInicio.getX() + tamProporcionalAncho + tamProporcionalAncho * 0.2)
                 , (int) (auxCuadradoFinal.getY() - auxCuadradoInicio.getY() + tamProporcionalAlto + tamProporcionalAlto * 0.2), "Board");
 
@@ -399,35 +401,35 @@ public class QuickGameScene implements Scene {
             //Solo renderizo las azules
             for (int i = 0; i < matriz.length; i++) {
                 for (int j = 0; j < matriz[i].length; j++) {
-                    this.matriz[i][j].solutionRender(engine);
+                    this.matriz[i][j].solutionRender(render);
                 }
             }
 
             //Mensaje de enhorabuena
-            this.engine.getGraphics().drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
+            render.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0);
 
             //BackButton
-            this.engine.getGraphics().drawImage((int)(backInputButton.getPos().getX()), (int)(backInputButton.getPos().getY()), (int)(backInputButton.getSize().getX()), (int)(backInputButton.getSize().getY()), "Back");
+            render.drawImage((int)(backInputButton.getPos().getX()), (int)(backInputButton.getPos().getY()), (int)(backInputButton.getSize().getX()), (int)(backInputButton.getSize().getY()), "Back");
 
             //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
                 //Muestra el texto...
-                this.engine.getGraphics().drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)scaleWidth/2), scaleHeight/22, "red", "Calibri", 0);
-                this.engine.getGraphics().drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)scaleWidth/2), 10 + scaleHeight/11, "red", "Calibri", 0);
+                render.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)scaleWidth/2), scaleHeight/22, "red", "Calibri", 0);
+                render.drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)scaleWidth/2), 10 + scaleHeight/11, "red", "Calibri", 0);
 
                 //Renderiza rojo si esta mal
                 for (int i = 0; i < matriz.length; i++) {
                     for (int j = 0; j < matriz[i].length; j++) {
-                        this.matriz[i][j].trueRender(engine);
+                        this.matriz[i][j].trueRender(render);
                     }
                 }
             } else {
                 //Render normal
                 for (int i = 0; i < matriz.length; i++) {
                     for (int j = 0; j < matriz[i].length; j++) {
-                        this.matriz[i][j].render(engine);
+                        this.matriz[i][j].render(render);
                     }
                 }
             }
@@ -443,9 +445,9 @@ public class QuickGameScene implements Scene {
             }
 
             //BOTONES
-            this.engine.getGraphics().drawImage((int)((double) checkInputButton.getPos().getX()), (int)((double) checkInputButton.getPos().getY()), (int)((double) checkInputButton.getSize().getX()), (int)((double) checkInputButton.getSize().getY()), "Check");
+            render.drawImage((int)((double) checkInputButton.getPos().getX()), (int)((double) checkInputButton.getPos().getY()), (int)((double) checkInputButton.getSize().getX()), (int)((double) checkInputButton.getSize().getY()), "Check");
 
-            this.engine.getGraphics().drawImage((int)((double) giveUpInputButton.getPos().getX()), (int)((double) giveUpInputButton.getPos().getY()), (int)((double) giveUpInputButton.getSize().getX()), (int)((double) giveUpInputButton.getSize().getY()), "GiveUp");
+            render.drawImage((int)((double) giveUpInputButton.getPos().getX()), (int)((double) giveUpInputButton.getPos().getY()), (int)((double) giveUpInputButton.getSize().getX()), (int)((double) giveUpInputButton.getSize().getY()), "GiveUp");
         }
     }
 

@@ -35,8 +35,8 @@ public class SceneMngrAndroid {
         stack.peek().update(deltaTime, adManager);
     }
 
-    public void render(){
-        stack.peek().render();
+    public void render(RenderAndroid render){
+        stack.peek().render(render);
     }
 
     public Scene getScene(){return stack.peek();}

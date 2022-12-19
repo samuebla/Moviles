@@ -5,6 +5,7 @@ import android.widget.Button;
 import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.Vector2D;
 
@@ -108,23 +109,24 @@ public class ThemeModeLevels implements Scene {
         }
     }
 
-    public void render(){
+    @Override
+    public void render(RenderAndroid render){
         for (int i = 0; i < lvls.length; ++i){
-            this.engine.getGraphics().drawImage((int)this.lvls[i].getPos().getX(), (int)this.lvls[i].getPos().getY(),(int)this.lvls[i].getSize().getX(),(int)this.lvls[i].getSize().getY(),lvlImages[i]);
+            render.drawImage((int)this.lvls[i].getPos().getX(), (int)this.lvls[i].getPos().getY(),(int)this.lvls[i].getSize().getX(),(int)this.lvls[i].getSize().getY(),lvlImages[i]);
         }
 
         //----------------------------------------
 
         //Back Button
-        this.engine.getGraphics().drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
+        render.drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        this.engine.getGraphics().drawText(selectedCategory + " Category", (int)(scaleWidth/2), (int)(scaleHeight/8), "Black", "CooperBold", 0);
+        render.drawText(selectedCategory + " Category", (int)(scaleWidth/2), (int)(scaleHeight/8), "Black", "CooperBold", 0);
 
         //Moneas
         //MONEDAS
-        this.engine.getGraphics().drawText(Integer.toString(coins.get()), scaleWidth- coinSize-scaleWidth/100, (int)(scaleHeight/72 + + coinSize/2.5), "Black", "CooperBold", 1);
-        this.engine.getGraphics().drawImage(scaleWidth-coinSize -scaleWidth/100, (int)scaleHeight/72,coinSize,coinSize/2,"Coin");
+        render.drawText(Integer.toString(coins.get()), scaleWidth- coinSize-scaleWidth/100, (int)(scaleHeight/72 + + coinSize/2.5), "Black", "CooperBold", 1);
+        render.drawImage(scaleWidth-coinSize -scaleWidth/100, (int)scaleHeight/72,coinSize,coinSize/2,"Coin");
 
     }
 

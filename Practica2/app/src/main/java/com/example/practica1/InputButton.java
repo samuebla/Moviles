@@ -1,6 +1,7 @@
 package com.example.practica1;
 
 import com.example.engineandroid.EngineApp;
+import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Vector2D;
 
 //Clase para todos los botones
@@ -12,7 +13,7 @@ public class InputButton extends Interactive {
     }
 
     @Override
-    public void render(EngineApp engine){
+    public void render(RenderAndroid render){
 
     }
     @Override
