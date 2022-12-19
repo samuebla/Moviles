@@ -117,7 +117,7 @@ public class MainMenuScene implements Scene {
         try {
             //La constructora del menu solo se llama una vez
             //Cargamos el fondo y lo playeamos
-            engineAux.getAudio().loadMusic("background", "assets/WiiBackgroundMusic.wav");
+            engineAux.getAudio().loadMusic( "assets/WiiBackgroundMusic.wav");
             engineAux.getAudio().playSound("background", 0);
             engineAux.getAudio().newSound("effect", "assets/wiiClickSound.wav");
 

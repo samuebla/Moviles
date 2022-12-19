@@ -10,11 +10,11 @@ import java.util.HashMap;
 
 public class AudioAndroid {
     private static final String PATH = "";
-    private HashMap<String,SoundApp> sounds;
-    private SoundPool soundPool;
+    private final HashMap<String,SoundApp> sounds;
+    private final SoundPool soundPool;
 
     //Para sonidos de mas de 1 mega (Para el background)
-    private MediaPlayer mediaPlayer;
+    private final MediaPlayer mediaPlayer;
 
     private AssetManager assets;
 
@@ -41,16 +41,16 @@ public class AudioAndroid {
         this.assets = assetsAux;
     }
 
-    public SoundApp newSound(String audioName, String path) {
+    public void newSound(String audioName, String path) {
         //Guarda en los sounds y crea el nuevo sonido
-        return this.sounds.put(audioName, new SoundApp(this.soundPool, PATH + path, this.assets));
+        this.sounds.put(audioName, new SoundApp(this.soundPool, PATH + path, this.assets));
     }
 
-    public void loadMusic(String audioName, String path){
+    public void loadMusic(String path){
         //Inicializamos la musica
         this.mediaPlayer.reset();
         String newFilePath = path.replaceAll("assets/", "");
-        AssetFileDescriptor fileDescriptor = null;
+        AssetFileDescriptor fileDescriptor;
         try{
             fileDescriptor = this.assets.openFd(newFilePath);
             this.mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(),
@@ -68,7 +68,8 @@ public class AudioAndroid {
             this.mediaPlayer.start();
         }else{
             SoundApp sound = this.sounds.get(audioName);
-            sound.play();
+            if (sound != null)
+                sound.play();
         }
     }
 

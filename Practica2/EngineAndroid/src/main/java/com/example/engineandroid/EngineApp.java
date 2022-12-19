@@ -2,7 +2,6 @@ package com.example.engineandroid;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.view.SurfaceView;
 import android.widget.LinearLayout;
 
@@ -10,17 +9,17 @@ public class EngineApp implements Runnable {
 
     private SurfaceView view;
 
-    private RenderAndroid render;
-    private InputAndroid input;
-    private EventHandler eventHandler;
-    private AudioAndroid audioMngr;
-    private AdManager adManager;
+    private final RenderAndroid render;
+    private final InputAndroid input;
+    private final EventHandler eventHandler;
+    private final AudioAndroid audioMngr;
+    private final AdManager adManager;
 
     private Thread renderThread;
 
     private boolean running;
 
-    private SceneMngrAndroid sceneMngr;
+    private final SceneMngrAndroid sceneMngr;
 
     private Context context;
 
