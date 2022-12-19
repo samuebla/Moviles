@@ -8,18 +8,15 @@ public class EventHandler {
          this.event= new IEvent();
     }
 
-    public enum EventType {NONE, TOUCH,LONG_TOUCH};
+    public enum EventType {NONE, TOUCH,LONG_TOUCH}
 
-    class IEvent{
+    static class IEvent{
         public EventType eventType;
     }
-    public IEvent getEvent(){
-        return event;
-    };
 
     public EventType getEventType(){ return event.eventType;}
     public void sendEvent(EventType type){
         event.eventType = type;
-    };
+    }
 }
 

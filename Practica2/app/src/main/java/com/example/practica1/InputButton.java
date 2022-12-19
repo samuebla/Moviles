@@ -28,11 +28,11 @@ public class InputButton extends Interactive {
     @Override
     public void setSize(int w, int h){
         super.setSize(w,h);
-    };
+    }
     @Override
     public void setPos(int x, int y){
         super.setPos(x, y);
-    };
+    }
 
     public Vector2D getPos(){
         return super.getPos();

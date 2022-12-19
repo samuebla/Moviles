@@ -1,8 +1,6 @@
 package com.example.practica1;
 
-import com.example.engineandroid.AdManager;
 import com.example.engineandroid.EngineApp;
-import com.example.engineandroid.Vector2D;
 
 
 public class CellHistoryMode extends CellBase {

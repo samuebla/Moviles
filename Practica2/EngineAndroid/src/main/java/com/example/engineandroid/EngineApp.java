@@ -7,8 +7,6 @@ import android.widget.LinearLayout;
 
 public class EngineApp implements Runnable {
 
-    private SurfaceView view;
-
     private final RenderAndroid render;
     private final InputAndroid input;
     private final EventHandler eventHandler;
@@ -21,20 +19,16 @@ public class EngineApp implements Runnable {
 
     private final SceneMngrAndroid sceneMngr;
 
-    private Context context;
+    private final Context context;
 
     private Scene primaryScene;
 
-    public EngineApp(SurfaceView myView, LinearLayout screenLayout, Activity mainActivity){
-        this.view = myView;
-
-
-
-        this.render = new RenderAndroid(this.view, 4.0f/6.0f, screenLayout);
+    public EngineApp(SurfaceView myView, Activity mainActivity){
+        this.render = new RenderAndroid(myView);
         this.eventHandler = new EventHandler();
         this.input = new InputAndroid(this.eventHandler);
-        this.view.setOnTouchListener(this.input.getTouchListener());
-        this.view.setOnLongClickListener(this.input.getLongTouchListener());
+        myView.setOnTouchListener(this.input.getTouchListener());
+        myView.setOnLongClickListener(this.input.getLongTouchListener());
         this.audioMngr = new AudioAndroid();
 
         this.render.setAssetContext(myView.getContext().getAssets());
@@ -46,19 +40,6 @@ public class EngineApp implements Runnable {
 
         this.adManager = new AdManager(mainActivity);
 
-    }
-
-    public void restart(SurfaceView newView, LinearLayout newScreenLayout){
-        this.view = newView;
-        this.render.restart(newView, newScreenLayout);
-
-        this.view.setOnTouchListener(this.input.getTouchListener());
-        this.view.setOnLongClickListener(this.input.getLongTouchListener());
-
-        this.render.setAssetContext(newView.getContext().getAssets());
-        this.audioMngr.setAssetsManager(newView.getContext().getAssets());
-
-        this.context = newView.getContext();
     }
 
 
@@ -109,40 +90,24 @@ public class EngineApp implements Runnable {
         // muy rápido, la vista podría todavía no estar inicializada.
         while (this.running && this.render.getWidth() == 0) ;
 
-
-
-        //Escalado de la app
-//        this.render.setFrameSize();
-//        this.render.scaleAppView();
-        this.input.setOffset(0, this.render.getOffset().getY());
+        //Cargamos los recursos del juego
+        //Se tiene que hacer por aqui para que el render ya este inicializado
         this.primaryScene.loadResources(this);
         this.sceneMngr.getScene().init();
-        // Espera activa. Sería más elegante al menos dormir un poco.
 
-        long lastFrameTime = System.nanoTime();
-
-        long informePrevio = lastFrameTime; // Informes de FPS
+        long informePrevio = System.nanoTime(); // Informes de FPS
         int frames = 0;
 
         long actualTime = System.currentTimeMillis();
-
-//        System.out.println(this.render.getViewWidth());
-//        System.out.println(this.render.getViewWidth());
-//        System.out.println(this.render.getViewWidth());
-//        System.out.println(this.render.getViewWidth());
-//        System.out.println(this.render.getViewWidth());
 
         // Bucle de juego principal.
         while(running) {
 //            this.render.setFrameSize();
             long currentTime = System.nanoTime();
-            long nanoElapsedTime = currentTime - lastFrameTime;
-            lastFrameTime = currentTime;
 
             // Informe de FPS
-            double elapsedTime = (double) nanoElapsedTime / 1.0E9;
-            if (currentTime - informePrevio > 1000000000l) {
-                long fps = frames * 1000000000l / (currentTime - informePrevio);
+            if (currentTime - informePrevio > 1000000000L) {
+                long fps = frames * 1000000000L / (currentTime - informePrevio);
                 System.out.println("" + fps + " fps");
                 frames = 0;
                 informePrevio = currentTime;
@@ -152,7 +117,10 @@ public class EngineApp implements Runnable {
             long deltaTime = System.currentTimeMillis() - actualTime;
             actualTime += deltaTime;
 
+            //Update de la escena
             this.sceneMngr.update(deltaTime / 1000.0, this.adManager);
+
+            //AAAAAAAAAAAAAAAAA Añadir aqui handleInput de la escena
 
             //Renderizado
             this.render.prepareFrame();
@@ -172,24 +140,6 @@ public class EngineApp implements Runnable {
             this.renderThread.start();
         }
     }
-
-    //Closes the thread and returns the id of the last scene in the app
-//    public int onForcedClose(){
-//        if (this.running) {
-//            this.running = false;
-//            while (true) {
-//                try {
-//                    this.renderThread.join();
-//                    this.renderThread = null;
-//                    return this.sceneMngr.handleClosed();
-//                } catch (InterruptedException ie) {
-//                    // Esto no debería ocurrir nunca...
-//                    return -1;
-//                }
-//            }
-//        }else
-//            return -1;
-//    }
 
     public void pause() {
         if (this.running) {

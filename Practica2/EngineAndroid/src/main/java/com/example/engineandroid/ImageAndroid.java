@@ -24,12 +24,4 @@ public class ImageAndroid {
     public Bitmap getImage() {
         return image;
     }
-
-    public int getWidth() {
-        return image.getWidth();
-    }
-
-    public int getHeight() {
-        return image.getHeight();
-    }
 }

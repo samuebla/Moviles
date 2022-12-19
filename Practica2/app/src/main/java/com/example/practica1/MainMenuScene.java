@@ -9,14 +9,7 @@ import com.example.engineandroid.Vector2D;
 
 //Ads
 import android.content.Context;
-import android.graphics.Rect;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.Button;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -24,15 +17,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicReference;
-//import com.google.android.gms.ads.AdRequest;
-//import com.google.android.gms.ads.AdSize;
-//import com.google.android.gms.ads.AdView;
-//import com.google.android.gms.ads.MobileAds;
-//import com.google.android.gms.ads.initialization.InitializationStatus;
-//import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 
 public class MainMenuScene implements Scene {
@@ -41,7 +27,7 @@ public class MainMenuScene implements Scene {
     int scaleWidth = 1000;
     int scaleHeight = 1000;
 
-    private EngineApp engine;
+    private final EngineApp engine;
     private InputButton fastPlay;
     private InputButton historyMode;
 
@@ -51,27 +37,17 @@ public class MainMenuScene implements Scene {
     private AtomicReference<Integer>[] palettes;
 
 
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
-//    private AdView adView;
-
-    private FrameLayout addContainerView;
-    //    private AdSize adsize;
-//    private AdRequest addRequest;
     Context baseContext;
-    private boolean initialLayoutComplete = false;
 
-    public MainMenuScene(EngineApp engineAux, FrameLayout addContainerViewAux, Context contextAux) {
+    public MainMenuScene(EngineApp engineAux, Context contextAux) {
         this.engine = engineAux;
-        this.addContainerView = addContainerViewAux;
-//        this.adsize = size;
-//        this.addRequest = addRequestAux;
         this.baseContext = contextAux;
 
         loadFromFile();
         System.out.print("Save data loaded: ");
         System.out.print(this.coins);
-        for (int i = 0; i < this.progress.length; ++i) {
-            System.out.print(this.progress[i]);
+        for (AtomicReference<Integer> integerAtomicReference : this.progress) {
+            System.out.print(integerAtomicReference);
         }
     }
 
@@ -93,23 +69,6 @@ public class MainMenuScene implements Scene {
         this.fastPlay = new InputButton(scaleWidth / 2 - (scaleWidth/ 4), scaleHeight / 5, scaleWidth / 2, scaleHeight / 4.8);
 
         this.historyMode = new InputButton(scaleWidth / 2 - (scaleWidth / 4), scaleHeight / 2, scaleWidth/ 2, scaleHeight/ 4.8);
-
-
-        //Creacion anuncio
-//        adView = new AdView(this.baseContext);
-//        addContainerView.addView(adView);
-//        // Since we're loading the banner based on the adContainerView size, we need
-//        // to wait until this view is laid out before we can get the width.
-//        addContainerView.getViewTreeObserver().addOnGlobalLayoutListener(
-//                new ViewTreeObserver.OnGlobalLayoutListener() {
-//                    @Override
-//                    public void onGlobalLayout() {
-//                        if (!initialLayoutComplete) {
-//                            initialLayoutComplete = true;
-//                            loadBanner();
-//                        }
-//                    }
-//                });
     }
 
     @Override
@@ -208,27 +167,27 @@ public class MainMenuScene implements Scene {
             //Carga el nivel desde el string "RAW" de lectura
             String[] fileRead;
             fileRead = receiveString.split(" ");
-            this.coins = new AtomicReference<Integer>(Integer.parseInt(fileRead[0]));
+            this.coins = new AtomicReference<>(Integer.parseInt(fileRead[0]));
 
             this.progress = new AtomicReference[4];
             this.palettes = new AtomicReference[4];
 
             for (int i = 0; i < this.progress.length; ++i) {
-                this.progress[i] = new AtomicReference<Integer>(Integer.parseInt(fileRead[i + 1]));
+                this.progress[i] = new AtomicReference<>(Integer.parseInt(fileRead[i + 1]));
             }
 
             //Paletas de colores
             for (int i = 0; i < this.palettes.length; ++i) {
-                this.palettes[i] = new AtomicReference<Integer>();
+                this.palettes[i] = new AtomicReference<>();
                 this.palettes[i].set(Integer.parseInt(fileRead[this.progress.length + 1 + i]));
             }
 
         } catch (
                 FileNotFoundException e) {
-            Log.e("Error", "Save data file not found: " + e.toString());
+            Log.e("Error", "Save data file not found: " + e);
         } catch (
                 IOException e) {
-            Log.e("Reading Error", "Can not read save data file: " + e.toString());
+            Log.e("Reading Error", "Can not read save data file: " + e);
         }
     }
 
@@ -242,21 +201,21 @@ public class MainMenuScene implements Scene {
             //Monedas
             writer += coins.get() + " \n";
 
-            for(int i = 0; i < this.progress.length; ++i){
-                writer += this.progress[i].get();
+            for (AtomicReference<Integer> integerAtomicReference : this.progress) {
+                writer += integerAtomicReference.get();
                 writer += " ";
             }
             writer += "\n";
 
-            for(int i = 0; i < this.palettes.length; ++i){
-                writer += this.palettes[i].get();
+            for (AtomicReference<Integer> palette : this.palettes) {
+                writer += palette.get();
                 writer += " ";
             }
 
             fos.write(writer.getBytes(StandardCharsets.UTF_8));
             fos.close();
         } catch (FileNotFoundException e) {
-            Log.e("Error", "File not found: " + e.toString());
+            Log.e("Error", "File not found: " + e);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -276,7 +235,7 @@ public class MainMenuScene implements Scene {
 
 
         //Titulo
-        render.drawText("NONOGRAMAS", (int) (scaleWidth / 2), (int) (scaleHeight / 10.8), "Black", "Cooper", 0,(scaleWidth/20));
+        render.drawText("NONOGRAMAS", (int) (scaleWidth / 2.0), (int) (scaleHeight / 10.8), "Black", "Cooper", 0,(scaleWidth/20));
 
         //Botones
         render.drawImage((int) this.fastPlay.getPos().getX(), (int) (fastPlay.getPos().getY()), (int) (this.fastPlay.getSize().getX()), (int) (this.fastPlay.getSize().getY()), "QuickPlay");
@@ -304,22 +263,4 @@ public class MainMenuScene implements Scene {
     public void onResume() {
         init();
     }
-
-    //TODO AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA muy feo pero no se me ocurre otra cosa, me quiero morir, lo siento
-    public EngineApp getEngine(){return engine;}
-
-//    @Override
-//    public int onClosed(){
-//
-//    }
-
-//    private void loadBanner() {
-//        adView.setAdUnitId(AD_UNIT_ID);
-//
-//        AdSize adSize = this.adsize;
-//        adView.setAdSize(adSize);
-//
-//        // Start loading the ad in the background.
-//        adView.loadAd(this.addRequest);
-//    }
 }

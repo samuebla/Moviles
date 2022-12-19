@@ -2,7 +2,6 @@ package com.example.practica1;
 
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.RenderAndroid;
-import com.example.engineandroid.Vector2D;
 
 public class CellQuickGame extends CellBase {
 

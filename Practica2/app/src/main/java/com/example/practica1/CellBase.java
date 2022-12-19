@@ -16,7 +16,7 @@ public class CellBase extends Interactive{
     @Override
     public void render(RenderAndroid render){
         render.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal(),palleteColor);
-    };
+    }
 
     //Para la pantalla de Enhorabuena
     public void solutionRender(RenderAndroid render) {
@@ -26,19 +26,19 @@ public class CellBase extends Interactive{
         }
     }
 
-    public void handleInput(EngineApp engine){};
+    public void handleInput(EngineApp engine){}
 
     public void setPalleteColor(int pallet) { palleteColor = pallet; }
     
     //POSICIONES
-    public Vector2D getSize(){return size;};
-    public Vector2D getPos(){return pos;};
+    public Vector2D getSize(){return size;}
+    public Vector2D getPos(){return pos;}
 
     public void setSize(int w, int h){
         this.size.set(w,h);
-    };
+    }
     public void setPos(int x, int y){
         this.pos.set(x, y);
-    };
+    }
 
 }
