@@ -8,18 +8,14 @@ public class InputAndroid {
     //TODO Aqui guarda la relacion
     int scaleWidth, scaleHeight;
 
-    private TouchListener touchlistener;
-    private MotionListener motionlistener;
-    private LongTouchListener longTouchListener;
+    private final TouchListener touchlistener;
+    private final LongTouchListener longTouchListener;
     Vector2D touchCoords;
-    private Vector2D offset;
-
-    private float scaleFactor = 1.0f;
+    private final Vector2D offset;
 
     public InputAndroid(EventHandler eHandler){
         this.touchCoords = new Vector2D(-1,-1);
         this.touchlistener = new TouchListener(this, eHandler);
-        this.motionlistener = new MotionListener(this, eHandler);
         this.longTouchListener = new LongTouchListener(this, eHandler, this.touchlistener);
         offset = new Vector2D();
 
@@ -33,15 +29,11 @@ public class InputAndroid {
     }
 
     public Vector2D getScaledCoords() {
-        return new Vector2D((getRawCoords().getX() - offset.getX())/scaleFactor, (getRawCoords().getY()  - offset.getY())/scaleFactor);
+        return new Vector2D((getRawCoords().getX() - offset.getX()), (getRawCoords().getY()  - offset.getY()));
     }
 
     public void setRawCoords(int x, int y) {
         this.touchCoords.set(x, y);
-    }
-
-    public void setScaleFactor(float scale) {
-        this.scaleFactor = scale;
     }
 
     public void setOffset(float x, float y) {
@@ -50,9 +42,6 @@ public class InputAndroid {
 
     public TouchListener getTouchListener(){
         return this.touchlistener;
-    }
-    public MotionListener getMotionListener(){
-        return this.motionlistener;
     }
     public LongTouchListener getLongTouchListener() { return this.longTouchListener; }
 }
@@ -70,23 +59,22 @@ class TouchListener implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         processEvent(motionEvent);
+        view.performClick();
         return false;
     }
 
-    public boolean processEvent(MotionEvent e){
+    public void processEvent(MotionEvent e){
         this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
 
         if(e.getAction() == MotionEvent.ACTION_UP){
             //Para que no se haga simple click despues de long touch
             if (cancel){
                 cancel = false;
-                return false;
+                return;
             }
             System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
             this.eventHandler.sendEvent(EventHandler.EventType.TOUCH);
-            return true;
         }
-        return false;
     }
 
     public void setCancel(){
@@ -115,30 +103,5 @@ class LongTouchListener implements View.OnLongClickListener{
     public void processEvent(){
         System.out.println("Long touch detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
         this.eventHandler.sendEvent(EventHandler.EventType.LONG_TOUCH);
-    }
-}
-
-class MotionListener implements View.OnGenericMotionListener {
-    InputAndroid inputAndroid;
-    EventHandler eventHandler;
-
-    public MotionListener(InputAndroid iAndroid, EventHandler eHandler){
-        this.inputAndroid = iAndroid;
-        this.eventHandler = eHandler;
-    }
-
-    @Override
-    public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-        processMotion(motionEvent);
-        return true;
-    }
-
-    public void processMotion(MotionEvent e){
-        this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
-//        if(e.getAction() == MotionEvent.ACTION_DOWN){
-//            this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
-//            System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
-//            this.eventHandler.sendEvent(EventHandler.EventType.TOUCH);
-//        }
     }
 }

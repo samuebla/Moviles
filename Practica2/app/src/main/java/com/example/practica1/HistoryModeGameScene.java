@@ -371,19 +371,19 @@ public class HistoryModeGameScene implements Scene {
         if (won && inputReceived(this.shareButton.getPos(), this.shareButton.getSize())) {
             switch (mode){
                 case 1:
-                    adManager.sendIntent(0, "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de alfabeto");
+                    adManager.sendIntent( "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de alfabeto");
                     break;
                 case 2:
-                    adManager.sendIntent(0, "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de fiesta");
+                    adManager.sendIntent( "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de fiesta");
                     break;
                 case 3:
-                    adManager.sendIntent(0, "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de animales");
+                    adManager.sendIntent( "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de animales");
                     break;
                 case 4:
-                    adManager.sendIntent(0, "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de geometria");
+                    adManager.sendIntent( "https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de geometria");
                     break;
                 default:
-                    adManager.sendIntent(0, "https://twitter.com/intent/tweet", "oh wow soy la ostia jugando al nonograma que va a aprobar Antonio");
+                    adManager.sendIntent( "https://twitter.com/intent/tweet", "oh wow soy la ostia jugando al nonograma que va a aprobar Antonio");
                     break;
             }
 
