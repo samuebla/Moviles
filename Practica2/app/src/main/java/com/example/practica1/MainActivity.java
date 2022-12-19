@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private AdView mAdView;
 
-//    AdView mAdView;
+    //    AdView mAdView;
     private AtomicReference<MainActivity> mainActivity;
     private Button rewardButton;
 
@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private Sensor sensor;
 
+    int numShakes = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,9 +150,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         getSupportActionBar().hide();
 
 
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             this.engine = new EngineApp(this.renderView, this.screenLayout, this);
-        }else{
+        } else {
             //Conseguimos el engine si se ha reiniciado la aplicacion
             this.engine = ((MainMenuScene) savedInstanceState.getSerializable("mainMenuScene")).getEngine();
             this.engine.restart(this.renderView, this.screenLayout);
@@ -195,20 +196,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
         //registramos el listener
-        sensorManager .registerListener( this, sensor , SensorManager.SENSOR_DELAY_NORMAL);
-        
-        if(savedInstanceState == null){
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        if (savedInstanceState == null) {
             mainMenuScene = new MainMenuScene(this.engine, this.adContainerView, this.getBaseContext());
             this.engine.getSceneMngr().pushScene(mainMenuScene);
             this.engine.setPrimaryScene(mainMenuScene);
-        }else{
+        } else {
             mainMenuScene = (MainMenuScene) savedInstanceState.getSerializable("mainMenuScene");
             this.engine.setPrimaryScene(mainMenuScene);
         }
         this.engine.resume();
     }
 
-    private void createWorkRequest(String title, String text){
+    private void createWorkRequest(String title, String text) {
         HashMap<String, Object> dataValues = new HashMap<>();
         dataValues.put("channelId", this.engine.getAdManager().getCHANNEL_ID());
         dataValues.put("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
@@ -219,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         WorkRequest uploadWorkRequest =
                 new OneTimeWorkRequest.Builder(IntentWorkRequest.class)
-                    //Configuration
+                        //Configuration
                         .setInitialDelay(30, TimeUnit.SECONDS)
                         .setInputData(inputData)
                         .build();
@@ -228,14 +229,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         mainMenuScene.saveDataHistoryMode();
         createWorkRequest("Nonogram", "Llevas mucho tiempo sin jugar... Te echamos de menos :(");
         super.onDestroy();
     }
 
     @Override
-    protected void onSaveInstanceState (Bundle outState){
+    protected void onSaveInstanceState(Bundle outState) {
         mainMenuScene.saveDataHistoryMode();
 //        outState.putInt("lastScene", this.engine.onForcedClose());
         outState.putSerializable("mainMenuScene", this.mainMenuScene);
@@ -246,12 +247,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
         this.engine.resume();
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         createWorkRequest("Nonogram", "Llevas mucho tiempo sin jugar... Te echamos de menos :(");
     }
@@ -264,9 +265,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     //Para comprobar la lista de aplicaciones que pueden abrir el intent
-    public void checkResolver(){
-        Intent share = new Intent(android.content.Intent. ACTION_SEND);
-        share.setType( "image/jpeg" );
+    public void checkResolver() {
+        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+        share.setType("image/jpeg");
 //        List<ResolveInfo> resInfo = getPackageManager().queryIntentActivities(share , 0);
 //        if (!resInfo.isEmpty()){
 //            for (ResolveInfo info : resInfo) {
@@ -283,6 +284,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
+        //Tienes que girar sobre si mismo con el movil agarrado para que le de una pista
+        //Si lo giras a la izquierda...
+
+        //1/-1 Es intacto, si giras 180º es 0.
+        //Si haces medio giro...
+        if (numShakes == 0 && event.values[2] > -0.2 && event.values[2] < 0.2) {
+            //Lo registramos...
+            numShakes = 1;
+        }
+        //Si haces el giro completo...
+        if (numShakes == 1 && ((event.values[2] < -0.8 && event.values[2] > -1) || (event.values[2] > 0.8 && event.values[2] < 1))) {
+            //Reseteamos para que lo vuelva a hacer
+            numShakes = 0;
+            //Y te regalamos 10 monedas
+            mainMenuScene.addCoins(10);
+        }
     }
 
     @Override
