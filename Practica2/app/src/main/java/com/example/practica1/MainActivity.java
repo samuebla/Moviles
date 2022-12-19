@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState (Bundle outState){
+        mainMenuScene.saveDataHistoryMode();
 //        outState.putInt("lastScene", this.engine.onForcedClose());
         outState.putSerializable("mainMenuScene", this.mainMenuScene);
         outState.putSerializable("sceneManager", this.engine.getSceneMngr());
