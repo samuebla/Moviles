@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private Sensor sensor;
 
+    int numShakes = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    protected void onSaveInstanceState (Bundle outState){
+    protected void onSaveInstanceState(Bundle outState) {
         mainMenuScene.saveDataHistoryMode();
         super.onSaveInstanceState(outState);
     }
@@ -193,12 +194,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
         this.engine.resume();
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         createWorkRequest("Nonogram", "Llevas mucho tiempo sin jugar... Te echamos de menos :(");
     }
@@ -213,6 +214,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
+        //Tienes que girar sobre si mismo con el movil agarrado para que le de una pista
+        //Si lo giras a la izquierda...
+
+        //1/-1 Es intacto, si giras 180º es 0.
+        //Si haces medio giro...
+        if (numShakes == 0 && event.values[2] > -0.2 && event.values[2] < 0.2) {
+            //Lo registramos...
+            numShakes = 1;
+        }
+        //Si haces el giro completo...
+        if (numShakes == 1 && ((event.values[2] < -0.8 && event.values[2] > -1) || (event.values[2] > 0.8 && event.values[2] < 1))) {
+            //Reseteamos para que lo vuelva a hacer
+            numShakes = 0;
+            //Y te regalamos 10 monedas
+            mainMenuScene.addCoins(10);
+        }
     }
 
     @Override

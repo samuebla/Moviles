@@ -186,6 +186,11 @@ public class MainMenuScene implements Scene {
         }
     }
 
+    //Con este metodo el sensor te da newCoins monedas cada vez que des una vuelta sobre ti mismo
+    public void addCoins(int newCoins){
+        coins.set(coins.get()+newCoins);
+    }
+
     //Metodos de lectura y guardado
     public void loadFromFile() {
         try {
