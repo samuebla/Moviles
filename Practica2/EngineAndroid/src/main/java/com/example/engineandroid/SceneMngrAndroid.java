@@ -4,7 +4,7 @@ package com.example.engineandroid;
 import java.io.Serializable;
 import java.util.Stack;
 
-public class SceneMngrAndroid implements Serializable {
+public class SceneMngrAndroid {
 
     Stack<Scene> stack;
 

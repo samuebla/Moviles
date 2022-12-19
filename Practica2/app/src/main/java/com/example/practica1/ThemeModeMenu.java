@@ -11,7 +11,7 @@ import com.example.engineandroid.Vector2D;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ThemeModeMenu implements Scene, Serializable {
+public class ThemeModeMenu implements Scene {
     //TODO Aqui guarda la relacion
     int scaleWidth, scaleHeight;
 

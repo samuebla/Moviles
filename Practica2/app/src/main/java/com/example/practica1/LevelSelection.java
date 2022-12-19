@@ -8,7 +8,7 @@ import com.example.engineandroid.Vector2D;
 
 import java.io.Serializable;
 
-public class LevelSelection implements Scene, Serializable {
+public class LevelSelection implements Scene {
 
     int scaleHeight;
     int scaleWidth;
