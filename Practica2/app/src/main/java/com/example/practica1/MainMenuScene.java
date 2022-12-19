@@ -169,6 +169,9 @@ public class MainMenuScene implements Scene, Serializable {
             this.engine.getGraphics().changeSizeText("CooperBig",(int)(scaleWidth/20));
             this.engine.getGraphics().changeSizeText("Cooper",(int)(scaleWidth/27));
             this.engine.getGraphics().changeSizeText("CooperBold",(int)(scaleWidth/20));
+            this.engine.getGraphics().changeSizeText("Amor",(int)(scaleWidth/22));
+            this.engine.getGraphics().changeSizeText("Calibri",(int)(scaleWidth/22));
+
 
         } catch (Exception e) {
             System.err.println(e.getMessage());

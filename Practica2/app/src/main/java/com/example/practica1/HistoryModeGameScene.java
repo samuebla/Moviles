@@ -510,11 +510,12 @@ public class HistoryModeGameScene implements Scene, Serializable {
             // Alto: Rows +1( Sin contar la interfaz de por encima y por debajo)
 
             //+1 para los numeros laterales
+            //0.1f por los margenes de espacio que hay entre cada celda
             //Y con eso sacamos el tamaño promedio de la celda
-            tamProporcionalAncho = scaleWidth / ((cols_ + 1) + 1);
+            tamProporcionalAncho = scaleWidth / ((cols_ + 1) + (0.1f*cols_));
 
             //Restamos la interfaz de las paletas y los botones de arriba
-            tamProporcionalAlto = (scaleHeight - scaleHeight / 7 - scaleHeight / 15) / ((rows_ + 1) + 1);
+            tamProporcionalAlto = (scaleHeight - scaleHeight / 7 - scaleHeight / 20) / ((rows_ + 1) +(0.1f*rows_));
 
             int tamTexto = (int) (tamProporcionalAncho / 4.5f);
             if (tamProporcionalAlto > tamProporcionalAncho)

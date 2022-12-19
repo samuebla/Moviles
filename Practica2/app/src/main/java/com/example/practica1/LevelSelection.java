@@ -10,6 +10,8 @@ import java.io.Serializable;
 
 public class LevelSelection implements Scene, Serializable {
 
+    int scaleHeight;
+    int scaleWidth;
     private InputButton inputButton5;
     private InputButton inputButton8;
     private InputButton inputButton10;
@@ -24,7 +26,8 @@ public class LevelSelection implements Scene, Serializable {
     public LevelSelection(EngineApp engineAux){
 
         this.engine = engineAux;
-
+        scaleHeight = 1000;
+        scaleWidth = 1000;
         init();
     }
 
@@ -33,20 +36,20 @@ public class LevelSelection implements Scene, Serializable {
         Vector2D coords = new Vector2D();
         coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
 
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+        return (coords.getX() * scaleWidth / engine.getGraphics().getWidth() >= pos.getX() && coords.getX() * scaleWidth / engine.getGraphics().getWidth() <= pos.getX() + size.getX() &&
+                coords.getY() * scaleHeight / engine.getGraphics().getHeight() >= pos.getY() && coords.getY() * scaleHeight / engine.getGraphics().getHeight() <= pos.getY() + size.getY());
     }
 
     @Override
     public void init() {
         //Botones selectores del nivel
-        this.inputButton5 = new InputButton(engine.getGraphics().getWidth()/4  - engine.getGraphics().getWidth()/12, engine.getGraphics().getHeight()/3.6, engine.getGraphics().getWidth()/6, engine.getGraphics().getHeight()/9);
-        this.inputButton8 = new InputButton(engine.getGraphics().getWidth()/2 - engine.getGraphics().getWidth()/12, engine.getGraphics().getHeight()/3.6, engine.getGraphics().getWidth()/6, engine.getGraphics().getHeight()/9);
-        this.inputButton10 = new InputButton(engine.getGraphics().getWidth()*3/4  - engine.getGraphics().getWidth()/12, engine.getGraphics().getHeight()/3.6, engine.getGraphics().getWidth()/6, engine.getGraphics().getHeight()/9);
-        this.inputButton5X8 = new InputButton(engine.getGraphics().getWidth()/4  - engine.getGraphics().getWidth()/12, engine.getGraphics().getHeight()/2.2, engine.getGraphics().getWidth()/6, engine.getGraphics().getHeight()/9);
-        this.inputButton8X10 = new InputButton(engine.getGraphics().getWidth()/2 - engine.getGraphics().getWidth()/12, engine.getGraphics().getHeight()/2.2, engine.getGraphics().getWidth()/6, engine.getGraphics().getHeight()/9);
-        this.inputButton5X10 = new InputButton(engine.getGraphics().getWidth()*3/4  - engine.getGraphics().getWidth()/12, engine.getGraphics().getHeight()/2.2, engine.getGraphics().getWidth()/6, engine.getGraphics().getHeight()/9);
-        this.backInputButton = new InputButton(engine.getGraphics().getWidth()/72 + engine.getGraphics().getWidth()/44, engine.getGraphics().getHeight()/22, engine.getGraphics().getWidth()/10, engine.getGraphics().getHeight()/15);
+        this.inputButton5 = new InputButton(scaleWidth/4  - scaleWidth/12, scaleHeight/3.6, scaleWidth/6, scaleHeight/9);
+        this.inputButton8 = new InputButton(scaleWidth/2 - scaleWidth/12,scaleHeight/3.6, scaleWidth/6, scaleHeight/9);
+        this.inputButton10 = new InputButton(scaleWidth*3/4  - scaleWidth/12, scaleHeight/3.6, scaleWidth/6, scaleHeight/9);
+        this.inputButton5X8 = new InputButton(scaleWidth/4  - scaleWidth/12, scaleHeight/2.2, scaleWidth/6, scaleHeight/9);
+        this.inputButton8X10 = new InputButton(scaleWidth/2 - scaleWidth/12, scaleHeight/2.2, scaleWidth/6, scaleHeight/9);
+        this.inputButton5X10 = new InputButton(scaleWidth*3/4  -scaleWidth/12, scaleHeight/2.2, scaleWidth/6, scaleHeight/9);
+        this.backInputButton = new InputButton(scaleWidth/72 + scaleWidth/44, scaleHeight/22, scaleWidth/10, scaleHeight/15);
     }
 
     @Override
@@ -67,28 +70,28 @@ public class LevelSelection implements Scene, Serializable {
     public void render(){
         //5x5
         this.engine.getGraphics().drawCircle(inputButton5.getPos().getX(), inputButton5.getPos().getY(), inputButton5.getSize().getX()/2, "purple");
-        this.engine.getGraphics().drawText("5x5", (int)(inputButton5.getPos().getX() + inputButton5.getSize().getX()/2), (int)(inputButton5.getPos().getY() + inputButton5.getSize().getY()/1.8), "Black","Amor", 0);
+        this.engine.getGraphics().drawText("5x5", (int)(inputButton5.getPos().getX() + inputButton5.getSize().getX()/2), (int)(inputButton5.getPos().getY() + inputButton5.getSize().getY()/1.5), "Black","Amor", 0);
         //8x8
         this.engine.getGraphics().drawCircle(inputButton8.getPos().getX(), inputButton8.getPos().getY(), inputButton8.getSize().getX()/2, "purple");
-        this.engine.getGraphics().drawText("8x8", (int)(inputButton8.getPos().getX() + inputButton8.getSize().getX()/2), (int)(inputButton8.getPos().getY() + inputButton8.getSize().getY()/1.8), "Black","Amor", 0);
+        this.engine.getGraphics().drawText("8x8", (int)(inputButton8.getPos().getX() + inputButton8.getSize().getX()/2), (int)(inputButton8.getPos().getY() + inputButton8.getSize().getY()/1.5), "Black","Amor", 0);
         //10x10
         this.engine.getGraphics().drawCircle(inputButton10.getPos().getX(), inputButton10.getPos().getY(), inputButton10.getSize().getX()/2, "purple");
-        this.engine.getGraphics().drawText("10x10", (int)(inputButton10.getPos().getX() + inputButton10.getSize().getX()/2), (int)(inputButton10.getPos().getY() + inputButton10.getSize().getY()/1.8), "Black", "Amor", 0);
+        this.engine.getGraphics().drawText("10x10", (int)(inputButton10.getPos().getX() + inputButton10.getSize().getX()/2), (int)(inputButton10.getPos().getY() + inputButton10.getSize().getY()/1.5), "Black", "Amor", 0);
         //5x8
         this.engine.getGraphics().drawCircle(inputButton5X8.getPos().getX(), inputButton5X8.getPos().getY(), inputButton5X8.getSize().getX()/2, "purple");
-        this.engine.getGraphics().drawText("5x8", (int)(inputButton5X8.getPos().getX() + inputButton5X8.getSize().getX()/2), (int)(inputButton5X8.getPos().getY() + inputButton5X8.getSize().getY()/1.8), "Black", "Amor", 0);
+        this.engine.getGraphics().drawText("5x8", (int)(inputButton5X8.getPos().getX() + inputButton5X8.getSize().getX()/2), (int)(inputButton5X8.getPos().getY() + inputButton5X8.getSize().getY()/1.5), "Black", "Amor", 0);
         //8x10
         this.engine.getGraphics().drawCircle(inputButton8X10.getPos().getX(), inputButton8X10.getPos().getY(), inputButton8X10.getSize().getX()/2, "purple");
-        this.engine.getGraphics().drawText("8x10", (int)(inputButton8X10.getPos().getX() + inputButton8X10.getSize().getX()/2), (int)(inputButton8X10.getPos().getY() + inputButton8X10.getSize().getY()/1.8), "Black", "Amor", 0);
+        this.engine.getGraphics().drawText("8x10", (int)(inputButton8X10.getPos().getX() + inputButton8X10.getSize().getX()/2), (int)(inputButton8X10.getPos().getY() + inputButton8X10.getSize().getY()/1.5), "Black", "Amor", 0);
         //5x10
         this.engine.getGraphics().drawCircle(inputButton5X10.getPos().getX(), inputButton5X10.getPos().getY(), inputButton5X10.getSize().getX()/2, "purple");
-        this.engine.getGraphics().drawText("5x10", (int)(inputButton5X10.getPos().getX() + inputButton5X10.getSize().getX()/2), (int)(inputButton5X10.getPos().getY() + inputButton5X10.getSize().getY()/1.8), "Black", "Amor", 0);
+        this.engine.getGraphics().drawText("5x10", (int)(inputButton5X10.getPos().getX() + inputButton5X10.getSize().getX()/2), (int)(inputButton5X10.getPos().getY() + inputButton5X10.getSize().getY()/1.5), "Black", "Amor", 0);
 
         //Back Button
         this.engine.getGraphics().drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        this.engine.getGraphics().drawText("Selecciona el tamaño del puzzle", (int)(engine.getGraphics().getWidth()/2), (int)(engine.getGraphics().getHeight()/5.4), "Black", "Amor", 0);
+        this.engine.getGraphics().drawText("Selecciona el tamaño del puzzle", (int)(scaleWidth/2), (int)(scaleHeight/5.4), "Black", "Amor", 0);
     }
 
     @Override
