@@ -17,6 +17,7 @@ import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
         //registramos el listener
-        sensorManager .registerListener( this, sensor , SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         //Cargamos la escena principal
         mainMenuScene = new MainMenuScene(getBaseContext());
@@ -222,4 +223,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
+    //Se llama cada vez que rotas la pantalla
+
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+
+        System.out.println("ME GIEROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+        this.engine.configurationChanged(newConfig.orientation);
+
+//        algo cuando se haya cambiado la configuracion si ella es la escena que esta arriba del stack
+
+    }
 }

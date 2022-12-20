@@ -8,33 +8,39 @@ public class SceneMngrAndroid {
 
     Stack<Scene> stack;
 
-    public SceneMngrAndroid(){
+    public SceneMngrAndroid() {
         stack = new Stack<>();
     }
 
-    public void popScene(){
+    public void popScene() {
         stack.pop();
     }
 
-    public void pushScene(Scene scene){
+    public void pushScene(Scene scene) {
         stack.push(scene);
     }
 
-    public void update(double deltaTime){
+    public void update(double deltaTime) {
         stack.peek().update(deltaTime);
     }
 
-    public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, AudioAndroid audio, RenderAndroid render){
+    public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, AudioAndroid audio, RenderAndroid render) {
         stack.peek().handleInput(type, adManager, input, this, audio, render);
     }
 
-    public void render(RenderAndroid render){
+    public void configurationChanged(int orientation) {
+        stack.peek().configurationChanged(orientation);
+    }
+
+    public void render(RenderAndroid render) {
         stack.peek().render(render);
     }
 
-    public Scene getScene(){return stack.peek();}
+    public Scene getScene() {
+        return stack.peek();
+    }
 
-    public void onStop(){
+    public void onStop() {
         stack.peek().onStop();
     }
 }

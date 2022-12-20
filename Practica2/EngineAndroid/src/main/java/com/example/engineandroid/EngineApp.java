@@ -77,6 +77,11 @@ public class EngineApp implements Runnable {
 
     public void setPrimaryScene(Scene sceneAux){ this.primaryScene = sceneAux;}
 
+    public void configurationChanged(int newOrientation){
+        //Llama a la escena actual para comentarle el cambio de orientacion
+        sceneMngr.configurationChanged(newOrientation);
+    };
+
     //bucle principal
     public void run() {
         if (renderThread != Thread.currentThread()) {

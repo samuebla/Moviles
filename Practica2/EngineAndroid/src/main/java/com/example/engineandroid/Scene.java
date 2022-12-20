@@ -15,4 +15,7 @@ public interface Scene {
 
     //Allows the loading of resources inside, only called automatically on the engine PrimaryScene
     void loadResources(EngineApp engineAux);
-    }
+
+    //Se llama al cambiar la orientacion de la pantalla por si hay que modificar algo de la escena
+    public void configurationChanged(int orientation);
+}

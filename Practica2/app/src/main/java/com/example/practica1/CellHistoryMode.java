@@ -1,5 +1,7 @@
 package com.example.practica1;
 
+import com.example.engineandroid.Vector2D;
+
 //Celda especial de la practica 2
 public class CellHistoryMode extends CellBase {
 
@@ -34,4 +36,5 @@ public class CellHistoryMode extends CellBase {
     }
 
     public cellType getCellType() { return type;}
+
 }

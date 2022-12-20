@@ -13,6 +13,7 @@ import com.example.engineandroid.Vector2D;
 
 //Ads
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -39,6 +40,7 @@ public class MainMenuScene implements Scene {
     private AtomicReference<Integer> coins;
     private AtomicReference<Integer>[] progress;
     private AtomicReference<Integer>[] palettes;
+    private AtomicReference<Boolean> horizontalOrientation;
 
     Context context;
 
@@ -58,9 +60,9 @@ public class MainMenuScene implements Scene {
     @Override
     public void init() {
 
-        this.fastPlay = new InputButton(scaleWidth / 2 - (scaleWidth/ 4), scaleHeight / 5, scaleWidth / 2, scaleHeight / 4.8);
+        this.fastPlay = new InputButton(scaleWidth / 2 - (scaleWidth / 4), scaleHeight / 5, scaleWidth / 2, scaleHeight / 4.8);
 
-        this.historyMode = new InputButton(scaleWidth / 2 - (scaleWidth / 4), scaleHeight / 2, scaleWidth/ 2, scaleHeight/ 4.8);
+        this.historyMode = new InputButton(scaleWidth / 2 - (scaleWidth / 4), scaleHeight / 2, scaleWidth / 2, scaleHeight / 4.8);
     }
 
     @Override
@@ -74,7 +76,7 @@ public class MainMenuScene implements Scene {
         try {
             //La constructora del menu solo se llama una vez
             //Cargamos el fondo y lo playeamos
-            engineAux.getAudio().loadMusic( "assets/WiiBackgroundMusic.wav");
+            engineAux.getAudio().loadMusic("assets/WiiBackgroundMusic.wav");
             engineAux.getAudio().playSound("background", 0);
             engineAux.getAudio().newSound("effect", "assets/wiiClickSound.wav");
 
@@ -129,8 +131,8 @@ public class MainMenuScene implements Scene {
     }
 
     //Con este metodo el sensor te da newCoins monedas cada vez que des una vuelta sobre ti mismo
-    public void addCoins(int newCoins){
-        coins.set(coins.get()+newCoins);
+    public void addCoins(int newCoins) {
+        coins.set(coins.get() + newCoins);
     }
 
     //Metodos de lectura y guardado
@@ -153,7 +155,7 @@ public class MainMenuScene implements Scene {
                     receiveString += bufferedReader.readLine();
                 }
 
-                String md5Origin  = receiveString;//md5 del archivo origen
+                String md5Origin = receiveString;//md5 del archivo origen
 
                 receiveString = "";
 
@@ -173,7 +175,7 @@ public class MainMenuScene implements Scene {
 
                 //MD5 actual del archivo
                 fis = new FileInputStream(new File(subFolder, "data"));
-                String md5Checksum    = Utils.md5(fis);
+                String md5Checksum = Utils.md5(fis);
                 if (!md5Checksum.equals(md5Origin)) {    //si son iguales sigue, si no resetea el archivo con
                     //file is not valid
                     throw new FileNotFoundException("file was modified externally");
@@ -197,6 +199,7 @@ public class MainMenuScene implements Scene {
 
             this.progress = new AtomicReference[4];
             this.palettes = new AtomicReference[4];
+            this.horizontalOrientation = new AtomicReference<Boolean>(false);
 
             for (int i = 0; i < this.progress.length; ++i) {
                 this.progress[i] = new AtomicReference<>(Integer.parseInt(fileRead[i + 1]));
@@ -220,7 +223,7 @@ public class MainMenuScene implements Scene {
     //Y aqui el guardado, recomiendo que este metodo lo pongamos aqui y podamos acceder a el desde todas las escenas para
     //que cada desbloqueo y cada transaccion de monedas se guarde al instante y no se tenga que salir
     //Tambien habria que hacer un getter en esta clase para saber cuantas monedas y niveles tienes
-    public void saveDataHistoryMode(Context context){   //Idtheme siempre debe ser desde 1
+    public void saveDataHistoryMode(Context context) {   //Idtheme siempre debe ser desde 1
         try {
 //            Context context = this.engine.getContext();
             //Miramos el root del gamedata
@@ -287,7 +290,7 @@ public class MainMenuScene implements Scene {
     @Override
     public void render(RenderAndroid render) {
         //Titulo
-        render.drawText("NONOGRAMAS", (int) (scaleWidth / 2.0), (int) (scaleHeight / 10.8), "Black", "Cooper", 0,(scaleWidth/14));
+        render.drawText("NONOGRAMAS", (int) (scaleWidth / 2.0), (int) (scaleHeight / 10.8), "Black", "Cooper", 0, (scaleWidth / 14));
 
         //Botones
         render.drawImage((int) this.fastPlay.getPos().getX(), (int) (fastPlay.getPos().getY()), (int) (this.fastPlay.getSize().getX()), (int) (this.fastPlay.getSize().getY()), "QuickPlay");
@@ -305,8 +308,17 @@ public class MainMenuScene implements Scene {
         }
         if (input.inputReceived(this.historyMode.getPos(), this.historyMode.getSize())) {
             //Te lleva a la pantalla de seleccion
-            HistoryModeMenu historyMode = new HistoryModeMenu(context, this.coins, this.progress,this.palettes);
+            HistoryModeMenu historyMode = new HistoryModeMenu(context, this.coins, this.progress, this.palettes,this.horizontalOrientation);
             sceneMngr.pushScene(historyMode);
         }
+    }
+
+    //Se llama cada vez que se gira la orientacion de la pantalla
+    @Override
+    public void configurationChanged(int orientation) {
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+            horizontalOrientation.set(true);
+        else
+            horizontalOrientation.set(false);
     }
 }

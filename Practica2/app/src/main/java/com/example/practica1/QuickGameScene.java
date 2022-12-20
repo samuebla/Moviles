@@ -490,4 +490,10 @@ public class QuickGameScene implements Scene {
     private boolean win() {
         return remainingCells == 0 && wrongCells == 0;
     }
+
+    //Se llama cada vez que se gira la orientacion de la pantalla
+    @Override
+    public void configurationChanged(int orientation) {
+
+    }
 }
