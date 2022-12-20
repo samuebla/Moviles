@@ -68,20 +68,6 @@ public class ThemeModeLevels implements Scene {
             }
         }
 
-        //Imagen de desbloqueado
-        this.lvlImages = new String[20];
-        for (int i = 1; i < this.unlockedlevels.get(); ++i){
-            this.lvlImages[i-1] = selectedCategory + "Play";
-        }
-        //Imagen de recien desbloqueado
-        if (this.unlockedlevels.get() < this.lvlImages.length){
-            this.lvlImages[this.unlockedlevels.get()-1] = selectedCategory +"Unlocked";
-        }
-        //Imagen de bloqueado
-        for (int i = this.unlockedlevels.get() + 1; i < this.lvlImages.length+1; ++i){
-            this.lvlImages[i-1] = selectedCategory + "Level";
-        }
-
         this.backInputButton = new InputButton(10, 10, scaleWidth/10, scaleHeight/15);
     }
 
@@ -101,8 +87,18 @@ public class ThemeModeLevels implements Scene {
 
     @Override
     public void render(RenderAndroid render){
-        for (int i = 0; i < lvls.length; ++i){
-            render.drawImage((int)this.lvls[i].getPos().getX(), (int)this.lvls[i].getPos().getY(),(int)this.lvls[i].getSize().getX(),(int)this.lvls[i].getSize().getY(),lvlImages[i]);
+        //Imagen de desbloqueado
+        this.lvlImages = new String[20];
+        for (int i = 1; i < this.unlockedlevels.get(); ++i){
+            render.drawImage((int)this.lvls[i - 1].getPos().getX(), (int)this.lvls[i - 1].getPos().getY(),(int)this.lvls[i - 1].getSize().getX(),(int)this.lvls[i - 1].getSize().getY(),selectedCategory + "Play");
+        }
+        //Imagen de recien desbloqueado
+        if (this.unlockedlevels.get() < this.lvlImages.length){
+            render.drawImage((int)this.lvls[this.unlockedlevels.get()-1].getPos().getX(), (int)this.lvls[this.unlockedlevels.get()-1].getPos().getY(),(int)this.lvls[this.unlockedlevels.get()-1].getSize().getX(),(int)this.lvls[this.unlockedlevels.get()-1].getSize().getY(),selectedCategory +"Unlocked");
+        }
+        //Imagen de bloqueado
+        for (int i = this.unlockedlevels.get() + 1; i < this.lvlImages.length+1; ++i){
+            render.drawImage((int)this.lvls[i - 1].getPos().getX(), (int)this.lvls[i - 1].getPos().getY(),(int)this.lvls[i - 1].getSize().getX(),(int)this.lvls[i - 1].getSize().getY(),selectedCategory + "Level");
         }
 
         //----------------------------------------
