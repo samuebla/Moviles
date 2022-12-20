@@ -22,8 +22,12 @@ public class SceneMngrAndroid {
         stack.push(scene);
     }
 
-    public void update(double deltaTime, AdManager adManager){
-        stack.peek().update(deltaTime, adManager);
+    public void update(double deltaTime){
+        stack.peek().update(deltaTime);
+    }
+
+    public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, AudioAndroid audio, RenderAndroid render){
+        stack.peek().handleInput(type, adManager, input, this, audio, render);
     }
 
     public void render(RenderAndroid render){
@@ -31,4 +35,8 @@ public class SceneMngrAndroid {
     }
 
     public Scene getScene(){return stack.peek();}
+
+    public void onStop(){
+        stack.peek().onStop();
+    }
 }

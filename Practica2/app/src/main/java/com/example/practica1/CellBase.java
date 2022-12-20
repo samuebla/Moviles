@@ -26,7 +26,7 @@ public class CellBase extends Interactive{
         }
     }
 
-    public void handleInput(EngineApp engine){}
+    public void handleInput(){}
 
     public void setPalleteColor(int pallet) { palleteColor = pallet; }
     

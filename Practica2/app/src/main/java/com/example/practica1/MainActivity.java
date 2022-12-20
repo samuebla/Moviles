@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //registramos el listener
         sensorManager .registerListener( this, sensor , SensorManager.SENSOR_DELAY_NORMAL);
         
-        mainMenuScene = new MainMenuScene(this.engine, this.getBaseContext());
+        mainMenuScene = new MainMenuScene(getBaseContext());
         this.engine.getSceneMngr().pushScene(mainMenuScene);
         this.engine.setPrimaryScene(mainMenuScene);
         this.engine.resume();
@@ -142,14 +142,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     protected void onDestroy() {
-        mainMenuScene.saveDataHistoryMode();
+        mainMenuScene.saveDataHistoryMode(getBaseContext());
         createWorkRequest();
         super.onDestroy();
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        mainMenuScene.saveDataHistoryMode();
+        mainMenuScene.saveDataHistoryMode(getBaseContext());
+        engine.onStop();
         super.onSaveInstanceState(outState);
     }
 

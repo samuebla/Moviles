@@ -1,10 +1,13 @@
 package com.example.practica1;
 
 import com.example.engineandroid.AdManager;
+import com.example.engineandroid.AudioAndroid;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.InputAndroid;
 import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
+import com.example.engineandroid.SceneMngrAndroid;
 import com.example.engineandroid.Utils;
 import com.example.engineandroid.Vector2D;
 
@@ -25,11 +28,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class MainMenuScene implements Scene {
 
-    //TODO A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
+    //Escala logica de la pantalla, de 0 a 1000, independiente del verdadero ancho y alto del surface
     int scaleWidth = 1000;
     int scaleHeight = 1000;
 
-    private final EngineApp engine;
     private InputButton fastPlay;
     private InputButton historyMode;
 
@@ -38,12 +40,10 @@ public class MainMenuScene implements Scene {
     private AtomicReference<Integer>[] progress;
     private AtomicReference<Integer>[] palettes;
 
+    Context context;
 
-    Context baseContext;
-
-    public MainMenuScene(EngineApp engineAux, Context contextAux) {
-        this.engine = engineAux;
-        this.baseContext = contextAux;
+    public MainMenuScene(Context context) {
+        this.context = context;
         this.loadFromFile();
         System.out.print("Save data loaded: ");
         System.out.print(this.coins);
@@ -53,23 +53,17 @@ public class MainMenuScene implements Scene {
     }
 
 
-    //TODO AAA QUITAR ESTO KE MAL KE MAL
-    //Actualmente Pos y Size se devuelve en unidades de 0 a 1000 pero el getScaledCoords esta en cordenadas reales por eso hago la conversion
-    @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size) {
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), this.engine.getInput().getScaledCoords().getY());
-
-        return (coords.getX()*scaleWidth/engine.getGraphics().getWidth() >= pos.getX()  && coords.getX()*scaleWidth/engine.getGraphics().getWidth() <= pos.getX() + size.getX() &&
-                coords.getY()*scaleHeight/engine.getGraphics().getHeight() >= pos.getY() && coords.getY()*scaleHeight/engine.getGraphics().getHeight() <= pos.getY() + size.getY());
-    }
-
     @Override
     public void init() {
 
         this.fastPlay = new InputButton(scaleWidth / 2 - (scaleWidth/ 4), scaleHeight / 5, scaleWidth / 2, scaleHeight / 4.8);
 
         this.historyMode = new InputButton(scaleWidth / 2 - (scaleWidth / 4), scaleHeight / 2, scaleWidth/ 2, scaleHeight/ 4.8);
+    }
+
+    @Override
+    public void onStop() {
+
     }
 
     @Override
@@ -142,8 +136,6 @@ public class MainMenuScene implements Scene {
 //            //Carga de archivo
             String receiveString = "";
             try {//Comprobar si existe en el almacenamiento interno
-                Context context = this.engine.getContext();
-
                 //CHECKSUM
                 //Comprobar archivo no ha sido modificado externamente o si existe
                 String folderPath = context.getFilesDir().getAbsolutePath() + File.separator + "salt";
@@ -186,7 +178,7 @@ public class MainMenuScene implements Scene {
             } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
                 e.printStackTrace();
 
-                InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/saveData"));
+                InputStreamReader inputStreamReader = new InputStreamReader(context.getAssets().open("files/saveData"));
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
                 while (bufferedReader.ready()) {
@@ -225,9 +217,9 @@ public class MainMenuScene implements Scene {
     //Y aqui el guardado, recomiendo que este metodo lo pongamos aqui y podamos acceder a el desde todas las escenas para
     //que cada desbloqueo y cada transaccion de monedas se guarde al instante y no se tenga que salir
     //Tambien habria que hacer un getter en esta clase para saber cuantas monedas y niveles tienes
-    public void saveDataHistoryMode(){   //Idtheme siempre debe ser desde 1
+    public void saveDataHistoryMode(Context context){   //Idtheme siempre debe ser desde 1
         try {
-            Context context = this.engine.getContext();
+//            Context context = this.engine.getContext();
             //Miramos el root del gamedata
             String folderPath = context.getFilesDir().getAbsolutePath() + File.separator + "saveData";
 
@@ -286,12 +278,7 @@ public class MainMenuScene implements Scene {
     }
 
     @Override
-    public void update(double deltaTime, AdManager adManager) {
-        //Para los eventos
-        if (this.engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput(engine.getEventMngr().getEventType(), adManager);
-            this.engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
-        }
+    public void update(double deltaTime) {
     }
 
     @Override
@@ -308,17 +295,17 @@ public class MainMenuScene implements Scene {
     }
 
     @Override
-    public void handleInput(EventHandler.EventType type, AdManager adManager) {
+    public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, SceneMngrAndroid sceneMngr, AudioAndroid audio, RenderAndroid render) {
         //Si pulsas el boton...
-        if (inputReceived(this.fastPlay.getPos(), this.fastPlay.getSize())) {
+        if (input.inputReceived(this.fastPlay.getPos(), this.fastPlay.getSize())) {
             //Te lleva a la pantalla de seleccion
-            LevelSelection levelScene = new LevelSelection(this.engine);
-            this.engine.getSceneMngr().pushScene(levelScene);
+            LevelSelection levelScene = new LevelSelection();
+            sceneMngr.pushScene(levelScene);
         }
-        if (inputReceived(this.historyMode.getPos(), this.historyMode.getSize())) {
+        if (input.inputReceived(this.historyMode.getPos(), this.historyMode.getSize())) {
             //Te lleva a la pantalla de seleccion
-            HistoryModeMenu historyMode = new HistoryModeMenu(this.engine, this.coins, this.progress,this.palettes);
-            this.engine.getSceneMngr().pushScene(historyMode);
+            HistoryModeMenu historyMode = new HistoryModeMenu(context, this.coins, this.progress,this.palettes);
+            sceneMngr.pushScene(historyMode);
         }
     }
 

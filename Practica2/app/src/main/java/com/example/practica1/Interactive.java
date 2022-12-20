@@ -11,7 +11,7 @@ public class Interactive {
 
     public void render(RenderAndroid render){}
     public void update(double deltaTime){}
-    public void handleInput(EngineApp engine){}
+    public void handleInput(){}
 
     public Vector2D getSize(){return size;}
     public Vector2D getPos(){return pos;}

@@ -13,7 +13,7 @@ public class CellHistoryMode extends CellBase {
     }
 
     @Override
-    public void handleInput(EngineApp engine) {
+    public void handleInput() {
         //Solo puedes interaccionar si está empty
         if (type == CellBase.cellType.EMPTY ||type == cellType.CROSSED ) {
             //Si te has equivocado...

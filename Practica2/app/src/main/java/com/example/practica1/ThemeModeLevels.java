@@ -1,10 +1,15 @@
 package com.example.practica1;
 
+import android.content.Context;
+
 import com.example.engineandroid.AdManager;
+import com.example.engineandroid.AudioAndroid;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.InputAndroid;
 import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
+import com.example.engineandroid.SceneMngrAndroid;
 import com.example.engineandroid.Vector2D;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,8 +25,6 @@ public class ThemeModeLevels implements Scene {
 
     private InputButton backInputButton;
 
-    private final EngineApp engine;
-
     private final AtomicReference<Integer> coins;
     private Integer coinSize;
 
@@ -34,9 +37,11 @@ public class ThemeModeLevels implements Scene {
 
     private String folderName;
 
+    Context context;
 
-    public ThemeModeLevels(EngineApp engineAux,AtomicReference<Integer> levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux,AtomicReference<Integer>[] palettesAux, String folder_){
-        this.engine = engineAux;
+
+    public ThemeModeLevels(Context context, AtomicReference<Integer> levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] palettesAux, String folder_){
+        this.context = context;
         this.selectedCategory = this.categories[selectedCategory - 1];
         this.category = selectedCategory;
         this.unlockedlevels = levelsUnlocked;
@@ -49,15 +54,6 @@ public class ThemeModeLevels implements Scene {
         folderName = folder_;
 
         init();
-    }
-
-    @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size){
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
-
-        return (coords.getX()*scaleWidth/engine.getGraphics().getWidth() >= pos.getX()  && coords.getX()*scaleWidth/engine.getGraphics().getWidth() <= pos.getX() + size.getX() &&
-                coords.getY()*scaleHeight/engine.getGraphics().getHeight() >= pos.getY() && coords.getY()*scaleHeight/engine.getGraphics().getHeight() <= pos.getY() + size.getY());
     }
 
     @Override
@@ -95,17 +91,17 @@ public class ThemeModeLevels implements Scene {
     }
 
     @Override
+    public void onStop() {
+
+    }
+
+    @Override
     public void loadResources(EngineApp engineAux) {
 
     }
 
     @Override
-    public void update(double deltaTime, AdManager adManager){
-        //Para los eventos...
-        if(engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput(engine.getEventMngr().getEventType(), adManager);
-            engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
-        }
+    public void update(double deltaTime){
     }
 
     @Override
@@ -130,17 +126,17 @@ public class ThemeModeLevels implements Scene {
     }
 
     @Override
-    public void handleInput(EventHandler.EventType type, AdManager adManager){
+    public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, SceneMngrAndroid sceneMngr, AudioAndroid audio, RenderAndroid render){
         for (int i = 0; i < this.unlockedlevels.get(); ++i){
-            if (inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
-                HistoryModeGameScene playScene = new HistoryModeGameScene(this.engine, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1,this.palettes, folderName);
-                this.engine.getSceneMngr().pushScene(playScene);
+            if (input.inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
+                HistoryModeGameScene playScene = new HistoryModeGameScene(context, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1,this.palettes, folderName);
+                sceneMngr.pushScene(playScene);
             }
         }
 
         //Back button
-        if (inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
-            this.engine.getSceneMngr().popScene();
+        if (input.inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
+            sceneMngr.popScene();
         }
     }
 

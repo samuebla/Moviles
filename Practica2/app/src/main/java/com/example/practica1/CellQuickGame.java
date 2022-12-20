@@ -16,7 +16,7 @@ public class CellQuickGame extends CellBase {
     }
 
     @Override
-    public void handleInput(EngineApp engine) {
+    public void handleInput() {
         switch (type) {
             case EMPTY:
                 type = cellType.SELECTED;

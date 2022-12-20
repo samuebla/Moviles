@@ -13,15 +13,28 @@ public class InputAndroid {
     Vector2D touchCoords;
     private final Vector2D offset;
 
-    public InputAndroid(EventHandler eHandler){
+    private RenderAndroid render;
+
+    public InputAndroid(EventHandler eHandler, RenderAndroid render){
         this.touchCoords = new Vector2D(-1,-1);
         this.touchlistener = new TouchListener(this, eHandler);
         this.longTouchListener = new LongTouchListener(this, eHandler, this.touchlistener);
         offset = new Vector2D();
 
+        this.render = render;
+
         //Por defecto la escala es 1000x1000 pero creamos un setter por si alguien quiere alguna modificacion
         scaleHeight=1000;
         scaleWidth=1000;
+    }
+
+    //Actualmente Pos y Size se devuelve en unidades de 0 a 1000 pero el getScaledCoords esta en cordenadas reales por eso hago la conversion
+    public boolean inputReceived(Vector2D pos, Vector2D size) {
+        Vector2D coords = new Vector2D();
+        coords.set(getScaledCoords().getX(), getScaledCoords().getY());
+
+        return (coords.getX()*scaleWidth/render.getWidth() >= pos.getX()  && coords.getX()*scaleWidth/render.getWidth() <= pos.getX() + size.getX() &&
+                coords.getY()*scaleHeight/render.getHeight() >= pos.getY() && coords.getY()*scaleHeight/render.getHeight() <= pos.getY() + size.getY());
     }
 
     public Vector2D getRawCoords() {

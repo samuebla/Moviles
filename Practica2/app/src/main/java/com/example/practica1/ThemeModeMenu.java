@@ -1,10 +1,15 @@
 package com.example.practica1;
 
+import android.content.Context;
+
 import com.example.engineandroid.AdManager;
+import com.example.engineandroid.AudioAndroid;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.InputAndroid;
 import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
+import com.example.engineandroid.SceneMngrAndroid;
 import com.example.engineandroid.Vector2D;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,16 +25,16 @@ public class ThemeModeMenu implements Scene {
 
     private InputButton backInputButton;
 
-    private final EngineApp engine;
-
     private final AtomicReference<Integer> coins;
     private Integer coinSize;
 
     private final AtomicReference<Integer>[] progress;
     private final AtomicReference<Integer>[] palettes;
 
-    public ThemeModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux,AtomicReference<Integer>[] palettesAux){
-        this.engine = engineAux;
+    Context context;
+
+    public ThemeModeMenu(Context context, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux, AtomicReference<Integer>[] palettesAux){
+        this.context = context;
         this.coins = coinsAux;
         this.progress = progressAux;
         this.palettes = palettesAux;
@@ -39,15 +44,6 @@ public class ThemeModeMenu implements Scene {
         scaleWidth=1000;
 
         init();
-    }
-
-    @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size){
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
-
-        return (coords.getX()*scaleWidth/engine.getGraphics().getWidth() >= pos.getX()  && coords.getX()*scaleWidth/engine.getGraphics().getWidth() <= pos.getX() + size.getX() &&
-                coords.getY()*scaleHeight/engine.getGraphics().getHeight() >= pos.getY() && coords.getY()*scaleHeight/engine.getGraphics().getHeight() <= pos.getY() + size.getY());
     }
 
     @Override
@@ -65,17 +61,17 @@ public class ThemeModeMenu implements Scene {
     }
 
     @Override
+    public void onStop() {
+
+    }
+
+    @Override
     public void loadResources(EngineApp engineAux) {
 
     }
 
     @Override
-    public void update(double deltaTime, AdManager adManager){
-        //Para los eventos...
-        if(engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput(engine.getEventMngr().getEventType(), adManager);
-            engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
-        }
+    public void update(double deltaTime){
     }
 
     @Override
@@ -111,31 +107,31 @@ public class ThemeModeMenu implements Scene {
     }
 
     @Override
-    public void handleInput(EventHandler.EventType type, AdManager adManager){
+    public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, SceneMngrAndroid sceneMngr, AudioAndroid audio, RenderAndroid render){
         //Tetarracas
-        if (inputReceived(this.alfabetoInputButtonMode.getPos(), this.alfabetoInputButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[0], 1, this.coins,this.palettes, "alphabet");
-            this.engine.getSceneMngr().pushScene(scene);
+        if (input.inputReceived(this.alfabetoInputButtonMode.getPos(), this.alfabetoInputButtonMode.getSize())){
+            ThemeModeLevels scene = new ThemeModeLevels(context, this.progress[0], 1, this.coins,this.palettes, "alphabet");
+            sceneMngr.pushScene(scene);
         }
         //Bubalongas
-        if (inputReceived(this.fiestaInputButtonMode.getPos(), this.fiestaInputButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[1], 2, this.coins,this.palettes, "party");
-            this.engine.getSceneMngr().pushScene(scene);
+        if (input.inputReceived(this.fiestaInputButtonMode.getPos(), this.fiestaInputButtonMode.getSize())){
+            ThemeModeLevels scene = new ThemeModeLevels(context, this.progress[1], 2, this.coins,this.palettes, "party");
+            sceneMngr.pushScene(scene);
         }
         //Bakugans
-        if (inputReceived(this.animalesInputButtonMode.getPos(), this.animalesInputButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[2], 3, this.coins,this.palettes, "animals");
-            this.engine.getSceneMngr().pushScene(scene);
+        if (input.inputReceived(this.animalesInputButtonMode.getPos(), this.animalesInputButtonMode.getSize())){
+            ThemeModeLevels scene = new ThemeModeLevels(context, this.progress[2], 3, this.coins,this.palettes, "animals");
+            sceneMngr.pushScene(scene);
         }
         //Mamelungas
-        if (inputReceived(this.geometriaInputButtonMode.getPos(), this.geometriaInputButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(engine,this.progress[3], 4, this.coins,this.palettes, "geometry");
-            this.engine.getSceneMngr().pushScene(scene);
+        if (input.inputReceived(this.geometriaInputButtonMode.getPos(), this.geometriaInputButtonMode.getSize())){
+            ThemeModeLevels scene = new ThemeModeLevels(context, this.progress[3], 4, this.coins,this.palettes, "geometry");
+            sceneMngr.pushScene(scene);
         }
 
         //Back button
-        if (inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
-            this.engine.getSceneMngr().popScene();
+        if (input.inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
+            sceneMngr.popScene();
         }
     }
 

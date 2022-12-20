@@ -1,10 +1,15 @@
 package com.example.practica1;
 
+import android.content.Context;
+
 import com.example.engineandroid.AdManager;
+import com.example.engineandroid.AudioAndroid;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.InputAndroid;
 import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
+import com.example.engineandroid.SceneMngrAndroid;
 import com.example.engineandroid.Vector2D;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -25,12 +30,10 @@ public class HistoryModeMenu implements Scene {
     private final AtomicReference<Integer>[] progress;
     private final AtomicReference<Integer>[] palettes;
 
-    private final EngineApp engine;
+    private Context context;
 
-    public HistoryModeMenu(EngineApp engineAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux,AtomicReference<Integer>[] palettesAux){
-
-        this.engine = engineAux;
-
+    public HistoryModeMenu(Context context, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux, AtomicReference<Integer>[] palettesAux){
+        this.context = context;
         this.coins = coinsAux;
         this.progress = progressAux;
         this.palettes = palettesAux;
@@ -40,15 +43,6 @@ public class HistoryModeMenu implements Scene {
         scaleWidth=1000;
 
         init();
-    }
-
-    @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size){
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
-
-        return (coords.getX()*scaleWidth/engine.getGraphics().getWidth() >= pos.getX()  && coords.getX()*scaleWidth/engine.getGraphics().getWidth() <= pos.getX() + size.getX() &&
-                coords.getY()*scaleHeight/engine.getGraphics().getHeight() >= pos.getY() && coords.getY()*scaleHeight/engine.getGraphics().getHeight() <= pos.getY() + size.getY());
     }
 
     @Override
@@ -62,17 +56,17 @@ public class HistoryModeMenu implements Scene {
     }
 
     @Override
+    public void onStop() {
+
+    }
+
+    @Override
     public void loadResources(EngineApp engineAux) {
 
     }
 
     @Override
-    public void update(double deltaTime, AdManager adManager){
-        //Para los eventos...
-        if(engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput(engine.getEventMngr().getEventType(), adManager);
-            engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
-        }
+    public void update(double deltaTime){
     }
 
     @Override
@@ -98,16 +92,16 @@ public class HistoryModeMenu implements Scene {
     }
 
     @Override
-    public void handleInput(EventHandler.EventType type, AdManager adManager){
+    public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, SceneMngrAndroid sceneMngr, AudioAndroid audio, RenderAndroid render){
         //ThemeMode
-        if (inputReceived(this.themeInputButtonMode.getPos(), this.themeInputButtonMode.getSize())){
-            ThemeModeMenu playScene = new ThemeModeMenu(this.engine, this.coins, this.progress,this.palettes);
-            this.engine.getSceneMngr().pushScene(playScene);
+        if (input.inputReceived(this.themeInputButtonMode.getPos(), this.themeInputButtonMode.getSize())){
+            ThemeModeMenu playScene = new ThemeModeMenu(context, this.coins, this.progress,this.palettes);
+            sceneMngr.pushScene(playScene);
         }
 
         //Back button
-        if (inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
-            this.engine.getSceneMngr().popScene();
+        if (input.inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
+            sceneMngr.popScene();
         }
     }
 

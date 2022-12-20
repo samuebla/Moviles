@@ -4,10 +4,13 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.engineandroid.AdManager;
+import com.example.engineandroid.AudioAndroid;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.InputAndroid;
 import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
+import com.example.engineandroid.SceneMngrAndroid;
 import com.example.engineandroid.Utils;
 import com.example.engineandroid.Vector2D;
 
@@ -23,8 +26,6 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class HistoryModeGameScene implements Scene {
-    private EngineApp engine;
-
     //A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
     int scaleWidth;
     int scaleHeight;
@@ -93,10 +94,10 @@ public class HistoryModeGameScene implements Scene {
     boolean won;
     boolean showAnswers;
 
-    public HistoryModeGameScene(EngineApp engine, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux, AtomicReference<Integer>[] palettesAux, String folder_) {
+    Context context;
 
-        //Asociamos el engine correspondiente
-        this.engine = engine;
+    public HistoryModeGameScene(Context context, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux, AtomicReference<Integer>[] palettesAux, String folder_) {
+        this.context = context;
 
         scaleHeight = 1000;
         scaleWidth = 1000;
@@ -132,15 +133,6 @@ public class HistoryModeGameScene implements Scene {
 
         //Leemos el archivo y seteamos todos los datos
         init();
-    }
-
-    @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size) {
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
-
-        return (coords.getX() * scaleWidth / engine.getGraphics().getWidth() >= pos.getX() && coords.getX() * scaleWidth / engine.getGraphics().getWidth() <= pos.getX() + size.getX() &&
-                coords.getY() * scaleHeight / engine.getGraphics().getHeight() >= pos.getY() && coords.getY() * scaleHeight / engine.getGraphics().getHeight() <= pos.getY() + size.getY());
     }
 
     @Override
@@ -193,21 +185,21 @@ public class HistoryModeGameScene implements Scene {
     }
 
     @Override
+    public void onStop() {
+        saveToFile(false);
+    }
+
+    @Override
     public void loadResources(EngineApp engineAux) {
 
     }
 
     @Override
-    public void update(double deltaTime, AdManager adManager) {
+    public void update(double deltaTime) {
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
                 this.matriz[j][i].update(deltaTime);
             }
-        }
-
-        if (engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput(engine.getEventMngr().getEventType(), adManager);
-            engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
 
         //Timer del boton de comprobar
@@ -305,19 +297,19 @@ public class HistoryModeGameScene implements Scene {
     }
 
     @Override
-    public void handleInput(EventHandler.EventType type, AdManager adManager) {
+    public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, SceneMngrAndroid sceneMngr, AudioAndroid audio, RenderAndroid render) {
         //Solo podra interactuar con el tablero si tiene vidas
         if (lives.get() > 0) {
             for (int i = 0; i < rows_; i++) {
                 for (int j = 0; j < cols_; j++) {
-                    if (inputReceived(this.matriz[j][i].getPos(), this.matriz[j][i].getSize())) {
+                    if (input.inputReceived(this.matriz[j][i].getPos(), this.matriz[j][i].getSize())) {
 
                         //Si es un long touch...
                         if (type == EventHandler.EventType.LONG_TOUCH) {
                             //Intentamos cruzarlo
                             this.matriz[j][i].setCrossed();
                             //Y playeamos el sonido
-                            engine.getAudio().playSound("effect", 1);
+                            audio.playSound("effect", 1);
                         } else {
                             //Fallo
                             if (this.matriz[j][i].getCellType() == CellBase.cellType.EMPTY) {
@@ -325,7 +317,7 @@ public class HistoryModeGameScene implements Scene {
                                     //Restamos una vida
                                     lives.set(lives.get() - 1);
                                     //Y playeamos el sonido
-                                    engine.getAudio().playSound("effect", 1);
+                                    audio.playSound("effect", 1);
                                 }
                                 //Acierto
                                 else {
@@ -340,11 +332,11 @@ public class HistoryModeGameScene implements Scene {
                                         }
                                     }
                                     //Y playeamos el sonido
-                                    engine.getAudio().playSound("effect", 1);
+                                    audio.playSound("effect", 1);
                                 }
                             }
                             //Aqui se guarda si te has equivocado...
-                            this.matriz[j][i].handleInput(engine);
+                            this.matriz[j][i].handleInput();
                         }
                     }
                 }
@@ -353,27 +345,27 @@ public class HistoryModeGameScene implements Scene {
 
         //BOTONES
         //Si te rindes vuelves a la seleccion de nivel
-        if (!won && inputReceived(this.escapeInputButton.getPos(), this.escapeInputButton.getSize())) {
+        if (!won && input.inputReceived(this.escapeInputButton.getPos(), this.escapeInputButton.getSize())) {
             if (lives.get() <= 0) {
                 saveToFile(true);
             } else {
                 saveToFile(false);
             }
-            this.engine.getSceneMngr().popScene();
-            this.engine.setColorBackground(0xFFFFFFFF);
+            sceneMngr.popScene();
+            render.setColorBackground(0xFFFFFFFF);
         }
         //Solo funciona si has ganado
-        if (won && inputReceived(this.winBackInputButton.getPos(), this.winBackInputButton.getSize())) {
+        if (won && input.inputReceived(this.winBackInputButton.getPos(), this.winBackInputButton.getSize())) {
             if (currentLevelNumber == this.progress.get()) {
                 this.progress.set(this.progress.get() + 1);
             }
             saveToFile(true);
-            this.engine.getSceneMngr().popScene();
-            this.engine.setColorBackground(0xFFFFFFFF);
+            sceneMngr.popScene();
+            render.setColorBackground(0xFFFFFFFF);
         }
 
         //Solo funciona si has ganado
-        if (won && inputReceived(this.shareButton.getPos(), this.shareButton.getSize())) {
+        if (won && input.inputReceived(this.shareButton.getPos(), this.shareButton.getSize())) {
             switch (mode) {
                 case 1:
                     adManager.sendIntent("https://twitter.com/intent/tweet", "oh wow soy la ostia pasandome el nivel " + currentLevelNumber + " de la categoria de alfabeto");
@@ -395,7 +387,7 @@ public class HistoryModeGameScene implements Scene {
         }
 
         for (int i = 0; i < colorsInputButtons.length; i++) {
-            if (!won && inputReceived(this.colorsInputButtons[i].getPos(), this.colorsInputButtons[i].getSize())) {
+            if (!won && input.inputReceived(this.colorsInputButtons[i].getPos(), this.colorsInputButtons[i].getSize())) {
                 //Si tienes la paleta bloqueada...
                 if (palettes[i].get() == 0) {
 
@@ -409,7 +401,7 @@ public class HistoryModeGameScene implements Scene {
 
                         //Y seteamos la nueva paleta
                         actualColorPattern = i;
-                        this.engine.setColorBackground(colorfulPattern[i]);
+                        render.setColorBackground(colorfulPattern[i]);
                         for (int h = 0; h < rows_; h++) {
                             for (int j = 0; j < cols_; j++) {
                                 //ARGB
@@ -419,7 +411,7 @@ public class HistoryModeGameScene implements Scene {
                     }
                 } else {
                     actualColorPattern = i;
-                    this.engine.setColorBackground(colorfulPattern[i]);
+                    render.setColorBackground(colorfulPattern[i]);
                     for (int h = 0; h < rows_; h++) {
                         for (int j = 0; j < cols_; j++) {
                             this.matriz[j][h].setPalleteColor(this.colorfulPatternCells[i]);
@@ -430,7 +422,7 @@ public class HistoryModeGameScene implements Scene {
         }
 
         //Si necesitas o quieres alguna vida...
-        if (lives.get() < 3 && inputReceived(this.getLifeInputButton.getPos(), this.getLifeInputButton.getSize())) {
+        if (lives.get() < 3 && input.inputReceived(this.getLifeInputButton.getPos(), this.getLifeInputButton.getSize())) {
             //Al mirar el anuncio se restaura un corazon
             adManager.showRewardedAd(lives, 1);
         }
@@ -447,8 +439,6 @@ public class HistoryModeGameScene implements Scene {
             //Carga de archivo
             String receiveString = "";
             try {//Comprobar si existe en el almacenamiento interno
-                Context context = this.engine.getContext();
-
                 //CHECKSUM
                 //Comprobar archivo no ha sido modificado externamente o si existe
                 String folderPath = context.getFilesDir().getAbsolutePath() + File.separator + "salt" + File.separator + folder;
@@ -506,7 +496,7 @@ public class HistoryModeGameScene implements Scene {
                     fileCarpet = "geometria/" + file;
                     break;
             }
-                InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/" + fileCarpet));
+                InputStreamReader inputStreamReader = new InputStreamReader(context.getAssets().open("files/" + fileCarpet));
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
                 while (bufferedReader.ready()) {
@@ -706,7 +696,6 @@ public class HistoryModeGameScene implements Scene {
 
     public void saveToFile(boolean reset) {
         try {
-            Context context = this.engine.getContext();
             //Miramos el root del gamedata
             String folderPath = context.getFilesDir().getAbsolutePath() + File.separator + rootFolder;
 

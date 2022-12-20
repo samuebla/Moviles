@@ -1,10 +1,13 @@
 package com.example.practica1;
 
 import com.example.engineandroid.AdManager;
+import com.example.engineandroid.AudioAndroid;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.InputAndroid;
 import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
+import com.example.engineandroid.SceneMngrAndroid;
 import com.example.engineandroid.Vector2D;
 
 public class LevelSelection implements Scene {
@@ -20,23 +23,10 @@ public class LevelSelection implements Scene {
 
     private InputButton backInputButton;
 
-    private final EngineApp engine;
-
-    public LevelSelection(EngineApp engineAux){
-
-        this.engine = engineAux;
+    public LevelSelection(){
         scaleHeight = 1000;
         scaleWidth = 1000;
         init();
-    }
-
-    @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size){
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
-
-        return (coords.getX() * scaleWidth / engine.getGraphics().getWidth() >= pos.getX() && coords.getX() * scaleWidth / engine.getGraphics().getWidth() <= pos.getX() + size.getX() &&
-                coords.getY() * scaleHeight / engine.getGraphics().getHeight() >= pos.getY() && coords.getY() * scaleHeight / engine.getGraphics().getHeight() <= pos.getY() + size.getY());
     }
 
     @Override
@@ -52,17 +42,17 @@ public class LevelSelection implements Scene {
     }
 
     @Override
+    public void onStop() {
+
+    }
+
+    @Override
     public void loadResources(EngineApp engineAux) {
 
     }
 
     @Override
-    public void update(double deltaTime, AdManager adManager){
-        //Para los eventos...
-        if(engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput(engine.getEventMngr().getEventType(), adManager);
-            engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
-        }
+    public void update(double deltaTime){
     }
 
     @Override
@@ -94,46 +84,46 @@ public class LevelSelection implements Scene {
     }
 
     @Override
-    public void handleInput(EventHandler.EventType type, AdManager adManager){
+    public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, SceneMngrAndroid sceneMngr, AudioAndroid audio, RenderAndroid render){
         //5x5
-        if (inputReceived(this.inputButton5.getPos(), this.inputButton5.getSize())){
-            QuickGameScene playScene = new QuickGameScene(this.engine, 5, 5);
-            this.engine.getSceneMngr().pushScene(playScene);
+        if (input.inputReceived(this.inputButton5.getPos(), this.inputButton5.getSize())){
+            QuickGameScene playScene = new QuickGameScene(5, 5);
+            sceneMngr.pushScene(playScene);
         }
 
         //8x8
-        if (inputReceived(this.inputButton8.getPos(), this.inputButton8.getSize())){
-            QuickGameScene playScene = new QuickGameScene(this.engine, 8, 8);
-            this.engine.getSceneMngr().pushScene(playScene);
+        if (input.inputReceived(this.inputButton8.getPos(), this.inputButton8.getSize())){
+            QuickGameScene playScene = new QuickGameScene( 8, 8);
+            sceneMngr.pushScene(playScene);
         }
 
         //10x10
-        if (inputReceived(this.inputButton10.getPos(), this.inputButton10.getSize())){
-            QuickGameScene playScene = new QuickGameScene(this.engine, 10, 10);
-            this.engine.getSceneMngr().pushScene(playScene);
+        if (input.inputReceived(this.inputButton10.getPos(), this.inputButton10.getSize())){
+            QuickGameScene playScene = new QuickGameScene(10, 10);
+            sceneMngr.pushScene(playScene);
         }
 
         //5x8
-        if (inputReceived(this.inputButton5X8.getPos(), this.inputButton5X8.getSize())){
-            QuickGameScene playScene = new QuickGameScene(this.engine, 5, 8);
-            this.engine.getSceneMngr().pushScene(playScene);
+        if (input.inputReceived(this.inputButton5X8.getPos(), this.inputButton5X8.getSize())){
+            QuickGameScene playScene = new QuickGameScene(5, 8);
+            sceneMngr.pushScene(playScene);
         }
 
         //8x10
-        if (inputReceived(this.inputButton8X10.getPos(), this.inputButton8X10.getSize())){
-            QuickGameScene playScene = new QuickGameScene(this.engine, 8, 10);
-            this.engine.getSceneMngr().pushScene(playScene);
+        if (input.inputReceived(this.inputButton8X10.getPos(), this.inputButton8X10.getSize())){
+            QuickGameScene playScene = new QuickGameScene(8, 10);
+            sceneMngr.pushScene(playScene);
         }
 
         //5x10
-        if (inputReceived(this.inputButton5X10.getPos(), this.inputButton5X10.getSize())){
-            QuickGameScene playScene = new QuickGameScene(this.engine, 5, 10);
-            this.engine.getSceneMngr().pushScene(playScene);
+        if (input.inputReceived(this.inputButton5X10.getPos(), this.inputButton5X10.getSize())){
+            QuickGameScene playScene = new QuickGameScene(5, 10);
+            sceneMngr.pushScene(playScene);
         }
 
         //Back button
-        if (inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
-            this.engine.getSceneMngr().popScene();
+        if (input.inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
+            sceneMngr.popScene();
         }
     }
 

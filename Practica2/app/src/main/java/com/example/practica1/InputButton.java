@@ -21,7 +21,7 @@ public class InputButton extends Interactive {
 
     }
     @Override
-    public void handleInput(EngineApp engine){
+    public void handleInput(){
 
     }
 

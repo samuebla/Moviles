@@ -1,10 +1,13 @@
 package com.example.practica1;
 
 import com.example.engineandroid.AdManager;
+import com.example.engineandroid.AudioAndroid;
 import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
+import com.example.engineandroid.InputAndroid;
 import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
+import com.example.engineandroid.SceneMngrAndroid;
 import com.example.engineandroid.Vector2D;
 
 
@@ -13,9 +16,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class QuickGameScene implements Scene {
-
-    private EngineApp engine;
-
     //A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
     int scaleWidth;
     int scaleHeight;
@@ -54,16 +54,10 @@ public class QuickGameScene implements Scene {
     boolean showAnswers;
     boolean auxShowAnswer;
 
-    public QuickGameScene(EngineApp engine, int rows, int cols) {
-
-        //Asociamos el engine correspondiente
-        this.engine = engine;
+    public QuickGameScene(int rows, int cols) {
 
         scaleHeight = 1000;
         scaleWidth = 1000;
-
-
-        this.engine.setColorBackground(0xFFFFFFFF);
 
         //Creamos el random
         Random random = new Random();
@@ -290,15 +284,6 @@ public class QuickGameScene implements Scene {
     }
 
     @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size) {
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
-
-        return (coords.getX() * scaleWidth / engine.getGraphics().getWidth() >= pos.getX() && coords.getX() * scaleWidth / engine.getGraphics().getWidth() <= pos.getX() + size.getX() &&
-                coords.getY() * scaleHeight / engine.getGraphics().getHeight() >= pos.getY() && coords.getY() * scaleHeight / engine.getGraphics().getHeight() <= pos.getY() + size.getY());
-    }
-
-    @Override
     public void init() {
 
         //Dividimos la pantalla en casillas.
@@ -348,21 +333,21 @@ public class QuickGameScene implements Scene {
     }
 
     @Override
+    public void onStop() {
+
+    }
+
+    @Override
     public void loadResources(EngineApp engineAux) {
 
     }
 
     @Override
-    public void update(double deltaTime, AdManager adManager) {
+    public void update(double deltaTime) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
                 this.matriz[i][j].update(deltaTime);
             }
-        }
-
-        if (engine.getEventMngr().getEventType() != EventHandler.EventType.NONE) {
-            handleInput(engine.getEventMngr().getEventType(), adManager);
-            engine.getEventMngr().sendEvent(EventHandler.EventType.NONE);
         }
 
         //Timer del boton de comprobar
@@ -433,11 +418,11 @@ public class QuickGameScene implements Scene {
 
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                engine.getGraphics().drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1,tamTexto);
+                render.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1,tamTexto);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    engine.getGraphics().drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto * 0.7 / (rows_ / 2)) + (int) ((tamProporcionalAlto / rows_ * 1.3 * j))), "Black", "Calibri", 0,tamTexto);
+                    render.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto * 0.7 / (rows_ / 2)) + (int) ((tamProporcionalAlto / rows_ * 1.3 * j))), "Black", "Calibri", 0,tamTexto);
                 }
             }
 
@@ -449,12 +434,12 @@ public class QuickGameScene implements Scene {
     }
 
     @Override
-    public void handleInput(EventHandler.EventType type, AdManager adManager) {
+    public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, SceneMngrAndroid sceneMngr, AudioAndroid audio, RenderAndroid render) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
-                if (inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
+                if (input.inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
                     //Aqui se guarda si te has equivocado...
-                    this.matriz[i][j].handleInput(engine);
+                    this.matriz[i][j].handleInput();
                     //1 Si esta mal
                     //2 Si lo seleccionas y esta bien
                     //3 Si estaba mal seleccionado y lo deseleccionas
@@ -477,27 +462,27 @@ public class QuickGameScene implements Scene {
                         remainingCells++;
                     }
                     //Y playeamos el sonido
-                    engine.getAudio().playSound("effect", 1);
+                    audio.playSound("effect", 1);
                 }
             }
         }
 
         //BOTONES
         //Boton de comprobar
-        if (inputReceived(this.checkInputButton.getPos(), this.checkInputButton.getSize())) {
+        if (input.inputReceived(this.checkInputButton.getPos(), this.checkInputButton.getSize())) {
             //Mostramos el texto en pantalla
             showAnswers = true;
             auxShowAnswer = true;
             timer = timeCheckButton;
         }
         //Si te rindes vuelves a la seleccion de nivel
-        if (inputReceived(this.giveUpInputButton.getPos(), this.giveUpInputButton.getSize())) {
-            this.engine.getSceneMngr().popScene();
+        if (input.inputReceived(this.giveUpInputButton.getPos(), this.giveUpInputButton.getSize())) {
+            sceneMngr.popScene();
         }
         //Solo funciona si has ganado
-        if (won && inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())) {
-            this.engine.getSceneMngr().popScene();
-            this.engine.getSceneMngr().popScene();
+        if (won && input.inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())) {
+            sceneMngr.popScene();
+            sceneMngr.popScene();
         }
     }
 

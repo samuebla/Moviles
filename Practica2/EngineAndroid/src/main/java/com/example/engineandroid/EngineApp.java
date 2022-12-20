@@ -26,7 +26,7 @@ public class EngineApp implements Runnable {
     public EngineApp(SurfaceView myView, Activity mainActivity){
         this.render = new RenderAndroid(myView);
         this.eventHandler = new EventHandler();
-        this.input = new InputAndroid(this.eventHandler);
+        this.input = new InputAndroid(this.eventHandler, render);
         myView.setOnTouchListener(this.input.getTouchListener());
         myView.setOnLongClickListener(this.input.getLongTouchListener());
         this.audioMngr = new AudioAndroid();
@@ -118,9 +118,13 @@ public class EngineApp implements Runnable {
             actualTime += deltaTime;
 
             //Update de la escena
-            this.sceneMngr.update(deltaTime / 1000.0, this.adManager);
+            this.sceneMngr.update(deltaTime / 1000.0);
 
-            //AAAAAAAAAAAAAAAAA Añadir aqui handleInput de la escena
+            //Handle input
+            if (eventHandler.getEventType() != EventHandler.EventType.NONE) {
+                sceneMngr.handleInput(eventHandler.getEventType(), adManager, input, audioMngr, render);
+                eventHandler.sendEvent(EventHandler.EventType.NONE);
+            }
 
             //Renderizado
             this.render.prepareFrame();
@@ -154,5 +158,9 @@ public class EngineApp implements Runnable {
                 }
             }
         }
+    }
+
+    public void onStop(){
+        sceneMngr.onStop();
     }
 }
