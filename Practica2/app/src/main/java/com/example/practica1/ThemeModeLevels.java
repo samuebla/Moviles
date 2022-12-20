@@ -130,4 +130,9 @@ public class ThemeModeLevels implements Scene {
             sceneMngr.popScene();
         }
     }
+    //Se llama cada vez que se gira la orientacion de la pantalla
+    @Override
+    public void configurationChanged(int orientation) {
+
+    }
 }

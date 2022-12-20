@@ -309,4 +309,9 @@ public class MainMenuScene implements Scene {
             sceneMngr.pushScene(historyMode);
         }
     }
+    //Se llama cada vez que se gira la orientacion de la pantalla
+    @Override
+    public void configurationChanged(int orientation) {
+
+    }
 }

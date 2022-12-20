@@ -1,6 +1,7 @@
 package com.example.practica1;
 
 import com.example.engineandroid.RenderAndroid;
+import com.example.engineandroid.Vector2D;
 
 //Celda de la practica 1, utilizada solo en QuickGame
 public class CellQuickGame extends CellBase {

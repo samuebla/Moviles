@@ -1,6 +1,7 @@
 package com.example.practica1;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.Log;
 
 import com.example.engineandroid.AdManager;
@@ -43,6 +44,9 @@ public class HistoryModeGameScene implements Scene {
     int remainingCells, maxCellsSolution;
 
     int mode;
+
+    //True si has girado el movil
+    boolean horizontal;
 
     //Progreso general del jugador
     private final AtomicReference<Integer> coins;
@@ -91,9 +95,9 @@ public class HistoryModeGameScene implements Scene {
 
     //Archivo de guardado
     String rootFolder = "gamedata";
-    String fileName ;
-    String fileToOpen ;
-    String folder ;
+    String fileName;
+    String fileToOpen;
+    String folder;
 
     double timer;
     boolean won;
@@ -116,6 +120,7 @@ public class HistoryModeGameScene implements Scene {
         timer = 0;
         lives.set(3);
 
+        horizontal = false;
         coins = coinsAux;
         progress = progressAux;
         this.palettes = palettesAux;
@@ -259,11 +264,11 @@ public class HistoryModeGameScene implements Scene {
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
                 //Con el margen de 1 celda no tendremos problema con las otras resoluciones
-                renderEngine.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1, (int)tamTextoTopToBottom);
+                renderEngine.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1, (int) tamTextoTopToBottom);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = xNumberLeftToRight[i].size() - 1; j >= 0; j--) {
-                    renderEngine.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - 20.0f - ((float)xNumberLeftToRight[i].size() / 2.0f * tamProporcionalAlto / ((float)rows_ / 2.0f)) + (tamTextoLeftToRight*0.6f *(float)j)), "Black", "Calibri", 0, (int)tamTextoLeftToRight);
+                    renderEngine.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - 20.0f - ((float) xNumberLeftToRight[i].size() / 2.0f * tamProporcionalAlto / ((float) rows_ / 2.0f)) + (tamTextoLeftToRight * 0.6f * (float) j)), "Black", "Calibri", 0, (int) tamTextoLeftToRight);
                 }
             }
 
@@ -286,12 +291,21 @@ public class HistoryModeGameScene implements Scene {
             renderEngine.drawImage((int) ((double) getLifeInputButton.getPos().getX()), (int) ((double) getLifeInputButton.getPos().getY()), (int) ((double) getLifeInputButton.getSize().getX()), (int) ((double) getLifeInputButton.getSize().getY()), "HeartAD");
 
             //MONEDAS
-            renderEngine.drawText(Integer.toString(coins.get()), scaleWidth - coinSize - scaleWidth / 100, (int) (scaleHeight / 72 + coinSize / 2.5f), "Black", "CooperBold", 1, scaleWidth / 14);
-            renderEngine.drawImage(scaleWidth - coinSize - scaleWidth / 100, (int) scaleHeight / 72, coinSize, coinSize / 2, "Coin");
+            if (!horizontal) {
+                renderEngine.drawText(Integer.toString(coins.get()), scaleWidth - coinSize - scaleWidth / 100, (int) (scaleHeight / 72 + coinSize / 2.5f), "Black", "CooperBold", 1, scaleWidth / 14);
+                renderEngine.drawImage(scaleWidth - coinSize - scaleWidth / 100, (int) scaleHeight / 72, coinSize, coinSize / 2, "Coin");
+            } else {
+                renderEngine.drawText(Integer.toString(coins.get()), scaleWidth - coinSize / 2 - scaleWidth / 72, (int) (scaleHeight / 100 + coinSize), "Black", "CooperBold", 1, scaleWidth / 21);
+                renderEngine.drawImage(scaleWidth - coinSize / 2, (int) scaleHeight / 72, coinSize / 2, coinSize, "Coin");
+
+            }
 
             //CORAZONES
             for (int i = lives.get(); i > 0; i--) {
-                renderEngine.drawImage((int) (scaleWidth * 5 / 7) + (scaleWidth * 2 / 21) * (i - 1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
+                if (!horizontal)
+                    renderEngine.drawImage((int) (scaleWidth * 5 / 7) + (scaleWidth * 2 / 21) * (i - 1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
+                else
+                    renderEngine.drawImage(0, scaleHeight - (scaleHeight * 2 / 21)*i, scaleWidth / 15, scaleHeight * 2 / 21, "Heart");
             }
 
             if (lives.get() <= 0) {
@@ -318,7 +332,7 @@ public class HistoryModeGameScene implements Scene {
                             audio.playSound("effect", 1);
                         } else {
                             //Fallo
-                            if (this.matriz[j][i].getCellType() == CellBase.cellType.EMPTY || this.matriz[j][i].getCellType() == CellBase.cellType.CROSSED ) {
+                            if (this.matriz[j][i].getCellType() == CellBase.cellType.EMPTY || this.matriz[j][i].getCellType() == CellBase.cellType.CROSSED) {
                                 if (!this.matriz[j][i].solution) {
                                     //Restamos una vida
                                     lives.set(lives.get() - 1);
@@ -450,7 +464,7 @@ public class HistoryModeGameScene implements Scene {
                     receiveString += bufferedReader.readLine();
                 }
 
-                String md5Origin  = receiveString;//md5 del archivo origen
+                String md5Origin = receiveString;//md5 del archivo origen
                 receiveString = "";
 
                 //Ahora sí cargamos el archivo
@@ -469,7 +483,7 @@ public class HistoryModeGameScene implements Scene {
 
                 //MD5 actual del archivo
                 fis = new FileInputStream(new File(subFolder, file));
-                String md5Checksum    = Utils.md5(fis);
+                String md5Checksum = Utils.md5(fis);
                 if (!md5Checksum.equals(md5Origin)) {    //si son iguales sigue, si no resetea el archivo con
                     //file is not valid
                     throw new FileNotFoundException("file was modified externally");
@@ -478,21 +492,21 @@ public class HistoryModeGameScene implements Scene {
                 e.printStackTrace();
 
 
-            String fileCarpet = "";
-            switch (mode) {
-                case 1:
-                    fileCarpet = "alfabeto/" + file;
-                    break;
-                case 2:
-                    fileCarpet = "fiesta/" + file;
-                    break;
-                case 3:
-                    fileCarpet = "animales/" + file;
-                    break;
-                case 4:
-                    fileCarpet = "geometria/" + file;
-                    break;
-            }
+                String fileCarpet = "";
+                switch (mode) {
+                    case 1:
+                        fileCarpet = "alfabeto/" + file;
+                        break;
+                    case 2:
+                        fileCarpet = "fiesta/" + file;
+                        break;
+                    case 3:
+                        fileCarpet = "animales/" + file;
+                        break;
+                    case 4:
+                        fileCarpet = "geometria/" + file;
+                        break;
+                }
                 InputStreamReader inputStreamReader = new InputStreamReader(context.getAssets().open("files/" + fileCarpet));
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
@@ -789,5 +803,100 @@ public class HistoryModeGameScene implements Scene {
     //Comprueba si has ganado o no
     private boolean win() {
         return remainingCells == 0;
+    }
+
+    //Se llama cada vez que se gira la orientacion de la pantalla
+    @Override
+    public void configurationChanged(int orientation) {
+
+        //Si pones el movil en horizontal...
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            //Cambiamos toda la distribucion y tamaño
+            horizontal = true;
+
+            //Seteamos los botones
+            this.escapeInputButton.setPos(0, 0);
+            this.escapeInputButton.setSize(scaleWidth / 15, scaleHeight / 10);
+
+            this.winBackInputButton.setPos(scaleWidth-scaleWidth/15, (int) (scaleHeight - scaleHeight/10));
+            this.winBackInputButton.setSize(scaleWidth / 15, scaleHeight / 10);
+
+            this.getLifeInputButton.setPos(0, scaleHeight / 6);
+            this.getLifeInputButton.setSize(scaleWidth /15, scaleHeight / 10);
+
+            this.shareButton.setPos(0, (int) scaleHeight-scaleHeight/8);
+            this.shareButton.setSize(scaleWidth / 10, scaleHeight / 8);
+
+            for (int i = 0; i < colorsInputButtons.length; i++) {
+                this.colorsInputButtons[i].setPos((int) (scaleWidth - scaleWidth * 0.10), scaleHeight / 5 + scaleHeight / 5 * i);
+                this.colorsInputButtons[i].setSize((int) (scaleWidth * 0.10), scaleHeight / 5);
+            }
+
+            for (int i = 0; i < rows_; i++) {
+                for (int j = 0; j < cols_; j++) {
+                    //Al cambiar la disposicion hay que volver a calcular los valores porque la redimension es distinta
+                    tamProporcionalAncho = (scaleWidth - scaleWidth / 10 - scaleWidth / 15) / ((cols_ + 1) + (0.1f * cols_));
+
+                    //Restamos la interfaz de las paletas y los botones de arriba
+                    tamProporcionalAlto = scaleHeight / ((rows_ + 1) + (0.1f * rows_));
+
+                    tamTextoTopToBottom = (int) (tamProporcionalAncho / 3f);
+                    tamTextoLeftToRight = (int) (tamProporcionalAlto / 3f);
+
+                    //Lo ajustamos al centro de la pantalla de largo
+                    yPos = tamProporcionalAlto + ((tamProporcionalAlto * 1.1) * i);
+
+                    //Scale/15 para la interfaz de arriba + 1Celda para las letras
+                    xPos = scaleWidth / 15 + tamProporcionalAncho + ((tamProporcionalAncho * 1.1) * j);
+                    this.matriz[j][i].setPos((int) xPos, (int) yPos);
+                    this.matriz[j][i].setSize((int) tamProporcionalAncho, (int) tamProporcionalAlto);
+
+                }
+            }
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+            horizontal = false;
+
+            for (int i = 0; i < rows_; i++) {
+                for (int j = 0; j < cols_; j++) {
+
+                    tamProporcionalAncho = scaleWidth / ((cols_ + 1) + (0.1f * cols_));
+
+                    //Restamos la interfaz de las paletas y los botones de arriba
+                    tamProporcionalAlto = (scaleHeight - scaleHeight / 7 - scaleHeight / 20) / ((rows_ + 1) + (0.1f * rows_));
+
+                    tamTextoTopToBottom = (int) (tamProporcionalAncho / 3f);
+                    tamTextoLeftToRight = (int) (tamProporcionalAlto / 1.8f);
+
+                    //Lo ajustamos al centro de la pantalla de largo
+                    //Scale/15 para la interfaz de arriba + 1Celda para las letras
+                    yPos = (scaleHeight / 15 + tamProporcionalAlto) + ((tamProporcionalAlto * 1.1) * i);
+
+                    //+1Celda para las letras
+                    xPos = tamProporcionalAncho + ((tamProporcionalAncho * 1.1) * j);
+
+                    this.matriz[j][i].setPos((int) xPos, (int) yPos);
+                    this.matriz[j][i].setSize((int) tamProporcionalAncho, (int) tamProporcionalAlto);
+
+                }
+            }
+
+            this.escapeInputButton.setPos(10, 10);
+            this.escapeInputButton.setSize( scaleWidth / 10, scaleHeight / 15);
+
+            this.winBackInputButton.setPos( scaleWidth / 2, (int) (scaleHeight / 1.1));
+            this.winBackInputButton.setSize( scaleWidth / 10, scaleHeight / 15);
+
+            this.getLifeInputButton.setPos(0, scaleHeight - scaleHeight / 10);
+            this.getLifeInputButton.setSize(scaleWidth / 7, scaleHeight / 10);
+
+            this.shareButton.setPos(scaleWidth / 4, (int) (scaleHeight * 0.9));
+            this.shareButton.setSize(scaleWidth / 8, scaleHeight / 10);
+
+            for (int i = 0; i < colorsInputButtons.length; i++) {
+                this.colorsInputButtons[i] = new InputButton((scaleWidth / 7) + (scaleWidth / 7) * i, (double) scaleHeight - scaleHeight * 0.10,
+                        (double) scaleWidth / 7, (double) scaleHeight * 0.10);
+            }
+        }
     }
 }
