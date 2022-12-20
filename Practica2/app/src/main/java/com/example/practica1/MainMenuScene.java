@@ -50,6 +50,8 @@ public class MainMenuScene implements Scene {
         for (AtomicReference<Integer> integerAtomicReference : this.progress) {
             System.out.print(integerAtomicReference);
         }
+
+        init();
     }
 
 

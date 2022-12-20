@@ -93,7 +93,6 @@ public class EngineApp implements Runnable {
         //Cargamos los recursos del juego
         //Se tiene que hacer por aqui para que el render ya este inicializado
         this.primaryScene.loadResources(this);
-        this.sceneMngr.getScene().init();
 
         long informePrevio = System.nanoTime(); // Informes de FPS
         int frames = 0;
