@@ -318,7 +318,7 @@ public class HistoryModeGameScene implements Scene {
                             audio.playSound("effect", 1);
                         } else {
                             //Fallo
-                            if (this.matriz[j][i].getCellType() == CellBase.cellType.EMPTY) {
+                            if (this.matriz[j][i].getCellType() == CellBase.cellType.EMPTY || this.matriz[j][i].getCellType() == CellBase.cellType.CROSSED ) {
                                 if (!this.matriz[j][i].solution) {
                                     //Restamos una vida
                                     lives.set(lives.get() - 1);
