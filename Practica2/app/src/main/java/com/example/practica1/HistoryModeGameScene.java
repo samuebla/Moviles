@@ -25,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
+//Escena principal del juego en el modo historia
 public class HistoryModeGameScene implements Scene {
     //A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
     int scaleWidth;
@@ -32,7 +33,10 @@ public class HistoryModeGameScene implements Scene {
     //Tenemos una matriz donde guardaremos las casillas seleccionadas
     private CellHistoryMode[][] matriz;
 
+    //Filas y columnas del tablero
     int rows_, cols_;
+
+    //Vidas que tenemos en el nivel
     AtomicReference<Integer> lives;
 
     //Para mostrar en pantallas la info de las celdas
@@ -40,9 +44,10 @@ public class HistoryModeGameScene implements Scene {
 
     int mode;
 
-    private AtomicReference<Integer> coins;
-    private AtomicReference<Integer> progress;
-    private Integer currentLevelNumber;
+    //Progreso general del jugador
+    private final AtomicReference<Integer> coins;
+    private final AtomicReference<Integer> progress;
+    private final Integer currentLevelNumber;
     private Integer coinSize;
     boolean showNewCoins;
 
@@ -59,21 +64,22 @@ public class HistoryModeGameScene implements Scene {
     int posXTextAuxLeftToRight;
 
     //Patron de colores
-    int colorfulPattern[];
-    int colorfulPatternCells[];
+    int[] colorfulPattern;
+    int[] colorfulPatternCells;
 
     int actualColorPattern;
 
+    //Botones
     private InputButton escapeInputButton;
     private InputButton winBackInputButton;
     private InputButton getLifeInputButton;
     private InputButton shareButton;
 
     //Con esta variable controlamos las paletas que hayas comprado
-    private AtomicReference<Integer>[] palettes;
+    private final AtomicReference<Integer>[] palettes;
 
-    private InputButton[] colorsInputButtons;
-    private String[] colorsButtonsName = {"WhitePalette", "BluePalette", "PinkPalette", "YellowPalette"};
+    private final InputButton[] colorsInputButtons;
+    private final String[] colorsButtonsName = {"WhitePalette", "BluePalette", "PinkPalette", "YellowPalette"};
 
     //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de las casillas azules. Uno el horizontal y otro el vertical
     private ArrayList<Integer>[] xPositionsTopToBottom;
@@ -89,7 +95,6 @@ public class HistoryModeGameScene implements Scene {
     String fileToOpen ;
     String folder ;
 
-    private static final int timeCheckButton = 5;
     double timer;
     boolean won;
     boolean showAnswers;
@@ -102,7 +107,7 @@ public class HistoryModeGameScene implements Scene {
         scaleHeight = 1000;
         scaleWidth = 1000;
 
-        lives = new AtomicReference<Integer>();
+        lives = new AtomicReference<>();
 
         //Seteamos valores iniciales
         remainingCells = 0;
@@ -116,8 +121,6 @@ public class HistoryModeGameScene implements Scene {
         this.palettes = palettesAux;
 
         this.currentLevelNumber = currentLevelNumberAux;
-
-//        this.rewardButton.setVisibility(View.VISIBLE);
 
         //Patron de colores
         colorfulPattern = new int[4];
@@ -184,11 +187,13 @@ public class HistoryModeGameScene implements Scene {
         colorfulPatternCells[3] = 0xFF00FF00;
     }
 
+    //Al parar inesperadamente antes guardamos los datos de la escena
     @Override
     public void onStop() {
         saveToFile(false);
     }
 
+    //No hay carga de recursos en esta escena
     @Override
     public void loadResources(EngineApp engineAux) {
 
@@ -196,6 +201,7 @@ public class HistoryModeGameScene implements Scene {
 
     @Override
     public void update(double deltaTime) {
+        //Actualizamos el estado de todas las celdas del tablero
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
                 this.matriz[j][i].update(deltaTime);
@@ -346,11 +352,7 @@ public class HistoryModeGameScene implements Scene {
         //BOTONES
         //Si te rindes vuelves a la seleccion de nivel
         if (!won && input.inputReceived(this.escapeInputButton.getPos(), this.escapeInputButton.getSize())) {
-            if (lives.get() <= 0) {
-                saveToFile(true);
-            } else {
-                saveToFile(false);
-            }
+            saveToFile(lives.get() <= 0);
             sceneMngr.popScene();
             render.setColorBackground(0xFFFFFFFF);
         }
@@ -426,11 +428,6 @@ public class HistoryModeGameScene implements Scene {
             //Al mirar el anuncio se restaura un corazon
             adManager.showRewardedAd(lives, 1);
         }
-    }
-
-    //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
-    @Override
-    public void onResume() {
     }
 
     //Metodos de lectura y guardado
@@ -686,10 +683,10 @@ public class HistoryModeGameScene implements Scene {
             fileName = file;
         } catch (
                 FileNotFoundException e) {
-            Log.e("Error", "File not found: " + e.toString());
+            Log.e("Error", "File not found: " + e);
         } catch (
                 IOException e) {
-            Log.e("Reading Error", "Can not read file: " + e.toString());
+            Log.e("Reading Error", "Can not read file: " + e);
         }
 
     }
@@ -783,7 +780,7 @@ public class HistoryModeGameScene implements Scene {
             fos.close();
 
         } catch (FileNotFoundException e) {
-            Log.e("Error", "File not found: " + e.toString());
+            Log.e("Error", "File not found: " + e);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 package com.example.engineandroid;
 
+//Estructura que permite guardar una posicion logica x, y
 public class Vector2D {
     private float x, y;
 

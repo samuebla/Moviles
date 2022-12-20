@@ -10,13 +10,11 @@ import com.example.engineandroid.InputAndroid;
 import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.SceneMngrAndroid;
-import com.example.engineandroid.Vector2D;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 public class HistoryModeMenu implements Scene {
 
-    //TODO Aqui guarda la relacion
     int scaleWidth, scaleHeight;
 
     private InputButton themeInputButtonMode;
@@ -30,7 +28,7 @@ public class HistoryModeMenu implements Scene {
     private final AtomicReference<Integer>[] progress;
     private final AtomicReference<Integer>[] palettes;
 
-    private Context context;
+    private final Context context;
 
     public HistoryModeMenu(Context context, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux, AtomicReference<Integer>[] palettesAux){
         this.context = context;
@@ -38,7 +36,7 @@ public class HistoryModeMenu implements Scene {
         this.progress = progressAux;
         this.palettes = palettesAux;
 
-        //Por defecto la escala es 1000x1000 pero creamos un setter por si alguien quiere alguna modificacion
+        //Por defecto la escala es 1000x1000
         scaleHeight=1000;
         scaleWidth=1000;
 
@@ -48,7 +46,6 @@ public class HistoryModeMenu implements Scene {
     @Override
     public void init() {
         coinSize = scaleWidth/10;
-//        loadCoinsFromFile();
         //Botones selectores del nivel
         this.themeInputButtonMode = new InputButton(scaleWidth/4  - scaleWidth/8, scaleHeight/2, scaleWidth/4, scaleHeight/6);
         this.dificultyInputButtonMode = new InputButton(scaleWidth*3/4 - scaleWidth/8, scaleHeight/2, scaleWidth/4, scaleHeight/6);
@@ -103,12 +100,6 @@ public class HistoryModeMenu implements Scene {
         if (input.inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
             sceneMngr.popScene();
         }
-    }
-
-    //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
-    @Override
-    public void onResume() {
-        init();
     }
 
 }

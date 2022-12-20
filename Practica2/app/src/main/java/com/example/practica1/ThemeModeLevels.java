@@ -15,8 +15,6 @@ import com.example.engineandroid.Vector2D;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ThemeModeLevels implements Scene {
-
-    //TODO Aqui guarda la relacion
     int scaleWidth, scaleHeight;
 
     private InputButton[] lvls;
@@ -70,24 +68,21 @@ public class ThemeModeLevels implements Scene {
             }
         }
 
+        //Imagen de desbloqueado
         this.lvlImages = new String[20];
-        //AAAAAAAAAAAAAAAAAA Asignar imagen distinta dependiendo del nivel
         for (int i = 1; i < this.unlockedlevels.get(); ++i){
             this.lvlImages[i-1] = selectedCategory + "Play";
         }
-        //AAAAAAAAAAAAAAAAAAA Asignar imagen de desbloqueado
+        //Imagen de recien desbloqueado
         if (this.unlockedlevels.get() < this.lvlImages.length){
             this.lvlImages[this.unlockedlevels.get()-1] = selectedCategory +"Unlocked";
         }
-        //AAAAAAAAAAAAAAAAAAA Asignar imagen de bloqueado
+        //Imagen de bloqueado
         for (int i = this.unlockedlevels.get() + 1; i < this.lvlImages.length+1; ++i){
             this.lvlImages[i-1] = selectedCategory + "Level";
         }
 
         this.backInputButton = new InputButton(10, 10, scaleWidth/10, scaleHeight/15);
-
-        //TODO LevelsUnlocked es un int que le pasas de la escena anterior. Me desbloquea los niveles hasta ahi y el resto se ven
-        //TODO de otra manera y no puedes interactuar con ellos
     }
 
     @Override
@@ -138,11 +133,5 @@ public class ThemeModeLevels implements Scene {
         if (input.inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
             sceneMngr.popScene();
         }
-    }
-
-    //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
-    @Override
-    public void onResume() {
-        init();
     }
 }

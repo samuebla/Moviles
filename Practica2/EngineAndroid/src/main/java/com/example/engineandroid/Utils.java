@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+//Checksum para evitar la modificacion de ficheros de guardado fuera del juego
 public class Utils {
 
     public static String md5(InputStream is) throws IOException {

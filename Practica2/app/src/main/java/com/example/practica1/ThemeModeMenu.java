@@ -10,12 +10,10 @@ import com.example.engineandroid.InputAndroid;
 import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
 import com.example.engineandroid.SceneMngrAndroid;
-import com.example.engineandroid.Vector2D;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 public class ThemeModeMenu implements Scene {
-    //TODO Aqui guarda la relacion
     int scaleWidth, scaleHeight;
 
     private InputButton alfabetoInputButtonMode;
@@ -133,11 +131,5 @@ public class ThemeModeMenu implements Scene {
         if (input.inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
             sceneMngr.popScene();
         }
-    }
-
-    //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
-    @Override
-    public void onResume() {
-        init();
     }
 }

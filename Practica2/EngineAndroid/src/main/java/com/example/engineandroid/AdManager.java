@@ -18,12 +18,14 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+//Encargado de manejar los anuncios, mandar intents y crear el canal necesario para mandar notificaciones
 public class AdManager {
+    //Referencia a la actividad para poder crear los distintos canales, hacer intents, etc.
     private final Activity mainActivity;
     private final String TAG = "MainActivity";
     private RewardedAd mRewardedAd;
 
-
+    //Id del canal de notificaciones
     private final String CHANNEL_ID = "NonogramChannelId";
 
 
@@ -64,6 +66,7 @@ public class AdManager {
         return CHANNEL_ID;
     }
 
+    //Manda un intent con formato de url con el mensaje especificado
     public void sendIntent(String url, String message) {
         Uri builtURI = Uri.parse(url).buildUpon()
                 .appendQueryParameter("text", message)

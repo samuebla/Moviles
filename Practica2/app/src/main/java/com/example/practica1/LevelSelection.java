@@ -126,10 +126,4 @@ public class LevelSelection implements Scene {
             sceneMngr.popScene();
         }
     }
-
-    //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
-    @Override
-    public void onResume() {
-        init();
-    }
 }

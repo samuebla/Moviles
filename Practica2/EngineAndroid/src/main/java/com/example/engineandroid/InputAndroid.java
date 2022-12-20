@@ -5,25 +5,28 @@ import android.view.MotionEvent;
 
 public class InputAndroid {
 
-    //TODO Aqui guarda la relacion
+    //Maxima escala de la logica, por defecto: 1000, 1000.
+    //Siendo 0 la izquierda del surface y 1000 la derecha del surface para scaleWidth.
+    //Y 0 arriba del surface y 1000 abajo del surface para scaleHeight.
     int scaleWidth, scaleHeight;
 
+    //Listeners para los clicks
     private final TouchListener touchlistener;
     private final LongTouchListener longTouchListener;
+    //Donde se ha pulsado por ultima vez
     Vector2D touchCoords;
-    private final Vector2D offset;
 
-    private RenderAndroid render;
+    //Referencia al render para obtener el tamaño del surface
+    private final RenderAndroid render;
 
     public InputAndroid(EventHandler eHandler, RenderAndroid render){
         this.touchCoords = new Vector2D(-1,-1);
         this.touchlistener = new TouchListener(this, eHandler);
         this.longTouchListener = new LongTouchListener(this, eHandler, this.touchlistener);
-        offset = new Vector2D();
 
         this.render = render;
 
-        //Por defecto la escala es 1000x1000 pero creamos un setter por si alguien quiere alguna modificacion
+        //Por defecto la escala es 1000x1000
         scaleHeight=1000;
         scaleWidth=1000;
     }
@@ -31,26 +34,18 @@ public class InputAndroid {
     //Actualmente Pos y Size se devuelve en unidades de 0 a 1000 pero el getScaledCoords esta en cordenadas reales por eso hago la conversion
     public boolean inputReceived(Vector2D pos, Vector2D size) {
         Vector2D coords = new Vector2D();
-        coords.set(getScaledCoords().getX(), getScaledCoords().getY());
+        coords.set(getCoords().getX(), getCoords().getY());
 
         return (coords.getX()*scaleWidth/render.getWidth() >= pos.getX()  && coords.getX()*scaleWidth/render.getWidth() <= pos.getX() + size.getX() &&
                 coords.getY()*scaleHeight/render.getHeight() >= pos.getY() && coords.getY()*scaleHeight/render.getHeight() <= pos.getY() + size.getY());
     }
 
-    public Vector2D getRawCoords() {
+    public Vector2D getCoords() {
         return new Vector2D(this.touchCoords.getX(), this.touchCoords.getY());
     }
 
-    public Vector2D getScaledCoords() {
-        return new Vector2D((getRawCoords().getX() - offset.getX()), (getRawCoords().getY()  - offset.getY()));
-    }
-
-    public void setRawCoords(int x, int y) {
+    public void setCoords(int x, int y) {
         this.touchCoords.set(x, y);
-    }
-
-    public void setOffset(float x, float y) {
-        this.offset.set(x,y);
     }
 
     public TouchListener getTouchListener(){
@@ -59,6 +54,7 @@ public class InputAndroid {
     public LongTouchListener getLongTouchListener() { return this.longTouchListener; }
 }
 
+//Toque simple
 class TouchListener implements View.OnTouchListener {
     InputAndroid inputAndroid;
     EventHandler eventHandler;
@@ -77,7 +73,7 @@ class TouchListener implements View.OnTouchListener {
     }
 
     public void processEvent(MotionEvent e){
-        this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
+        this.inputAndroid.setCoords((int)e.getX(),(int)e.getY());
 
         if(e.getAction() == MotionEvent.ACTION_UP){
             //Para que no se haga simple click despues de long touch
@@ -85,7 +81,6 @@ class TouchListener implements View.OnTouchListener {
                 cancel = false;
                 return;
             }
-            System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
             this.eventHandler.sendEvent(EventHandler.EventType.TOUCH);
         }
     }
@@ -95,6 +90,7 @@ class TouchListener implements View.OnTouchListener {
     }
 }
 
+//Toque largo
 class LongTouchListener implements View.OnLongClickListener{
     InputAndroid inputAndroid;
     EventHandler eventHandler;
@@ -114,7 +110,6 @@ class LongTouchListener implements View.OnLongClickListener{
     }
 
     public void processEvent(){
-        System.out.println("Long touch detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
         this.eventHandler.sendEvent(EventHandler.EventType.LONG_TOUCH);
     }
 }

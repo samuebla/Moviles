@@ -1,8 +1,8 @@
 package com.example.practica1;
 
-import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.RenderAndroid;
 
+//Celda de la practica 1, utilizada solo en QuickGame
 public class CellQuickGame extends CellBase {
 
     //Para el contador de celdas restantes y erroneas

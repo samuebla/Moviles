@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
+//Carga de la imagen por bitmap
 public class ImageAndroid {
 
     Bitmap image;

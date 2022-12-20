@@ -5,24 +5,29 @@ import android.content.Context;
 import android.view.SurfaceView;
 import android.widget.LinearLayout;
 
+//Engine encargado de realizar el bucle principal del juego e inicializar todas sis componentes
 public class EngineApp implements Runnable {
 
+    //Diferentes componentes del motor
     private final RenderAndroid render;
     private final InputAndroid input;
     private final EventHandler eventHandler;
     private final AudioAndroid audioMngr;
     private final AdManager adManager;
-
-    private Thread renderThread;
-
-    private boolean running;
-
     private final SceneMngrAndroid sceneMngr;
 
+    //Hilo del bucle principal
+    private Thread renderThread;
+    private boolean running;
+
+    //Contexto de la actividad
     private final Context context;
 
+    //Escena principal, donde se cargan los recursos necesarios para la lógica en su método loadResources, siempre tiene que ser distinto de null
+    //Se asigna con setPrimaryScene
     private Scene primaryScene;
 
+    //Inicialización de todas las componentes del Engine
     public EngineApp(SurfaceView myView, Activity mainActivity){
         this.render = new RenderAndroid(myView);
         this.eventHandler = new EventHandler();
@@ -39,10 +44,10 @@ public class EngineApp implements Runnable {
         this.sceneMngr = new SceneMngrAndroid();
 
         this.adManager = new AdManager(mainActivity);
-
     }
 
 
+    //Gettters sobretodo para la carga de recursos
     public RenderAndroid getGraphics() {
         return render;
     }
@@ -70,15 +75,9 @@ public class EngineApp implements Runnable {
         return this.context;
     }
 
-    //<<< API >>>
-
-    public void setColorBackground(int newColor) {
-        this.render.setColorBackground(newColor);
-    }
-
     public void setPrimaryScene(Scene sceneAux){ this.primaryScene = sceneAux;}
 
-    //blucle principal
+    //bucle principal
     public void run() {
         if (renderThread != Thread.currentThread()) {
             // Evita que cualquiera que no sea esta clase llame a este Runnable en un Thread
@@ -101,7 +100,6 @@ public class EngineApp implements Runnable {
 
         // Bucle de juego principal.
         while(running) {
-//            this.render.setFrameSize();
             long currentTime = System.nanoTime();
 
             // Informe de FPS
@@ -159,6 +157,7 @@ public class EngineApp implements Runnable {
         }
     }
 
+    //Permite que las escenas puedan hacer algo si el juego se para inesperadamente, como guardar su progreso
     public void onStop(){
         sceneMngr.onStop();
     }

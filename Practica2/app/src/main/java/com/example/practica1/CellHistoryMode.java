@@ -1,8 +1,6 @@
 package com.example.practica1;
 
-import com.example.engineandroid.EngineApp;
-
-
+//Celda especial de la practica 2
 public class CellHistoryMode extends CellBase {
 
     public CellHistoryMode(int x, int y, int width, int height,cellType typeAux,boolean solutionAux) {

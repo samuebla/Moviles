@@ -30,32 +30,39 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
+    //Engine
     private EngineApp engine;
-
     private SurfaceView renderView;
 
+    //MainMenuScene, escena principal del engine, donde se cargan todos los recursos del juego
     MainMenuScene mainMenuScene;
 
+    //AdView para el banner
     private AdView mAdView;
 
     //Sensores
     private SensorManager sensorManager;
     private Sensor sensor;
-
     int numShakes = 0;
 
+    //Inicializacion de la actividad
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Cancelamos todas las notificaciones pendientes para no andar mandando notificaciones al jugador mientras esta jugando
         WorkManager.getInstance(this).cancelAllWork();
 
+        //Nuestro contentView que queremos utilizar es el layout guardado como activity_main.xml en la carpeta layout
         setContentView(R.layout.activity_main);
 
         //Creamos el SurfaceView que "contendrá" nuestra escena
         this.renderView = findViewById(R.id.surfaceView);
 
+        //AdView para el banner, presente en el xml
         mAdView = findViewById(R.id.adView);
+
+        //Creamos el banner para que se vaya cargando y mostrando
         AdRequest adRequest = new AdRequest.Builder().build();
 
         //Initialize the Mobile Ads SDK.
@@ -104,9 +111,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
+        //Escondemos la barra de acciones del movil
         Objects.requireNonNull(getSupportActionBar()).hide();
 
 
+        //Inicializacion del engine
         this.engine = new EngineApp(this.renderView, this);
 
         //SENSOR
@@ -114,32 +123,41 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
         //registramos el listener
         sensorManager .registerListener( this, sensor , SensorManager.SENSOR_DELAY_NORMAL);
-        
+
+        //Cargamos la escena principal
         mainMenuScene = new MainMenuScene(getBaseContext());
         this.engine.getSceneMngr().pushScene(mainMenuScene);
+
+        //Asigna la escena para que se carguen los assets a partir de ella, de esta manera las distintas componentes del engine ya han podido ser inicializadas correctamente y da tiempo a que no haya partes que sean null
         this.engine.setPrimaryScene(mainMenuScene);
+
+        //Iniciamos la hebra del engine
         this.engine.resume();
     }
 
+    //Crea una peticion al WorkManager para que haga una notificacion despues de 30 segundos
     private void createWorkRequest() {
         HashMap<String, Object> dataValues = new HashMap<>();
-        dataValues.put("channelId", this.engine.getAdManager().getCHANNEL_ID());
-        dataValues.put("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg);
-        dataValues.put("contentTitle", "Nonogram");
-        dataValues.put("contentText", "Llevas mucho tiempo sin jugar... Te echamos de menos :(");
-        dataValues.put("notificationId", 437);
-        Data inputData = new Data.Builder().putAll(dataValues).build();
+        dataValues.put("channelId", this.engine.getAdManager().getCHANNEL_ID());    //Id del canal, importante que este canal este inicializado desde el AdManager
+        dataValues.put("smallIcon", androidx.constraintlayout.widget.R.drawable.notification_template_icon_low_bg); //Icono de la notificacion
+        dataValues.put("contentTitle", "Nonogram"); //Titulo de la notificacion
+        dataValues.put("contentText", "Llevas mucho tiempo sin jugar... Te echamos de menos :(");   //Texto de la notificacion
+        dataValues.put("notificationId", 437);  //Id unico de la notificacion, es 437 por poner algo, lo unico importante es que no se repita
+        Data inputData = new Data.Builder().putAll(dataValues).build(); //Datos que luego se pasan al Worker
 
+        //Creamos el worker
         WorkRequest uploadWorkRequest =
                 new OneTimeWorkRequest.Builder(IntentWorkRequest.class)
-                        //Configuration
+                        //Configuracion, podemos cambiar 30 para especificar los segundos tras los que se hara la accion
                         .setInitialDelay(30, TimeUnit.SECONDS)
                         .setInputData(inputData)
                         .build();
 
+        //Añadimos el worker al WorkManager de la actividad
         WorkManager.getInstance(this).enqueue(uploadWorkRequest);
     }
 
+    //Llamado al final de la actividad, no confiar mucho en el preferiblemente, mejor usar onStop()
     @Override
     protected void onDestroy() {
         mainMenuScene.saveDataHistoryMode(getBaseContext());
@@ -147,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onDestroy();
     }
 
+    //Llamado al final de la actividad, para la hebra del engine
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         mainMenuScene.saveDataHistoryMode(getBaseContext());
@@ -154,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onSaveInstanceState(outState);
     }
 
+    //Llamado al retomar la actividad, reinicia la hebra del engine
     @Override
     protected void onResume() {
         super.onResume();
@@ -161,12 +181,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         this.engine.resume();
     }
 
+    //Llamado al interrumpirse la actividad
     @Override
     protected void onStop() {
         super.onStop();
         createWorkRequest();
     }
 
+    //Llamado al pausarse la actividad
     @Override
     protected void onPause() {
         super.onPause();

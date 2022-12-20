@@ -68,6 +68,7 @@ public class MainMenuScene implements Scene {
 
     }
 
+    //Carga todos los recursos del juego, se llama en el engine al ser la escena seteada como primaryScene
     @Override
     public void loadResources(EngineApp engineAux) {
         try {
@@ -285,8 +286,6 @@ public class MainMenuScene implements Scene {
 
     @Override
     public void render(RenderAndroid render) {
-
-
         //Titulo
         render.drawText("NONOGRAMAS", (int) (scaleWidth / 2.0), (int) (scaleHeight / 10.8), "Black", "Cooper", 0,(scaleWidth/14));
 
@@ -309,11 +308,5 @@ public class MainMenuScene implements Scene {
             HistoryModeMenu historyMode = new HistoryModeMenu(context, this.coins, this.progress,this.palettes);
             sceneMngr.pushScene(historyMode);
         }
-    }
-
-    //Se llama cuando la escena posterior se elimina y se vuelve aqui, por si hay que actualizar algo
-    @Override
-    public void onResume() {
-        init();
     }
 }

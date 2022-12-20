@@ -7,15 +7,22 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 
 import java.util.HashMap;
+import java.util.Objects;
 
+//Encargado de reproducir sonidos previamente cargados en la escena
 public class AudioAndroid {
+    //Permite cambiar el path base de carga de ficheros
     private static final String PATH = "";
+    //HashMap de sonidos para poder guardar y acceder a los sonidos mediante un string
     private final HashMap<String,SoundApp> sounds;
+
+    //Contiene los sonidos pequeños
     private final SoundPool soundPool;
 
     //Para sonidos de mas de 1 mega (Para el background)
     private final MediaPlayer mediaPlayer;
 
+    //Contiene todos los assets cargados desde la escena
     private AssetManager assets;
 
     public AudioAndroid(){
@@ -46,6 +53,8 @@ public class AudioAndroid {
         this.sounds.put(audioName, new SoundApp(this.soundPool, PATH + path, this.assets));
     }
 
+    //Asigna la musica de fondo al mediaPlayer
+    //Con este metodo no se reproduce, solo se carga. Para empezar a reproducir usar despues playSound con type = 0
     public void loadMusic(String path){
         //Inicializamos la musica
         this.mediaPlayer.reset();
@@ -63,6 +72,9 @@ public class AudioAndroid {
         this.mediaPlayer.setLooping(true);
     }
 
+    //Reproduce un sonido.
+    //type == 0 -> Sonido largo (solo puede haber uno y esta previamente asugnado en loadMusic)
+    //type == 1 -> Sonido corto, solo reproduce el especificado por audioName
     public void playSound(String audioName, int type) {
         if (type == 0){
             this.mediaPlayer.start();
@@ -74,6 +86,6 @@ public class AudioAndroid {
     }
 
     public void setLoop(String audioName) {
-        this.sounds.get(audioName).setLoop(1);
+        Objects.requireNonNull(this.sounds.get(audioName)).setLoop(1);
     }
 }

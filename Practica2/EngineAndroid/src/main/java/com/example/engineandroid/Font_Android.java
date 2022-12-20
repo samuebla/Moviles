@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 
 import java.io.IOException;
 
+//Almacena la información de la fuente, presente de esta manera para compatibilidad con practica 1
 public class Font_Android {
 
     Typeface font;

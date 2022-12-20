@@ -1,5 +1,6 @@
 package com.example.engineandroid;
 
+//Event handler que contiene informacion del ultimo evento de input recibido
 public class EventHandler {
 
     IEvent event;

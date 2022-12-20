@@ -4,6 +4,7 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.SoundPool;
 
+//Carga y guarda un sonido breve, no funciona para sonidos largos o que ocupan mucho
 public class SoundApp {
 
     private final SoundPool soundPool;
