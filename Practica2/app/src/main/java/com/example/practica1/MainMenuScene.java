@@ -5,6 +5,7 @@ import com.example.engineandroid.EngineApp;
 import com.example.engineandroid.EventHandler;
 import com.example.engineandroid.RenderAndroid;
 import com.example.engineandroid.Scene;
+import com.example.engineandroid.Utils;
 import com.example.engineandroid.Vector2D;
 
 //Ads
@@ -12,6 +13,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -42,8 +44,7 @@ public class MainMenuScene implements Scene {
     public MainMenuScene(EngineApp engineAux, Context contextAux) {
         this.engine = engineAux;
         this.baseContext = contextAux;
-
-        loadFromFile();
+        this.loadFromFile();
         System.out.print("Save data loaded: ");
         System.out.print(this.coins);
         for (AtomicReference<Integer> integerAtomicReference : this.progress) {
@@ -141,29 +142,59 @@ public class MainMenuScene implements Scene {
 //            //Carga de archivo
             String receiveString = "";
             try {//Comprobar si existe en el almacenamiento interno
-                FileInputStream fis = this.engine.getContext().openFileInput("saveData");
+                Context context = this.engine.getContext();
+
+                //CHECKSUM
+                //Comprobar archivo no ha sido modificado externamente o si existe
+                String folderPath = context.getFilesDir().getAbsolutePath() + File.separator + "salt";
+
+                File subFolder = new File(folderPath);
+
+                FileInputStream fis = new FileInputStream(new File(subFolder, "data"));
                 InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
                 while (bufferedReader.ready()) {
                     receiveString += bufferedReader.readLine();
                 }
+
+                String md5Origin  = receiveString;//md5 del archivo origen
+
+                receiveString = "";
+
+                //Ahora sí cargamos el archivo
+                folderPath = context.getFilesDir().getAbsolutePath() + File.separator + "saveData";
+
+                subFolder = new File(folderPath);
+
+                fis = new FileInputStream(new File(subFolder, "data"));
+                inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+                bufferedReader = new BufferedReader(inputStreamReader);
+
+                while (bufferedReader.ready()) {
+                    receiveString += bufferedReader.readLine();
+                }
                 inputStreamReader.close();
+
+                //MD5 actual del archivo
+                fis = new FileInputStream(new File(subFolder, "data"));
+                String md5Checksum    = Utils.md5(fis);
+                if (!md5Checksum.equals(md5Origin)) {    //si son iguales sigue, si no resetea el archivo con
+                    //file is not valid
+                    throw new FileNotFoundException("file was modified externally");
+                }
             } catch (FileNotFoundException e) { //Si no existe, crea un nuevo archivo en almacenamiento interno como copia desde assets
                 e.printStackTrace();
-            }
-            InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/saveData"));
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-            while (bufferedReader.ready()) {
-                receiveString += bufferedReader.readLine();
-            }
+                InputStreamReader inputStreamReader = new InputStreamReader(this.engine.getContext().getAssets().open("files/saveData"));
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-            inputStreamReader.close();
-            //Copia del fichero
-            FileOutputStream fos = this.engine.getContext().openFileOutput("saveData", Context.MODE_PRIVATE);
-            fos.write(receiveString.getBytes());
-            fos.close();
+                while (bufferedReader.ready()) {
+                    receiveString += bufferedReader.readLine();
+                }
+
+                inputStreamReader.close();
+            }
             //Carga el nivel desde el string "RAW" de lectura
             String[] fileRead;
             fileRead = receiveString.split(" ");
@@ -196,7 +227,18 @@ public class MainMenuScene implements Scene {
     //Tambien habria que hacer un getter en esta clase para saber cuantas monedas y niveles tienes
     public void saveDataHistoryMode(){   //Idtheme siempre debe ser desde 1
         try {
-            FileOutputStream fos = this.engine.getContext().openFileOutput("saveData", Context.MODE_PRIVATE);
+            Context context = this.engine.getContext();
+            //Miramos el root del gamedata
+            String folderPath = context.getFilesDir().getAbsolutePath() + File.separator + "saveData";
+
+            File subFolder = new File(folderPath);
+
+            if (!subFolder.exists()) {
+                subFolder.mkdirs();
+            }
+            File file = new File(subFolder, "data");
+            file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(file);
             String writer = "";
             //Monedas
             writer += coins.get() + " \n";
@@ -214,6 +256,28 @@ public class MainMenuScene implements Scene {
 
             fos.write(writer.getBytes(StandardCharsets.UTF_8));
             fos.close();
+
+            ///
+            ///CHECKSUM
+            ///
+            //Obtenemos el checksum y guardamos en otro archivo
+            FileInputStream fis = new FileInputStream(new File(subFolder, "data"));
+            //MD5 del archivo
+            String md5Checksum = Utils.md5(fis);
+            //Miramos el root del salt
+            folderPath = context.getFilesDir().getAbsolutePath() + File.separator + "salt";
+
+            subFolder = new File(folderPath);
+
+            if (!subFolder.exists()) {
+                subFolder.mkdirs();
+            }
+            file = new File(subFolder, "data");
+            file.createNewFile();
+            fos = new FileOutputStream(file);
+            fos.write(md5Checksum.getBytes(StandardCharsets.UTF_8));
+            fos.close();
+
         } catch (FileNotFoundException e) {
             Log.e("Error", "File not found: " + e);
         } catch (IOException e) {
