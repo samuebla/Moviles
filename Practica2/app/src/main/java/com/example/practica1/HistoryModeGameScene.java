@@ -46,7 +46,7 @@ public class HistoryModeGameScene implements Scene {
     int mode;
 
     //True si has girado el movil
-    boolean horizontal;
+    AtomicReference<Boolean> horizontalOrientation;
 
     //Progreso general del jugador
     private final AtomicReference<Integer> coins;
@@ -105,7 +105,7 @@ public class HistoryModeGameScene implements Scene {
 
     Context context;
 
-    public HistoryModeGameScene(Context context, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux, AtomicReference<Integer>[] palettesAux, String folder_) {
+    public HistoryModeGameScene(Context context, String file, int modeAux, AtomicReference<Integer> coinsAux, AtomicReference<Integer> progressAux, Integer currentLevelNumberAux, AtomicReference<Integer>[] palettesAux, String folder_, AtomicReference<Boolean> horizontalOrientationAux) {
         this.context = context;
 
         scaleHeight = 1000;
@@ -120,7 +120,7 @@ public class HistoryModeGameScene implements Scene {
         timer = 0;
         lives.set(3);
 
-        horizontal = false;
+        this.horizontalOrientation = horizontalOrientationAux;
         coins = coinsAux;
         progress = progressAux;
         this.palettes = palettesAux;
@@ -240,12 +240,21 @@ public class HistoryModeGameScene implements Scene {
 
             //Mostramos las monedas obtenidas
             if (showNewCoins) {
-                renderEngine.drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize / 2.5f), "Black", "Cooper", 0, scaleWidth / 27);
-                renderEngine.drawImage((int) (scaleWidth / 1.8), (int) (scaleHeight / 12), coinSize, coinSize / 2, "Coin");
+                if (!horizontalOrientation.get()) {
+                    renderEngine.drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize / 2.5f), "Black", "Cooper", 0, scaleWidth / 27);
+                    renderEngine.drawImage((int) (scaleWidth / 1.8), (int) (scaleHeight / 12), coinSize, coinSize / 2, "Coin");
+
+                } else {
+                    renderEngine.drawText("+10", (int) (scaleWidth / 2), (int) (scaleHeight / 12 + coinSize), "Black", "Cooper", 0, scaleWidth / 15);
+                    renderEngine.drawImage((int) (scaleWidth / 1.8), (int) (scaleHeight / 12), coinSize/2, coinSize, "Coin");
+                }
             }
 
             //Mensaje de enhorabuena
-            renderEngine.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0, scaleWidth / 27);
+            if (!horizontalOrientation.get())
+                renderEngine.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0, scaleWidth / 27);
+            else
+                renderEngine.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 10), "Black", "Cooper", 0, scaleWidth / 16);
 
             //BackButton
             renderEngine.drawImage((int) (winBackInputButton.getPos().getX()), (int) (winBackInputButton.getPos().getY()), (int) (winBackInputButton.getSize().getX()), (int) (winBackInputButton.getSize().getY()), "Back");
@@ -291,7 +300,7 @@ public class HistoryModeGameScene implements Scene {
             renderEngine.drawImage((int) ((double) getLifeInputButton.getPos().getX()), (int) ((double) getLifeInputButton.getPos().getY()), (int) ((double) getLifeInputButton.getSize().getX()), (int) ((double) getLifeInputButton.getSize().getY()), "HeartAD");
 
             //MONEDAS
-            if (!horizontal) {
+            if (!horizontalOrientation.get()) {
                 renderEngine.drawText(Integer.toString(coins.get()), scaleWidth - coinSize - scaleWidth / 100, (int) (scaleHeight / 72 + coinSize / 2.5f), "Black", "CooperBold", 1, scaleWidth / 14);
                 renderEngine.drawImage(scaleWidth - coinSize - scaleWidth / 100, (int) scaleHeight / 72, coinSize, coinSize / 2, "Coin");
             } else {
@@ -302,15 +311,18 @@ public class HistoryModeGameScene implements Scene {
 
             //CORAZONES
             for (int i = lives.get(); i > 0; i--) {
-                if (!horizontal)
+                if (!horizontalOrientation.get())
                     renderEngine.drawImage((int) (scaleWidth * 5 / 7) + (scaleWidth * 2 / 21) * (i - 1), (int) (scaleHeight - scaleHeight / 15 - 10), scaleWidth * 2 / 21, scaleHeight / 15, "Heart");
                 else
-                    renderEngine.drawImage(0, scaleHeight - (scaleHeight * 2 / 21)*i, scaleWidth / 15, scaleHeight * 2 / 21, "Heart");
+                    renderEngine.drawImage(0, scaleHeight - (scaleHeight * 2 / 21) * i, scaleWidth / 15, scaleHeight * 2 / 21, "Heart");
             }
 
             if (lives.get() <= 0) {
-                //Mensaje de enhorabuena
-                renderEngine.drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0, scaleWidth / 14);
+                //Mensaje de derrota
+                if (!horizontalOrientation.get())
+                    renderEngine.drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0, scaleWidth / 14);
+                else
+                    renderEngine.drawText("¡HAS PERDIDO!", (int) ((double) scaleWidth / 2), (int) ((double) scaleHeight / 10), "Black", "Cooper", 0, scaleWidth / 9);
 
             }
         }
@@ -812,19 +824,19 @@ public class HistoryModeGameScene implements Scene {
         //Si pones el movil en horizontal...
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //Cambiamos toda la distribucion y tamaño
-            horizontal = true;
+            horizontalOrientation.set(true);
 
             //Seteamos los botones
             this.escapeInputButton.setPos(0, 0);
             this.escapeInputButton.setSize(scaleWidth / 15, scaleHeight / 10);
 
-            this.winBackInputButton.setPos(scaleWidth-scaleWidth/15, (int) (scaleHeight - scaleHeight/10));
+            this.winBackInputButton.setPos(scaleWidth - scaleWidth / 15, (int) (scaleHeight - scaleHeight / 10));
             this.winBackInputButton.setSize(scaleWidth / 15, scaleHeight / 10);
 
             this.getLifeInputButton.setPos(0, scaleHeight / 6);
-            this.getLifeInputButton.setSize(scaleWidth /15, scaleHeight / 10);
+            this.getLifeInputButton.setSize(scaleWidth / 15, scaleHeight / 10);
 
-            this.shareButton.setPos(0, (int) scaleHeight-scaleHeight/8);
+            this.shareButton.setPos(0, (int) scaleHeight - scaleHeight / 8);
             this.shareButton.setSize(scaleWidth / 10, scaleHeight / 8);
 
             for (int i = 0; i < colorsInputButtons.length; i++) {
@@ -855,7 +867,7 @@ public class HistoryModeGameScene implements Scene {
             }
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-            horizontal = false;
+            horizontalOrientation.set(false);
 
             for (int i = 0; i < rows_; i++) {
                 for (int j = 0; j < cols_; j++) {
@@ -882,10 +894,10 @@ public class HistoryModeGameScene implements Scene {
             }
 
             this.escapeInputButton.setPos(10, 10);
-            this.escapeInputButton.setSize( scaleWidth / 10, scaleHeight / 15);
+            this.escapeInputButton.setSize(scaleWidth / 10, scaleHeight / 15);
 
-            this.winBackInputButton.setPos( scaleWidth / 2, (int) (scaleHeight / 1.1));
-            this.winBackInputButton.setSize( scaleWidth / 10, scaleHeight / 15);
+            this.winBackInputButton.setPos(scaleWidth / 2, (int) (scaleHeight / 1.1));
+            this.winBackInputButton.setSize(scaleWidth / 10, scaleHeight / 15);
 
             this.getLifeInputButton.setPos(0, scaleHeight - scaleHeight / 10);
             this.getLifeInputButton.setSize(scaleWidth / 7, scaleHeight / 10);

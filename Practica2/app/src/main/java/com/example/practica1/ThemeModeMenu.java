@@ -1,6 +1,7 @@
 package com.example.practica1;
 
 import android.content.Context;
+import android.content.res.Configuration;
 
 import com.example.engineandroid.AdManager;
 import com.example.engineandroid.AudioAndroid;
@@ -26,16 +27,18 @@ public class ThemeModeMenu implements Scene {
     private final AtomicReference<Integer> coins;
     private Integer coinSize;
 
+    private final AtomicReference<Boolean> horizontalOrientation;
     private final AtomicReference<Integer>[] progress;
     private final AtomicReference<Integer>[] palettes;
 
     Context context;
 
-    public ThemeModeMenu(Context context, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux, AtomicReference<Integer>[] palettesAux){
+    public ThemeModeMenu(Context context, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux, AtomicReference<Integer>[] palettesAux,AtomicReference<Boolean> horizontalOrientationAux){
         this.context = context;
         this.coins = coinsAux;
         this.progress = progressAux;
         this.palettes = palettesAux;
+        this.horizontalOrientation = horizontalOrientationAux;
 
         //Por defecto la escala es 1000x1000 pero podemos cambiarlo (recordar llamar al engine para cambiarlo)
         scaleHeight=1000;
@@ -108,22 +111,22 @@ public class ThemeModeMenu implements Scene {
     public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, SceneMngrAndroid sceneMngr, AudioAndroid audio, RenderAndroid render){
         //Tetarracas
         if (input.inputReceived(this.alfabetoInputButtonMode.getPos(), this.alfabetoInputButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(context, this.progress[0], 1, this.coins,this.palettes, "alphabet");
+            ThemeModeLevels scene = new ThemeModeLevels(context, this.progress[0], 1, this.coins,this.palettes, "alphabet",this.horizontalOrientation);
             sceneMngr.pushScene(scene);
         }
         //Bubalongas
         if (input.inputReceived(this.fiestaInputButtonMode.getPos(), this.fiestaInputButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(context, this.progress[1], 2, this.coins,this.palettes, "party");
+            ThemeModeLevels scene = new ThemeModeLevels(context, this.progress[1], 2, this.coins,this.palettes, "party",this.horizontalOrientation);
             sceneMngr.pushScene(scene);
         }
         //Bakugans
         if (input.inputReceived(this.animalesInputButtonMode.getPos(), this.animalesInputButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(context, this.progress[2], 3, this.coins,this.palettes, "animals");
+            ThemeModeLevels scene = new ThemeModeLevels(context, this.progress[2], 3, this.coins,this.palettes, "animals",this.horizontalOrientation);
             sceneMngr.pushScene(scene);
         }
         //Mamelungas
         if (input.inputReceived(this.geometriaInputButtonMode.getPos(), this.geometriaInputButtonMode.getSize())){
-            ThemeModeLevels scene = new ThemeModeLevels(context, this.progress[3], 4, this.coins,this.palettes, "geometry");
+            ThemeModeLevels scene = new ThemeModeLevels(context, this.progress[3], 4, this.coins,this.palettes, "geometry",this.horizontalOrientation);
             sceneMngr.pushScene(scene);
         }
 
@@ -136,6 +139,9 @@ public class ThemeModeMenu implements Scene {
     //Se llama cada vez que se gira la orientacion de la pantalla
     @Override
     public void configurationChanged(int orientation) {
-
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+            horizontalOrientation.set(true);
+        else
+            horizontalOrientation.set(false);
     }
 }

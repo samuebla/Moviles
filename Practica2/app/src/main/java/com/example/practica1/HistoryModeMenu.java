@@ -1,6 +1,7 @@
 package com.example.practica1;
 
 import android.content.Context;
+import android.content.res.Configuration;
 
 import com.example.engineandroid.AdManager;
 import com.example.engineandroid.AudioAndroid;
@@ -25,16 +26,18 @@ public class HistoryModeMenu implements Scene {
     AtomicReference<Integer> coins;
     private Integer coinSize;
 
+    private final AtomicReference<Boolean> horizontalOrientation;
     private final AtomicReference<Integer>[] progress;
     private final AtomicReference<Integer>[] palettes;
 
     private final Context context;
 
-    public HistoryModeMenu(Context context, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux, AtomicReference<Integer>[] palettesAux){
+    public HistoryModeMenu(Context context, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] progressAux, AtomicReference<Integer>[] palettesAux,AtomicReference<Boolean> horizontalOrientationAux){
         this.context = context;
         this.coins = coinsAux;
         this.progress = progressAux;
         this.palettes = palettesAux;
+        this.horizontalOrientation = horizontalOrientationAux;
 
         //Por defecto la escala es 1000x1000
         scaleHeight=1000;
@@ -92,7 +95,7 @@ public class HistoryModeMenu implements Scene {
     public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, SceneMngrAndroid sceneMngr, AudioAndroid audio, RenderAndroid render){
         //ThemeMode
         if (input.inputReceived(this.themeInputButtonMode.getPos(), this.themeInputButtonMode.getSize())){
-            ThemeModeMenu playScene = new ThemeModeMenu(context, this.coins, this.progress,this.palettes);
+            ThemeModeMenu playScene = new ThemeModeMenu(context, this.coins, this.progress,this.palettes,this.horizontalOrientation);
             sceneMngr.pushScene(playScene);
         }
 
@@ -104,7 +107,10 @@ public class HistoryModeMenu implements Scene {
     //Se llama cada vez que se gira la orientacion de la pantalla
     @Override
     public void configurationChanged(int orientation) {
-
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+            horizontalOrientation.set(true);
+        else
+            horizontalOrientation.set(false);
     }
 
 }

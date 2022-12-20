@@ -1,6 +1,7 @@
 package com.example.practica1;
 
 import android.content.Context;
+import android.content.res.Configuration;
 
 import com.example.engineandroid.AdManager;
 import com.example.engineandroid.AudioAndroid;
@@ -30,6 +31,7 @@ public class ThemeModeLevels implements Scene {
     private final String selectedCategory;
     private final int category;
 
+    private final AtomicReference<Boolean> horizontalOrientation;
     private final AtomicReference<Integer> unlockedlevels;
     private final AtomicReference<Integer>[] palettes;
 
@@ -38,14 +40,15 @@ public class ThemeModeLevels implements Scene {
     Context context;
 
 
-    public ThemeModeLevels(Context context, AtomicReference<Integer> levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] palettesAux, String folder_){
+    public ThemeModeLevels(Context context, AtomicReference<Integer> levelsUnlocked, int selectedCategory, AtomicReference<Integer> coinsAux, AtomicReference<Integer>[] palettesAux, String folder_,AtomicReference<Boolean> horizontalOrientationAux){
         this.context = context;
         this.selectedCategory = this.categories[selectedCategory - 1];
         this.category = selectedCategory;
         this.unlockedlevels = levelsUnlocked;
         this.palettes = palettesAux;
-
         this.coins = coinsAux;
+        this.horizontalOrientation = horizontalOrientationAux;
+
         //Por defecto la escala es 1000x1000 pero creamos un setter por si alguien quiere alguna modificacion
         scaleHeight=1000;
         scaleWidth=1000;
@@ -120,7 +123,7 @@ public class ThemeModeLevels implements Scene {
     public void handleInput(EventHandler.EventType type, AdManager adManager, InputAndroid input, SceneMngrAndroid sceneMngr, AudioAndroid audio, RenderAndroid render){
         for (int i = 0; i < this.unlockedlevels.get(); ++i){
             if (input.inputReceived(this.lvls[i].getPos(), this.lvls[i].getSize())){
-                HistoryModeGameScene playScene = new HistoryModeGameScene(context, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1,this.palettes, folderName);
+                HistoryModeGameScene playScene = new HistoryModeGameScene(context, "level" + (i+1),this.category, this.coins, this.unlockedlevels, i + 1,this.palettes, folderName,this.horizontalOrientation);
                 sceneMngr.pushScene(playScene);
             }
         }
@@ -133,6 +136,9 @@ public class ThemeModeLevels implements Scene {
     //Se llama cada vez que se gira la orientacion de la pantalla
     @Override
     public void configurationChanged(int orientation) {
-
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+            horizontalOrientation.set(true);
+        else
+            horizontalOrientation.set(false);
     }
 }
