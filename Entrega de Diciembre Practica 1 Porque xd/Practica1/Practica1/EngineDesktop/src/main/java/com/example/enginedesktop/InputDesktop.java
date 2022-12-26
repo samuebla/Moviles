@@ -31,8 +31,8 @@ public class InputDesktop implements Input {
     }
 
     @Override
-    public Vector2D getScaledCoords() {
-        return new Vector2D((getRawCoords().getX() - offset.getX())/scaleFactor, (getRawCoords().getY()  - offset.getY())/scaleFactor);
+    public Vector2D getScaledCoords(Vector2D coords) {
+        return new Vector2D((coords.getX() - offset.getX())*scaleFactor, (coords.getY()  - offset.getY())*scaleFactor);
     }
 
     @Override
@@ -57,12 +57,14 @@ public class InputDesktop implements Input {
         return  this.listener.mouse_isClicked;
     }
 
-    public boolean inputReceived(Vector2D pos, Vector2D size){
-        Vector2D coords = new Vector2D();
-        coords.set(getScaledCoords().getX(), getScaledCoords().getY());
+    public boolean InputReceive(Vector2D pos, Vector2D size){
+        Vector2D coords = new Vector2D(getScaledCoords(getRawCoords()));
+        Vector2D posScaled = new Vector2D(getScaledCoords(pos));
+        Vector2D sizeScaled = new Vector2D(size.getX()*scaleFactor, size.getY()*scaleFactor);
 
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+        System.out.println("Object Pos [X] " + pos.getX() + "[Y] " + pos.getY() + ",Size: [X] " + size.getX() + "[Y] " + size.getY());
+        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + sizeScaled.getX() &&
+                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + sizeScaled.getY());
     }
 }
 
@@ -82,7 +84,8 @@ class MouseListener extends MouseAdapter{
         super.mouseClicked(e);
         if(InputEvent.BUTTON1_DOWN_MASK != 0){
             this.inputDesktop.setRawCoords((int)e.getPoint().getX(),(int)e.getPoint().getY());
-            System.out.println("Click detected "+ "[X] " + this.inputDesktop.mouseCoords.getX() + "[Y] " + this.inputDesktop.mouseCoords.getY());
+            Vector2D coords = new Vector2D(inputDesktop.getScaledCoords(inputDesktop.getRawCoords()));
+            System.out.println("Click detected "+ "[X] " + coords.getX() + "[Y] " + coords.getY());
             this.mouse_isClicked = true;
             this.eventHandler.sendEvent(IEventHandler.EventType.MOUSE);
         }

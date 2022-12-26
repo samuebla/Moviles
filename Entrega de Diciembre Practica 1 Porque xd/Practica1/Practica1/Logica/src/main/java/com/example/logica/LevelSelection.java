@@ -83,43 +83,43 @@ public class LevelSelection implements Scene {
     @Override
     public void handleInput(IEventHandler.EventType type, IAudio audio, Input input, ISceneMngr sceneMngr){
         //5x5
-        if (input.inputReceived(this.inputButton5.getPos(), this.inputButton5.getSize())){
+        if (input.InputReceive(this.inputButton5.getPos(), this.inputButton5.getSize())){
             MyScene playScene = new MyScene(5, 5);
             sceneMngr.pushScene(playScene);
         }
 
         //8x8
-        if (input.inputReceived(this.inputButton8.getPos(), this.inputButton8.getSize())){
+        if (input.InputReceive(this.inputButton8.getPos(), this.inputButton8.getSize())){
             MyScene playScene = new MyScene( 8, 8);
             sceneMngr.pushScene(playScene);
         }
 
         //10x10
-        if (input.inputReceived(this.inputButton10.getPos(), this.inputButton10.getSize())){
+        if (input.InputReceive(this.inputButton10.getPos(), this.inputButton10.getSize())){
             MyScene playScene = new MyScene(10, 10);
             sceneMngr.pushScene(playScene);
         }
 
         //5x8
-        if (input.inputReceived(this.inputButton5X8.getPos(), this.inputButton5X8.getSize())){
+        if (input.InputReceive(this.inputButton5X8.getPos(), this.inputButton5X8.getSize())){
             MyScene playScene = new MyScene(5, 8);
             sceneMngr.pushScene(playScene);
         }
 
         //8x10
-        if (input.inputReceived(this.inputButton8X10.getPos(), this.inputButton8X10.getSize())){
+        if (input.InputReceive(this.inputButton8X10.getPos(), this.inputButton8X10.getSize())){
             MyScene playScene = new MyScene(8, 10);
             sceneMngr.pushScene(playScene);
         }
 
         //5x10
-        if (input.inputReceived(this.inputButton5X10.getPos(), this.inputButton5X10.getSize())){
+        if (input.InputReceive(this.inputButton5X10.getPos(), this.inputButton5X10.getSize())){
             MyScene playScene = new MyScene(5, 10);
             sceneMngr.pushScene(playScene);
         }
 
         //Back button
-        if (input.inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
+        if (input.InputReceive(this.backInputButton.getPos(), this.backInputButton.getSize())){
             sceneMngr.popScene();
         }
     }

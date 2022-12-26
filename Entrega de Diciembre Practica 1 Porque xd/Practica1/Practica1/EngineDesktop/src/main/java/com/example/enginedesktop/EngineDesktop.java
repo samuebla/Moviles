@@ -104,10 +104,10 @@ public class EngineDesktop implements Engine,Runnable{
 
 
             this.sceneManager.update(deltaTime / 1000.0);
-//            if (eventHandler.getEventType() != EventHandler.EventType.NONE) {
-//                sceneMngr.handleInput(eventHandler.getEventType(), adManager, input, audioMngr, render);
-//                eventHandler.sendEvent(EventHandler.EventType.NONE);
-//            }
+            if (eventHandler.getEvent().eventType != EventHandlerDesktop.EventType.NONE) {
+                sceneManager.handleInput(eventHandler.getEvent().eventType, audioMngr, input, sceneManager);
+                eventHandler.sendEvent(EventHandlerDesktop.EventType.NONE);
+            }
 
             //Bucle de renderizado
             do{

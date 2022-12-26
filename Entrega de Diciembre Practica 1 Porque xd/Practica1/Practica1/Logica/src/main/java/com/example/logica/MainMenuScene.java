@@ -76,7 +76,7 @@ public class MainMenuScene implements Scene {
     @Override
     public void handleInput(IEventHandler.EventType type, IAudio audio, Input input, ISceneMngr sceneMngr) {
         //Si pulsas el boton...
-        if (input.inputReceived(this.play.getPos(), this.play.getSize())) {
+        if (input.InputReceive(this.play.getPos(), this.play.getSize())) {
             //Te lleva a la pantalla de seleccion
             LevelSelection levelScene = new LevelSelection();
             sceneMngr.pushScene(levelScene);

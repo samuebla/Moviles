@@ -29,8 +29,8 @@ public class InputAndroid implements Input {
     }
 
     @Override
-    public Vector2D getScaledCoords() {
-        return new Vector2D((getRawCoords().getX() - offset.getX())/scaleFactor, (getRawCoords().getY()  - offset.getY())/scaleFactor);
+    public Vector2D getScaledCoords(Vector2D coords) {
+        return new Vector2D((coords.getX() - offset.getX())/scaleFactor, (coords.getY()  - offset.getY())/scaleFactor);
     }
 
     @Override
@@ -39,12 +39,15 @@ public class InputAndroid implements Input {
     }
 
     @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size) {
-        Vector2D coords = new Vector2D();
-        coords.set(getScaledCoords().getX(), getScaledCoords().getY());
+    public boolean InputReceive(Vector2D pos, Vector2D size) {
+        Vector2D coords = new Vector2D(getScaledCoords(getRawCoords()));
+        Vector2D posScaled = new Vector2D(getScaledCoords(pos));
+        Vector2D sizeScaled = new Vector2D(getScaledCoords(size));
 
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+        System.out.println("Object Pos [X] " + pos.getX() + "[Y] " + pos.getY() + ",Size: [X] " + size.getX() + "[Y] " + size.getY());
+
+        return (coords.getX() >= posScaled.getX() && coords.getX() <= posScaled.getX() + sizeScaled.getX() &&
+                coords.getY() >= posScaled.getY() && coords.getY() <= posScaled.getY() + sizeScaled.getY());
     }
 
     @Override

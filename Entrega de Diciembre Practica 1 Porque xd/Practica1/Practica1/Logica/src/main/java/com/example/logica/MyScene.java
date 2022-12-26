@@ -426,7 +426,7 @@ public class MyScene implements Scene {
     public void handleInput(IEventHandler.EventType type, IAudio audio, Input input, ISceneMngr sceneMngr) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
-                if (input.inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
+                if (input.InputReceive(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
                     //Aqui se guarda si te has equivocado...
                     this.matriz[i][j].handleInput();
                     //1 Si esta mal
@@ -458,7 +458,7 @@ public class MyScene implements Scene {
 
         //BOTONES
         //Boton de comprobar
-        if (input.inputReceived(this.checkButton.getPos(), this.checkButton.getSize())) {
+        if (input.InputReceive(this.checkButton.getPos(), this.checkButton.getSize())) {
             //Mostramos el texto en pantalla
             showAnswers = true;
             auxShowAnswer = true;
@@ -466,12 +466,12 @@ public class MyScene implements Scene {
         }
 
         //Si te rindes vuelves a la seleccion de nivel
-        if (input.inputReceived(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
+        if (input.InputReceive(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
             sceneMngr.popScene();
         }
 
         //Solo funciona si has ganado
-        if (won && input.inputReceived(this.backButton.getPos(), this.backButton.getSize())) {
+        if (won && input.InputReceive(this.backButton.getPos(), this.backButton.getSize())) {
             sceneMngr.popScene();
             sceneMngr.popScene();
         }
