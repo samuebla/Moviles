@@ -9,7 +9,7 @@ public class Cell extends Interactive {
     public enum cellType {EMPTY, SELECTED, CROSSED, WRONG};
 
     private cellType type;
-    private boolean solution = false;
+    boolean solution = false;
 
     //Para el contador de celdas restantes y erroneas
     int key;

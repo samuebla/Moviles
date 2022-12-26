@@ -381,7 +381,7 @@ public class MyScene implements Scene {
             render.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0, scaleWidth / 18);
 
             //BackButton
-            render.drawImage((int) (backInputButton.getPos().getX()), (int) (backInputButton.getPos().getY()), (int) (backInputButton.getSize().getX()), (int) (backInputButton.getSize().getY()), "Back");
+            render.drawImage((int) (backButton.getPos().getX()), (int) (backButton.getPos().getY()), (int) (backButton.getSize().getX()), (int) (backButton.getSize().getY()), "Back");
 
             //Si sigo jugando...
         } else {
@@ -417,9 +417,9 @@ public class MyScene implements Scene {
             }
 
             //BOTONES
-            render.drawImage((int) ((double) checkInputButton.getPos().getX()), (int) ((double) checkInputButton.getPos().getY()), (int) ((double) checkInputButton.getSize().getX()), (int) ((double) checkInputButton.getSize().getY()), "Check");
+            render.drawImage((int) ((double) checkButton.getPos().getX()), (int) ((double) checkButton.getPos().getY()), (int) ((double) checkButton.getSize().getX()), (int) ((double) checkButton.getSize().getY()), "Check");
 
-            render.drawImage((int) ((double) giveUpInputButton.getPos().getX()), (int) ((double) giveUpInputButton.getPos().getY()), (int) ((double) giveUpInputButton.getSize().getX()), (int) ((double) giveUpInputButton.getSize().getY()), "GiveUp");
+            render.drawImage((int) ((double) giveUpButton.getPos().getX()), (int) ((double) giveUpButton.getPos().getY()), (int) ((double) giveUpButton.getSize().getX()), (int) ((double) giveUpButton.getSize().getY()), "GiveUp");
         }
     }
 

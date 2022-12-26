@@ -16,8 +16,11 @@ import java.io.File;
 import java.util.HashMap;
 
 public class MainMenuScene implements Scene {
+    //Escala logica de la pantalla, de 0 a 1000, independiente del verdadero ancho y alto del surface
+    int scaleWidth = 1000;
+    int scaleHeight = 1000;
 
-    private Button play;
+    private InputButton play;
 
     public MainMenuScene() {
         init();
@@ -32,12 +35,11 @@ public class MainMenuScene implements Scene {
             engine.getAudio().playSound("background", 0);
             engine.getAudio().newSound("effect", "assets/wiiClickSound.wav");
 
-            engine.getGraphics().newFont("Amor", "assets/AmorRegular.ttf", 0, 50);
-            engine.getGraphics().newFont("Calibri", "assets/CalibriRegular.ttf", 0, 25);
-            engine.getGraphics().newFont("Cooper", "assets/CooperBlackRegular.ttf", 0, 50);
-            engine.getGraphics().newFont("CalibriSmall", "assets/CalibriRegular.ttf", 0, 22);
-            engine.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1, 40);
-            engine.getGraphics().newFont("CalibriBold", "assets/CalibriRegular.ttf", 1, 20);
+            engine.getGraphics().newFont("Amor", "assets/AmorRegular.ttf", 0);
+            engine.getGraphics().newFont("Calibri", "assets/CalibriRegular.ttf", 0);
+            engine.getGraphics().newFont("Cooper", "assets/CooperBlackRegular.ttf", 0);
+            engine.getGraphics().newFont("CooperBold", "assets/CalibriRegular.ttf", 1);
+            engine.getGraphics().newFont("CalibriBold", "assets/CalibriRegular.ttf", 1);
 
             engine.getGraphics().newImage("Board", "assets/board.png");
             engine.getGraphics().newImage("GiveUp", "assets/giveUpButton.png");
@@ -53,35 +55,30 @@ public class MainMenuScene implements Scene {
 
     @Override
     public void init() {
-        this.play = new Button(this.engine.getWidth() / 2 - (engine.getWidth()/6), this.engine.getHeight() / 2.5, engine.getWidth()/3, engine.getHeight()/4.8);
-        System.out.println("Boton[X] " + this.play.pos.getX() +" [Y] " + this.play.pos.getY());
+        this.play = new InputButton(scaleWidth / 2 - (scaleWidth / 4), scaleHeight / 5, scaleWidth / 2, scaleHeight / 4.8);
     }
 
     @Override
     public void update(double deltaTime) {
-        //Para los eventos
-        if (this.engine.getEventMngr().getEvent().eventType != IEventHandler.EventType.NONE) {
-            handleInput();
-            this.engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
-        }
     }
 
     @Override
     public void render(IGraphics render) {
         //Titulo
-        this.engine.drawText("NONOGRAMAS", (int) (this.engine.getWidth() / 2), (int) (this.engine.getHeight() / 10.8), "Black", "Cooper", 0);
-        //Boton
-        this.engine.drawImage((int)this.play.getPos().getX(),(int)(play.getPos().getY()) ,(int)(this.play.getSize ().getX()), (int)(this.play.getSize ().getY()), "PlayButton");
+        render.drawText("NONOGRAMAS", (int) (scaleWidth / 2.0), (int) (scaleHeight / 10.8), "Black", "Cooper", 0, (scaleWidth / 14));
+
+        //Botones
+        render.drawImage((int) this.play.getPos().getX(), (int) (play.getPos().getY()), (int) (this.play.getSize().getX()), (int) (this.play.getSize().getY()), "QuickPlay");
 
     }
 
     @Override
     public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr) {
         //Si pulsas el boton...
-        if (engine.getInput().InputReceive(this.play.getPos(), this.play.getSize())) {
+        if (input.inputReceived(this.play.getPos(), this.play.getSize())) {
             //Te lleva a la pantalla de seleccion
-            LevelSelection levelScene = new LevelSelection(this.engine);
-            this.engine.setScene(levelScene);
+            LevelSelection levelScene = new LevelSelection();
+            sceneMngr.pushScene(levelScene);
         }
     }
 }
