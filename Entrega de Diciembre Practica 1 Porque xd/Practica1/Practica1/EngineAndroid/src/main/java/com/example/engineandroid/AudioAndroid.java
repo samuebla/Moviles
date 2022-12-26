@@ -21,7 +21,7 @@ public class AudioAndroid implements IAudio {
 
     private AssetManager assets;
 
-    public AudioAndroid(){
+    public AudioAndroid(AssetManager assets){
         //Inicializamos atributos
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
@@ -33,15 +33,13 @@ public class AudioAndroid implements IAudio {
                 setAudioAttributes(audioAttributes)
                 .build();
 
+        this.assets = assets;
+
         //Media player para la musica de fondo
         this.mediaPlayer = new MediaPlayer();
 
         //Aqui guardamos los sonidos de efecto
         this.sounds = new HashMap<>();
-    }
-
-    public void setAssetsManager(AssetManager assetsAux){
-        this.assets = assetsAux;
     }
 
     @Override

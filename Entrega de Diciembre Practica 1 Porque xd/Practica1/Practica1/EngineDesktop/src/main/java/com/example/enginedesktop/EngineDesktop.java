@@ -16,6 +16,8 @@ public class EngineDesktop implements Engine,Runnable{
     private IEventHandler eventHandler;
     private AudioDesktop audioMngr;
 
+    private Scene resourceScene;
+
     public EngineDesktop(final JFrame myView){
         this.render = new RenderDesktop(myView);
         //Event handler que detecta los eventos de raton
@@ -34,36 +36,7 @@ public class EngineDesktop implements Engine,Runnable{
         myView.addMouseListener(this.input.getListener());
 
         this.audioMngr = new AudioDesktop();
-    }
-
-    //Pinta una celda del tablero
-    //EMPTY(gray) = 0
-    //SELECTED(blue) = 1
-    //CROSSED(crossed) = 2
-    //WRONG(red) = 3
-    //blank = marco vacio para la interfaz = -1
-    @Override
-    public void paintCell(int x, int y, int w, int h, int celltype){
-        this.render.paintCell(x, y, w, h, celltype);
-    }
-
-    //AlignType:
-    //-1 Alineamiento a la izquierda
-    //0 Alineamiento en el centro
-    //1 Alineamiento a la derecho
-    @Override
-    public void drawText(String text, int x, int y, String color, String font, int alignType){
-        this.render.drawText(text, x, y, color,font, alignType);
-    }
-
-    @Override
-    public void drawCircle(float x, float y, float r, String color) {
-        this.render.drawCircle(x,y,r,color);
-    }
-
-    @Override
-    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String image){
-        this.render.drawImage(x, y, desiredWidth, desiredHeight, image);
+        this.sceneManager = new SceneMngrDesktop();
     }
 
     //<<Partes Motor>>
@@ -76,31 +49,10 @@ public class EngineDesktop implements Engine,Runnable{
         return audioMngr;
     }
 
+    @Override
+    public ISceneMngr getSceneMngr() { return sceneManager; }
+
     //<<Fin Partes Motor>>
-
-    @Override
-    public int getWidth(){
-        return this.render.getWidth();
-    }
-    @Override
-    public int getHeight(){
-        return this.render.getHeight();
-    }
-
-    //Cambia la escena activa
-    @Override
-    public void setScene(Scene newScene){
-        this.sceneManager.pushScene(newScene);
-    }
-
-    //Guarda el sceneManager
-    @Override
-    public void setSceneMngr(ISceneMngr sceneMngrAux){this.sceneManager = (SceneMngrDesktop) sceneMngrAux;}
-
-    //Vuelve a la escena anterior del stack
-    @Override
-    public void popScene(){ this.sceneManager.popScene();}
-
 
     //<<Input>>
     public Input getInput(){
@@ -112,6 +64,12 @@ public class EngineDesktop implements Engine,Runnable{
         return eventHandler;
     }
     //<<Fin Input>>
+
+    //Sets the scene that's loading the resources of the game
+    @Override
+    public void setResourceScene(Scene scene){
+        this.resourceScene = scene;
+    }
 
     //Hebra principal
     @Override
@@ -131,7 +89,9 @@ public class EngineDesktop implements Engine,Runnable{
 
 //        long informePrevio = lastFrameTime; // Informes de FPS
 //        int frames = 0;
-        this.sceneManager.getScene().init();
+
+        //Loads resources such as sound, images, etc
+        this.resourceScene.loadResources(this);
 
         long actualTime = System.currentTimeMillis();
 

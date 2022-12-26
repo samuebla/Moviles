@@ -3,8 +3,11 @@ package com.example.logica;
 import com.example.lib.Engine;
 import com.example.lib.IEventHandler;
 import com.example.lib.IFont;
+import com.example.lib.IGraphics;
 import com.example.lib.IImage;
+import com.example.lib.ISceneMngr;
 import com.example.lib.ISound;
+import com.example.lib.Input;
 import com.example.lib.Scene;
 import com.example.lib.Vector2D;
 
@@ -22,22 +25,9 @@ public class LevelSelection implements Scene {
 
     private Button backButton;
 
-    private Engine engine;
-
-    public LevelSelection(Engine engineAux){
-
-        this.engine = engineAux;
+    public LevelSelection(){
 
         init();
-    }
-
-    @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size){
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
-
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
     }
 
     @Override
@@ -54,15 +44,15 @@ public class LevelSelection implements Scene {
 
     @Override
     public void update(double deltaTime){
-        //Para los eventos...
-        if(engine.getEventMngr().getEvent().eventType != IEventHandler.EventType.NONE) {
-            handleInput();
-            engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
-        }
     }
 
     @Override
-    public void render(){
+    public void loadResources(Engine engine){
+
+    }
+
+    @Override
+    public void render(IGraphics render){
         //5x5
         this.engine.drawCircle(button5.getPos().getX(), button5.getPos().getY(), button5.getSize().getX()/2, "purple");
         this.engine.drawText("5x5", (int)(button5.getPos().getX() + button5.getSize().getX()/2), (int)(button5.getPos().getY() + button5.getSize().getY()/1.8), "Black","Amor", 0);
@@ -90,7 +80,7 @@ public class LevelSelection implements Scene {
     }
 
     @Override
-    public void handleInput(){
+    public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr){
         //5x5
         if (inputReceived(this.button5.getPos(), this.button5.getSize())){
             MyScene playScene = new MyScene(this.engine, 5, 5);

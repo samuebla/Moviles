@@ -10,8 +10,6 @@ import java.util.Random;
 
 public class MyScene implements Scene {
 
-    private Engine engine;
-
     //Tenemos una matriz donde guardaremos las casillas seleccionadas
     private Cell[][] matriz;
 
@@ -41,10 +39,7 @@ public class MyScene implements Scene {
     boolean showAnswers;
     boolean auxShowAnswer;
 
-    public MyScene(Engine engine, int rows, int cols) {
-
-        //Asociamos el engine correspondiente
-        this.engine = engine;
+    public MyScene(int rows, int cols) {
 
         init();
 
@@ -287,12 +282,8 @@ public class MyScene implements Scene {
     }
 
     @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size) {
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
+    public void loadResources(Engine engine){
 
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
     }
 
     @Override
@@ -314,11 +305,6 @@ public class MyScene implements Scene {
             }
         }
 
-        if (engine.getEventMngr().getEvent().eventType != IEventHandler.EventType.NONE) {
-            handleInput();
-            engine.getEventMngr().sendEvent(IEventHandler.EventType.NONE);
-        }
-
         //Timer del boton de comprobar
         if (timer > 0) {
             timer -= deltaTime;
@@ -337,7 +323,7 @@ public class MyScene implements Scene {
     }
 
     @Override
-    public void render() {
+    public void render(IGraphics render) {
 
         Vector2D auxCuadradoFinal = this.matriz[cols_-1][rows_-1].getPos();
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
@@ -403,7 +389,7 @@ public class MyScene implements Scene {
     }
 
     @Override
-    public void handleInput() {
+    public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
                 if (inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {

@@ -20,6 +20,8 @@ public class EngineApp implements Engine,Runnable{
 
     private SceneMngrAndroid sceneMngr;
 
+    private Scene resourceScene;
+
     public EngineApp(SurfaceView myView){
         this.view = myView;
         this.render = new RenderAndroid(this.view, 4.0f/6.0f);
@@ -37,7 +39,9 @@ public class EngineApp implements Engine,Runnable{
         this.input = new InputAndroid(this.eventHandler);
         this.view.setOnTouchListener(this.input.getTouchListener());
 
-        this.audioMngr = new AudioAndroid();
+        this.audioMngr = new AudioAndroid(myView.getContext().getAssets());
+
+        this.sceneMngr = new SceneMngrAndroid();
     }
 
 
@@ -50,6 +54,9 @@ public class EngineApp implements Engine,Runnable{
         return audioMngr;
     }
 
+    @Override
+    public SceneMngrAndroid getSceneMngr() { return sceneMngr; }
+
     //<<Input>>
     @Override
     public Input getInput(){
@@ -60,61 +67,14 @@ public class EngineApp implements Engine,Runnable{
     public IEventHandler getEventMngr() {
         return eventHandler;
     }
-
-    @Override
-    public int getWidth() {
-        int w = this.render.getWidth();
-        return w;
-    }
-
-    @Override
-    public int getHeight() {
-        return this.render.getHeight();
-    }
     //<<Fin Input>>
-
-    @Override
-    public void paintCell(int x, int y, int w, int h, int celltype){
-        this.render.paintCell(x, y, w, h, celltype);
-    }
-
-    public void setAssetsContext(AssetManager assetsAux){
-        this.render.setAssetContext(assetsAux);
-        this.audioMngr.setAssetsManager(assetsAux);
-    }
 
     //<<< API >>>
 
-    //AlignType:
-    //-1 Alineamiento a la izquierda
-    //0 Alineamiento en el centro
-    //1 Alineamiento a la derecho
+    //Sets the scene that's loading the resources of the game
     @Override
-    public void drawText(String text, int x, int y, String color, String font, int alignType){
-        this.render.drawText(text, x, y, color,font, alignType);
-    }
-
-    @Override
-    public void drawCircle(float x, float y, float r, String color) {
-        this.render.drawCircle(x,y,r,color);
-    }
-
-    @Override
-    public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String image){
-        this.render.drawImage(x, y, desiredWidth, desiredHeight, image);
-    }
-
-    @Override
-    public void setScene(Scene newScene) {
-        this.sceneMngr.pushScene(newScene);
-    }
-
-    @Override
-    public void setSceneMngr(ISceneMngr sceneMngrAux){this.sceneMngr = (SceneMngrAndroid) sceneMngrAux;}
-
-    @Override
-    public void popScene() {
-        this.sceneMngr.popScene();
+    public void setResourceScene(Scene scene){
+        this.resourceScene = scene;
     }
 
     //blucle principal
@@ -133,7 +93,8 @@ public class EngineApp implements Engine,Runnable{
         //Escalado de la app
         this.render.scaleAppView();
         this.input.setOffset(0,this.render.getOffset().getY());
-        this.sceneMngr.getScene().init();
+        //Loads resources such as sound, images, etc
+        this.resourceScene.loadResources(this);
         // Espera activa. Sería más elegante al menos dormir un poco.
 
         long lastFrameTime = System.nanoTime();
