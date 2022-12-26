@@ -19,10 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
     private SurfaceView renderView;
 
-    private AssetManager assetManager;
-
-    private SceneMngrAndroid sceneMngr;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,17 +30,11 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         this.engine = new EngineApp(this.renderView);
 
-        this.assetManager = this.getBaseContext().getAssets();
-
-        this.engine.setAssetsContext(this.assetManager);
-
-        this.sceneMngr = new SceneMngrAndroid();
-
-        this.engine.setSceneMngr(this.sceneMngr);
+        MainMenuScene mainMenuScene = new MainMenuScene();
+        this.engine.getSceneMngr().pushScene(mainMenuScene);
+        this.engine.setResourceScene(mainMenuScene);
 
         engine.resume();
-        MainMenuScene mainMenuScene = new MainMenuScene(this.engine);
-        this.engine.setScene(mainMenuScene);
     }
 
     @Override

@@ -47,7 +47,7 @@ public class MyScene implements Scene {
     boolean showAnswers;
     boolean auxShowAnswer;
 
-    public MyScene(Engine engine, int rows, int cols) {
+    public MyScene(int rows, int cols) {
 
         //Creamos el random
         Random random = new Random();
@@ -278,12 +278,8 @@ public class MyScene implements Scene {
     }
 
     @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size) {
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
+    public void loadResources(Engine engine){
 
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
     }
 
     @Override
@@ -361,7 +357,7 @@ public class MyScene implements Scene {
     }
 
     @Override
-    public void render() {
+    public void render(IGraphics render) {
 
         Vector2D auxCuadradoFinal = this.matriz[cols_ - 1][rows_ - 1].getPos();
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
@@ -428,7 +424,7 @@ public class MyScene implements Scene {
     }
 
     @Override
-    public void handleInput() {
+    public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
                 if (input.inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {

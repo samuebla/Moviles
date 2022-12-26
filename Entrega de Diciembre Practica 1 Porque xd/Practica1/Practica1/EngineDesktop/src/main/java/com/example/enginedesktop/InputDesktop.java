@@ -56,6 +56,14 @@ public class InputDesktop implements Input {
     public boolean mouse_Clicked(){
         return  this.listener.mouse_isClicked;
     }
+
+    public boolean InputReceive(Vector2D pos, Vector2D size){
+        Vector2D coords = new Vector2D();
+        coords.set(getScaledCoords().getX(), getScaledCoords().getY());
+
+        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
+                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+    }
 }
 
 class MouseListener extends MouseAdapter{

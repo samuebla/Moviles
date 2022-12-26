@@ -46,6 +46,8 @@ public class RenderAndroid implements IGraphics {
         this.images = new HashMap<>();
 
         this.factorScale = scale;
+
+        this.assets = myView.getContext().getAssets();
     }
 
     public void prepareFrame() {
@@ -163,10 +165,6 @@ public class RenderAndroid implements IGraphics {
     @Override
     public void setColor(int color) {
         this.paint.setColor(color);
-    }
-
-    public void setAssetContext(AssetManager assetsAux){
-        this.assets = assetsAux;
     }
 
     @Override

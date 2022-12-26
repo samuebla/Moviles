@@ -19,6 +19,7 @@ public class MainActivity {
 
     public static void main(String[] args) {
 
+        //Creación y customización de la ventana
         JFrame renderView = new JFrame("NONOGRAMA");
 
         renderView.setSize(720, 1080);
@@ -29,28 +30,14 @@ public class MainActivity {
         renderView.setVisible(true);
         renderView.setResizable(true);
 
-        // Intentamos crear el buffer strategy con 2 buffers.
-        int intentos = 100;
-        while (intentos-- > 0) {
-            try {
-                renderView.createBufferStrategy(2);
-                break;
-            } catch (Exception e) {
-            }
-        } // while pidiendo la creación de la buffeStrategy
-        if (intentos == 0) {
-            System.err.println("No pude crear la BufferStrategy");
-            return;
-        }
-
+        //Inicialización del engine
         EngineDesktop engine = new EngineDesktop(renderView);
 
-        MainMenuScene scene = new MainMenuScene(engine);
+        MainMenuScene scene = new MainMenuScene();
 
-        SceneMngrDesktop sceneMngr = new SceneMngrDesktop();
+        engine.getSceneMngr().pushScene(scene);
+        engine.setResourceScene(scene);
 
-        engine.setSceneMngr(sceneMngr);
-        engine.setScene(scene);
         engine.resume();
     }
 }

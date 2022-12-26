@@ -6,8 +6,9 @@ import java.awt.geom.Point2D;
 public interface Scene {
     //Main Functions
     public void update(double deltaTime);
-    public void render();
-    public void handleInput();
-    public boolean inputReceived(Vector2D pos, Vector2D size);
+    public void render(IGraphics render);
+    //Allows the loading of resources
+    public void loadResources(Engine engine);
+    public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr);
     public void init();
     }

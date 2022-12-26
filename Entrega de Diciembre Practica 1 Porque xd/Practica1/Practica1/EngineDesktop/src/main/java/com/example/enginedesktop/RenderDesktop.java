@@ -40,6 +40,20 @@ public class RenderDesktop implements IGraphics {
     HashMap<String,ImageDesktop> images;
 
     public RenderDesktop(JFrame myView) {
+        // Intentamos crear el buffer strategy con 2 buffers.
+        int intentos = 100;
+        while (intentos-- > 0) {
+            try {
+                myView.createBufferStrategy(2);
+                break;
+            } catch (Exception e) {
+            }
+        } // while pidiendo la creación de la buffeStrategy
+        if (intentos == 0) {
+            System.err.println("No pude crear la BufferStrategy");
+            return;
+        }
+
         //Canvas y ventana
         this.myView = myView;
         this.bufferStrategy = this.myView.getBufferStrategy();
