@@ -135,6 +135,10 @@ public class RenderAndroid implements IGraphics {
     public int getWidth() {
         return (int)(this.surfaceFrame.getX());
     }
+
+    public int getViewWidth() {
+        return this.myView.getWidth();
+    }
     @Override
     public int getHeight() {
         return (int)(this.surfaceFrame.getY());

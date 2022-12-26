@@ -78,7 +78,7 @@ public class EngineApp implements Engine,Runnable{
 
         // Si el Thread se pone en marcha
         // muy rápido, la vista podría todavía no estar inicializada.
-        while(!this.running);
+        while(this.running && this.render.getViewWidth() == 0);
 
         //Escalado de la app
         this.render.scaleAppView();
