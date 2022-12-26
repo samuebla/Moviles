@@ -125,10 +125,14 @@ public class EngineApp implements Engine,Runnable{
             actualTime += deltaTime;
 
             this.sceneMngr.update(deltaTime / 1000.0);
+//            if (eventHandler.getEventType() != EventHandler.EventType.NONE) {
+//                sceneMngr.handleInput(eventHandler.getEventType(), adManager, input, audioMngr, render);
+//                eventHandler.sendEvent(EventHandler.EventType.NONE);
+//            }
 
             //Renderizado
             this.render.prepareFrame();
-            this.sceneMngr.render();
+            this.sceneMngr.render(render);
             this.render.clear();
         }
     }
