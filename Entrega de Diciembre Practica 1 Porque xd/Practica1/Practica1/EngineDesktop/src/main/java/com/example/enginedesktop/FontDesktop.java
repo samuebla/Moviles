@@ -13,12 +13,11 @@ public class FontDesktop implements IFont {
 
     private Font font;
 
-    public FontDesktop(File file, int type, int size){
+    public FontDesktop(File file, int type){
         //Intenta inicializar la fuente del fichero especificado
         try {
             InputStream is = new FileInputStream(file);
             font = Font.createFont(Font.TRUETYPE_FONT, is);
-            setSize(type,size);
         }
         catch(IOException | FontFormatException e) {
             //Te devuelve el recorrido de llamadas en caso de que de error

@@ -3,7 +3,7 @@ package com.example.lib;
 public interface IGraphics {
     //Main functions
     public IImage newImage(String imageName,String path);
-    public IFont newFont(String fontName,String path,int type,int size);
+    public IFont newFont(String fontName,String path,int type);
     public void setResolution(double width,double height);
     public int getWidth();
     public int getHeight();

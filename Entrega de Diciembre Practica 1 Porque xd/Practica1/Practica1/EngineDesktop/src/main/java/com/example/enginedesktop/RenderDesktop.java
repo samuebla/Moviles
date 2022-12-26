@@ -39,6 +39,11 @@ public class RenderDesktop implements IGraphics {
     HashMap<String,FontDesktop> fonts;
     HashMap<String,ImageDesktop> images;
 
+    //Escala logica del juego, por defecto 1000, lo que significa que el usuario puede colocar elementos entre las posiciones 0 y 1000
+    //De esta manera los elementos se escalan automaticamente al tamaño de la pantalla
+    private int scaleWidth;
+    private int scaleHeight;
+
     public RenderDesktop(JFrame myView) {
         // Intentamos crear el buffer strategy con 2 buffers.
         int intentos = 100;
@@ -75,6 +80,9 @@ public class RenderDesktop implements IGraphics {
         this.scaleProportion = this.graphics2D.getTransform().getScaleX();
 
         this.myView.setResizable(true);
+
+        this.scaleWidth = 1000;
+        this.scaleHeight = 1000;
     }
 
     public void initFrame() {
@@ -110,8 +118,8 @@ public class RenderDesktop implements IGraphics {
     }
 
     @Override
-    public IFont newFont(String fontName,String path,int type, int size) {
-        return fonts.put(fontName,new FontDesktop(new File(path),type,size));
+    public IFont newFont(String fontName,String path,int type) {
+        return fonts.put(fontName,new FontDesktop(new File(path),type));
     }
 
     @Override
@@ -145,7 +153,7 @@ public class RenderDesktop implements IGraphics {
     @Override
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String imageName) {
         ImageDesktop image = images.get(imageName);
-        this.graphics2D.drawImage(image.getImage(), x, y, x +desiredWidth, y + desiredHeight,
+        this.graphics2D.drawImage(image.getImage(), x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + desiredWidth) * getWidth() / scaleWidth, (y + desiredHeight) * getHeight() / scaleHeight,
                 0, 0, image.getWidth(), image.getHeight(), null);
         this.graphics2D.setPaintMode();
     }
@@ -154,16 +162,16 @@ public class RenderDesktop implements IGraphics {
     @Override
     public void drawRectangle(int x, int y, int w, int h, boolean fill) {
         if (!fill)
-            this.graphics2D.drawRect(x, y, w, h);
+            this.graphics2D.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, w * getWidth() / scaleWidth, h * getHeight() / scaleHeight);
         else
-            this.graphics2D.fillRect(x, y, w, h);
+            this.graphics2D.fillRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, w * getWidth() / scaleWidth, h * getHeight() / scaleHeight);
 
         this.graphics2D.setPaintMode();
     }
 
     @Override
     public void drawLine(int x, int y, int w, int h) {
-        this.graphics2D.drawLine(x, y, w, h);
+        this.graphics2D.drawLine(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, w * getWidth() / scaleWidth, h * getHeight() / scaleHeight);
         this.graphics2D.setPaintMode();
     }
 
@@ -186,13 +194,13 @@ public class RenderDesktop implements IGraphics {
         //Con esto centramos el texto en Desktop
         switch (alignType){
             case 0:
-                this.graphics2D.drawString(text, x - (this.graphics2D.getFontMetrics().stringWidth(text)/2), y);
+                this.graphics2D.drawString(text, x * getWidth() / scaleWidth - (this.graphics2D.getFontMetrics().stringWidth(text)/2), y * getHeight() / scaleHeight);
                 break;
             case 1:
-                this.graphics2D.drawString(text, x - (this.graphics2D.getFontMetrics().stringWidth(text)), y);
+                this.graphics2D.drawString(text, x * getWidth() / scaleWidth - (this.graphics2D.getFontMetrics().stringWidth(text)), y * getHeight() / scaleHeight);
                 break;
             case -1:
-                this.graphics2D.drawString(text, x, y);
+                this.graphics2D.drawString(text, x * getWidth() / scaleWidth, y * getHeight() / scaleHeight);
                 break;
             default:
                 break;
@@ -215,10 +223,10 @@ public class RenderDesktop implements IGraphics {
         }
 
         this.graphics2D.setColor(c);
-        this.graphics2D.fillOval((int)x, (int)y, (int)r*2, (int)r*2);
+        this.graphics2D.fillOval((int)x * getWidth() / scaleWidth, (int)y * getHeight() / scaleHeight, (int)r * getWidth() / scaleWidth * 2, (int)r * getWidth() / scaleWidth * 2);
 
         this.graphics2D.setColor(Color.BLACK);
-        this.graphics2D.drawOval((int)x,(int)y,(int)r*2,(int)r*2);
+        this.graphics2D.drawOval((int)x * getWidth() / scaleWidth,(int)y * getHeight() / scaleHeight,(int)r * getWidth() / scaleWidth * 2,(int)r * getWidth() / scaleWidth * 2);
 
         this.graphics2D.setPaintMode();
     }
@@ -276,15 +284,15 @@ public class RenderDesktop implements IGraphics {
         this.graphics2D.setColor(c);
 
         if (celltype == -1 || celltype == 2) {
-            this.graphics2D.drawRect(x, y, w, h);
+            this.graphics2D.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, w * getWidth() / scaleWidth, h * getHeight() / scaleHeight);
 
             //Cuadrado de la interfaz
             if (celltype == 2) {
-                this.graphics2D.drawLine(x, y, w + x, h + y);
+                this.graphics2D.drawLine(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (w + x) * getWidth() / scaleWidth, (h + y) * getHeight() / scaleHeight);
             }
         } else {
             //Cambiar para que tenga en cuenta las dimensiones de la ventana, los últimos dos valores son el ancho y alto
-            this.graphics2D.fillRect(x, y, w, h);
+            this.graphics2D.fillRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, w * getWidth() / scaleWidth, h * getHeight() / scaleHeight);
         }
         this.graphics2D.setPaintMode();
     }
