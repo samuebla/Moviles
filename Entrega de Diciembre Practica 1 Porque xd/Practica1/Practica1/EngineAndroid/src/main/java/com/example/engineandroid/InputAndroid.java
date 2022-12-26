@@ -39,6 +39,15 @@ public class InputAndroid implements Input {
     }
 
     @Override
+    public boolean InputReceive(Vector2D pos, Vector2D size) {
+        Vector2D coords = new Vector2D();
+        coords.set(getScaledCoords().getX(), getScaledCoords().getY());
+
+        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
+                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
+    }
+
+    @Override
     public void setScaleFactor(float scale) {
         this.scaleFactor = scale;
     }
