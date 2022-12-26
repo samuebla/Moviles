@@ -63,8 +63,8 @@ public class InputDesktop implements Input {
         Vector2D sizeScaled = new Vector2D(size.getX()*scaleFactor, size.getY()*scaleFactor);
 
         System.out.println("Object Pos [X] " + pos.getX() + "[Y] " + pos.getY() + ",Size: [X] " + size.getX() + "[Y] " + size.getY());
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + sizeScaled.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + sizeScaled.getY());
+        return (coords.getX() >= posScaled.getX() && coords.getX() <= posScaled.getX() + sizeScaled.getX() &&
+                coords.getY() >= posScaled.getY() && coords.getY() <= posScaled.getY() + sizeScaled.getY());
     }
 }
 
