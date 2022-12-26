@@ -1,6 +1,7 @@
 package com.example.enginedesktop;
 
 import com.example.lib.Engine;
+import com.example.lib.IAudio;
 import com.example.lib.IEventHandler;
 import com.example.lib.IGraphics;
 import com.example.lib.ISceneMngr;
@@ -40,8 +41,8 @@ public class SceneMngrDesktop implements ISceneMngr {
     }
 
     @Override
-    public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr){
-        stack.peek().handleInput(type, sound, input, sceneMngr);
+    public void handleInput(IEventHandler.EventType type, IAudio audio, Input input, ISceneMngr sceneMngr){
+        stack.peek().handleInput(type, audio, input, sceneMngr);
     }
 
     @Override

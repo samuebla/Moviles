@@ -1,6 +1,7 @@
 package com.example.logica;
 
 import com.example.lib.Engine;
+import com.example.lib.IAudio;
 import com.example.lib.IEventHandler;
 import com.example.lib.IFont;
 import com.example.lib.IGraphics;
@@ -73,7 +74,7 @@ public class MainMenuScene implements Scene {
     }
 
     @Override
-    public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr) {
+    public void handleInput(IEventHandler.EventType type, IAudio audio, Input input, ISceneMngr sceneMngr) {
         //Si pulsas el boton...
         if (input.inputReceived(this.play.getPos(), this.play.getSize())) {
             //Te lleva a la pantalla de seleccion

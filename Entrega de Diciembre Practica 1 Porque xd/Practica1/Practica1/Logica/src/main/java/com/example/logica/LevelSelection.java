@@ -1,6 +1,7 @@
 package com.example.logica;
 
 import com.example.lib.Engine;
+import com.example.lib.IAudio;
 import com.example.lib.IEventHandler;
 import com.example.lib.IFont;
 import com.example.lib.IGraphics;
@@ -80,40 +81,40 @@ public class LevelSelection implements Scene {
     }
 
     @Override
-    public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr){
+    public void handleInput(IEventHandler.EventType type, IAudio audio, Input input, ISceneMngr sceneMngr){
         //5x5
         if (input.inputReceived(this.inputButton5.getPos(), this.inputButton5.getSize())){
-            QuickGameScene playScene = new QuickGameScene(5, 5);
+            MyScene playScene = new MyScene(5, 5);
             sceneMngr.pushScene(playScene);
         }
 
         //8x8
         if (input.inputReceived(this.inputButton8.getPos(), this.inputButton8.getSize())){
-            QuickGameScene playScene = new QuickGameScene( 8, 8);
+            MyScene playScene = new MyScene( 8, 8);
             sceneMngr.pushScene(playScene);
         }
 
         //10x10
         if (input.inputReceived(this.inputButton10.getPos(), this.inputButton10.getSize())){
-            QuickGameScene playScene = new QuickGameScene(10, 10);
+            MyScene playScene = new MyScene(10, 10);
             sceneMngr.pushScene(playScene);
         }
 
         //5x8
         if (input.inputReceived(this.inputButton5X8.getPos(), this.inputButton5X8.getSize())){
-            QuickGameScene playScene = new QuickGameScene(5, 8);
+            MyScene playScene = new MyScene(5, 8);
             sceneMngr.pushScene(playScene);
         }
 
         //8x10
         if (input.inputReceived(this.inputButton8X10.getPos(), this.inputButton8X10.getSize())){
-            QuickGameScene playScene = new QuickGameScene(8, 10);
+            MyScene playScene = new MyScene(8, 10);
             sceneMngr.pushScene(playScene);
         }
 
         //5x10
         if (input.inputReceived(this.inputButton5X10.getPos(), this.inputButton5X10.getSize())){
-            QuickGameScene playScene = new QuickGameScene(5, 10);
+            MyScene playScene = new MyScene(5, 10);
             sceneMngr.pushScene(playScene);
         }
 

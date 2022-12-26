@@ -260,6 +260,7 @@ public class RenderDesktop implements IGraphics {
     //CROSSED(crossed) = 2
     //WRONG(red) = 3
     //blank = marco vacio para la interfaz = -1
+    @Override
     public void paintCell(int x, int y, int w, int h, int celltype) {
         Color c;
         if (celltype == 1) {

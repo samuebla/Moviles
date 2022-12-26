@@ -8,4 +8,4 @@ public interface ISound {
     public void stop();
 
     public void startLoop();
-}
+ }

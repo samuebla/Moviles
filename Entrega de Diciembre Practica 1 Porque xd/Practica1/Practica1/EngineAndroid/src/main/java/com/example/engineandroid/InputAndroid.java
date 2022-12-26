@@ -39,7 +39,7 @@ public class InputAndroid implements Input {
     }
 
     @Override
-    public boolean InputReceive(Vector2D pos, Vector2D size) {
+    public boolean inputReceived(Vector2D pos, Vector2D size) {
         Vector2D coords = new Vector2D();
         coords.set(getScaledCoords().getX(), getScaledCoords().getY());
 

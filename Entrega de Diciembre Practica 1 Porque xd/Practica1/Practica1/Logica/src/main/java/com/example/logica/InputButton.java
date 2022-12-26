@@ -1,20 +1,19 @@
 package com.example.logica;
 
 import com.example.lib.Engine;
+import com.example.lib.IGraphics;
 import com.example.lib.Vector2D;
 
-import java.awt.geom.Point2D;
-
 //Clase para todos los botones
-public class Button extends Interactive {
+public class InputButton extends Interactive {
 
-    public Button(double posX, double posY, double sizeW, double sizeH){
-        this.pos = new Vector2D(posX, posY);
-        this.size = new Vector2D(sizeW, sizeH);
+    public InputButton(double posX, double posY, double sizeW, double sizeH){
+        setPos((int)posX,(int)posY);
+        setSize((int)sizeW,(int)sizeH);
     }
 
     @Override
-    public void render(Engine engine){
+    public void render(IGraphics render){
 
     }
     @Override
@@ -22,7 +21,7 @@ public class Button extends Interactive {
 
     }
     @Override
-    public void handleInput(Engine engine){
+    public void handleInput(){
 
     }
 

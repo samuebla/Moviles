@@ -367,7 +367,6 @@ public class MyScene implements Scene {
                 (int) (auxCuadradoFinal.getX() - auxCuadradoInicio.getX() + tamProporcionalAncho + tamProporcionalAncho * 0.2)
                 , (int) (auxCuadradoFinal.getY() - auxCuadradoInicio.getY() + tamProporcionalAlto + tamProporcionalAlto * 0.2), "Board");
 
-
         //Si ya he ganado...
         if (won) {
             //Solo renderizo las azules
@@ -424,7 +423,7 @@ public class MyScene implements Scene {
     }
 
     @Override
-    public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr) {
+    public void handleInput(IEventHandler.EventType type, IAudio audio, Input input, ISceneMngr sceneMngr) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
                 if (input.inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
