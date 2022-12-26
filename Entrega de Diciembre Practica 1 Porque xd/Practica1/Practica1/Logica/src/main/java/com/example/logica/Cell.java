@@ -1,6 +1,7 @@
 package com.example.logica;
 
 import com.example.lib.Engine;
+import com.example.lib.IGraphics;
 import com.example.lib.Vector2D;
 
 //Struct
@@ -9,7 +10,7 @@ public class Cell extends Interactive {
     public enum cellType {EMPTY, SELECTED, CROSSED, WRONG};
 
     private cellType type;
-    private boolean solution = false;
+    boolean solution = false;
 
     //Para el contador de celdas restantes y erroneas
     int key;
@@ -26,12 +27,12 @@ public class Cell extends Interactive {
     }
 
     @Override
-    public void render(Engine engine) {
-        engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
+    public void render(IGraphics render) {
+        render.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
     }
 
     @Override
-    public void handleInput(Engine engine) {
+    public void handleInput() {
         switch (type) {
             case EMPTY:
                 type = cellType.SELECTED;
@@ -80,22 +81,22 @@ public class Cell extends Interactive {
     }
 
     //Para el boton de comprobar
-    public void trueRender(Engine engine) {
+    public void trueRender(IGraphics render) {
         //Si te has equivocado...
         if(key == 1){
             //Renderizamos a rojo
-            engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), cellType.WRONG.ordinal());
+            render.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), cellType.WRONG.ordinal());
         }
         else{
-            engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
+            render.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
         }
     }
 
     //Para la pantalla de Enhorabuena
-    public void solutionRender(Engine engine) {
+    public void solutionRender(IGraphics render) {
         //Solo renderizo si esta azul
         if(type == cellType.SELECTED){
-            engine.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
+            render.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
         }
     }
 

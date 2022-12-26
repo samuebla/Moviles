@@ -6,7 +6,7 @@ public interface Input {
     public Vector2D getScaledCoords();
     public void setRawCoords(int x, int y);
     //Pos y tamaño del objeto Input a recibir
-    public boolean InputReceive(Vector2D pos, Vector2D size);
+    public boolean inputReceived(Vector2D pos, Vector2D size);
 
     public void setScaleFactor(float scale);
 }

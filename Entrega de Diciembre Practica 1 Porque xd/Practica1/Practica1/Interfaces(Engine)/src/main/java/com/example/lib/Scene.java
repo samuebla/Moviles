@@ -9,6 +9,6 @@ public interface Scene {
     public void render(IGraphics render);
     //Allows the loading of resources
     public void loadResources(Engine engine);
-    public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr);
+    public void handleInput(IEventHandler.EventType type, IAudio audio, Input input, ISceneMngr sceneMngr);
     public void init();
     }

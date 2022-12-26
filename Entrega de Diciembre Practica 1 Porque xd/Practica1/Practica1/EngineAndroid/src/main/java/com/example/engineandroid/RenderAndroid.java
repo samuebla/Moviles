@@ -73,6 +73,7 @@ public class RenderAndroid implements IGraphics {
         this.holder.unlockCanvasAndPost(canvas);
     }
 
+    @Override
     public void paintCell(int x, int y, int w, int h, int celltype) {
         int c;
         if (celltype == 1) {

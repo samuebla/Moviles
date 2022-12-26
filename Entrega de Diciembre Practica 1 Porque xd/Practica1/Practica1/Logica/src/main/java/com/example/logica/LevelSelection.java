@@ -1,45 +1,46 @@
 package com.example.logica;
 
 import com.example.lib.Engine;
+import com.example.lib.IAudio;
 import com.example.lib.IEventHandler;
 import com.example.lib.IFont;
 import com.example.lib.IGraphics;
-import com.example.lib.IImage;
 import com.example.lib.ISceneMngr;
 import com.example.lib.ISound;
 import com.example.lib.Input;
 import com.example.lib.Scene;
 import com.example.lib.Vector2D;
 
-import java.awt.geom.Point2D;
-import java.util.HashMap;
 
 public class LevelSelection implements Scene {
 
-    private Button button5;
-    private Button button8;
-    private Button button10;
-    private Button button5x8;
-    private Button button8x10;
-    private Button button5x10;
+    int scaleHeight;
+    int scaleWidth;
+    private InputButton inputButton5;
+    private InputButton inputButton8;
+    private InputButton inputButton10;
+    private InputButton inputButton5X8;
+    private InputButton inputButton8X10;
+    private InputButton inputButton5X10;
 
-    private Button backButton;
+    private InputButton backInputButton;
 
     public LevelSelection(){
-
+        scaleHeight = 1000;
+        scaleWidth = 1000;
         init();
     }
 
     @Override
     public void init() {
         //Botones selectores del nivel
-        this.button5 = new Button(engine.getWidth()/4  - engine.getWidth()/12, engine.getHeight()/3.6, engine.getWidth()/6, engine.getHeight()/9);
-        this.button8 = new Button(engine.getWidth()/2 - engine.getWidth()/12, engine.getHeight()/3.6, engine.getWidth()/6, engine.getHeight()/9);
-        this.button10 = new Button(engine.getWidth()*3/4  - engine.getWidth()/12, engine.getHeight()/3.6, engine.getWidth()/6, engine.getHeight()/9);
-        this.button5x8 = new Button(engine.getWidth()/4  - engine.getWidth()/12, engine.getHeight()/2.2, engine.getWidth()/6, engine.getHeight()/9);
-        this.button8x10 = new Button(engine.getWidth()/2 - engine.getWidth()/12, engine.getHeight()/2.2, engine.getWidth()/6, engine.getHeight()/9);
-        this.button5x10 = new Button(engine.getWidth()*3/4  - engine.getWidth()/12, engine.getHeight()/2.2, engine.getWidth()/6, engine.getHeight()/9);
-        this.backButton = new Button(engine.getWidth()/72 + engine.getWidth()/44, engine.getHeight()/22, engine.getWidth()/10, engine.getHeight()/15);
+        this.inputButton5 = new InputButton(scaleWidth/4  - scaleWidth/12, scaleHeight/3.6, scaleWidth/6, scaleHeight/9);
+        this.inputButton8 = new InputButton(scaleWidth/2 - scaleWidth/12,scaleHeight/3.6, scaleWidth/6, scaleHeight/9);
+        this.inputButton10 = new InputButton(scaleWidth*3/4  - scaleWidth/12, scaleHeight/3.6, scaleWidth/6, scaleHeight/9);
+        this.inputButton5X8 = new InputButton(scaleWidth/4  - scaleWidth/12, scaleHeight/2.2, scaleWidth/6, scaleHeight/9);
+        this.inputButton8X10 = new InputButton(scaleWidth/2 - scaleWidth/12, scaleHeight/2.2, scaleWidth/6, scaleHeight/9);
+        this.inputButton5X10 = new InputButton(scaleWidth*3/4  -scaleWidth/12, scaleHeight/2.2, scaleWidth/6, scaleHeight/9);
+        this.backInputButton = new InputButton(scaleWidth/72 + scaleWidth/44, scaleHeight/22, scaleWidth/10, scaleHeight/15);
     }
 
     @Override
@@ -54,72 +55,72 @@ public class LevelSelection implements Scene {
     @Override
     public void render(IGraphics render){
         //5x5
-        this.engine.drawCircle(button5.getPos().getX(), button5.getPos().getY(), button5.getSize().getX()/2, "purple");
-        this.engine.drawText("5x5", (int)(button5.getPos().getX() + button5.getSize().getX()/2), (int)(button5.getPos().getY() + button5.getSize().getY()/1.8), "Black","Amor", 0);
+        render.drawCircle(inputButton5.getPos().getX(), inputButton5.getPos().getY(), inputButton5.getSize().getX()/2, "purple");
+        render.drawText("5x5", (int)(inputButton5.getPos().getX() + inputButton5.getSize().getX()/2), (int)(inputButton5.getPos().getY() + inputButton5.getSize().getY()/1.5), "Black","Amor", 0,scaleWidth/15);
         //8x8
-        this.engine.drawCircle(button8.getPos().getX(), button8.getPos().getY(), button8.getSize().getX()/2, "purple");
-        this.engine.drawText("8x8", (int)(button8.getPos().getX() + button8.getSize().getX()/2), (int)(button8.getPos().getY() + button8.getSize().getY()/1.8), "Black","Amor", 0);
+        render.drawCircle(inputButton8.getPos().getX(), inputButton8.getPos().getY(), inputButton8.getSize().getX()/2, "purple");
+        render.drawText("8x8", (int)(inputButton8.getPos().getX() + inputButton8.getSize().getX()/2), (int)(inputButton8.getPos().getY() + inputButton8.getSize().getY()/1.5), "Black","Amor", 0,scaleWidth/15);
         //10x10
-        this.engine.drawCircle(button10.getPos().getX(), button10.getPos().getY(), button10.getSize().getX()/2, "purple");
-        this.engine.drawText("10x10", (int)(button10.getPos().getX() + button10.getSize().getX()/2), (int)(button10.getPos().getY() + button10.getSize().getY()/1.8), "Black", "Amor", 0);
+        render.drawCircle(inputButton10.getPos().getX(), inputButton10.getPos().getY(), inputButton10.getSize().getX()/2, "purple");
+        render.drawText("10x10", (int)(inputButton10.getPos().getX() + inputButton10.getSize().getX()/2), (int)(inputButton10.getPos().getY() + inputButton10.getSize().getY()/1.5), "Black", "Amor", 0,scaleWidth/15);
         //5x8
-        this.engine.drawCircle(button5x8.getPos().getX(), button5x8.getPos().getY(), button5x8.getSize().getX()/2, "purple");
-        this.engine.drawText("5x8", (int)(button5x8.getPos().getX() + button5x8.getSize().getX()/2), (int)(button5x8.getPos().getY() + button5x8.getSize().getY()/1.8), "Black", "Amor", 0);
+        render.drawCircle(inputButton5X8.getPos().getX(), inputButton5X8.getPos().getY(), inputButton5X8.getSize().getX()/2, "purple");
+        render.drawText("5x8", (int)(inputButton5X8.getPos().getX() + inputButton5X8.getSize().getX()/2), (int)(inputButton5X8.getPos().getY() + inputButton5X8.getSize().getY()/1.5), "Black", "Amor", 0,scaleWidth/15);
         //8x10
-        this.engine.drawCircle(button8x10.getPos().getX(), button8x10.getPos().getY(), button8x10.getSize().getX()/2, "purple");
-        this.engine.drawText("8x10", (int)(button8x10.getPos().getX() + button8x10.getSize().getX()/2), (int)(button8x10.getPos().getY() + button8x10.getSize().getY()/1.8), "Black", "Amor", 0);
+        render.drawCircle(inputButton8X10.getPos().getX(), inputButton8X10.getPos().getY(), inputButton8X10.getSize().getX()/2, "purple");
+        render.drawText("8x10", (int)(inputButton8X10.getPos().getX() + inputButton8X10.getSize().getX()/2), (int)(inputButton8X10.getPos().getY() + inputButton8X10.getSize().getY()/1.5), "Black", "Amor", 0,scaleWidth/15);
         //5x10
-        this.engine.drawCircle(button5x10.getPos().getX(), button5x10.getPos().getY(), button5x10.getSize().getX()/2, "purple");
-        this.engine.drawText("5x10", (int)(button5x10.getPos().getX() + button5x10.getSize().getX()/2), (int)(button5x10.getPos().getY() + button5x10.getSize().getY()/1.8), "Black", "Amor", 0);
+        render.drawCircle(inputButton5X10.getPos().getX(), inputButton5X10.getPos().getY(), inputButton5X10.getSize().getX()/2, "purple");
+        render.drawText("5x10", (int)(inputButton5X10.getPos().getX() + inputButton5X10.getSize().getX()/2), (int)(inputButton5X10.getPos().getY() + inputButton5X10.getSize().getY()/1.5), "Black", "Amor", 0,scaleWidth/15);
 
         //Back Button
-        this.engine.drawImage(engine.getWidth()/72, engine.getHeight()/22,(int)(backButton.getSize().getX()),(int)(backButton.getSize().getY()), "Back");
+        render.drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
 
         //Texto indicativo
-        this.engine.drawText("Selecciona el tamaño del puzzle", (int)(engine.getWidth()/2), (int)(engine.getHeight()/5.4), "Black", "Amor", 0);
+        render.drawText("Selecciona el tamaño del puzzle", (int)(scaleWidth/2.0), (int)(scaleHeight/5.4), "Black", "Amor", 0,scaleWidth/15);
     }
 
     @Override
-    public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr){
+    public void handleInput(IEventHandler.EventType type, IAudio audio, Input input, ISceneMngr sceneMngr){
         //5x5
-        if (engine.getInput().InputReceive(this.button5.getPos(), this.button5.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 5);
-            this.engine.setScene(playScene);
+        if (input.inputReceived(this.inputButton5.getPos(), this.inputButton5.getSize())){
+            MyScene playScene = new MyScene(5, 5);
+            sceneMngr.pushScene(playScene);
         }
 
         //8x8
-        if (engine.getInput().InputReceive(this.button8.getPos(), this.button8.getSize())){
-            MyScene playScene = new MyScene(this.engine, 8, 8);
-            this.engine.setScene(playScene);
+        if (input.inputReceived(this.inputButton8.getPos(), this.inputButton8.getSize())){
+            MyScene playScene = new MyScene( 8, 8);
+            sceneMngr.pushScene(playScene);
         }
 
         //10x10
-        if (engine.getInput().InputReceive(this.button10.getPos(), this.button10.getSize())){
-            MyScene playScene = new MyScene(this.engine, 10, 10);
-            this.engine.setScene(playScene);
+        if (input.inputReceived(this.inputButton10.getPos(), this.inputButton10.getSize())){
+            MyScene playScene = new MyScene(10, 10);
+            sceneMngr.pushScene(playScene);
         }
 
         //5x8
-        if (engine.getInput().InputReceive(this.button5x8.getPos(), this.button5x8.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 8);
-            this.engine.setScene(playScene);
+        if (input.inputReceived(this.inputButton5X8.getPos(), this.inputButton5X8.getSize())){
+            MyScene playScene = new MyScene(5, 8);
+            sceneMngr.pushScene(playScene);
         }
 
         //8x10
-        if (engine.getInput().InputReceive(this.button8x10.getPos(), this.button8x10.getSize())){
-            MyScene playScene = new MyScene(this.engine, 8, 10);
-            this.engine.setScene(playScene);
+        if (input.inputReceived(this.inputButton8X10.getPos(), this.inputButton8X10.getSize())){
+            MyScene playScene = new MyScene(8, 10);
+            sceneMngr.pushScene(playScene);
         }
 
         //5x10
-        if (engine.getInput().InputReceive(this.button5x10.getPos(), this.button5x10.getSize())){
-            MyScene playScene = new MyScene(this.engine, 5, 10);
-            this.engine.setScene(playScene);
+        if (input.inputReceived(this.inputButton5X10.getPos(), this.inputButton5X10.getSize())){
+            MyScene playScene = new MyScene(5, 10);
+            sceneMngr.pushScene(playScene);
         }
 
         //Back button
-        if (engine.getInput().InputReceive(this.backButton.getPos(), this.backButton.getSize())){
-            this.engine.popScene();
+        if (input.inputReceived(this.backInputButton.getPos(), this.backInputButton.getSize())){
+            sceneMngr.popScene();
         }
     }
 }

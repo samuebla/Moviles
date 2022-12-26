@@ -13,4 +13,5 @@ public interface IGraphics {
     public void drawLine(int x,int y,int w,int h);
     public void drawText(String text, int x, int y, String color,String fontKey, int alignType);
     public void drawCircle(float x, float y, float r ,String color);
-}
+    public void paintCell(int x, int y, int w, int h, int celltype);
+    }
