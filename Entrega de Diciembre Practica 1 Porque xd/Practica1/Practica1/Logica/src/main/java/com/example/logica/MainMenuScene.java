@@ -56,7 +56,7 @@ public class MainMenuScene implements Scene {
 
     @Override
     public void init() {
-        this.play = new InputButton(scaleWidth / 2 - (scaleWidth / 4), scaleHeight / 5, scaleWidth / 2, scaleHeight / 4.8);
+        this.play = new InputButton(scaleWidth / 2 - (scaleWidth / 4), scaleHeight / 2 - (scaleHeight/3.3/2), scaleWidth / 2, scaleHeight / 3.3);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class MainMenuScene implements Scene {
         render.drawText("NONOGRAMAS", (int) (scaleWidth / 2.0), (int) (scaleHeight / 10.8), "Black", "Cooper", 0, (scaleWidth / 14));
 
         //Botones
-        render.drawImage((int) this.play.getPos().getX(), (int) (play.getPos().getY()), (int) (this.play.getSize().getX()), (int) (this.play.getSize().getY()), "QuickPlay");
+        render.drawImage((int) this.play.getPos().getX(), (int) (play.getPos().getY()), (int) (this.play.getSize().getX()), (int) (this.play.getSize().getY()), "PlayButton");
 
     }
 
