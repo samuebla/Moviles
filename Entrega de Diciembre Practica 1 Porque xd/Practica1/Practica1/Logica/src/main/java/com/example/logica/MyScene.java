@@ -10,17 +10,28 @@ import java.util.Random;
 
 public class MyScene implements Scene {
 
+    //A partir de ahora tenemos una escala de 1000x1000, asi que no usamos mas engine.getWidth ni engine.getHeight
+    int scaleWidth;
+    int scaleHeight;
+
     //Tenemos una matriz donde guardaremos las casillas seleccionadas
     private Cell[][] matriz;
 
     int rows_, cols_;
+    int posYTextAuxTopToBottom;
+    int posXTextAuxLeftToRight;
+
+    //Tamaño proporcional de las celdas adaptado a la pantalla
+    float tamProporcionalAncho;
+    float tamProporcionalAlto;
+    int tamTexto;
 
     //Para mostrar en pantallas la info de las celdas
     int remainingCells, wrongCells, maxCellsSolution;
 
-    private Button checkButton;
-    private Button giveUpButton;
-    private Button backButton;
+    private InputButton checkButton;
+    private InputButton giveUpButton;
+    private InputButton backButton;
 
     //Tenemos un array de listas de Ints, que son los que muestran las "posiciones" de las casillas azules. Uno el horizontal y otro el vertical
     private ArrayList<Integer>[] xPositionsTopToBottom;
@@ -30,9 +41,6 @@ public class MyScene implements Scene {
     private String[] xNumberTopToBottom;
     private ArrayList<String>[] xNumberLeftToRight;
 
-    //Para los rectangulos que recubren las celdas y son meramente esteticos
-    int widthAestheticCellX, heightAestheticCellX, widthAestheticCellY, heightAestheticCellY;
-
     private static final int timeCheckButton = 5;
     double timer;
     boolean won;
@@ -41,10 +49,11 @@ public class MyScene implements Scene {
 
     public MyScene(int rows, int cols) {
 
-        init();
-
         //Creamos el random
         Random random = new Random();
+
+        scaleHeight = 1000;
+        scaleWidth = 1000;
 
         //Creamos la matriz con el tamaño
         this.matriz = new Cell[cols][rows];
@@ -79,21 +88,8 @@ public class MyScene implements Scene {
             xNumberLeftToRight[i] = new ArrayList<>();
         }
 
-        //Iniciamos la matriz
-        for (int i = 0; i < rows_; i++) {
-            for (int j = 0; j < cols_; j++) {
-                //Primero J que son las columnas en X y luego las filas en Y
-                this.matriz[j][i] = new Cell((int)((double)this.engine.getWidth()*0.125) + (int)((double)this.engine.getWidth()*0.083333) * j,
-                        (int)((double)this.engine.getHeight()*0.296296296) + (int)((double)this.engine.getHeight()*0.055555555) * i, (int)((double)this.engine.getWidth()*0.075), (int)((double)this.engine.getHeight()*0.05));
-            }
-        }
+        init();
 
-        //Tamaño de las cuadriculas que recubren el nonograma
-        widthAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getX()) + (int)((double)this.engine.getWidth()*0.0625);
-        heightAestheticCellX = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - this.matriz[0][0].getPos().getY() + (int)((double)this.engine.getHeight()*0.0601851));
-
-        widthAestheticCellY = (int) ((this.matriz[cols_ - 1][0].getPos().getX()) - this.matriz[0][0].getPos().getX()) + (int)((double)this.engine.getWidth()*0.0902777);
-        heightAestheticCellY = (int) (this.matriz[cols_ - 1][rows_ - 1].getPos().getY() - (int)((double)this.engine.getHeight()*0.111111111));
 
         //CREACION ALEATORIA DEL TABLERO
         for (int i = 0; i < rows_; i++) {
@@ -116,7 +112,7 @@ public class MyScene implements Scene {
                         xPositionsTopToBottom[i].add(contAux);
                         contAux = 0;
                     }
-                    this.matriz[j][i].setSolution(false);
+                    this.matriz[j][i].solution = false;
 
                     //Para el valor de las columnas...
                     if (numAnterior[j] == 0) {
@@ -132,7 +128,7 @@ public class MyScene implements Scene {
                     //Lo añadimos a la lista de celdas que tiene que acertar el jugador
                     remainingCells++;
 
-                    this.matriz[j][i].setSolution(true);
+                    this.matriz[j][i].solution = true;
                     numSolutionPerRows++;
 
                     //Para averiguar los numeros laterales de las celdas
@@ -166,7 +162,7 @@ public class MyScene implements Scene {
             if (numSolutionPerRows == 0) {
                 int aux = random.nextInt(cols_);
                 //Minimo rellenamos una
-                this.matriz[aux][i].setSolution(true);
+                this.matriz[aux][i].solution = true;
                 xPositionsTopToBottom[i].add(1);
 
                 //Ahora limpiamos la columna correspondiente y volvemos a contar
@@ -175,7 +171,7 @@ public class MyScene implements Scene {
                 int cont = 0;
                 //Recorremos la columna otra vez para rellenar correctamente la fila
                 for (int j = 0; j < rows_; j++) {
-                    if (this.matriz[aux][j].getSolution()) {
+                    if (this.matriz[aux][j].solution) {
                         cont++;
                     } else if (cont != 0) {
                         xPositionsLeftToRight[aux].add(cont);
@@ -194,7 +190,7 @@ public class MyScene implements Scene {
             else if (numSolutionPerRows == cols_) {
                 int aux = random.nextInt(cols_);
                 //Dejamos al menos una vacia
-                this.matriz[aux][i].setSolution(false);
+                this.matriz[aux][i].solution = false;
 
                 //Vaciamos la lista
                 xPositionsTopToBottom[i].clear();
@@ -215,7 +211,7 @@ public class MyScene implements Scene {
                 int cont = 0;
                 //Recorremos la columna otra vez para rellenar correctamente la fila
                 for (int j = 0; j < rows_; j++) {
-                    if (this.matriz[aux][j].getSolution()) {
+                    if (this.matriz[aux][j].solution) {
                         cont++;
                     } else if (cont != 0) {
                         xPositionsLeftToRight[aux].add(cont);
@@ -239,7 +235,7 @@ public class MyScene implements Scene {
                 int randAux = random.nextInt(rows_);
 
                 //Minimo rellenamos una
-                this.matriz[i][randAux].setSolution(true);
+                this.matriz[i][randAux].solution = true;
                 xPositionsLeftToRight[i].add(1);
 
                 //Contabilizamos esa suma
@@ -251,7 +247,7 @@ public class MyScene implements Scene {
                 int cont = 0;
                 //Recorremos la columna otra vez para rellenar correctamente la fila
                 for (int j = 0; j < cols_; j++) {
-                    if (this.matriz[j][randAux].getSolution()) {
+                    if (this.matriz[j][randAux].solution) {
                         cont++;
                     } else if (cont != 0) {
                         xPositionsTopToBottom[randAux].add(cont);
@@ -288,13 +284,51 @@ public class MyScene implements Scene {
 
     @Override
     public void init() {
+
+        //Dividimos la pantalla en casillas.
+        // Ancho: Cols +1(Para los numeros)
+        // Alto: Rows +1( Sin contar la interfaz de por encima y por debajo)
+
+        //+1 para los numeros laterales
+        //0.1f por los margenes de espacio que hay entre cada celda
+        //Y con eso sacamos el tamaño promedio de la celda
+        tamProporcionalAncho = scaleWidth / ((cols_ + 1) + (0.1f * cols_));
+
+        //Restamos la interfaz de las paletas y los botones de arriba
+        tamProporcionalAlto = (scaleHeight - scaleHeight / 15) / ((rows_ + 1) + (0.1f * rows_));
+
+        tamTexto = (int) (tamProporcionalAncho / 3f);
+        if (tamProporcionalAlto > tamProporcionalAncho)
+            //Nos quedamos con el tamaño mas grande para que el texto se ajuste a la peor situacion
+            tamTexto = (int) (tamProporcionalAlto / 3f);
+        //Lo ajustamos al centro de la pantalla de largo
+        double yPos;
+
+        double xPos;
+
+        //Iniciamos la matriz
+        for (int i = 0; i < rows_; i++) {
+            for (int j = 0; j < cols_; j++) {
+                //Scale/15 para la interfaz de arriba + 1Celda para las letras
+                yPos = ((scaleHeight / 15 + tamProporcionalAlto) + ((tamProporcionalAlto * 1.1) * i));
+                //+1Celda para las letras
+                xPos = (tamProporcionalAncho + ((tamProporcionalAncho * 1.1) * j));
+                //Primero J que son las columnas en X y luego las filas en Y
+                this.matriz[j][i] = new Cell((int) (xPos),
+                        (int) yPos, (int) (tamProporcionalAncho), (int) (tamProporcionalAlto));
+            }
+        }
+
+        //Para las posiciones del texto indicativo
+        posYTextAuxTopToBottom = (int) (matriz[0][0].getPos().getY() + (tamProporcionalAlto / 2));
+        posXTextAuxLeftToRight = (int) (matriz[0][0].getPos().getX() + (tamProporcionalAncho / 2));
+
         //Seteamos los botones
-        this.checkButton = new Button((double)this.engine.getWidth()*0.8, (double)this.engine.getHeight()*0.06,
-                (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.10);
-        this.giveUpButton = new Button((double)this.engine.getWidth()*0.01388888, (double)this.engine.getHeight()*0.04629629,
-                (double)this.engine.getWidth()*0.1666666, (double)this.engine.getHeight()*0.10);
-        this.backButton = new Button((double)this.engine.getWidth()*0.44444444, (double)this.engine.getHeight()/1.1,
-                (double)this.engine.getWidth()/10, (double)this.engine.getHeight()/15);
+        this.checkButton = new InputButton(scaleWidth * 0.9, 10,
+                scaleWidth * 0.10, scaleHeight / 15);
+        this.giveUpButton = new InputButton(10, 10, scaleWidth / 10, scaleHeight / 15);
+        this.backButton = new InputButton(scaleWidth / 2, scaleHeight / 1.1,
+                scaleWidth / 10, scaleHeight / 15);
     }
 
     @Override
@@ -325,66 +359,67 @@ public class MyScene implements Scene {
     @Override
     public void render(IGraphics render) {
 
-        Vector2D auxCuadradoFinal = this.matriz[cols_-1][rows_-1].getPos();
+        Vector2D auxCuadradoFinal = this.matriz[cols_ - 1][rows_ - 1].getPos();
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 
         //El cuadrado se mantiene aunque ganes porque es muy bonito
-        this.engine.drawImage((int)(auxCuadradoInicio.getX()-((double)(this.engine.getWidth())/100.0)), (int)(auxCuadradoInicio.getY()-((double)(this.engine.getHeight())/150)),
-                (int)(auxCuadradoFinal.getX()-auxCuadradoInicio.getX() + engine.getWidth()/50 + this.engine.getWidth()*0.075)
-               , (int)(auxCuadradoFinal.getY()-auxCuadradoInicio.getY() + engine.getHeight()/65 + this.engine.getHeight()*0.05), "Board");
+        render.drawImage((int) (auxCuadradoInicio.getX() - tamProporcionalAncho * 0.1), (int) (auxCuadradoInicio.getY() - tamProporcionalAlto * 0.1),
+                (int) (auxCuadradoFinal.getX() - auxCuadradoInicio.getX() + tamProporcionalAncho + tamProporcionalAncho * 0.2)
+                , (int) (auxCuadradoFinal.getY() - auxCuadradoInicio.getY() + tamProporcionalAlto + tamProporcionalAlto * 0.2), "Board");
+
 
         //Si ya he ganado...
         if (won) {
             //Solo renderizo las azules
             for (int i = 0; i < matriz.length; i++) {
                 for (int j = 0; j < matriz[i].length; j++) {
-                    this.matriz[i][j].solutionRender(engine);
+                    this.matriz[i][j].solutionRender(render);
                 }
             }
 
             //Mensaje de enhorabuena
-            this.engine.drawText("ENHORABUENA!", (int)((double)this.engine.getWidth()*0.5), (int)((double)this.engine.getHeight()*0.1111111), "Black", "Cooper", 0);
+            render.drawText("¡ENHORABUENA!", (int) ((double) scaleWidth * 0.5), (int) ((double) scaleHeight / 15), "Black", "Cooper", 0, scaleWidth / 18);
 
             //BackButton
-            this.engine.drawImage((int)(backButton.getPos().getX()), (int)(backButton.getPos().getY()), (int)(backButton.getSize().getX()), (int)(backButton.getSize().getY()), "Back");
+            render.drawImage((int) (backInputButton.getPos().getX()), (int) (backInputButton.getPos().getY()), (int) (backInputButton.getSize().getX()), (int) (backInputButton.getSize().getY()), "Back");
 
             //Si sigo jugando...
         } else {
             //Si tienes pulsado el boton de comprobar...
             if (showAnswers) {
                 //Muestra el texto...
-                this.engine.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int)((double)this.engine.getWidth()/2), (int)((double)this.engine.getHeight()*0.1111111), "red", "Calibri", 0);
-                this.engine.drawText("Tienes mal " + wrongCells + " casilla(s)", (int)((double)this.engine.getWidth()/2), (int)((double)this.engine.getHeight()*0.1388888), "red", "Calibri", 0);
+                render.drawText("Te falta(n) " + remainingCells + " casilla(s)", (int) ((double) scaleWidth / 2), scaleHeight / 22, "red", "Calibri", 0, scaleWidth / 15);
+                render.drawText("Tienes mal " + wrongCells + " casilla(s)", (int) ((double) scaleWidth / 2), 10 + scaleHeight / 11, "red", "Calibri", 0, scaleWidth / 15);
 
                 //Renderiza rojo si esta mal
                 for (int i = 0; i < matriz.length; i++) {
                     for (int j = 0; j < matriz[i].length; j++) {
-                        this.matriz[i][j].trueRender(engine);
+                        this.matriz[i][j].trueRender(render);
                     }
                 }
             } else {
                 //Render normal
                 for (int i = 0; i < matriz.length; i++) {
                     for (int j = 0; j < matriz[i].length; j++) {
-                        this.matriz[i][j].render(engine);
+                        this.matriz[i][j].render(render);
                     }
                 }
             }
 
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                engine.drawText(xNumberTopToBottom[i], (int)(auxCuadradoInicio.getX()-((double)(this.engine.getWidth())/90.0)), (int)((double)this.engine.getHeight()*0.3240740) + (int)((double)this.engine.getHeight()*0.0555555) * i, "Black", "CalibriSmall", 1);
+                render.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.1)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1,tamTexto);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    engine.drawText(xNumberLeftToRight[i].get(j), (int)((double)this.engine.getWidth()*0.155) + (int)((double)this.engine.getWidth()*0.083333) * i, (int)((double)this.engine.getHeight()*0.185185) + (int)((double)this.engine.getHeight()*0.027777) * j, "Black", "CalibriSmall", 0);
+                    render.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto * 0.7 / (rows_ / 2)) + (int) ((tamProporcionalAlto / rows_ * 1.3 * j))), "Black", "Calibri", 0,tamTexto);
                 }
             }
 
             //BOTONES
-            this.engine.drawImage((int)((double)checkButton.getPos().getX()), (int)((double)checkButton.getPos().getY()), (int)((double)checkButton.getSize().getX()), (int)((double)checkButton.getSize().getY()), "Check");
+            render.drawImage((int) ((double) checkInputButton.getPos().getX()), (int) ((double) checkInputButton.getPos().getY()), (int) ((double) checkInputButton.getSize().getX()), (int) ((double) checkInputButton.getSize().getY()), "Check");
 
-            this.engine.drawImage((int)((double)giveUpButton.getPos().getX()), (int)((double)giveUpButton.getPos().getY()), (int)((double)giveUpButton.getSize().getX()), (int)((double)giveUpButton.getSize().getY()), "GiveUp");
+            render.drawImage((int) ((double) giveUpInputButton.getPos().getX()), (int) ((double) giveUpInputButton.getPos().getY()), (int) ((double) giveUpInputButton.getSize().getX()), (int) ((double) giveUpInputButton.getSize().getY()), "GiveUp");
         }
     }
 
@@ -392,9 +427,9 @@ public class MyScene implements Scene {
     public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr) {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
-                if (engine.getInput().InputReceive(matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
+                if (input.inputReceived(this.matriz[i][j].getPos(), this.matriz[i][j].getSize())) {
                     //Aqui se guarda si te has equivocado...
-                    this.matriz[i][j].handleInput(engine);
+                    this.matriz[i][j].handleInput();
                     //1 Si esta mal
                     //2 Si lo seleccionas y esta bien
                     //3 Si estaba mal seleccionado y lo deseleccionas
@@ -417,27 +452,29 @@ public class MyScene implements Scene {
                         remainingCells++;
                     }
                     //Y playeamos el sonido
-                    engine.getAudio().playSound("effect", 1);
+                    audio.playSound("effect", 1);
                 }
             }
         }
 
         //BOTONES
         //Boton de comprobar
-        if (engine.getInput().InputReceive(this.checkButton.getPos(), this.checkButton.getSize())) {
+        if (input.inputReceived(this.checkButton.getPos(), this.checkButton.getSize())) {
             //Mostramos el texto en pantalla
             showAnswers = true;
             auxShowAnswer = true;
             timer = timeCheckButton;
         }
+
         //Si te rindes vuelves a la seleccion de nivel
-        if (engine.getInput().InputReceive(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
-            this.engine.popScene();
+        if (input.inputReceived(this.giveUpButton.getPos(), this.giveUpButton.getSize())) {
+            sceneMngr.popScene();
         }
+
         //Solo funciona si has ganado
-        if (won && engine.getInput().InputReceive(this.backButton.getPos(), this.backButton.getSize())) {
-            this.engine.popScene();
-            this.engine.popScene();
+        if (won && input.inputReceived(this.backButton.getPos(), this.backButton.getSize())) {
+            sceneMngr.popScene();
+            sceneMngr.popScene();
         }
     }
 
