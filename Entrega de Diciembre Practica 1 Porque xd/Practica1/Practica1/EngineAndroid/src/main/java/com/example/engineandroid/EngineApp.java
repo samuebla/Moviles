@@ -25,17 +25,7 @@ public class EngineApp implements Engine,Runnable{
     public EngineApp(SurfaceView myView){
         this.view = myView;
         this.render = new RenderAndroid(this.view, 4.0f/6.0f);
-        this.eventHandler = new IEventHandler() {
-            @Override
-            public IEvent getEvent() {
-                return event;
-            }
-
-            @Override
-            public void sendEvent(EventType type) {
-                event.eventType = type;
-            }
-        };
+        this.eventHandler = new EventHandlerAndroid();
         this.input = new InputAndroid(this.eventHandler);
         this.view.setOnTouchListener(this.input.getTouchListener());
 

@@ -21,17 +21,7 @@ public class EngineDesktop implements Engine,Runnable{
     public EngineDesktop(final JFrame myView){
         this.render = new RenderDesktop(myView);
         //Event handler que detecta los eventos de raton
-        this.eventHandler = new IEventHandler() {
-            @Override
-            public IEvent getEvent() {
-                return event;
-            }
-
-            @Override
-            public void sendEvent(EventType type) {
-                event.eventType = type;
-            }
-        };
+        this.eventHandler = new EventHandlerDesktop();
         this.input = new InputDesktop(this.eventHandler);
         myView.addMouseListener(this.input.getListener());
 
