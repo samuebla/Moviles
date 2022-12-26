@@ -22,15 +22,6 @@ public class MainMenuScene implements Scene {
     }
 
     @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size) {
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), this.engine.getInput().getScaledCoords().getY());
-
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
-    }
-
-    @Override
     public void init() {
         try {
             //La constructora del menu solo se llama una vez
@@ -81,7 +72,7 @@ public class MainMenuScene implements Scene {
     @Override
     public void handleInput() {
         //Si pulsas el boton...
-        if (inputReceived(this.play.getPos(), this.play.getSize())) {
+        if (engine.getInput().InputReceive(this.play.getPos(), this.play.getSize())) {
             //Te lleva a la pantalla de seleccion
             LevelSelection levelScene = new LevelSelection(this.engine);
             this.engine.setScene(levelScene);

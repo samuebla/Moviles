@@ -32,15 +32,6 @@ public class LevelSelection implements Scene {
     }
 
     @Override
-    public boolean inputReceived(Vector2D pos, Vector2D size){
-        Vector2D coords = new Vector2D();
-        coords.set(engine.getInput().getScaledCoords().getX(), engine.getInput().getScaledCoords().getY());
-
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + size.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + size.getY());
-    }
-
-    @Override
     public void init() {
         //Botones selectores del nivel
         this.button5 = new Button(engine.getWidth()/4  - engine.getWidth()/12, engine.getHeight()/3.6, engine.getWidth()/6, engine.getHeight()/9);
@@ -92,43 +83,43 @@ public class LevelSelection implements Scene {
     @Override
     public void handleInput(){
         //5x5
-        if (inputReceived(this.button5.getPos(), this.button5.getSize())){
+        if (engine.getInput().InputReceive(this.button5.getPos(), this.button5.getSize())){
             MyScene playScene = new MyScene(this.engine, 5, 5);
             this.engine.setScene(playScene);
         }
 
         //8x8
-        if (inputReceived(this.button8.getPos(), this.button8.getSize())){
+        if (engine.getInput().InputReceive(this.button8.getPos(), this.button8.getSize())){
             MyScene playScene = new MyScene(this.engine, 8, 8);
             this.engine.setScene(playScene);
         }
 
         //10x10
-        if (inputReceived(this.button10.getPos(), this.button10.getSize())){
+        if (engine.getInput().InputReceive(this.button10.getPos(), this.button10.getSize())){
             MyScene playScene = new MyScene(this.engine, 10, 10);
             this.engine.setScene(playScene);
         }
 
         //5x8
-        if (inputReceived(this.button5x8.getPos(), this.button5x8.getSize())){
+        if (engine.getInput().InputReceive(this.button5x8.getPos(), this.button5x8.getSize())){
             MyScene playScene = new MyScene(this.engine, 5, 8);
             this.engine.setScene(playScene);
         }
 
         //8x10
-        if (inputReceived(this.button8x10.getPos(), this.button8x10.getSize())){
+        if (engine.getInput().InputReceive(this.button8x10.getPos(), this.button8x10.getSize())){
             MyScene playScene = new MyScene(this.engine, 8, 10);
             this.engine.setScene(playScene);
         }
 
         //5x10
-        if (inputReceived(this.button5x10.getPos(), this.button5x10.getSize())){
+        if (engine.getInput().InputReceive(this.button5x10.getPos(), this.button5x10.getSize())){
             MyScene playScene = new MyScene(this.engine, 5, 10);
             this.engine.setScene(playScene);
         }
 
         //Back button
-        if (inputReceived(this.backButton.getPos(), this.backButton.getSize())){
+        if (engine.getInput().InputReceive(this.backButton.getPos(), this.backButton.getSize())){
             this.engine.popScene();
         }
     }
