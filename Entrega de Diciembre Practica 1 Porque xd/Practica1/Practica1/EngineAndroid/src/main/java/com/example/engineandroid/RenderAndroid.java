@@ -29,8 +29,9 @@ public class RenderAndroid implements IGraphics {
     private AssetManager assets;
 
     private Vector2D posCanvas;
-    private Vector2D frameSize;
     private float factorScale;
+    //ANCHO Y ALTO REAL DE LA PANTALLA
+    Vector2D surfaceFrame;
 
     //Escala logica del juego, por defecto 1000, lo que significa que el usuario puede colocar elementos entre las posiciones 0 y 1000
     //De esta manera los elementos se escalan automaticamente al tamaño de la pantalla
@@ -44,8 +45,8 @@ public class RenderAndroid implements IGraphics {
         this.paint = new Paint();
         this.paint.setColor(0xFF000000);
 
-        this.frameSize = new Vector2D(720, 1080);
         this.posCanvas = new Vector2D();
+        this.surfaceFrame = new Vector2D();
 
         this.fonts = new HashMap<>();
         this.images = new HashMap<>();
@@ -66,7 +67,7 @@ public class RenderAndroid implements IGraphics {
         this.canvas.drawColor(0xFFFFFFFF); // ARGB
         this.canvas.translate(0, this.posCanvas.getY());
         setColor(0XFFFFFFFF);
-        drawRectangle(0,0, this.getViewWidth(), (int)(this.frameSize.getY()/factorScale), true);
+        drawRectangle(0,0, scaleWidth, scaleWidth, true);
     }
 
     public void clear() {
@@ -93,17 +94,17 @@ public class RenderAndroid implements IGraphics {
 
             this.paint.setStyle(Paint.Style.STROKE);
             this.paint.setStrokeWidth(3);
-            this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
+            this.canvas.drawRect((x * getWidth() / scaleWidth) + + posCanvas.getX(), (y * getHeight() / scaleHeight)  + posCanvas.getY(), ((x + w) * getWidth() / scaleWidth)+ posCanvas.getX(), ((y + h) * getHeight() / scaleHeight) + posCanvas.getY(), this.paint);
             //Cuadrado de la interfaz
             if (celltype == 2) {
-                this.canvas.drawLine(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (w + x) * getWidth() / scaleWidth, (h + y) * getHeight() / scaleHeight, this.paint);
+                this.canvas.drawLine((x * getWidth() / scaleWidth)+ posCanvas.getX(), (y * getHeight() / scaleHeight) + posCanvas.getY(), ((w + x) * getWidth() / scaleWidth) + posCanvas.getX(), ((h + y) * getHeight() / scaleHeight) + posCanvas.getY(), this.paint);
             }
             this.paint.setStrokeWidth(1);
 
         } else {
             //Cambiar para que tenga en cuenta las dimensiones de la ventana, los últimos dos valores son el ancho y alto
             this.paint.setStyle(Paint.Style.FILL);
-            this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
+            this.canvas.drawRect((x * getWidth() / scaleWidth)+ posCanvas.getX(), (y * getHeight() / scaleHeight) + posCanvas.getY(), ((x + w) * getWidth() / scaleWidth) + posCanvas.getX(), ((y + h) * getHeight() / scaleHeight) + posCanvas.getY(), this.paint);
             this.paint.setStyle(Paint.Style.STROKE);
         }
     }
@@ -123,42 +124,28 @@ public class RenderAndroid implements IGraphics {
 
         this.paint.setColor(c);
         this.paint.setStyle(Paint.Style.FILL);
-        this.canvas.drawCircle((x+r) * getWidth() / scaleWidth, (y+r) * getHeight() / scaleHeight, r * getWidth() / scaleWidth, this.paint);
+        this.canvas.drawCircle(((x+r) * getWidth() / scaleWidth)+ posCanvas.getX(), ((y+r) * getHeight() / scaleHeight) + posCanvas.getY(), r * getWidth() / scaleWidth, this.paint);
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setColor(Color.BLACK);
-        this.canvas.drawCircle((x+r) * getWidth() / scaleWidth , (y+r) * getHeight() / scaleHeight, r * getWidth() / scaleWidth, this.paint);
+        this.canvas.drawCircle(((x+r) * getWidth() / scaleWidth)+ posCanvas.getX() , ((y+r) * getHeight() / scaleHeight) + posCanvas.getY(), r * getWidth() / scaleWidth, this.paint);
 
     }
 
     @Override
     public int getWidth() {
-        return (int)(this.frameSize.getX() + posCanvas.getX());
+        return (int)(this.surfaceFrame.getX());
     }
     @Override
     public int getHeight() {
-        return (int)(this.frameSize.getY() + posCanvas.getY());
-    }
-
-    public int getViewWidth() {
-        return this.myView.getWidth();
-    }
-
-    public int getViewHeight() {
-        return this.myView.getHeight();
+        return (int)(this.surfaceFrame.getY());
     }
 
     public void scaleAppView(){
         while(this.holder.getSurfaceFrame().width() == 0);
         //obtenemos el tamaño del frame y lo guardamos como copia para la escala
-        Vector2D surfaceFrame = new Vector2D(this.holder.getSurfaceFrame().width(), this.holder.getSurfaceFrame().height());
-        Vector2D scale = new Vector2D(surfaceFrame.getX()/frameSize.getX(), surfaceFrame.getY()/frameSize.getY());
+        surfaceFrame = new Vector2D(this.holder.getSurfaceFrame().width(), this.holder.getSurfaceFrame().height());
 
-        if(scale.getX() * this.factorScale < scale.getY()) scale.setY(scale.getX()/factorScale);
-        else
-            scale.setX(scale.getY()/factorScale);
-
-        posCanvas.set((int)(surfaceFrame.getX()-frameSize.getX()), (int)(surfaceFrame.getY()-frameSize.getY())/2*factorScale);
-
+        posCanvas.set((int)(surfaceFrame.getX()), (int)(surfaceFrame.getY()*factorScale));
     }
 
 
@@ -195,24 +182,24 @@ public class RenderAndroid implements IGraphics {
     public void drawImage(int x, int y, int desiredWidth, int desiredHeight, String imageAux) {
         ImageAndroid image = images.get(imageAux);
         Bitmap map = image.getImage();
-        Bitmap scaledMap = Bitmap.createScaledBitmap(map, (int)(desiredWidth * getWidth() / scaleWidth), (int)(desiredHeight * getHeight() / scaleHeight), false);
-        canvas.drawBitmap(scaledMap, (int)(x), (int)(y), this.paint);
+        Bitmap scaledMap = Bitmap.createScaledBitmap(map,desiredWidth * getWidth() / scaleWidth, desiredHeight * getHeight() / scaleHeight, false);
+        canvas.drawBitmap(scaledMap, (x* getWidth() / (float)scaleWidth)+ posCanvas.getX(), (y* getHeight() / (float)scaleHeight) + posCanvas.getY(), this.paint);
     }
 
     @Override
     public void drawRectangle(int x, int y, int w, int h, boolean fill) {
         if(!fill)
-            this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
+            this.canvas.drawRect((x * getWidth() / scaleWidth)+ posCanvas.getX(), (y * getHeight() / scaleHeight) + posCanvas.getY(), ((x + w) * getWidth() / scaleWidth)+ posCanvas.getX(), ((y + h) * getHeight() / scaleHeight) + posCanvas.getY(), this.paint);
         else{
             this.paint.setStyle(Paint.Style.FILL);
-            this.canvas.drawRect(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
+            this.canvas.drawRect((x * getWidth() / scaleWidth)+ posCanvas.getX(), (y * getHeight() / scaleHeight) + posCanvas.getY(), ((x + w) * getWidth() / scaleWidth)+ posCanvas.getX(), ((y + h) * getHeight() / scaleHeight) + posCanvas.getY(), this.paint);
             this.paint.setStyle(Paint.Style.STROKE);
         }
     }
 
     @Override
     public void drawLine(int x, int y, int w, int h) {
-        this.canvas.drawLine(x * getWidth() / scaleWidth, y * getHeight() / scaleHeight, (x + w) * getWidth() / scaleWidth, (y + h) * getHeight() / scaleHeight, this.paint);
+        this.canvas.drawLine((x * getWidth() / scaleWidth)+ posCanvas.getX(), (y * getHeight() / scaleHeight)+ posCanvas.getY(), ((x + w) * getWidth() / scaleWidth)+ posCanvas.getX(), ((y + h) * getHeight() / scaleHeight) + posCanvas.getY(), this.paint);
     }
 
     //AlignType:
@@ -223,7 +210,7 @@ public class RenderAndroid implements IGraphics {
     public void drawText(String text, int x, int y, String color, String fontAux, int alignType,int size) {
         int prevColor = this.paint.getColor();
         Font_Android font = this.fonts.get(fontAux);
-        int f = (int) ((size*getWidth()/scaleWidth)/factorScale);
+        int f = (int) (size*getWidth()/scaleWidth);
 
         this.paint.setTextSize(f);
         this.paint.setTypeface(font.getFont());
@@ -251,7 +238,7 @@ public class RenderAndroid implements IGraphics {
         }
         this.paint.setColor(currentColor);
 
-        this.canvas.drawText(text, (float)x * getWidth() / scaleWidth, (float)y * getHeight() / scaleHeight, this.paint);
+        this.canvas.drawText(text, ((float)x * getWidth() / scaleWidth)+ posCanvas.getX(), ((float)y * getHeight() / scaleHeight) + posCanvas.getY(), this.paint);
         this.paint.setColor(prevColor);
         this.paint.setStyle(Paint.Style.STROKE);
     }
