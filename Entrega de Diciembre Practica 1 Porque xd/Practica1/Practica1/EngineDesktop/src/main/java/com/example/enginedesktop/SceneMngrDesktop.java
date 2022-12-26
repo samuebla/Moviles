@@ -1,6 +1,11 @@
 package com.example.enginedesktop;
 
+import com.example.lib.Engine;
+import com.example.lib.IEventHandler;
+import com.example.lib.IGraphics;
 import com.example.lib.ISceneMngr;
+import com.example.lib.ISound;
+import com.example.lib.Input;
 import com.example.lib.Scene;
 
 import java.util.ArrayList;
@@ -30,13 +35,13 @@ public class SceneMngrDesktop implements ISceneMngr {
     }
 
     @Override
-    public void render(){
-        stack.peek().render();
+    public void render(IGraphics render){
+        stack.peek().render(render);
     }
 
     @Override
-    public void handleInput(){
-        stack.peek().handleInput();
+    public void handleInput(IEventHandler.EventType type, ISound sound, Input input, ISceneMngr sceneMngr){
+        stack.peek().handleInput(type, sound, input, sceneMngr);
     }
 
     @Override
