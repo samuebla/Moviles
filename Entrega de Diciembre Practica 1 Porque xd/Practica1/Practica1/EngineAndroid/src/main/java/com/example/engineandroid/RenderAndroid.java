@@ -65,8 +65,8 @@ public class RenderAndroid implements IGraphics {
         this.canvas = this.holder.lockCanvas();
         // "Borramos" el fondo.
         this.canvas.drawColor(0xFFFFFFFF); // ARGB
-        this.canvas.translate(0, this.posCanvas.getY());
-        setColor(0XFFFFFFFF);
+        this.canvas.translate(this.posCanvas.getX(), this.posCanvas.getY());
+        setColor(0XFFFF00FF);
         drawRectangle(0,0, scaleWidth, scaleWidth, true);
     }
 
@@ -149,7 +149,7 @@ public class RenderAndroid implements IGraphics {
         //obtenemos el tamaño del frame y lo guardamos como copia para la escala
         surfaceFrame = new Vector2D(this.holder.getSurfaceFrame().width(), this.holder.getSurfaceFrame().height());
 
-        posCanvas.set((int)(surfaceFrame.getX()), (int)(surfaceFrame.getY()*factorScale));
+        posCanvas.set((int)(myView.getX()), (int)(surfaceFrame.getY() - surfaceFrame.getX()/factorScale)/2);
     }
 
 
