@@ -4,8 +4,6 @@ import static android.graphics.Typeface.*;
 
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
-import android.graphics.fonts.Font;
-import android.graphics.fonts.FontStyle;
 
 import com.example.lib.IFont;
 
@@ -17,10 +15,12 @@ public class Font_Android implements IFont {
     int size;
 
     public Font_Android(String filePath, int type, AssetManager assets) throws IOException {
+        //Abrimos el asset de la fuente y creamos una fuente base
         String newFilePath = filePath.replaceAll("assets/", "");
         assets.open(newFilePath);
         Typeface baseFont = Typeface.createFromAsset(assets, newFilePath);
 
+        //Cambiamos la base para poder crear fuentes que esten en negrita, cursiva o normal
         switch (type) {
             //NEGRITA
             case 1:

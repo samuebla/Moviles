@@ -1,6 +1,6 @@
 package com.example.lib;
 
 public interface IImage {
-    public int getWidth();
-    public int getHeight();
+    int getWidth();
+    int getHeight();
 }

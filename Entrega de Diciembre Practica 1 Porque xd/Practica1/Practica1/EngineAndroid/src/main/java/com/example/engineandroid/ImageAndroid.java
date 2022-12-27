@@ -14,6 +14,7 @@ public class ImageAndroid implements IImage {
     Bitmap image;
 
     public ImageAndroid(AssetManager assets, String path) {
+        //Carga de la imagen generando un bitmap que sera el utilizado para renderizarla
         String newFilePath = path.replaceAll("assets/", "");
         try {
             InputStream input = assets.open(newFilePath);

@@ -2,22 +2,22 @@ package com.example.engineandroid;
 
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
-import android.media.AudioAttributes;
 import android.media.SoundPool;
 
 import com.example.lib.ISound;
 
 public class SoundApp implements ISound {
 
-    private SoundPool soundPool;
+    private final SoundPool soundPool;
 
-    private int soundID;
+    private final int soundID;
     private float volume = 1.0f;
     private int priority = 0;
     private int loop = 0;
     private float rate = 1.0f;
 
     public SoundApp(SoundPool sPool, String path, AssetManager assets) {
+        //Crea el sonido a base de un fichero y lo guarda en el soundpool
         String newFilePath = path.replaceAll("assets/", "");
         this.soundPool = sPool;
         AssetFileDescriptor fileDescriptor = null;

@@ -1,25 +1,16 @@
 package com.example.enginedesktop;
 
 import com.example.lib.*;
-import com.example.lib.IGraphics.*;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Insets;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
-
-//class WindowSize{
-//    public double w;
-//    public double h;
-//};
 
 //Clase interna encargada de obtener el SurfaceHolder y pintar con el canvas
 public class RenderDesktop implements IGraphics {
@@ -51,7 +42,7 @@ public class RenderDesktop implements IGraphics {
             try {
                 myView.createBufferStrategy(2);
                 break;
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         } // while pidiendo la creación de la buffeStrategy
         if (intentos == 0) {
@@ -307,8 +298,7 @@ public class RenderDesktop implements IGraphics {
     }
 
     public Vector2D getMargins(){
-        Vector2D offset = new Vector2D((margins.getX()+ insets.left)/scaleProportion, (margins.getY()+ insets.top)/scaleProportion);
-        return offset;
+        return new Vector2D((margins.getX()+ insets.left)/scaleProportion, (margins.getY()+ insets.top)/scaleProportion);
     }
 }
 

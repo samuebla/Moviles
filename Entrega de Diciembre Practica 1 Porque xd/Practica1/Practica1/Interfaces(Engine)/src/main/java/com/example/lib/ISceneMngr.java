@@ -2,15 +2,15 @@ package com.example.lib;
 
 public interface ISceneMngr {
 
-    public void popScene();
+    void popScene();
 
-    public void pushScene(Scene scene);
+    void pushScene(Scene scene);
 
-    public void update(double deltaTime);
+    void update(double deltaTime);
 
-    public void render(IGraphics render);
+    void render(IGraphics render);
 
-    public void handleInput(IEventHandler.EventType type, IAudio audio, Input input, ISceneMngr sceneMngr);
+    void handleInput(IEventHandler.EventType type, IAudio audio, Input input);
 
-    public Scene getScene();
+    Scene getScene();
 }
