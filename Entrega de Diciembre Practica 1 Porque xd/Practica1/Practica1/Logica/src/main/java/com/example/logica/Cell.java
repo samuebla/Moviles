@@ -7,10 +7,16 @@ import com.example.lib.Vector2D;
 //Struct
 public class Cell extends Interactive {
 
-    public enum cellType {EMPTY, SELECTED, CROSSED, WRONG};
+    //Tipo de celdas
+    public enum cellType {EMPTY, SELECTED, CROSSED, WRONG}
 
     private cellType type;
+
+    //True si es parte de la solucion
     boolean solution = false;
+
+    //True si está seleccionada y pulsas el boton de comprobar
+    boolean showAnswer;
 
     //Para el contador de celdas restantes y erroneas
     int key;
@@ -20,6 +26,7 @@ public class Cell extends Interactive {
         this.setPos(x, y);
         type = cellType.EMPTY;
         key = -1;
+        showAnswer = false;
     }
 
     @Override
@@ -42,7 +49,7 @@ public class Cell extends Interactive {
                     key = 1;
                 }
                 //2 si lo seleccionas y es la solucion
-                else{
+                else {
                     key = 2;
                 }
                 break;
@@ -50,7 +57,7 @@ public class Cell extends Interactive {
                 type = cellType.CROSSED;
 
                 //3 si lo tenias seleccionado y estaba mal pero ahora no
-                if(!solution){
+                if (!solution) {
                     key = 3;
                 }
                 //4 si estaba bien seleccionado y lo deseleccionas
@@ -82,30 +89,37 @@ public class Cell extends Interactive {
 
     //Para el boton de comprobar
     public void trueRender(IGraphics render) {
-        //Si te has equivocado...
-        if(key == 1){
-            //Renderizamos a rojo
-            render.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), cellType.WRONG.ordinal());
+        //Si te has equivocado y estabas pulsada cuando seleccionaste el boton comprobar...
+        if(showAnswer){
+            if (key == 1) {
+                //Renderizamos a rojo
+                render.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), cellType.WRONG.ordinal());
+            } else {
+                render.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
+            }
         }
-        else{
-            render.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
-        }
+        //Si no renderizamos normalmente
+        else
+            render(render);
+
     }
 
     //Para la pantalla de Enhorabuena
     public void solutionRender(IGraphics render) {
         //Solo renderizo si esta azul
-        if(type == cellType.SELECTED){
+        if (type == cellType.SELECTED) {
             render.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), type.ordinal());
         }
     }
 
-    public void changeEmptyCells(){
-        if(key == 1){
+    //Elimina las casillas rojas(erroneas) y deja la celda deseleccionada
+    public void changeEmptyCells() {
+        if (key == 1) {
             key = -1;
             type = cellType.EMPTY;
         }
     }
+
     public void setSolution(boolean aux) {
         solution = aux;
     }
@@ -116,6 +130,17 @@ public class Cell extends Interactive {
 
     public boolean getSolution() {
         return solution;
+    }
+
+    public boolean getShowAnswer() {
+        return showAnswer;
+    }
+
+   //Indica si esta celda debe de mostrar la solucion en el render o no
+    public void setShowAnswer(boolean aux) {
+        //Si la casilla está seleccionada... (sea la solucion o no)
+        if(key==1 || key==2)
+        showAnswer = aux;
     }
 
     //1 Si esta mal

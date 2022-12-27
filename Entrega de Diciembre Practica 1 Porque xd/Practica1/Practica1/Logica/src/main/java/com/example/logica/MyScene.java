@@ -359,6 +359,7 @@ public class MyScene implements Scene {
     @Override
     public void render(IGraphics render) {
 
+        //Los guardamos aqui por mayor comodidad
         Vector2D auxCuadradoFinal = this.matriz[cols_ - 1][rows_ - 1].getPos();
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 
@@ -461,6 +462,13 @@ public class MyScene implements Scene {
         if (input.InputReceive(this.checkButton.getPos(), this.checkButton.getSize())) {
             //Mostramos el texto en pantalla
             showAnswers = true;
+
+            //Seteamos el valor de las celdas seleccionadas para que se muestren en pantalla
+            for (int i = 0; i < matriz.length; i++) {
+                for (int j = 0; j < matriz[i].length; j++) {
+                    this.matriz[i][j].setShowAnswer(true);
+                }
+            }
             auxShowAnswer = true;
             timer = timeCheckButton;
         }

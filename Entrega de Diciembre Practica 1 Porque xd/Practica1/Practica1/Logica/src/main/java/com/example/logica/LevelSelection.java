@@ -16,6 +16,7 @@ public class LevelSelection implements Scene {
 
     int scaleHeight;
     int scaleWidth;
+
     private InputButton inputButton5;
     private InputButton inputButton8;
     private InputButton inputButton10;
