@@ -87,9 +87,6 @@ public class RenderDesktop implements IGraphics {
     }
 
     public void clearFrame() {
-        //dibujar los margenes por encima
-        drawMargins();
-
         this.bufferStrategy.getDrawGraphics().dispose();
     }
 
@@ -245,16 +242,6 @@ public class RenderDesktop implements IGraphics {
         this.graphics2D.setTransform(aTr);
         aTr.setToScale((factorScale / aTr.getScaleX()), (factorScale / aTr.getScaleY()));
         this.graphics2D.transform(aTr);
-    }
-
-    private void drawMargins() {
-        this.graphics2D.setColor(Color.WHITE);
-
-        drawRectangle((int) (-margins.getX() / factorScale), 0, (int) (margins.getX() / factorScale), (int) canvasSize.getY(), true);
-        drawRectangle((int) canvasSize.getX(), 0, (int) (margins.getX() / factorScale), (int) canvasSize.getY(), true);
-
-        drawRectangle(0, (int) (-margins.getY() / factorScale), (int) canvasSize.getX(), (int) (margins.getY() / factorScale), true);
-        drawRectangle(0, (int) canvasSize.getY(), (int) canvasSize.getX(), (int) (margins.getY() / factorScale), true);
     }
 
     //Pinta una celda del juego
