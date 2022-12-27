@@ -19,10 +19,13 @@ public class InputDesktop implements Input {
     private float scaleFactor;
     private Vector2D offset;
 
-    public InputDesktop(IEventHandler eHandler){
+    private RenderDesktop render;
+
+    public InputDesktop(RenderDesktop rend, EventHandlerDesktop eHandler){
         this.mouseCoords = new Vector2D();
         this.listener = new MouseListener(this, eHandler);
         offset = new Vector2D();
+        render = rend;
     }
 
     @Override
@@ -32,7 +35,8 @@ public class InputDesktop implements Input {
 
     @Override
     public Vector2D getScaledCoords(Vector2D coords) {
-        return new Vector2D((coords.getX() - offset.getX())*scaleFactor, (coords.getY()  - offset.getY())*scaleFactor);
+        System.out.println("ScaleFactor: " + scaleFactor);
+        return new Vector2D((coords.getX()-offset.getX())*scaleFactor, (coords.getY()-offset.getY())*scaleFactor);
     }
 
     @Override
@@ -58,11 +62,15 @@ public class InputDesktop implements Input {
     }
 
     public boolean InputReceive(Vector2D pos, Vector2D size){
-        Vector2D coords = new Vector2D(getScaledCoords(getRawCoords()));
-        Vector2D posScaled = new Vector2D(getScaledCoords(pos));
-        Vector2D sizeScaled = new Vector2D(size.getX()*scaleFactor, size.getY()*scaleFactor);
+        if(mouseCoords.getX() == 0 && mouseCoords.getY()==0)
+            return false;
 
-        System.out.println("Object Pos [X] " + pos.getX() + "[Y] " + pos.getY() + ",Size: [X] " + size.getX() + "[Y] " + size.getY());
+        Vector2D coords = new Vector2D(getRawCoords());
+        Vector2D posScaled = new Vector2D((pos.getX())*scaleFactor+ offset.getX(), pos.getY()*scaleFactor + offset.getY());
+        Vector2D sizeScaled = new Vector2D((size.getX())*scaleFactor , size.getY()*scaleFactor);
+        System.out.println("ScaleFactor: " + scaleFactor);
+        System.out.println("Margin [X] " + offset.getX() + "[Y] " + offset.getY());
+        System.out.println("Object Pos [X] " + posScaled.getX() + "[Y] " + posScaled.getY() + ",Size: [X] " + sizeScaled.getX() + "[Y] " + sizeScaled.getY());
         return (coords.getX() >= posScaled.getX() && coords.getX() <= posScaled.getX() + sizeScaled.getX() &&
                 coords.getY() >= posScaled.getY() && coords.getY() <= posScaled.getY() + sizeScaled.getY());
     }
@@ -84,8 +92,8 @@ class MouseListener extends MouseAdapter{
         super.mouseClicked(e);
         if(InputEvent.BUTTON1_DOWN_MASK != 0){
             this.inputDesktop.setRawCoords((int)e.getPoint().getX(),(int)e.getPoint().getY());
-            Vector2D coords = new Vector2D(inputDesktop.getScaledCoords(inputDesktop.getRawCoords()));
-            System.out.println("Click detected "+ "[X] " + coords.getX() + "[Y] " + coords.getY());
+            Vector2D coords = new Vector2D(inputDesktop.getRawCoords());
+            System.out.println("Click detected Raw"+ "[X] " + coords.getX() + "[Y] " + coords.getY());
             this.mouse_isClicked = true;
             this.eventHandler.sendEvent(IEventHandler.EventType.MOUSE);
         }

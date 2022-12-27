@@ -13,7 +13,7 @@ public class EngineDesktop implements Engine,Runnable{
     private SceneMngrDesktop sceneManager;
 
     private InputDesktop input;
-    private IEventHandler eventHandler;
+    private EventHandlerDesktop eventHandler;
     private AudioDesktop audioMngr;
 
     private Scene resourceScene;
@@ -22,7 +22,7 @@ public class EngineDesktop implements Engine,Runnable{
         this.render = new RenderDesktop(myView);
         //Event handler que detecta los eventos de raton
         this.eventHandler = new EventHandlerDesktop();
-        this.input = new InputDesktop(this.eventHandler);
+        this.input = new InputDesktop(this.render, this.eventHandler);
         myView.addMouseListener(this.input.getListener());
 
         this.audioMngr = new AudioDesktop();
