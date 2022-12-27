@@ -40,14 +40,19 @@ public class InputAndroid implements Input {
 
     @Override
     public boolean InputReceive(Vector2D pos, Vector2D size) {
-        Vector2D coords = new Vector2D(getScaledCoords(getRawCoords()));
-        Vector2D posScaled = new Vector2D(getScaledCoords(pos));
-        Vector2D sizeScaled = new Vector2D(size.getX()*scaleFactor, size.getY()*scaleFactor);
+        if(touchCoords.getX() == 0 && touchCoords.getY()==0)
+            return false;
 
-        System.out.println("Object Pos [X] " + pos.getX() + "[Y] " + pos.getY() + ",Size: [X] " + size.getX() + "[Y] " + size.getY());
+        Vector2D coords = new Vector2D(getRawCoords());
+        Vector2D posScaled = new Vector2D((pos.getX())*scaleFactor+ offset.getX(), pos.getY()*scaleFactor + offset.getY());
+        Vector2D sizeScaled = new Vector2D((size.getX())*scaleFactor , size.getY()*scaleFactor);
 
-        return (coords.getX() >= pos.getX() && coords.getX() <= pos.getX() + sizeScaled.getX() &&
-                coords.getY() >= pos.getY() && coords.getY() <= pos.getY() + sizeScaled.getY());
+//        System.out.println("ScaleFactor: " + scaleFactor);
+//        System.out.println("Margin [X] " + offset.getX() + "[Y] " + offset.getY());
+//        System.out.println("Object Pos [X] " + posScaled.getX() + "[Y] " + posScaled.getY() + ",Size: [X] " + sizeScaled.getX() + "[Y] " + sizeScaled.getY());
+
+        return (coords.getX() >= posScaled.getX() && coords.getX() <= posScaled.getX() + sizeScaled.getX() &&
+                coords.getY() >= posScaled.getY() && coords.getY() <= posScaled.getY() + sizeScaled.getY());
     }
 
     @Override
