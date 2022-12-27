@@ -2,31 +2,33 @@ package com.example.engineandroid;
 
 import com.example.lib.*;
 
-import android.content.res.AssetManager;
 import android.view.SurfaceView;
 
 public class EngineApp implements Engine,Runnable{
 
-    private SurfaceView view;
+    private final SurfaceView view;
 
-    private RenderAndroid render;
-    private InputAndroid input;
-    private IEventHandler eventHandler;
-    private AudioAndroid audioMngr;
+    private final RenderAndroid render;
+    private final InputAndroid input;
+    private final IEventHandler eventHandler;
+    private final AudioAndroid audioMngr;
 
     private Thread renderThread;
 
     private boolean running;
 
-    private SceneMngrAndroid sceneMngr;
+    private final SceneMngrAndroid sceneMngr;
 
     private Scene resourceScene;
 
     public EngineApp(SurfaceView myView){
         this.view = myView;
+        //Inicialización del render con la relacion de aspecto de la pantalla
         this.render = new RenderAndroid(this.view, 4.0f/6.0f);
+
         this.eventHandler = new EventHandlerAndroid();
         this.input = new InputAndroid(this.eventHandler);
+        //Redefinicion del listener de tocar en la pantalla para poder procesar el input que necesitamos
         this.view.setOnTouchListener(this.input.getTouchListener());
 
         this.audioMngr = new AudioAndroid(myView.getContext().getAssets());
@@ -67,7 +69,7 @@ public class EngineApp implements Engine,Runnable{
         this.resourceScene = scene;
     }
 
-    //blucle principal
+    //bucle principal
     @Override
     public void run() {
         if (renderThread != Thread.currentThread()) {
@@ -103,8 +105,8 @@ public class EngineApp implements Engine,Runnable{
             // Informe de FPS
             double elapsedTime = (double) nanoElapsedTime / 1.0E9;
             this.update(elapsedTime);
-            if (currentTime - informePrevio > 1000000000l) {
-                long fps = frames * 1000000000l / (currentTime - informePrevio);
+            if (currentTime - informePrevio > 1000000000L) {
+                long fps = frames * 1000000000L / (currentTime - informePrevio);
                 System.out.println("" + fps + " fps");
                 frames = 0;
                 informePrevio = currentTime;
@@ -115,8 +117,9 @@ public class EngineApp implements Engine,Runnable{
             actualTime += deltaTime;
 
             this.sceneMngr.update(deltaTime / 1000.0);
+            //si hay algun evento de input, lo procesamos
             if (eventHandler.getEvent().eventType != EventHandlerAndroid.EventType.NONE) {
-                sceneMngr.handleInput(eventHandler.getEvent().eventType, audioMngr,input, sceneMngr);
+                sceneMngr.handleInput(eventHandler.getEvent().eventType, audioMngr,input);
                 eventHandler.sendEvent(EventHandlerAndroid.EventType.NONE);
             }
 

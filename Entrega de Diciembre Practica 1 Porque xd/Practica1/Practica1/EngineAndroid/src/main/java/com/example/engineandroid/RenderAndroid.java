@@ -13,30 +13,29 @@ import com.example.lib.IGraphics;
 import com.example.lib.IImage;
 import com.example.lib.Vector2D;
 
-import java.io.File;
 import java.util.HashMap;
 
 public class RenderAndroid implements IGraphics {
 
-    private SurfaceView myView;
-    private SurfaceHolder holder;
+    private final SurfaceView myView;
+    private final SurfaceHolder holder;
     private Canvas canvas;
-    private Paint paint;
+    private final Paint paint;
 
     HashMap<String,Font_Android> fonts;
     HashMap<String,ImageAndroid> images;
 
-    private AssetManager assets;
+    private final AssetManager assets;
 
-    private Vector2D posCanvas;
-    private float factorScale;
+    private final Vector2D posCanvas;
+    private final float factorScale;
     //ANCHO Y ALTO REAL DE LA PANTALLA
     Vector2D surfaceFrame;
 
     //Escala logica del juego, por defecto 1000, lo que significa que el usuario puede colocar elementos entre las posiciones 0 y 1000
     //De esta manera los elementos se escalan automaticamente al tamaño de la pantalla
-    private int scaleWidth;
-    private int scaleHeight;
+    private final int scaleWidth;
+    private final int scaleHeight;
 
     public RenderAndroid(SurfaceView myView, float scale) {
         // Intentamos crear el buffer strategy con 2 buffers.

@@ -4,7 +4,6 @@ import com.example.lib.IAudio;
 import com.example.lib.IEventHandler;
 import com.example.lib.IGraphics;
 import com.example.lib.ISceneMngr;
-import com.example.lib.ISound;
 import com.example.lib.Input;
 import com.example.lib.Scene;
 
@@ -15,7 +14,7 @@ public class SceneMngrAndroid implements ISceneMngr {
     Stack<Scene> stack;
 
     public SceneMngrAndroid(){
-        stack = new Stack<Scene>();
+        stack = new Stack<>();
     }
 
     @Override
@@ -39,8 +38,8 @@ public class SceneMngrAndroid implements ISceneMngr {
     }
 
     @Override
-    public void handleInput(IEventHandler.EventType type, IAudio audio, Input input, ISceneMngr sceneMngr){
-        stack.peek().handleInput(type, audio, input, sceneMngr);
+    public void handleInput(IEventHandler.EventType type, IAudio audio, Input input){
+        stack.peek().handleInput(type, audio, input, this);
     }
 
     @Override

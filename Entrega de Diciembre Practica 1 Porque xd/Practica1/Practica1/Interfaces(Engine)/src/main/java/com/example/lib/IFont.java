@@ -2,10 +2,10 @@ package com.example.lib;
 
 public interface IFont {
 
-    public int getSize();
-    public void setSize(int type,int size);
+    int getSize();
+    void setSize(int type,int size);
 
-    public boolean isBold();
+    boolean isBold();
 
-    public boolean isItalic();
+    boolean isItalic();
 }

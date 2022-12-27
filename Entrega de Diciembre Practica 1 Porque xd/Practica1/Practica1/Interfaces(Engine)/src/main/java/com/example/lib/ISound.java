@@ -3,9 +3,9 @@ package com.example.lib;
 
 public interface ISound {
 
-    public void play();
+    void play();
 
-    public void stop();
+    void stop();
 
-    public void startLoop();
+    void startLoop();
  }

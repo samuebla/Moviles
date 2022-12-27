@@ -6,12 +6,10 @@ import com.example.lib.ISound;
 import java.io.File;
 import java.util.HashMap;
 
-import javax.sound.sampled.Clip;
-
 public class AudioDesktop implements IAudio {
     private static final String PATH = "";
     //Guardamos los sonidos
-    private HashMap<String, SoundDesktop> sounds;
+    private final HashMap<String, SoundDesktop> sounds;
     SoundDesktop backgroundMusic;
 
     public AudioDesktop() {
@@ -32,10 +30,9 @@ public class AudioDesktop implements IAudio {
     @Override
     public void loadMusic(String audioName, String path) {
         File audioFile = new File(PATH + path);
-        SoundDesktop sAux = new SoundDesktop(audioFile);
 
         //Guardamos la musica de fondo, la cual sera solo una
-        this.backgroundMusic = sAux;
+        this.backgroundMusic = new SoundDesktop(audioFile);
     }
 
     //Reproduce un sonido, si type es 0 se reproduce la musica de fondo, sino reproduce el sonido especificado

@@ -1,15 +1,12 @@
 package com.example.enginedesktop;
 
-import com.example.lib.Engine;
 import com.example.lib.IAudio;
 import com.example.lib.IEventHandler;
 import com.example.lib.IGraphics;
 import com.example.lib.ISceneMngr;
-import com.example.lib.ISound;
 import com.example.lib.Input;
 import com.example.lib.Scene;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class SceneMngrDesktop implements ISceneMngr {
@@ -17,7 +14,7 @@ public class SceneMngrDesktop implements ISceneMngr {
     Stack<Scene> stack;
 
     public SceneMngrDesktop(){
-        stack = new Stack<Scene>();
+        stack = new Stack<>();
     }
 
     @Override
@@ -41,8 +38,8 @@ public class SceneMngrDesktop implements ISceneMngr {
     }
 
     @Override
-    public void handleInput(IEventHandler.EventType type, IAudio audio, Input input, ISceneMngr sceneMngr){
-        stack.peek().handleInput(type, audio, input, sceneMngr);
+    public void handleInput(IEventHandler.EventType type, IAudio audio, Input input){
+        stack.peek().handleInput(type, audio, input, this);
     }
 
     @Override

@@ -9,17 +9,16 @@ import com.example.lib.Vector2D;
 
 public class InputAndroid implements Input {
 
-    private TouchListener touchlistener;
-    private MotionListener motionlistener;
+    private final TouchListener touchlistener;
     Vector2D touchCoords;
-    private Vector2D offset;
+    private final Vector2D offset;
 
     private float scaleFactor = 1.0f;
 
     public InputAndroid(IEventHandler eHandler){
         this.touchCoords = new Vector2D(-1,-1);
+        //Touch listener llamado cuando el view detecta input
         this.touchlistener = new TouchListener(this, eHandler);
-        this.motionlistener = new MotionListener(this, eHandler);
         offset = new Vector2D();
     }
 
@@ -38,6 +37,7 @@ public class InputAndroid implements Input {
         this.touchCoords.set(x, y);
     }
 
+    //Comprueba si el toque en la pantalla esta dentro de las coordenadas definidas por pos y size
     @Override
     public boolean InputReceive(Vector2D pos, Vector2D size) {
         if(touchCoords.getX() == 0 && touchCoords.getY()==0)
@@ -67,9 +67,6 @@ public class InputAndroid implements Input {
     public TouchListener getTouchListener(){
         return this.touchlistener;
     }
-    public MotionListener getMotionListener(){
-        return this.motionlistener;
-    }
 }
 
 class TouchListener implements View.OnTouchListener {
@@ -84,34 +81,11 @@ class TouchListener implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         processEvent(motionEvent);
+        view.performClick();
         return false;
     }
 
     public void processEvent(MotionEvent e){
-        if(e.getAction() == MotionEvent.ACTION_DOWN){
-            this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
-            System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());
-            this.eventHandler.sendEvent(IEventHandler.EventType.TOUCH);
-        }
-    }
-}
-
-class MotionListener implements View.OnGenericMotionListener {
-    InputAndroid inputAndroid;
-    IEventHandler eventHandler;
-
-    public MotionListener(InputAndroid iAndroid, IEventHandler eHandler){
-        this.inputAndroid = iAndroid;
-        this.eventHandler = eHandler;
-    }
-
-    @Override
-    public boolean onGenericMotion(View view, MotionEvent motionEvent) {
-        processMotion(motionEvent);
-        return true;
-    }
-
-    public void processMotion(MotionEvent e){
         if(e.getAction() == MotionEvent.ACTION_DOWN){
             this.inputAndroid.setRawCoords((int)e.getX(),(int)e.getY());
             System.out.println("Click detected "+ "[X] " + this.inputAndroid.touchCoords.getX() + "[Y] " + this.inputAndroid.touchCoords.getY());

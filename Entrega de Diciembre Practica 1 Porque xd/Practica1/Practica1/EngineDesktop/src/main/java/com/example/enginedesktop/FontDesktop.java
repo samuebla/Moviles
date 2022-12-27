@@ -46,7 +46,7 @@ public class FontDesktop implements IFont {
                 break;
             //No se cual es esta la verdad
             default:
-                font = font.deriveFont(Font.TRUETYPE_FONT, size);
+                font = font.deriveFont(Font.PLAIN, size);
                 break;
         }
     }

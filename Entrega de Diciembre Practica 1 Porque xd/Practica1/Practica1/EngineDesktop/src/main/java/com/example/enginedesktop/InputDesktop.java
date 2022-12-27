@@ -3,23 +3,21 @@ package com.example.enginedesktop;
 import com.example.lib.Input;
 import com.example.lib.IEventHandler;
 import com.example.lib.Vector2D;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 //Input
-import java.awt.Event;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class InputDesktop implements Input {
-    private MouseListener listener;
+    private final MouseListener listener;
 
     Vector2D mouseCoords;
 
     private float scaleFactor;
     private Vector2D offset;
 
-    private RenderDesktop render;
+    private final RenderDesktop render;
 
     public InputDesktop(RenderDesktop rend, EventHandlerDesktop eHandler){
         this.mouseCoords = new Vector2D();

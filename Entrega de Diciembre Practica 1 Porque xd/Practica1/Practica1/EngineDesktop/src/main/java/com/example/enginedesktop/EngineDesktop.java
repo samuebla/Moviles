@@ -9,12 +9,12 @@ public class EngineDesktop implements Engine,Runnable{
     private Thread renderThread;
     private boolean running;
 
-    private RenderDesktop render;
-    private SceneMngrDesktop sceneManager;
+    private final RenderDesktop render;
+    private final SceneMngrDesktop sceneManager;
 
-    private InputDesktop input;
-    private EventHandlerDesktop eventHandler;
-    private AudioDesktop audioMngr;
+    private final InputDesktop input;
+    private final EventHandlerDesktop eventHandler;
+    private final AudioDesktop audioMngr;
 
     private Scene resourceScene;
 
@@ -23,6 +23,7 @@ public class EngineDesktop implements Engine,Runnable{
         //Event handler que detecta los eventos de raton
         this.eventHandler = new EventHandlerDesktop();
         this.input = new InputDesktop(this.render, this.eventHandler);
+        //Pone nuestro listener a la ventana para que nos lleguen los eventos
         myView.addMouseListener(this.input.getListener());
 
         this.audioMngr = new AudioDesktop();
@@ -87,7 +88,7 @@ public class EngineDesktop implements Engine,Runnable{
 
         // Bucle de juego principal.
         while(running) {
-            long currentTime = System.nanoTime();
+//            long currentTime = System.nanoTime();
 
 //            // Informe de FPS
 //            if (currentTime - informePrevio > 1000000000l) {
@@ -104,8 +105,9 @@ public class EngineDesktop implements Engine,Runnable{
 
 
             this.sceneManager.update(deltaTime / 1000.0);
+            //Si hay algun evento de input lo procesamos
             if (eventHandler.getEvent().eventType != EventHandlerDesktop.EventType.NONE) {
-                sceneManager.handleInput(eventHandler.getEvent().eventType, audioMngr, input, sceneManager);
+                sceneManager.handleInput(eventHandler.getEvent().eventType, audioMngr, input);
                 eventHandler.sendEvent(EventHandlerDesktop.EventType.NONE);
             }
 
