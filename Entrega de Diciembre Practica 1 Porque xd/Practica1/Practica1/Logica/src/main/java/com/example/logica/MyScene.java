@@ -359,6 +359,7 @@ public class MyScene implements Scene {
     @Override
     public void render(IGraphics render) {
 
+        //Los guardamos aqui por mayor comodidad
         Vector2D auxCuadradoFinal = this.matriz[cols_ - 1][rows_ - 1].getPos();
         Vector2D auxCuadradoInicio = this.matriz[0][0].getPos();
 

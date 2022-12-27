@@ -7,12 +7,15 @@ import com.example.lib.Vector2D;
 //Struct
 public class Cell extends Interactive {
 
+    //Tipo de celdas
     public enum cellType {EMPTY, SELECTED, CROSSED, WRONG}
 
-    ;
-
     private cellType type;
+
+    //True si es parte de la solucion
     boolean solution = false;
+
+    //True si está seleccionada y pulsas el boton de comprobar
     boolean showAnswer;
 
     //Para el contador de celdas restantes y erroneas
@@ -109,6 +112,7 @@ public class Cell extends Interactive {
         }
     }
 
+    //Elimina las casillas rojas(erroneas) y deja la celda deseleccionada
     public void changeEmptyCells() {
         if (key == 1) {
             key = -1;
@@ -132,6 +136,7 @@ public class Cell extends Interactive {
         return showAnswer;
     }
 
+   //Indica si esta celda debe de mostrar la solucion en el render o no
     public void setShowAnswer(boolean aux) {
         //Si la casilla está seleccionada... (sea la solucion o no)
         if(key==1 || key==2)
