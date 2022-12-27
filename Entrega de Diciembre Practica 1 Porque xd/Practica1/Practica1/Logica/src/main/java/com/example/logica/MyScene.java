@@ -461,6 +461,13 @@ public class MyScene implements Scene {
         if (input.InputReceive(this.checkButton.getPos(), this.checkButton.getSize())) {
             //Mostramos el texto en pantalla
             showAnswers = true;
+
+            //Seteamos el valor de las celdas seleccionadas para que se muestren en pantalla
+            for (int i = 0; i < matriz.length; i++) {
+                for (int j = 0; j < matriz[i].length; j++) {
+                    this.matriz[i][j].setShowAnswer(true);
+                }
+            }
             auxShowAnswer = true;
             timer = timeCheckButton;
         }
