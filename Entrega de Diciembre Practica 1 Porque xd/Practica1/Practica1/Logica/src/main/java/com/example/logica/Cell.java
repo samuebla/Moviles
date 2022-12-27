@@ -55,7 +55,7 @@ public class Cell extends Interactive {
                 break;
             case SELECTED:
                 type = cellType.CROSSED;
-
+                showAnswer = false;
                 //3 si lo tenias seleccionado y estaba mal pero ahora no
                 if (!solution) {
                     key = 3;
@@ -66,6 +66,7 @@ public class Cell extends Interactive {
                 }
                 break;
             case CROSSED:
+                showAnswer = false;
                 type = cellType.EMPTY;
                 key = 0;
                 break;
@@ -90,7 +91,7 @@ public class Cell extends Interactive {
     //Para el boton de comprobar
     public void trueRender(IGraphics render) {
         //Si te has equivocado y estabas pulsada cuando seleccionaste el boton comprobar...
-        if(showAnswer){
+        if (showAnswer) {
             if (key == 1) {
                 //Renderizamos a rojo
                 render.paintCell((int) this.getPos().getX(), (int) this.getPos().getY(), (int) this.getSize().getX(), (int) this.getSize().getY(), cellType.WRONG.ordinal());
@@ -114,10 +115,14 @@ public class Cell extends Interactive {
 
     //Elimina las casillas rojas(erroneas) y deja la celda deseleccionada
     public void changeEmptyCells() {
-        if (key == 1) {
-            key = -1;
-            type = cellType.EMPTY;
+        if (showAnswer) {
+
+            if (key == 1) {
+                key = -1;
+                type = cellType.EMPTY;
+            }
         }
+
     }
 
     public void setSolution(boolean aux) {
@@ -136,11 +141,11 @@ public class Cell extends Interactive {
         return showAnswer;
     }
 
-   //Indica si esta celda debe de mostrar la solucion en el render o no
+    //Indica si esta celda debe de mostrar la solucion en el render o no
     public void setShowAnswer(boolean aux) {
         //Si la casilla está seleccionada... (sea la solucion o no)
-        if(key==1 || key==2)
-        showAnswer = aux;
+        if (key == 1 || key == 2)
+            showAnswer = aux;
     }
 
     //1 Si esta mal
