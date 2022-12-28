@@ -114,7 +114,6 @@ public class EngineDesktop implements Engine,Runnable{
             //Bucle de renderizado
             do{
                 this.render.initFrame();
-
                 this.sceneManager.render(render);
                 this.render.clearFrame();
             } while(this.render.swap());

@@ -85,14 +85,17 @@ public class RenderDesktop implements IGraphics {
 
     //Convierte una coordenada del juego a coordenada de la ventana
     public Vector2D convertLogicCoordsToWindow(Vector2D logicCoords){
-        return new Vector2D((float) (((float)logicCoords.getX() * (float)getWidth() / (float) scaleWidth ) + canvasPosX),
-                (float) (((float)logicCoords.getY() * (float)getHeight() / (float)scaleHeight) + canvasPosY));
+//        System.out.println("Insets Size [X]: " + insets.left + " [Y]: " + insets.top);
+//        System.out.println("Canvas Size [X]: " + getWidth() + " [Y]: " + getHeight());
+//        System.out.println("Canvas Pos [X]: " + canvasPosX + " [Y]: " + canvasPosY);
+        return new Vector2D((float) (logicCoords.getX() * (float)getWidth() / (float) scaleWidth*factorScale + canvasPosX),
+                (float) (logicCoords.getY()) * (float)getHeight() / (float)scaleHeight*factorScale + canvasPosY);
     }
 
     //Convierte un tamaño del juego a un tamaño de la ventana
     public Vector2D convertLogicSizeToWindow(Vector2D logicSize){
-        return new Vector2D((float) (((float)logicSize.getX() * (float)getWidth() / (float)scaleWidth)),
-                (float) (((float)logicSize.getY() * (float)getHeight() / (float)scaleHeight)));
+        return new Vector2D((float) (logicSize.getX() * (float)getWidth() / (float)scaleWidth*factorScale),
+                (float) (logicSize.getY() * (float)getHeight() / (float)scaleHeight*factorScale));
     }
 
     public void initFrame() {
