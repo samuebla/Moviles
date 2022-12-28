@@ -27,7 +27,7 @@ public class EngineApp implements Engine,Runnable{
         this.render = new RenderAndroid(this.view, 4.0f/6.0f);
 
         this.eventHandler = new EventHandlerAndroid();
-        this.input = new InputAndroid(this.eventHandler);
+        this.input = new InputAndroid(this.eventHandler, this.render);
         //Redefinicion del listener de tocar en la pantalla para poder procesar el input que necesitamos
         this.view.setOnTouchListener(this.input.getTouchListener());
 
@@ -84,7 +84,6 @@ public class EngineApp implements Engine,Runnable{
 
         //Escalado de la app
         this.render.scaleAppView();
-        this.input.setOffset(0,this.render.getOffset().getY());
         //Loads resources such as sound, images, etc
         this.resourceScene.loadResources(this);
         // Espera activa. Sería más elegante al menos dormir un poco.

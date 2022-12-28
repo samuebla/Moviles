@@ -35,6 +35,13 @@ public class RenderDesktop implements IGraphics {
     private int scaleWidth;
     private int scaleHeight;
 
+    //Determina cuanto escala el render un elemento, util al convertir coordenadas logicas a coordenadas de pantalla
+    private double factorEscaladoInputX;
+    private double factorEscaladoInputY;
+    //Determina la posicion del canvas, util para calcular coordenadas de pantalla a partir de coordenadas del juego
+    private double canvasPosX;
+    private double canvasPosY;
+
     public RenderDesktop(JFrame myView) {
         // Intentamos crear el buffer strategy con 2 buffers.
         int intentos = 100;
@@ -72,8 +79,20 @@ public class RenderDesktop implements IGraphics {
 
         this.myView.setResizable(true);
 
-        this.scaleWidth = 1000;
-        this.scaleHeight = 1000;
+        this.scaleWidth = 400;
+        this.scaleHeight = 600;
+    }
+
+    //Convierte una coordenada del juego a coordenada de la ventana
+    public Vector2D convertLogicCoordsToWindow(Vector2D logicCoords){
+        return new Vector2D((float) (((float)logicCoords.getX() * (float)getWidth() / (float) scaleWidth ) + canvasPosX),
+                (float) (((float)logicCoords.getY() * (float)getHeight() / (float)scaleHeight) + canvasPosY));
+    }
+
+    //Convierte un tamaño del juego a un tamaño de la ventana
+    public Vector2D convertLogicSizeToWindow(Vector2D logicSize){
+        return new Vector2D((float) (((float)logicSize.getX() * (float)getWidth() / (float)scaleWidth)),
+                (float) (((float)logicSize.getY() * (float)getHeight() / (float)scaleHeight)));
     }
 
     public void initFrame() {
@@ -82,7 +101,7 @@ public class RenderDesktop implements IGraphics {
         //Ajustar escala del canvas
         this.scaleCanvas();
 
-        this.graphics2D.setColor(Color.white);
+        this.graphics2D.setColor(Color.PINK);
         this.graphics2D.fillRect(0, 0, getWidth(), getHeight());
     }
 
@@ -230,6 +249,7 @@ public class RenderDesktop implements IGraphics {
         double scaleY = (myView.getHeight() - insets.top - insets.bottom) / canvasSize.getY();
         this.factorScale = Math.min(scaleX, scaleY) * scaleProportion;
 
+        //Movimiento necesario
         Vector2D tr = new Vector2D((int) ((this.myView.getWidth() / 2 - canvasSize.getX() * (factorScale / scaleProportion) / 2) * scaleProportion),
                 (int) (((this.myView.getHeight() + this.insets.top - this.insets.bottom) / 2 - canvasSize.getY() * (factorScale / scaleProportion) / 2) * scaleProportion));
 
@@ -237,10 +257,23 @@ public class RenderDesktop implements IGraphics {
         margins = new Vector2D(Math.max(tr.getX() - this.insets.left, 0), Math.max(tr.getY() - this.insets.top, 0));
 
         //Proceso de escalado
+        //Posicionamiento del canvas
         AffineTransform aTr = this.graphics2D.getTransform();
-            aTr.setToTranslation(tr.getX(), tr.getY());
+
+        aTr.setToTranslation(tr.getX(), tr.getY());
+
+        canvasPosX = tr.getX();
+        canvasPosY = tr.getY();
+
         this.graphics2D.setTransform(aTr);
+
+        //Escalado del canvas
+        factorEscaladoInputX = this.graphics2D.getTransform().getScaleX();
+        factorEscaladoInputY = this.graphics2D.getTransform().getScaleY();
+
         aTr.setToScale((factorScale / aTr.getScaleX()), (factorScale / aTr.getScaleY()));
+
+
         this.graphics2D.transform(aTr);
     }
 

@@ -52,8 +52,8 @@ public class MyScene implements Scene {
         //Creamos el random
         Random random = new Random();
 
-        scaleHeight = 1000;
-        scaleWidth = 1000;
+        scaleHeight = 600;
+        scaleWidth = 400;
 
         //Creamos la matriz con el tamaño
         this.matriz = new Cell[cols][rows];

@@ -14,15 +14,11 @@ public class InputDesktop implements Input {
 
     Vector2D mouseCoords;
 
-    private float scaleFactor;
-    private Vector2D offset;
-
     private final RenderDesktop render;
 
     public InputDesktop(RenderDesktop rend, EventHandlerDesktop eHandler){
         this.mouseCoords = new Vector2D();
         this.listener = new MouseListener(this, eHandler);
-        offset = new Vector2D();
         render = rend;
     }
 
@@ -33,22 +29,12 @@ public class InputDesktop implements Input {
 
     @Override
     public Vector2D getScaledCoords(Vector2D coords) {
-        System.out.println("ScaleFactor: " + scaleFactor);
-        return new Vector2D((coords.getX()-offset.getX())*scaleFactor, (coords.getY()-offset.getY())*scaleFactor);
+        return new Vector2D(coords.getX(), coords.getY());
     }
 
     @Override
-    public void setRawCoords(int x, int y) {
+    public void setRawCoords(float x, float y) {
         this.mouseCoords.set(x,y);
-    }
-
-    @Override
-    public void setScaleFactor(float scale) {
-        this.scaleFactor = scale;
-    }
-
-    public void setOffset(Vector2D v) {
-        this.offset = v;
     }
 
     public MouseListener getListener(){
@@ -64,10 +50,8 @@ public class InputDesktop implements Input {
             return false;
 
         Vector2D coords = new Vector2D(getRawCoords());
-        Vector2D posScaled = new Vector2D((pos.getX())*scaleFactor+ offset.getX(), pos.getY()*scaleFactor + offset.getY());
-        Vector2D sizeScaled = new Vector2D((size.getX())*scaleFactor , size.getY()*scaleFactor);
-        System.out.println("ScaleFactor: " + scaleFactor);
-        System.out.println("Margin [X] " + offset.getX() + "[Y] " + offset.getY());
+        Vector2D posScaled = render.convertLogicCoordsToWindow(pos);
+        Vector2D sizeScaled = render.convertLogicSizeToWindow(size);
         System.out.println("Object Pos [X] " + posScaled.getX() + "[Y] " + posScaled.getY() + ",Size: [X] " + sizeScaled.getX() + "[Y] " + sizeScaled.getY());
         return (coords.getX() >= posScaled.getX() && coords.getX() <= posScaled.getX() + sizeScaled.getX() &&
                 coords.getY() >= posScaled.getY() && coords.getY() <= posScaled.getY() + sizeScaled.getY());

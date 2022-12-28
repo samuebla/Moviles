@@ -15,7 +15,7 @@ public class MainActivity {
         JFrame renderView = new JFrame("NONOGRAMA");
 
         //Tamaño inicial de la ventana
-        renderView.setSize(720, 1080);
+        renderView.setSize(400, 600);
         renderView.setBackground(Color.WHITE);
         renderView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         renderView.setIgnoreRepaint(true);

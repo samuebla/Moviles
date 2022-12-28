@@ -18,8 +18,8 @@ import java.util.HashMap;
 
 public class MainMenuScene implements Scene {
     //Escala logica de la pantalla, de 0 a 1000, independiente del verdadero ancho y alto del surface
-    int scaleWidth = 1000;
-    int scaleHeight = 1000;
+    int scaleWidth = 400;
+    int scaleHeight = 600;
 
     private InputButton play;
 

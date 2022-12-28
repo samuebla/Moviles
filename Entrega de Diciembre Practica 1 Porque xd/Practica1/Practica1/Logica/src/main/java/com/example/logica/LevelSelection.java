@@ -27,8 +27,8 @@ public class LevelSelection implements Scene {
     private InputButton backInputButton;
 
     public LevelSelection(){
-        scaleHeight = 1000;
-        scaleWidth = 1000;
+        scaleHeight = 600;
+        scaleWidth = 400;
         init();
     }
 

@@ -15,7 +15,10 @@ public class InputAndroid implements Input {
 
     private float scaleFactor = 1.0f;
 
-    public InputAndroid(IEventHandler eHandler){
+    private RenderAndroid render;
+
+    public InputAndroid(IEventHandler eHandler, RenderAndroid render){
+        this.render = render;
         this.touchCoords = new Vector2D(-1,-1);
         //Touch listener llamado cuando el view detecta input
         this.touchlistener = new TouchListener(this, eHandler);
@@ -29,11 +32,11 @@ public class InputAndroid implements Input {
 
     @Override
     public Vector2D getScaledCoords(Vector2D coords) {
-        return new Vector2D((coords.getX() - offset.getX())*scaleFactor, (coords.getY()  - offset.getY())*scaleFactor);
+        return new Vector2D(coords.getX(), coords.getY());
     }
 
     @Override
-    public void setRawCoords(int x, int y) {
+    public void setRawCoords(float x, float y) {
         this.touchCoords.set(x, y);
     }
 
@@ -44,8 +47,8 @@ public class InputAndroid implements Input {
             return false;
 
         Vector2D coords = new Vector2D(getRawCoords());
-        Vector2D posScaled = new Vector2D((pos.getX())*scaleFactor+ offset.getX(), pos.getY()*scaleFactor + offset.getY());
-        Vector2D sizeScaled = new Vector2D((size.getX())*scaleFactor , size.getY()*scaleFactor);
+        Vector2D posScaled = render.convertLogicCoordsToView(pos);
+        Vector2D sizeScaled = render.convertLogicSizeToView(size);
 
 //        System.out.println("ScaleFactor: " + scaleFactor);
 //        System.out.println("Margin [X] " + offset.getX() + "[Y] " + offset.getY());
@@ -53,15 +56,6 @@ public class InputAndroid implements Input {
 
         return (coords.getX() >= posScaled.getX() && coords.getX() <= posScaled.getX() + sizeScaled.getX() &&
                 coords.getY() >= posScaled.getY() && coords.getY() <= posScaled.getY() + sizeScaled.getY());
-    }
-
-    @Override
-    public void setScaleFactor(float scale) {
-        this.scaleFactor = scale;
-    }
-
-    public void setOffset(float x, float y) {
-        this.offset.set(x,y);
     }
 
     public TouchListener getTouchListener(){
