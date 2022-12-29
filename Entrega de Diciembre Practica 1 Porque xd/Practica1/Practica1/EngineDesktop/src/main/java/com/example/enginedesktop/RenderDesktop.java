@@ -104,7 +104,7 @@ public class RenderDesktop implements IGraphics {
         //Ajustar escala del canvas
         this.scaleCanvas();
 
-        this.graphics2D.setColor(Color.PINK);
+        this.graphics2D.setColor(Color.WHITE);
         this.graphics2D.fillRect(0, 0, getWidth(), getHeight());
     }
 

@@ -88,7 +88,7 @@ public class RenderAndroid implements IGraphics {
         this.canvas.drawColor(0xFFFFFFFF); // ARGB
         this.canvas.translate(this.posCanvas.getX(), this.posCanvas.getY());
         canvas.scale(scaleX,scaleY);
-        setColor(0XFFFF00FF);
+        setColor(0XFFFFFFFF);
         drawRectangle(0,0, scaleWidth, scaleHeight, true);
     }
 
