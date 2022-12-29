@@ -3,13 +3,10 @@ package com.example.logica;
 import com.example.lib.Engine;
 import com.example.lib.IAudio;
 import com.example.lib.IEventHandler;
-import com.example.lib.IFont;
 import com.example.lib.IGraphics;
 import com.example.lib.ISceneMngr;
-import com.example.lib.ISound;
 import com.example.lib.Input;
 import com.example.lib.Scene;
-import com.example.lib.Vector2D;
 
 
 public class LevelSelection implements Scene {
@@ -22,7 +19,7 @@ public class LevelSelection implements Scene {
     private InputButton inputButton10;
     private InputButton inputButton5X8;
     private InputButton inputButton8X10;
-    private InputButton inputButton5X10;
+    private InputButton inputButton5X7;
 
     private InputButton backInputButton;
 
@@ -40,7 +37,7 @@ public class LevelSelection implements Scene {
         this.inputButton10 = new InputButton(scaleWidth*3/4  - scaleWidth/12, scaleHeight/3.6, scaleWidth/6, scaleHeight/9);
         this.inputButton5X8 = new InputButton(scaleWidth/4  - scaleWidth/12, scaleHeight/2.2, scaleWidth/6, scaleHeight/9);
         this.inputButton8X10 = new InputButton(scaleWidth/2 - scaleWidth/12, scaleHeight/2.2, scaleWidth/6, scaleHeight/9);
-        this.inputButton5X10 = new InputButton(scaleWidth*3/4  -scaleWidth/12, scaleHeight/2.2, scaleWidth/6, scaleHeight/9);
+        this.inputButton5X7 = new InputButton(scaleWidth*3/4  -scaleWidth/12, scaleHeight/2.2, scaleWidth/6, scaleHeight/9);
         this.backInputButton = new InputButton(scaleWidth/72 + scaleWidth/44, scaleHeight/22, scaleWidth/10, scaleHeight/15);
     }
 
@@ -70,9 +67,9 @@ public class LevelSelection implements Scene {
         //8x10
         render.drawCircle(inputButton8X10.getPos().getX(), inputButton8X10.getPos().getY(), inputButton8X10.getSize().getX()/2, "purple");
         render.drawText("8x10", (int)(inputButton8X10.getPos().getX() + inputButton8X10.getSize().getX()/2), (int)(inputButton8X10.getPos().getY() + inputButton8X10.getSize().getY()/1.5), "Black", "Amor", 0,scaleWidth/15);
-        //5x10
-        render.drawCircle(inputButton5X10.getPos().getX(), inputButton5X10.getPos().getY(), inputButton5X10.getSize().getX()/2, "purple");
-        render.drawText("5x10", (int)(inputButton5X10.getPos().getX() + inputButton5X10.getSize().getX()/2), (int)(inputButton5X10.getPos().getY() + inputButton5X10.getSize().getY()/1.5), "Black", "Amor", 0,scaleWidth/15);
+        //5x7
+        render.drawCircle(inputButton5X7.getPos().getX(), inputButton5X7.getPos().getY(), inputButton5X7.getSize().getX()/2, "purple");
+        render.drawText("5x7", (int)(inputButton5X7.getPos().getX() + inputButton5X7.getSize().getX()/2), (int)(inputButton5X7.getPos().getY() + inputButton5X7.getSize().getY()/1.5), "Black", "Amor", 0,scaleWidth/15);
 
         //Back Button
         render.drawImage((int) backInputButton.getPos().getX(),(int) backInputButton.getPos().getY(),(int)(backInputButton.getSize().getX()),(int)(backInputButton.getSize().getY()), "Back");
@@ -114,8 +111,8 @@ public class LevelSelection implements Scene {
         }
 
         //5x10
-        if (input.InputReceive(this.inputButton5X10.getPos(), this.inputButton5X10.getSize())){
-            MyScene playScene = new MyScene(5, 10);
+        if (input.InputReceive(this.inputButton5X7.getPos(), this.inputButton5X7.getSize())){
+            MyScene playScene = new MyScene(5, 7);
             sceneMngr.pushScene(playScene);
         }
 
