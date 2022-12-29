@@ -150,7 +150,8 @@ public class MyScene implements Scene {
                         contadorCols[j]++;
 
                         //Eliminamos el anterior
-                        xPositionsLeftToRight[j].remove(xPositionsLeftToRight[j].size() - 1);
+                        if (xPositionsLeftToRight[j].size() != 0)
+                            xPositionsLeftToRight[j].remove(xPositionsLeftToRight[j].size() - 1);
 
                         //Y metemos el nuevo
                         xPositionsLeftToRight[j].add(xPositionsLeftToRight[j].size(), contadorCols[j]);
@@ -278,7 +279,7 @@ public class MyScene implements Scene {
     }
 
     @Override
-    public void loadResources(Engine engine){
+    public void loadResources(Engine engine) {
 
     }
 
@@ -297,10 +298,10 @@ public class MyScene implements Scene {
         //Restamos la interfaz de las paletas y los botones de arriba
         tamProporcionalAlto = (scaleHeight - scaleHeight / 15) / ((rows_ + 2) + (0.1f * rows_));
 
-        tamTexto = (int) (tamProporcionalAncho / ((cols_+1)/2));
+        tamTexto = (int) (tamProporcionalAncho / ((cols_ + 1) / 2));
         if (tamProporcionalAlto > tamProporcionalAncho)
             //Nos quedamos con el tamaño mas grande para que el texto se ajuste a la peor situacion
-            tamTexto = (int) (tamProporcionalAlto / ((rows_+1)/2));
+            tamTexto = (int) (tamProporcionalAlto / ((rows_ + 1) / 2));
         //Lo ajustamos al centro de la pantalla de largo
         double yPos;
 
@@ -310,9 +311,9 @@ public class MyScene implements Scene {
         for (int i = 0; i < rows_; i++) {
             for (int j = 0; j < cols_; j++) {
                 //Scale/15 para la interfaz de arriba + 1Celda para las letras
-                yPos = ((scaleHeight / 15 + tamProporcionalAlto*1.5) + ((tamProporcionalAlto * 1.1) * i));
+                yPos = ((scaleHeight / 15 + tamProporcionalAlto * 1.5) + ((tamProporcionalAlto * 1.1) * i));
                 //+1Celda para las letras
-                xPos = (tamProporcionalAncho*1.5 + ((tamProporcionalAncho * 1.1) * j));
+                xPos = (tamProporcionalAncho * 1.5 + ((tamProporcionalAncho * 1.1) * j));
                 //Primero J que son las columnas en X y luego las filas en Y
                 this.matriz[j][i] = new Cell((int) (xPos),
                         (int) yPos, (int) (tamProporcionalAncho), (int) (tamProporcionalAlto));
@@ -408,11 +409,11 @@ public class MyScene implements Scene {
 
             //NUMEROS LATERALES
             for (int i = 0; i < xNumberTopToBottom.length; i++) {
-                render.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.05)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1,tamTexto);
+                render.drawText(xNumberTopToBottom[i], (int) (auxCuadradoInicio.getX() - (tamProporcionalAlto * 0.05)), posYTextAuxTopToBottom + (int) (tamProporcionalAlto * 1.1 * i), "Black", "Calibri", 1, tamTexto);
             }
             for (int i = 0; i < xNumberLeftToRight.length; i++) {
                 for (int j = 0; j < xNumberLeftToRight[i].size(); j++) {
-                    render.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto * 0.7 / (rows_ / 2)) + (int) ((tamProporcionalAlto / rows_ * 1.3 * j))), "Black", "Calibri", 0,tamTexto);
+                    render.drawText(xNumberLeftToRight[i].get(j), posXTextAuxLeftToRight + (int) (tamProporcionalAncho * 1.1 * i), (int) (auxCuadradoInicio.getY() - (xNumberLeftToRight[i].size() * tamProporcionalAlto * 0.7 / (rows_ / 2)) + (int) ((tamProporcionalAlto / rows_ * 1.3 * j))), "Black", "Calibri", 0, tamTexto);
                 }
             }
 
