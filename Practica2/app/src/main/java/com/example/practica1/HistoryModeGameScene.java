@@ -388,6 +388,7 @@ public class HistoryModeGameScene implements Scene {
                 this.progress.set(this.progress.get() + 1);
             }
             saveToFile(true);
+
             sceneMngr.popScene();
             render.setColorBackground(0xFFFFFFFF);
         }
@@ -538,6 +539,15 @@ public class HistoryModeGameScene implements Scene {
             fileRead = receiveString.split(" ");
             rows_ = Integer.parseInt(fileRead[0]);
             cols_ = Integer.parseInt(fileRead[1]);
+
+            //---------EXAMEN------------
+            //Cambio de lectura de archivo en caso de tener más de una nueva variable
+            //IMPORTANTE: El valor por defecto para el numero de strings, no casilla, es 3
+            //si ese numero cambia, debemos cambiar su valor por defecto de la variable
+            //if (){}
+            //else {}
+            //---------EXAMEN------------
+
             lives.set(Integer.parseInt(fileRead[2]));
 
             //Creamos la matriz con el tamaño
