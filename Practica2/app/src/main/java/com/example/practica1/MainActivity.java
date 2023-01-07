@@ -186,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onStop() {
         super.onStop();
+        mainMenuScene.saveDataHistoryMode(getBaseContext());
         createWorkRequest();
     }
 
@@ -194,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(this);
+        mainMenuScene.saveDataHistoryMode(getBaseContext());
         this.engine.pause();
     }
 
@@ -230,8 +232,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-
-        System.out.println("ME GIEROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
         this.engine.configurationChanged(newConfig.orientation);
 
 //        algo cuando se haya cambiado la configuracion si ella es la escena que esta arriba del stack
